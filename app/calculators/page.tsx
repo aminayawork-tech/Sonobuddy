@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   calculators, searchCalculators,
@@ -9,7 +9,6 @@ import {
   type CalcResult,
 } from '@/data/calculators';
 import clsx from 'clsx';
-import { Suspense } from 'react';
 
 const RESULT_COLORS: Record<NonNullable<CalcResult['color']>, string> = {
   green: 'bg-green-900/30 border-green-600/50 text-green-300',
