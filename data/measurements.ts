@@ -479,6 +479,91 @@ export const measurements: Measurement[] = [
     clinicalNote: 'Subcostal view, measure 1–2 cm from RA junction, in M-mode. POCUS essential skill.',
     tags: ['ivc', 'inferior vena cava', 'cvp', 'volume', 'pocus', 'cardiac'],
   },
+
+  // ── PROSTATE ─────────────────────────────────────────────────────────────────
+  {
+    id: 'prostate-volume',
+    name: 'Prostate Volume & Dimensions',
+    category: 'abdomen',
+    subcategory: 'Prostate',
+    ranges: [
+      { max: 30, unit: 'mL', label: 'Normal', notes: 'AP ≤3.0 cm · Width ≤4.5 cm · Length ≤4.0 cm' },
+      { min: 30, max: 50, unit: 'mL', label: 'Mild BPH', notes: 'Correlate with symptoms (IPSS score)' },
+      { min: 50, max: 80, unit: 'mL', label: 'Moderate BPH', notes: 'Medical therapy usually indicated' },
+      { min: 80, unit: 'mL', label: 'Severe BPH / Large Prostate', notes: 'Surgical intervention often required' },
+    ],
+    clinicalNote: 'Volume = AP × Width × Length × 0.52 (ellipsoid formula). Measure transabdominal with full bladder (routine) or transrectal US (TRUS) for greater accuracy. PSA density = PSA (ng/mL) ÷ Volume (mL) — density >0.15 ng/mL/mL raises cancer concern. Always document AP, width, and length in 3 planes.',
+    tags: ['prostate', 'bph', 'prostate volume', 'benign prostatic hyperplasia', 'psa', 'urinary retention', 'abdomen', 'men'],
+  },
+  {
+    id: 'prostate-ap-width-length',
+    name: 'Prostate Dimensions (3-Plane)',
+    category: 'abdomen',
+    subcategory: 'Prostate',
+    ranges: [
+      { max: 3.0, unit: 'cm', label: 'Normal AP diameter (anterior-posterior)' },
+      { max: 4.5, unit: 'cm', label: 'Normal width (transverse)' },
+      { max: 4.0, unit: 'cm', label: 'Normal length (cranio-caudal)' },
+    ],
+    clinicalNote: 'AP measured in sagittal (transverse diameter), width in transverse (widest), length from base to apex in sagittal. Calcifications: echogenic foci in transition zone — benign, common in older men. Peripheral zone hypoechoic nodule: PCa concern — recommend TRUS ± biopsy.',
+    tags: ['prostate', 'dimensions', 'ap', 'width', 'length', 'measurement', 'men', 'abdomen'],
+  },
+
+  // ── UTERUS COMPLETE ───────────────────────────────────────────────────────────
+  {
+    id: 'uterus-ap-width',
+    name: 'Uterus — AP & Width Dimensions',
+    category: 'ob',
+    subcategory: 'Uterus',
+    ranges: [
+      { min: 3, max: 5, unit: 'cm', label: 'Normal AP diameter (anterior-posterior)', notes: 'Measured in sagittal at widest point' },
+      { min: 4, max: 6, unit: 'cm', label: 'Normal width (transverse)', notes: 'Measured at widest transverse dimension' },
+    ],
+    clinicalNote: 'AP measured in sagittal plane at body of uterus (not fundus, not cervix). Width measured in axial/transverse plane. Postmenopausal: AP 2–4 cm, width 3–5 cm. Enlarged uterus (>9 cm length or >5 cm AP): consider fibroids, adenomyosis, or malignancy.',
+    tags: ['uterus', 'ap', 'width', 'dimensions', 'uterine', 'gynecology', 'ob'],
+  },
+  {
+    id: 'uterus-postmenopausal',
+    name: 'Uterus — Postmenopausal Size',
+    category: 'ob',
+    subcategory: 'Uterus',
+    ranges: [
+      { min: 3.5, max: 6.5, unit: 'cm', label: 'Normal postmenopausal length' },
+      { min: 2.0, max: 4.0, unit: 'cm', label: 'Normal postmenopausal AP' },
+      { min: 2.5, max: 5.0, unit: 'cm', label: 'Normal postmenopausal width' },
+    ],
+    clinicalNote: 'Uterus atrophies after menopause. Endometrium ≤4 mm (no HRT) is normal. Any uterine enlargement in postmenopausal patient warrants further evaluation. Fibroids may regress but calcified ones persist.',
+    tags: ['uterus', 'postmenopausal', 'atrophy', 'size', 'gynecology', 'ob'],
+  },
+
+  // ── ADDITIONAL VASCULAR ───────────────────────────────────────────────────────
+  {
+    id: 'ue-arterial-velocities',
+    name: 'Upper Extremity Arterial PSV',
+    category: 'vascular',
+    subcategory: 'Upper Extremity',
+    ranges: [
+      { min: 60, max: 120, unit: 'cm/s', label: 'Normal subclavian PSV', notes: 'Triphasic waveform expected' },
+      { min: 50, max: 100, unit: 'cm/s', label: 'Normal brachial PSV', notes: 'Triphasic waveform' },
+      { min: 40, max: 90, unit: 'cm/s', label: 'Normal radial / ulnar PSV', notes: 'Triphasic waveform' },
+    ],
+    clinicalNote: 'All normal UE arteries should have triphasic waveform (high resistance). Monophasic waveform distal to a stenosis = hemodynamically significant obstruction proximal. Bilateral brachial pressure difference >15 mmHg = subclavian or innominate stenosis on low-pressure side.',
+    tags: ['upper extremity', 'arterial', 'psv', 'subclavian', 'brachial', 'radial', 'ulnar', 'vascular'],
+  },
+  {
+    id: 'av-fistula-flow-volume',
+    name: 'AV Fistula Flow Volume',
+    category: 'vascular',
+    subcategory: 'Dialysis Access',
+    ranges: [
+      { max: 499, unit: 'mL/min', label: 'Inadequate flow — risk of poor dialysis', notes: 'Assess for stenosis' },
+      { min: 500, max: 1200, unit: 'mL/min', label: 'Adequate for dialysis', notes: 'Target range for most centers' },
+      { min: 1200, max: 2000, unit: 'mL/min', label: 'High flow — acceptable, monitor', notes: 'May indicate maturation or upstream dilation' },
+      { min: 2000, unit: 'mL/min', label: 'Very high flow — cardiac risk / steal', notes: 'Consider banding or reduction' },
+    ],
+    clinicalNote: 'Measure at brachial artery: Volume (mL/min) = π × (diameter/2)² × TAMEAN × 60. Mature AVF target: ≥600 mL/min. Very high flow (>2000 mL/min): risk of high-output cardiac failure or arterial steal syndrome.',
+    tags: ['av fistula', 'flow volume', 'dialysis', 'avf', 'hemodialysis', 'access', 'vascular'],
+  },
 ];
 
 export function searchMeasurements(query: string): Measurement[] {
