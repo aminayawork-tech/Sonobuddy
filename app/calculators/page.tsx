@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Calculator } from 'lucide-react';
 import {
   calculators, searchCalculators,
   calcABI, calcResistiveIndex, calcVolume, calcAFI,
@@ -81,7 +82,7 @@ function CalculatorContent() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3">🧮 Calculators</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
           <input
             type="text"
             value={query}

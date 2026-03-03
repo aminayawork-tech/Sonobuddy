@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Microscope } from 'lucide-react';
 import { pathologies, searchPathologies, type PathologyCategory } from '@/data/pathologies';
 import clsx from 'clsx';
 
@@ -40,7 +41,7 @@ export default function PathologiesPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3">🔬 Pathologies</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
           <input
             type="text"
             value={query}

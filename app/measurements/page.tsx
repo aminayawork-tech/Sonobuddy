@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Ruler } from 'lucide-react';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
 import RangeBar from '@/components/RangeBar';
 import clsx from 'clsx';
@@ -25,7 +26,7 @@ export default function MeasurementsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3">📏 Measurements</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
             type="text"
             value={query}

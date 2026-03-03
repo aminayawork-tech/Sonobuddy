@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { ClipboardList } from 'lucide-react';
 import { protocols, searchProtocols, PROTOCOL_CATEGORY_LABELS, DIFFICULTY_COLORS, type ProtocolCategory } from '@/data/protocols';
 import clsx from 'clsx';
 
@@ -25,7 +26,7 @@ export default function ProtocolsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3">📋 Protocols</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-sono-blue" /> Protocols</h1>
           <input
             type="text"
             value={query}
