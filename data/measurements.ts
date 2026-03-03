@@ -36,13 +36,13 @@ export const CATEGORY_LABELS: Record<MeasurementCategory, string> = {
 };
 
 export const CATEGORY_COLORS: Record<MeasurementCategory, string> = {
-  vascular: 'bg-red-900/40 text-red-300 border-red-700',
-  abdomen: 'bg-amber-900/40 text-amber-300 border-amber-700',
-  ob: 'bg-pink-900/40 text-pink-300 border-pink-700',
-  thyroid: 'bg-purple-900/40 text-purple-300 border-purple-700',
-  cardiac: 'bg-blue-900/40 text-blue-300 border-blue-700',
-  musculoskeletal: 'bg-green-900/40 text-green-300 border-green-700',
-  superficial: 'bg-teal-900/40 text-teal-300 border-teal-700',
+  vascular: 'bg-red-100 text-red-700 border-red-200',
+  abdomen: 'bg-amber-100 text-amber-700 border-amber-200',
+  ob: 'bg-pink-100 text-pink-700 border-pink-200',
+  thyroid: 'bg-purple-100 text-purple-700 border-purple-200',
+  cardiac: 'bg-blue-100 text-blue-700 border-blue-200',
+  musculoskeletal: 'bg-green-100 text-green-700 border-green-200',
+  superficial: 'bg-teal-100 text-teal-700 border-teal-200',
 };
 
 export const measurements: Measurement[] = [

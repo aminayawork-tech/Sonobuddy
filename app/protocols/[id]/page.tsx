@@ -35,7 +35,7 @@ export default function ProtocolDetailPage() {
         <Link href="/protocols" className="inline-flex items-center gap-1 text-sono-blue text-sm mb-3 hover:underline">
           ← Protocols
         </Link>
-        <h1 className="text-xl font-bold text-white mb-2">{protocol.name}</h1>
+        <h1 className="text-xl font-bold text-slate-900 mb-2">{protocol.name}</h1>
         <div className="flex items-center gap-2 flex-wrap text-xs text-sono-muted">
           <span className={clsx('px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[protocol.difficulty])}>
             {protocol.difficulty}
@@ -50,11 +50,11 @@ export default function ProtocolDetailPage() {
       <div className="px-4 pt-4 grid grid-cols-1 gap-2">
         <div className="bg-sono-card border border-sono-border rounded-xl p-3">
           <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Patient Position</p>
-          <p className="text-xs text-slate-300">{protocol.patient}</p>
+          <p className="text-xs text-slate-700">{protocol.patient}</p>
         </div>
         <div className="bg-sono-card border border-sono-border rounded-xl p-3">
           <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Indications</p>
-          <p className="text-xs text-slate-300">{protocol.indication}</p>
+          <p className="text-xs text-slate-700">{protocol.indication}</p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function ProtocolDetailPage() {
                 'flex-1 py-3 text-xs font-medium border-b-2 transition-colors',
                 activeTab === tab.id
                   ? 'text-sono-blue border-sono-blue'
-                  : 'text-sono-muted border-transparent hover:text-slate-300'
+                  : 'text-sono-muted border-transparent hover:text-slate-700'
               )}
             >
               {tab.label}
@@ -86,20 +86,20 @@ export default function ProtocolDetailPage() {
               <div className="w-6 h-6 rounded-full bg-sono-blue/20 border border-sono-blue/50 flex items-center justify-center shrink-0">
                 <span className="text-xs font-bold text-sono-blue">{step.step}</span>
               </div>
-              <h3 className="font-semibold text-white text-sm">{step.title}</h3>
+              <h3 className="font-semibold text-slate-900 text-sm">{step.title}</h3>
             </div>
             <div className="px-4 py-3 space-y-3">
-              <p className="text-xs text-slate-300 leading-relaxed">{step.description}</p>
+              <p className="text-xs text-slate-700 leading-relaxed">{step.description}</p>
               {step.probe && (
                 <p className="text-xs text-sono-muted italic">🔬 {step.probe}</p>
               )}
               {step.tips && step.tips.length > 0 && (
-                <div className="bg-amber-900/20 border border-amber-700/30 rounded-xl p-3 space-y-1.5">
-                  <p className="text-[11px] font-semibold text-amber-400 uppercase tracking-wide">Tips</p>
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-1.5">
+                  <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">Tips</p>
                   {step.tips.map((tip, i) => (
                     <div key={i} className="flex gap-2">
-                      <span className="text-amber-500 shrink-0 text-xs mt-0.5">→</span>
-                      <p className="text-xs text-amber-200/80 leading-relaxed">{tip}</p>
+                      <span className="text-amber-600 shrink-0 text-xs mt-0.5">→</span>
+                      <p className="text-xs text-amber-800 leading-relaxed">{tip}</p>
                     </div>
                   ))}
                 </div>
@@ -114,10 +114,10 @@ export default function ProtocolDetailPage() {
             <p className="text-xs text-sono-muted mb-3">Required images to document for this exam:</p>
             {protocol.keyImages.map((img, i) => (
               <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
-                <div className="w-6 h-6 rounded-full bg-green-900/40 border border-green-700/40 flex items-center justify-center shrink-0">
-                  <span className="text-[10px] font-bold text-green-400">{i + 1}</span>
+                <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
                 </div>
-                <p className="text-sm text-slate-300 pt-0.5">{img}</p>
+                <p className="text-sm text-slate-700 pt-0.5">{img}</p>
               </div>
             ))}
           </div>
@@ -130,15 +130,15 @@ export default function ProtocolDetailPage() {
             {protocol.reportChecklist.map((item, i) => (
               <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
                 <span className="text-sono-blue shrink-0 mt-0.5">☐</span>
-                <p className="text-sm text-slate-300">{item}</p>
+                <p className="text-sm text-slate-700">{item}</p>
               </div>
             ))}
             {protocol.commonFindings.length > 0 && (
               <>
                 <p className="text-xs font-semibold text-sono-muted uppercase tracking-wide mt-4 mb-2">Common Findings</p>
                 {protocol.commonFindings.map((finding, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-slate-400">
-                    <span className="text-slate-600">•</span> {finding}
+                  <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                    <span className="text-slate-400">•</span> {finding}
                   </div>
                 ))}
               </>

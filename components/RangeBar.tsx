@@ -6,10 +6,10 @@ type Props = {
 };
 
 const RANGE_COLORS = [
-  'bg-green-500/20 border-green-500/40 text-green-300',
-  'bg-amber-500/20 border-amber-500/40 text-amber-300',
-  'bg-red-500/20 border-red-500/40 text-red-300',
-  'bg-blue-500/20 border-blue-500/40 text-blue-300',
+  'bg-green-50 border-green-200 text-green-700',
+  'bg-amber-50 border-amber-200 text-amber-700',
+  'bg-red-50 border-red-200 text-red-700',
+  'bg-blue-50 border-blue-200 text-blue-700',
 ];
 
 export default function RangeBar({ ranges }: Props) {

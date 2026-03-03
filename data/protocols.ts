@@ -35,9 +35,9 @@ export const PROTOCOL_CATEGORY_LABELS: Record<ProtocolCategory, string> = {
 };
 
 export const DIFFICULTY_COLORS = {
-  beginner: 'text-green-400 bg-green-900/30 border-green-700',
-  intermediate: 'text-amber-400 bg-amber-900/30 border-amber-700',
-  advanced: 'text-red-400 bg-red-900/30 border-red-700',
+  beginner: 'text-green-700 bg-green-100 border-green-200',
+  intermediate: 'text-amber-700 bg-amber-100 border-amber-200',
+  advanced: 'text-red-700 bg-red-100 border-red-200',
 };
 
 export const protocols: Protocol[] = [
