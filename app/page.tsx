@@ -1,27 +1,33 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 import { type SearchResult } from '@/lib/search';
+import {
+  Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2, Workflow,
+  Ruler, ClipboardList, Microscope, Scan, type LucideIcon,
+} from 'lucide-react';
 
-const QUICK_LINKS = [
-  { label: 'Carotid Duplex', href: '/protocols/carotid-duplex', icon: '🫀' },
-  { label: 'DVT Lower', href: '/protocols/dvt-lower', icon: '🦵' },
-  { label: 'UE Arterial', href: '/protocols/ue-arterial', icon: '💪' },
-  { label: 'Echo / TTE', href: '/protocols/echo-tte', icon: '❤️' },
-  { label: 'Pelvic US', href: '/protocols/pelvic-us', icon: '🩻' },
-  { label: 'Thyroid US', href: '/protocols/thyroid-ultrasound', icon: '🦋' },
-  { label: 'ABI Calc', href: '/calculators?id=abi', icon: '🧮' },
-  { label: 'Carotid Stenosis', href: '/calculators?id=carotid-stenosis', icon: '📊' },
-  { label: 'AVF Surveillance', href: '/protocols/av-fistula-graft', icon: '🔗' },
+type QuickLink = { label: string; href: string; Icon: LucideIcon; iconBg: string; iconColor: string };
+type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; color: string; iconBg: string; iconColor: string };
+
+const QUICK_LINKS: QuickLink[] = [
+  { label: 'Carotid Duplex',    href: '/protocols/carotid-duplex',        Icon: Activity,     iconBg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
+  { label: 'DVT Lower',         href: '/protocols/dvt-lower',             Icon: Activity,     iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
+  { label: 'UE Arterial',       href: '/protocols/ue-arterial',           Icon: Activity,     iconBg: 'bg-cyan-100',   iconColor: 'text-cyan-600'   },
+  { label: 'Echo / TTE',        href: '/protocols/echo-tte',              Icon: Heart,        iconBg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
+  { label: 'Pelvic US',         href: '/protocols/pelvic-us',             Icon: Stethoscope,  iconBg: 'bg-violet-100', iconColor: 'text-violet-600' },
+  { label: 'Thyroid US',        href: '/protocols/thyroid-ultrasound',    Icon: Scan,         iconBg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
+  { label: 'ABI Calc',          href: '/calculators?id=abi',              Icon: Gauge,        iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'Carotid Stenosis',  href: '/calculators?id=carotid-stenosis', Icon: BarChart2,    iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'AVF Surveillance',  href: '/protocols/av-fistula-graft',      Icon: Workflow,     iconBg: 'bg-teal-100',   iconColor: 'text-teal-600'   },
 ];
 
-const CATEGORY_TILES = [
-  { label: 'Measurements', href: '/measurements', icon: '📏', desc: 'Normal values + ranges', color: 'from-sky-50 to-blue-100 border-blue-200', iconBg: 'bg-blue-100' },
-  { label: 'Protocols', href: '/protocols', icon: '📋', desc: 'Step-by-step exam guides', color: 'from-emerald-50 to-green-100 border-green-200', iconBg: 'bg-green-100' },
-  { label: 'Calculators', href: '/calculators', icon: '🧮', desc: 'ABI, RI, stenosis, OB…', color: 'from-violet-50 to-purple-100 border-purple-200', iconBg: 'bg-purple-100' },
-  { label: 'Pathologies', href: '/pathologies', icon: '🔬', desc: 'US findings + red flags', color: 'from-rose-50 to-red-100 border-red-200', iconBg: 'bg-red-100' },
+const CATEGORY_TILES: CategoryTile[] = [
+  { label: 'Measurements', href: '/measurements', Icon: Ruler,        desc: 'Normal values + ranges',    color: 'from-sky-50 to-blue-100 border-blue-200',     iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
+  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides',  color: 'from-emerald-50 to-green-100 border-green-200', iconBg: 'bg-green-100',  iconColor: 'text-green-600'  },
+  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,   desc: 'ABI, RI, stenosis, OB…',    color: 'from-violet-50 to-purple-100 border-purple-200', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,   desc: 'US findings + red flags',   color: 'from-rose-50 to-red-100 border-red-200',        iconBg: 'bg-red-100',    iconColor: 'text-red-600'    },
 ];
 
 export default function HomePage() {
@@ -63,8 +69,8 @@ export default function HomePage() {
               onClick={() => router.push(tile.href)}
               className={`bg-gradient-to-br ${tile.color} border rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm`}
             >
-              <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3`}>
-                {tile.icon}
+              <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center mb-3`}>
+                <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
               </div>
               <div className="font-bold text-slate-800 text-sm">{tile.label}</div>
               <div className="text-[11px] text-slate-500 mt-0.5 font-medium">{tile.desc}</div>
@@ -83,7 +89,9 @@ export default function HomePage() {
               onClick={() => router.push(link.href)}
               className="bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm"
             >
-              <div className="text-2xl mb-1.5">{link.icon}</div>
+              <div className={`${link.iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
+                <link.Icon size={18} className={link.iconColor} strokeWidth={2} />
+              </div>
               <div className="text-[10px] text-slate-600 font-semibold leading-tight">{link.label}</div>
             </button>
           ))}
