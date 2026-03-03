@@ -119,6 +119,42 @@ export function calcEDD(lmpDate: string): CalcResult {
   return { value: formatted, unit: 'EDD', color: 'blue', interpretation: 'Naegele\'s rule (LMP + 280 days)' };
 }
 
+export function calcCarotidStenosis(icaPSV: number, icaEDV: number, ccaPSV: number): CalcResult {
+  if (!icaPSV || !ccaPSV) return { value: '—', unit: '' };
+  const ratio = icaPSV / ccaPSV;
+  let grade = '';
+  let interpretation = '';
+  let color: CalcResult['color'] = 'green';
+
+  if (icaPSV < 125 && ratio < 2.0) {
+    grade = 'Normal / <50%';
+    interpretation = 'No significant stenosis — ICA PSV <125 cm/s, ICA/CCA ratio <2.0';
+    color = 'green';
+  } else if (icaPSV < 125) {
+    grade = '<50% stenosis';
+    interpretation = 'Mild stenosis — ICA PSV <125 cm/s (plaque present without velocity elevation)';
+    color = 'blue';
+  } else if (icaPSV <= 230 && ratio >= 2.0 && ratio <= 4.0) {
+    grade = '50–69% stenosis';
+    interpretation = 'Moderate stenosis — ICA PSV 125–230 cm/s, ICA/CCA ratio 2–4';
+    color = 'amber';
+  } else if (icaPSV > 230 && icaEDV > 100 && ratio > 4.0) {
+    grade = '≥70% stenosis';
+    interpretation = 'Severe stenosis — ICA PSV >230, EDV >100, ICA/CCA ratio >4';
+    color = 'red';
+  } else if (icaPSV > 230 && ratio > 4.0) {
+    grade = '≥70% stenosis (probable)';
+    interpretation = 'ICA PSV >230 with ratio >4 — severe stenosis likely; confirm with EDV';
+    color = 'red';
+  } else {
+    grade = 'Indeterminate';
+    interpretation = 'Values span multiple categories — clinical correlation required';
+    color = 'amber';
+  }
+
+  return { value: grade, unit: `ICA/CCA: ${ratio.toFixed(2)}`, interpretation, color };
+}
+
 export function calcThyroidVolume(rL: number, rW: number, rH: number, lL: number, lW: number, lH: number): CalcResult {
   const rVol = 0.52 * rL * rW * rH;
   const lVol = 0.52 * lL * lW * lH;
@@ -245,6 +281,21 @@ export const calculators: Calculator[] = [
       { id: 'psv2', label: 'Vessel 2 PSV (reference)', unit: 'cm/s', placeholder: '70', hint: 'e.g. CCA PSV or aortic PSV' },
     ],
     tags: ['ratio', 'psv', 'ica-cca', 'rar', 'stenosis', 'vascular'],
+  },
+  {
+    id: 'carotid-stenosis',
+    name: 'Carotid Stenosis Grade (SRU)',
+    shortName: 'Carotid Stenosis',
+    category: 'vascular',
+    description: 'Grades ICA stenosis severity using SRU 2003 consensus criteria. Enter ICA PSV, EDV, and CCA PSV for automatic grade.',
+    formula: '≥70%: ICA PSV >230 + EDV >100 + ratio >4 | 50–69%: PSV 125–230 + ratio 2–4 | <50%: PSV <125',
+    fields: [
+      { id: 'icaPSV', label: 'ICA Peak Systolic Velocity', unit: 'cm/s', placeholder: '250', hint: 'Highest PSV at or distal to stenosis' },
+      { id: 'icaEDV', label: 'ICA End Diastolic Velocity', unit: 'cm/s', placeholder: '110', hint: 'EDV at same location as PSV' },
+      { id: 'ccaPSV', label: 'CCA Peak Systolic Velocity', unit: 'cm/s', placeholder: '70', hint: 'PSV in distal CCA (reference vessel)' },
+    ],
+    tags: ['carotid', 'stenosis', 'ica', 'cca', 'sru', 'plaque', 'vascular', 'imt', 'duplex'],
+    reference: 'SRU Carotid Stenosis Consensus 2003',
   },
 ];
 

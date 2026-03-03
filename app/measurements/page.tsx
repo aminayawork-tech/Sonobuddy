@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Ruler } from 'lucide-react';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
 import RangeBar from '@/components/RangeBar';
 import clsx from 'clsx';
@@ -25,13 +26,13 @@ export default function MeasurementsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-white mb-3">📏 Measurements</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "aorta", "BPD", "endometrium"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-white placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
         {/* Category filter */}
@@ -42,7 +43,7 @@ export default function MeasurementsPage() {
               'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
               activeCategory === 'all'
                 ? 'bg-sono-blue text-white border-sono-blue'
-                : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-500'
+                : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-400'
             )}
           >
             All
@@ -55,7 +56,7 @@ export default function MeasurementsPage() {
                 'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
                 activeCategory === cat
                   ? 'bg-sono-blue text-white border-sono-blue'
-                  : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-500'
+                  : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-400'
               )}
             >
               {label}
@@ -79,14 +80,14 @@ export default function MeasurementsPage() {
         {filtered.map((m) => {
           const isExpanded = expandedId === m.id;
           return (
-            <div key={m.id} className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden">
+            <div key={m.id} className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden shadow-sm">
               <button
                 className="w-full px-4 py-4 text-left flex items-start justify-between gap-3"
                 onClick={() => setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-sm font-semibold text-white">{m.name}</span>
+                    <span className="text-sm font-semibold text-slate-900">{m.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[m.category])}>
@@ -103,12 +104,12 @@ export default function MeasurementsPage() {
               </button>
 
               {isExpanded && (
-                <div className="px-4 pb-4 border-t border-sono-border/50 pt-3 space-y-3">
+                <div className="px-4 pb-4 border-t border-sono-border pt-3 space-y-3">
                   <RangeBar ranges={m.ranges} />
                   {m.clinicalNote && (
-                    <div className="bg-slate-800/50 rounded-xl p-3">
+                    <div className="bg-slate-50 rounded-xl p-3">
                       <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Note</p>
-                      <p className="text-xs text-slate-300 leading-relaxed">{m.clinicalNote}</p>
+                      <p className="text-xs text-slate-700 leading-relaxed">{m.clinicalNote}</p>
                     </div>
                   )}
                 </div>

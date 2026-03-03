@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { Microscope } from 'lucide-react';
 import { pathologies, searchPathologies, type PathologyCategory } from '@/data/pathologies';
 import clsx from 'clsx';
 
@@ -13,11 +14,11 @@ const CATEGORY_LABELS: Record<PathologyCategory, string> = {
 };
 
 const CATEGORY_COLORS: Record<PathologyCategory, string> = {
-  vascular: 'bg-red-900/40 text-red-300 border-red-700',
-  abdomen: 'bg-amber-900/40 text-amber-300 border-amber-700',
-  ob: 'bg-pink-900/40 text-pink-300 border-pink-700',
-  thyroid: 'bg-purple-900/40 text-purple-300 border-purple-700',
-  cardiac: 'bg-blue-900/40 text-blue-300 border-blue-700',
+  vascular: 'bg-red-100 text-red-700 border-red-200',
+  abdomen: 'bg-amber-100 text-amber-700 border-amber-200',
+  ob: 'bg-pink-100 text-pink-700 border-pink-200',
+  thyroid: 'bg-purple-100 text-purple-700 border-purple-200',
+  cardiac: 'bg-blue-100 text-blue-700 border-blue-200',
 };
 
 type Category = PathologyCategory | 'all';
@@ -40,13 +41,13 @@ export default function PathologiesPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-white mb-3">🔬 Pathologies</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "DVT", "cholecystitis", "fatty liver"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-white placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
         <div className="flex gap-2 px-4 pb-3 overflow-x-auto">
@@ -98,12 +99,12 @@ export default function PathologiesPage() {
                 onClick={() => setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-white text-sm mb-1">{p.name}</h3>
+                  <h3 className="font-semibold text-slate-900 text-sm mb-1">{p.name}</h3>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[p.category])}>
                       {CATEGORY_LABELS[p.category]}
                     </span>
-                    <span className="text-[11px] text-red-400">⚠ {p.redFlags.length} red flags</span>
+                    <span className="text-[11px] text-red-600">⚠ {p.redFlags.length} red flags</span>
                   </div>
                 </div>
                 <span className="text-sono-muted text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
@@ -112,11 +113,11 @@ export default function PathologiesPage() {
               </button>
 
               {isExpanded && (
-                <div className="border-t border-sono-border/50 divide-y divide-sono-border/30">
+                <div className="border-t border-sono-border divide-y divide-sono-border">
                   {/* Clinical context */}
                   <div className="px-4 py-3">
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Context</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">{p.clinicalContext}</p>
+                    <p className="text-xs text-slate-700 leading-relaxed">{p.clinicalContext}</p>
                   </div>
 
                   {/* US Findings */}
@@ -124,7 +125,7 @@ export default function PathologiesPage() {
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Ultrasound Findings</p>
                     <ul className="space-y-1">
                       {p.ultrasoundFindings.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-slate-300">
+                        <li key={i} className="flex gap-2 text-xs text-slate-700">
                           <span className="text-sono-blue shrink-0">•</span>
                           <span>{f}</span>
                         </li>
@@ -133,11 +134,11 @@ export default function PathologiesPage() {
                   </div>
 
                   {/* Red Flags */}
-                  <div className="px-4 py-3 bg-red-950/20">
-                    <p className="text-[11px] font-semibold text-red-400 uppercase tracking-wide mb-2">⚠ Red Flags</p>
+                  <div className="px-4 py-3 bg-red-50">
+                    <p className="text-[11px] font-semibold text-red-700 uppercase tracking-wide mb-2">⚠ Red Flags</p>
                     <ul className="space-y-1">
                       {p.redFlags.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-red-300">
+                        <li key={i} className="flex gap-2 text-xs text-red-800">
                           <span className="shrink-0">!</span>
                           <span>{f}</span>
                         </li>
@@ -150,8 +151,8 @@ export default function PathologiesPage() {
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Differentials</p>
                     <ul className="space-y-1">
                       {p.differentials.map((d, i) => (
-                        <li key={i} className="text-xs text-slate-400 flex gap-2">
-                          <span className="text-slate-600 shrink-0">vs</span>
+                        <li key={i} className="text-xs text-slate-700 flex gap-2">
+                          <span className="text-slate-400 shrink-0">vs</span>
                           <span>{d}</span>
                         </li>
                       ))}
@@ -159,9 +160,9 @@ export default function PathologiesPage() {
                   </div>
 
                   {/* Reporting Tips */}
-                  <div className="px-4 py-3 bg-amber-950/20">
-                    <p className="text-[11px] font-semibold text-amber-400 uppercase tracking-wide mb-1">Reporting Tips</p>
-                    <p className="text-xs text-amber-200/80 leading-relaxed">{p.reportingTips}</p>
+                  <div className="px-4 py-3 bg-amber-50">
+                    <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide mb-1">Reporting Tips</p>
+                    <p className="text-xs text-amber-800 leading-relaxed">{p.reportingTips}</p>
                   </div>
                 </div>
               )}

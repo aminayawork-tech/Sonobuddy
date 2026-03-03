@@ -1,24 +1,33 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 import { type SearchResult } from '@/lib/search';
+import {
+  Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2, Workflow,
+  Ruler, ClipboardList, Microscope, Scan, type LucideIcon,
+} from 'lucide-react';
 
-const QUICK_LINKS = [
-  { label: 'Carotid Duplex', href: '/protocols/carotid-duplex', icon: '🫀' },
-  { label: 'DVT Protocol', href: '/protocols/dvt-lower', icon: '🦵' },
-  { label: 'RUQ Abdomen', href: '/protocols/ruo', icon: '🫁' },
-  { label: 'Thyroid US', href: '/protocols/thyroid-ultrasound', icon: '🫃' },
-  { label: 'ABI Calc', href: '/calculators?id=abi', icon: '🧮' },
-  { label: 'AFI Calc', href: '/calculators?id=afi', icon: '🤰' },
+type QuickLink = { label: string; href: string; Icon: LucideIcon; iconBg: string; iconColor: string };
+type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; color: string; iconBg: string; iconColor: string };
+
+const QUICK_LINKS: QuickLink[] = [
+  { label: 'Carotid Duplex',    href: '/protocols/carotid-duplex',        Icon: Activity,     iconBg: 'bg-sky-100',    iconColor: 'text-sky-600'    },
+  { label: 'DVT Lower',         href: '/protocols/dvt-lower',             Icon: Activity,     iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
+  { label: 'UE Arterial',       href: '/protocols/ue-arterial',           Icon: Activity,     iconBg: 'bg-cyan-100',   iconColor: 'text-cyan-600'   },
+  { label: 'Echo / TTE',        href: '/protocols/echo-tte',              Icon: Heart,        iconBg: 'bg-rose-100',   iconColor: 'text-rose-600'   },
+  { label: 'Pelvic US',         href: '/protocols/pelvic-us',             Icon: Stethoscope,  iconBg: 'bg-violet-100', iconColor: 'text-violet-600' },
+  { label: 'Thyroid US',        href: '/protocols/thyroid-ultrasound',    Icon: Scan,         iconBg: 'bg-amber-100',  iconColor: 'text-amber-600'  },
+  { label: 'ABI Calc',          href: '/calculators?id=abi',              Icon: Gauge,        iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'Carotid Stenosis',  href: '/calculators?id=carotid-stenosis', Icon: BarChart2,    iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'AVF Surveillance',  href: '/protocols/av-fistula-graft',      Icon: Workflow,     iconBg: 'bg-teal-100',   iconColor: 'text-teal-600'   },
 ];
 
-const CATEGORY_TILES = [
-  { label: 'Measurements', href: '/measurements', icon: '📏', desc: 'Normal values + ranges', color: 'from-blue-900/60 to-blue-800/30 border-blue-700/50' },
-  { label: 'Protocols', href: '/protocols', icon: '📋', desc: 'Step-by-step exam guides', color: 'from-green-900/60 to-green-800/30 border-green-700/50' },
-  { label: 'Calculators', href: '/calculators', icon: '🧮', desc: 'ABI, RI, volume, OB…', color: 'from-purple-900/60 to-purple-800/30 border-purple-700/50' },
-  { label: 'Pathologies', href: '/pathologies', icon: '🔬', desc: 'US findings + red flags', color: 'from-red-900/60 to-red-800/30 border-red-700/50' },
+const CATEGORY_TILES: CategoryTile[] = [
+  { label: 'Measurements', href: '/measurements', Icon: Ruler,        desc: 'Normal values + ranges',    color: 'from-sky-50 to-blue-100 border-blue-200',     iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
+  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides',  color: 'from-emerald-50 to-green-100 border-green-200', iconBg: 'bg-green-100',  iconColor: 'text-green-600'  },
+  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,   desc: 'ABI, RI, stenosis, OB…',    color: 'from-violet-50 to-purple-100 border-purple-200', iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
+  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,   desc: 'US findings + red flags',   color: 'from-rose-50 to-red-100 border-red-200',        iconBg: 'bg-red-100',    iconColor: 'text-red-600'    },
 ];
 
 export default function HomePage() {
@@ -29,76 +38,82 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen pb-nav">
-      {/* Header */}
-      <div className="px-4 pt-12 pb-6">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-2xl">🩺</span>
-          <h1 className="text-2xl font-bold text-white tracking-tight">SonoBuddy</h1>
+    <div className="min-h-screen pb-nav bg-sono-dark">
+      {/* Gradient Hero Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-100 via-blue-50 to-transparent pointer-events-none" />
+        <div className="relative px-5 pt-14 pb-7">
+          <div className="flex items-center gap-2.5 mb-1">
+            <h1 className="text-3xl font-black tracking-tight">
+              <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
+            </h1>
+          </div>
+          <p className="text-sono-muted text-sm font-medium">Your pocket sonographer reference</p>
         </div>
-        <p className="text-sono-muted text-sm">Your pocket sono reference</p>
       </div>
 
       {/* Search */}
-      <div className="px-4 mb-6">
+      <div className="px-5 mb-7">
         <SearchBar
-          placeholder='Try "aorta" or "carotid protocol"…'
+          placeholder='Search protocols, measurements, calcs…'
           onSelect={handleSearchSelect}
         />
       </div>
 
-      {/* Quick Links */}
-      <div className="px-4 mb-6">
-        <h2 className="text-xs font-semibold text-sono-muted uppercase tracking-wider mb-3">Quick Access</h2>
-        <div className="grid grid-cols-3 gap-2">
-          {QUICK_LINKS.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => router.push(link.href)}
-              className="bg-sono-card border border-sono-border rounded-xl p-3 text-center hover:border-sono-blue/50 hover:bg-slate-700/50 transition-all active:scale-95"
-            >
-              <div className="text-2xl mb-1">{link.icon}</div>
-              <div className="text-[11px] text-slate-300 font-medium leading-tight">{link.label}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Category Tiles */}
-      <div className="px-4 mb-6">
-        <h2 className="text-xs font-semibold text-sono-muted uppercase tracking-wider mb-3">Browse</h2>
+      <div className="px-5 mb-7">
+        <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Browse</p>
         <div className="grid grid-cols-2 gap-3">
           {CATEGORY_TILES.map((tile) => (
             <button
               key={tile.href}
               onClick={() => router.push(tile.href)}
-              className={`bg-gradient-to-br ${tile.color} border rounded-2xl p-4 text-left hover:opacity-90 transition-all active:scale-95`}
+              className={`bg-gradient-to-br ${tile.color} border rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm`}
             >
-              <div className="text-3xl mb-2">{tile.icon}</div>
-              <div className="font-semibold text-white text-sm">{tile.label}</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">{tile.desc}</div>
+              <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center mb-3`}>
+                <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
+              </div>
+              <div className="font-bold text-slate-800 text-sm">{tile.label}</div>
+              <div className="text-[11px] text-slate-500 mt-0.5 font-medium">{tile.desc}</div>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Tip of the Day */}
-      <div className="px-4 mb-6">
-        <div className="bg-sono-card border border-sono-blue/30 rounded-2xl p-4">
+      {/* Quick Links */}
+      <div className="px-5 mb-7">
+        <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Quick Access</p>
+        <div className="grid grid-cols-3 gap-2">
+          {QUICK_LINKS.map((link) => (
+            <button
+              key={link.href}
+              onClick={() => router.push(link.href)}
+              className="bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm"
+            >
+              <div className={`${link.iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
+                <link.Icon size={18} className={link.iconColor} strokeWidth={2} />
+              </div>
+              <div className="text-[10px] text-slate-600 font-semibold leading-tight">{link.label}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tip Card */}
+      <div className="px-5 mb-6">
+        <div className="bg-sono-card border border-sono-border rounded-2xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-base">💡</span>
-            <span className="text-xs font-semibold text-sono-blue uppercase tracking-wider">Tip</span>
+            <div className="bg-sky-100 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
+            <span className="text-xs font-bold text-sono-blue uppercase tracking-widest">Sono Tip</span>
           </div>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            The &ldquo;superficial&rdquo; femoral vein is part of the <span className="text-white font-medium">deep</span> venous system.
-            DVT here still requires anticoagulation — never let the name confuse you or your ordering provider.
+          <p className="text-sm text-slate-700 leading-relaxed font-medium">
+            The &ldquo;superficial&rdquo; femoral vein is part of the <span className="text-slate-900 font-bold">deep</span> venous system — DVT here still requires anticoagulation. Never let the name mislead you or your provider.
           </p>
         </div>
       </div>
 
-      {/* Version */}
-      <div className="px-4 pb-4 text-center">
-        <p className="text-[11px] text-sono-muted">SonoBuddy v0.1 · MVP · Made for sonographers</p>
+      <div className="px-5 pb-4 text-center">
+        <p className="text-[11px] text-sono-muted">SonoBuddy · Made for sonographers</p>
       </div>
     </div>
   );
