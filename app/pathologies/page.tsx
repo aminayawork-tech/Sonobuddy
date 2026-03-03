@@ -85,7 +85,7 @@ export default function PathologiesPage() {
       <div className="px-4 space-y-3 pb-4">
         {filtered.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-sono-muted text-sm">No pathologies found for "{query}"</p>
+            <p className="text-sono-muted text-sm">No pathologies found for &ldquo;{query}&rdquo;</p>
           </div>
         )}
 

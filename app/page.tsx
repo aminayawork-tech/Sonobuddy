@@ -90,7 +90,7 @@ export default function HomePage() {
             <span className="text-xs font-semibold text-sono-blue uppercase tracking-wider">Tip</span>
           </div>
           <p className="text-sm text-slate-300 leading-relaxed">
-            The "superficial" femoral vein is part of the <span className="text-white font-medium">deep</span> venous system.
+            The &ldquo;superficial&rdquo; femoral vein is part of the <span className="text-white font-medium">deep</span> venous system.
             DVT here still requires anticoagulation — never let the name confuse you or your ordering provider.
           </p>
         </div>

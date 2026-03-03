@@ -73,7 +73,7 @@ export default function MeasurementsPage() {
       <div className="px-4 space-y-3 pb-4">
         {filtered.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-sono-muted text-sm">No measurements found for "{query}"</p>
+            <p className="text-sono-muted text-sm">No measurements found for &ldquo;{query}&rdquo;</p>
           </div>
         )}
         {filtered.map((m) => {
