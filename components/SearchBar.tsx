@@ -2,8 +2,16 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { globalSearch, type SearchResult, TYPE_LABELS, TYPE_COLORS, TYPE_ICONS } from '@/lib/search';
+import { Search, X, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
+import { globalSearch, type SearchResult, TYPE_LABELS, TYPE_COLORS } from '@/lib/search';
 import clsx from 'clsx';
+
+const TYPE_ICON_COMPONENTS: Record<SearchResult['type'], React.ElementType> = {
+  measurement: Ruler,
+  protocol: ClipboardList,
+  calculator: Calculator,
+  pathology: Microscope,
+};
 
 type Props = {
   placeholder?: string;
@@ -42,7 +50,7 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
   return (
     <div className="relative w-full">
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sono-muted text-lg">🔍</span>
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-sono-muted" />
         <input
           ref={inputRef}
           type="text"
@@ -61,7 +69,7 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
             onClick={() => { setQuery(''); setOpen(false); }}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-sono-muted hover:text-slate-700 transition-colors"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -74,7 +82,7 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
               onClick={() => handleSelect(result)}
               className="w-full flex items-start gap-3 px-4 py-3 hover:bg-slate-100 transition-colors text-left border-b border-sono-border last:border-0"
             >
-              <span className="text-lg mt-0.5 shrink-0">{TYPE_ICONS[result.type]}</span>
+              {(() => { const Icon = TYPE_ICON_COMPONENTS[result.type]; return <Icon className="w-4 h-4 mt-0.5 shrink-0 text-sono-muted" />; })()}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-sm font-medium text-slate-900 truncate">{result.name}</span>

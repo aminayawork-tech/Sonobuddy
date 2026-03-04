@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, Clock, Zap } from 'lucide-react';
 import { protocols, searchProtocols, PROTOCOL_CATEGORY_LABELS, DIFFICULTY_COLORS, type ProtocolCategory } from '@/data/protocols';
 import clsx from 'clsx';
 
@@ -87,8 +87,8 @@ export default function ProtocolsPage() {
                   <span className={clsx('text-[11px] px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[p.difficulty])}>
                     {p.difficulty}
                   </span>
-                  <span className="text-[11px] text-sono-muted">⏱ {p.duration}</span>
-                  <span className="text-[11px] text-sono-muted">🔬 {p.probe.split(' ')[0]}</span>
+                  <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Clock className="w-3 h-3" /> {p.duration}</span>
+                  <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Zap className="w-3 h-3" /> {p.probe.split(' ')[0]}</span>
                 </div>
                 <p className="text-[11px] text-slate-500 mt-2 line-clamp-2">{p.indication}</p>
               </div>
