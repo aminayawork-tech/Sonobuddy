@@ -80,9 +80,3 @@ export const TYPE_COLORS: Record<SearchResultType, string> = {
   pathology: 'bg-red-100 text-red-700 border-red-200',
 };
 
-export const TYPE_ICONS: Record<SearchResultType, string> = {
-  measurement: '📏',
-  protocol: '📋',
-  calculator: '🧮',
-  pathology: '🔬',
-};

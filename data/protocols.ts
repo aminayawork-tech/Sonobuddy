@@ -18,6 +18,7 @@ export type Protocol = {
   indication: string;
   steps: ProtocolStep[];
   keyImages: string[];
+  keyImageFiles?: string[];   // parallel to keyImages — '/protocols/{id}/{filename}' when image exists
   commonFindings: string[];
   reportChecklist: string[];
   tags: string[];
