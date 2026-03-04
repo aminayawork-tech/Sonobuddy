@@ -115,7 +115,7 @@ export const protocols: Protocol[] = [
       'Vertebral — color Doppler + spectral',
       'Bifurcation — color Doppler overview',
       'Plaque — sagittal view',
-      'Plaque — transverse / zoomed view',
+      'Plaque — sagittal / zoomed view',
     ],
     keyImageFiles: [
       '/protocols/carotid-duplex/01-cca-transverse.jpg',
