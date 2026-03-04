@@ -110,10 +110,23 @@ export const protocols: Protocol[] = [
       'CCA sagittal — spectral Doppler (distal)',
       'ICA proximal — spectral Doppler with PSV/EDV',
       'ICA mid — spectral Doppler',
+      'ICA distal — spectral Doppler',
       'ECA — spectral Doppler',
       'Vertebral — color Doppler + spectral',
       'Bifurcation — color Doppler overview',
       'Any plaque: sagittal + transverse measurement',
+    ],
+    keyImageFiles: [
+      '/protocols/carotid-duplex/01-cca-transverse.jpg',
+      '/protocols/carotid-duplex/02-cca-sagittal-proximal.png',
+      '/protocols/carotid-duplex/03-cca-sagittal-distal.png',
+      '/protocols/carotid-duplex/04-ica-prox.png',
+      '/protocols/carotid-duplex/05-ica-mid.png',
+      '/protocols/carotid-duplex/06-ica-distal.png',
+      '/protocols/carotid-duplex/07-eca.png',
+      '/protocols/carotid-duplex/08-vertebral.png',
+      '/protocols/carotid-duplex/09-bifurcation.png',
+      // index 9 (plaque) — no image yet
     ],
     commonFindings: [
       'Atherosclerotic plaque (calcified/soft)',
