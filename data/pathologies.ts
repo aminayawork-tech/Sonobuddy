@@ -1,3 +1,9 @@
+export type PathologyImage = {
+  src: string;       // path under /public, e.g. "/pathologies/cholecystitis/01-gallstone.jpg"
+  caption: string;   // short description
+  credit?: string;   // license/attribution, e.g. "Wikimedia Commons — CC BY-SA 4.0, Author Name"
+};
+
 export type Pathology = {
   id: string;
   name: string;
@@ -9,6 +15,7 @@ export type Pathology = {
   clinicalContext: string;
   reportingTips: string;
   tags: string[];
+  images?: PathologyImage[];  // add licensed images here when available
 };
 
 export type PathologyCategory =
