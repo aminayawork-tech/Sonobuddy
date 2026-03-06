@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Microscope } from 'lucide-react';
-import { pathologies, searchPathologies, type PathologyCategory } from '@/data/pathologies';
+import { Microscope, X } from 'lucide-react';
+import Image from 'next/image';
+import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
 import clsx from 'clsx';
 
 const CATEGORY_LABELS: Record<PathologyCategory, string> = {
@@ -27,6 +28,7 @@ export default function PathologiesPage() {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<PathologyImage | null>(null);
 
   const filtered = useMemo(() => {
     let results = query ? searchPathologies(query) : pathologies;
@@ -38,6 +40,34 @@ export default function PathologiesPage() {
 
   return (
     <div className="min-h-screen pb-nav">
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white/70 hover:text-white"
+            onClick={() => setLightbox(null)}
+          >
+            <X className="w-7 h-7" />
+          </button>
+          <div className="relative w-full max-w-lg max-h-[75vh]" onClick={(e) => e.stopPropagation()}>
+            <Image
+              src={lightbox.src}
+              alt={lightbox.caption}
+              width={800}
+              height={600}
+              className="rounded-xl object-contain w-full max-h-[75vh]"
+            />
+          </div>
+          <p className="text-white/80 text-sm mt-3 text-center max-w-sm">{lightbox.caption}</p>
+          {lightbox.credit && (
+            <p className="text-white/40 text-[11px] mt-1 text-center max-w-sm">{lightbox.credit}</p>
+          )}
+        </div>
+      )}
+
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
@@ -164,6 +194,31 @@ export default function PathologiesPage() {
                     <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide mb-1">Reporting Tips</p>
                     <p className="text-xs text-amber-800 leading-relaxed">{p.reportingTips}</p>
                   </div>
+
+                  {/* Images */}
+                  {p.images && p.images.length > 0 && (
+                    <div className="px-4 py-3">
+                      <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Ultrasound Images</p>
+                      <div className="flex gap-2 overflow-x-auto pb-1">
+                        {p.images.map((img, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setLightbox(img)}
+                            className="shrink-0 rounded-xl overflow-hidden border border-sono-border active:scale-95 transition-transform"
+                          >
+                            <Image
+                              src={img.src}
+                              alt={img.caption}
+                              width={120}
+                              height={90}
+                              className="object-cover w-[120px] h-[90px]"
+                            />
+                            <p className="text-[10px] text-sono-muted px-2 py-1 max-w-[120px] truncate">{img.caption}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
