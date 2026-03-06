@@ -3,17 +3,14 @@
 import { useParams } from 'next/navigation';
 import { protocols, DIFFICULTY_COLORS } from '@/data/protocols';
 import Link from 'next/link';
-import Image from 'next/image';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { Clock, Zap, ImageIcon, X } from 'lucide-react';
+import { Clock, Zap } from 'lucide-react';
 
 export default function ProtocolDetailPage() {
   const params = useParams();
   const protocol = protocols.find((p) => p.id === params.id);
   const [activeTab, setActiveTab] = useState<'steps' | 'images' | 'report'>('steps');
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  const [lightboxLabel, setLightboxLabel] = useState<string>('');
 
   if (!protocol) {
     return (
@@ -34,31 +31,6 @@ export default function ProtocolDetailPage() {
 
   return (
     <div className="min-h-screen pb-nav">
-      {/* Lightbox */}
-      {lightboxSrc && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4"
-          onClick={() => setLightboxSrc(null)}
-        >
-          <button
-            className="absolute top-4 right-4 text-white/70 hover:text-white"
-            onClick={() => setLightboxSrc(null)}
-          >
-            <X className="w-7 h-7" />
-          </button>
-          <div className="relative w-full max-w-lg max-h-[75vh]" onClick={(e) => e.stopPropagation()}>
-            <Image
-              src={lightboxSrc}
-              alt={lightboxLabel}
-              width={800}
-              height={600}
-              className="rounded-xl object-contain w-full max-h-[75vh]"
-            />
-          </div>
-          <p className="text-white/80 text-sm mt-4 text-center max-w-sm">{lightboxLabel}</p>
-        </div>
-      )}
-
       {/* Header */}
       <div className="px-4 pt-12 pb-4 border-b border-sono-border">
         <Link href="/protocols" className="inline-flex items-center gap-1 text-sono-blue text-sm mb-3 hover:underline">
@@ -141,29 +113,14 @@ export default function ProtocolDetailPage() {
         {activeTab === 'images' && (
           <div className="space-y-2">
             <p className="text-xs text-sono-muted mb-3">Required images to document for this exam:</p>
-            {protocol.keyImages.map((img, i) => {
-              const fileSrc = protocol.keyImageFiles?.[i];
-              return fileSrc ? (
-                <button
-                  key={i}
-                  onClick={() => { setLightboxSrc(fileSrc); setLightboxLabel(img); }}
-                  className="w-full flex items-center gap-3 bg-sono-card border border-sono-blue/40 rounded-xl px-4 py-3 text-left hover:border-sono-blue transition-colors active:scale-[0.98]"
-                >
-                  <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
-                    <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
-                  </div>
-                  <p className="text-sm text-slate-700 flex-1">{img}</p>
-                  <ImageIcon className="w-4 h-4 text-sono-blue shrink-0" />
-                </button>
-              ) : (
-                <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
-                  <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
-                    <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
-                  </div>
-                  <p className="text-sm text-slate-700 pt-0.5">{img}</p>
+            {protocol.keyImages.map((img, i) => (
+              <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
+                <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
                 </div>
-              );
-            })}
+                <p className="text-sm text-slate-700 pt-0.5">{img}</p>
+              </div>
+            ))}
           </div>
         )}
 
