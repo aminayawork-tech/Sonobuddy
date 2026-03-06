@@ -18,7 +18,6 @@ export type Protocol = {
   indication: string;
   steps: ProtocolStep[];
   keyImages: string[];
-  keyImageFiles?: string[];   // parallel to keyImages — '/protocols/{id}/{filename}' when image exists
   commonFindings: string[];
   reportChecklist: string[];
   tags: string[];
@@ -122,7 +121,6 @@ export const protocols: Protocol[] = [
       'Plaque — sagittal view',
       'Plaque — sagittal / zoomed view',
     ],
-    // keyImageFiles: [], — add image file paths here when you have licensed images
     commonFindings: [
       'Atherosclerotic plaque (calcified/soft)',
       'ICA stenosis (mild/moderate/severe)',
