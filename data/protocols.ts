@@ -18,6 +18,7 @@ export type Protocol = {
   indication: string;
   steps: ProtocolStep[];
   keyImages: string[];
+  keyImageFiles?: string[]; // parallel to keyImages — populate when licensed images are ready
   commonFindings: string[];
   reportChecklist: string[];
   tags: string[];
