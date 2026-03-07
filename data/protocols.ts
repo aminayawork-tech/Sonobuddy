@@ -6,6 +6,12 @@ export type ProtocolStep = {
   tips?: string[];
 };
 
+export type ReportTemplate = {
+  label: string;    // short name, e.g. "Normal Study"
+  scenario: string; // one-line hint, e.g. "No stenosis, no plaque"
+  text: string;     // full ready-to-paste conclusion
+};
+
 export type Protocol = {
   id: string;
   name: string;
@@ -21,6 +27,7 @@ export type Protocol = {
   keyImageFiles?: string[]; // parallel to keyImages — populate when licensed images are ready
   commonFindings: string[];
   reportChecklist: string[];
+  reportTemplates?: ReportTemplate[];
   tags: string[];
 };
 
@@ -132,6 +139,28 @@ export const protocols: Protocol[] = [
       'IMT measurement (if indicated)',
       'Plaque: location, size, echogenicity',
     ],
+    reportTemplates: [
+      {
+        label: 'Normal Study',
+        scenario: 'No stenosis, no plaque',
+        text: 'Bilateral carotid duplex ultrasound was performed. The common carotid arteries demonstrate normal waveforms bilaterally with peak systolic velocities within normal limits. No significant plaque or stenosis is identified at the bifurcations bilaterally. The internal carotid arteries demonstrate normal spectral waveforms with ICA/CCA ratios within normal range bilaterally. The external carotid arteries are patent. Vertebral artery flow is antegrade bilaterally.\n\nImpression: Normal bilateral carotid duplex ultrasound. No hemodynamically significant stenosis identified.',
+      },
+      {
+        label: 'Mild Stenosis (<50%)',
+        scenario: 'Plaque with low-grade narrowing',
+        text: 'Carotid duplex ultrasound demonstrates [right/left] ICA PSV of ___ cm/s with an ICA/CCA ratio of ___, consistent with mild stenosis (<50%). [Calcified/soft] plaque is noted at the [right/left] bifurcation. The contralateral ICA is within normal limits. Vertebral artery flow is antegrade bilaterally.\n\nImpression: Mild [right/left] ICA stenosis (<50%). Annual duplex surveillance recommended. Correlate clinically and with cardiovascular risk factors.',
+      },
+      {
+        label: 'Severe Stenosis (70–99%)',
+        scenario: 'Markedly elevated velocities, surgical threshold',
+        text: 'Carotid duplex ultrasound demonstrates markedly elevated [right/left] ICA PSV of ___ cm/s with an ICA/CCA ratio of ___, consistent with severe stenosis (70–99%). Dense [calcified/soft] plaque is identified at the [right/left] bifurcation extending into the proximal ICA. Post-stenotic turbulence is present. The contralateral ICA is within normal limits.\n\nImpression: Severe [right/left] ICA stenosis (70–99%) by velocity criteria (SRU 2003). Vascular surgery consultation recommended. Correlate clinically.',
+      },
+      {
+        label: 'ICA Occlusion',
+        scenario: 'No detectable flow in ICA',
+        text: 'Carotid duplex ultrasound demonstrates absent flow in the [right/left] ICA with no detectable spectral Doppler waveform. Echogenic material fills the [right/left] ICA lumen consistent with occlusion. The [right/left] CCA demonstrates an internalized waveform pattern. The contralateral ICA is within normal limits. Vertebral artery flow is antegrade bilaterally.\n\nImpression: [Right/Left] ICA occlusion. Urgent vascular surgery consultation and further evaluation with CTA or MRA recommended. Correlate clinically.',
+      },
+    ],
     tags: ['carotid', 'duplex', 'ica', 'cca', 'stenosis', 'stroke', 'tia', 'vascular'],
   },
   {
@@ -206,6 +235,28 @@ export const protocols: Protocol[] = [
       'SFJ evaluated',
       'Calf veins: if evaluated, findings',
     ],
+    reportTemplates: [
+      {
+        label: 'Negative Study',
+        scenario: 'No DVT identified',
+        text: 'Lower extremity venous duplex ultrasound was performed from the common femoral vein to the popliteal vein bilaterally. All visualized veins demonstrate complete compressibility with no intraluminal thrombus identified. Normal phasic flow is present at the common femoral veins bilaterally with appropriate augmentation response. Calf veins were not evaluated.\n\nImpression: Negative bilateral lower extremity venous duplex ultrasound. No DVT identified in the visualized segments.',
+      },
+      {
+        label: 'Acute DVT',
+        scenario: 'Non-compressible vein with thrombus',
+        text: 'Lower extremity venous duplex ultrasound demonstrates a non-compressible [right/left] [vessel name] with echogenic intraluminal thrombus consistent with acute deep vein thrombosis. The thrombus extends from the ___ to the ___. The involved segment is expanded with absent color flow on Doppler. The contralateral extremity is without evidence of DVT.\n\nImpression: Acute [right/left] [femoral/popliteal/tibial] deep vein thrombosis. Anticoagulation therapy recommended. Correlate clinically.',
+      },
+      {
+        label: 'Chronic DVT',
+        scenario: 'Old thrombus, post-thrombotic changes',
+        text: 'Lower extremity venous duplex ultrasound demonstrates partial compressibility of the [right/left] [vessel name] with hyperechoic intraluminal material and thickened fibrotic walls consistent with chronic deep vein thrombosis. Phasicity is diminished at the [right/left] common femoral vein. No new acute thrombus is identified.\n\nImpression: Chronic [right/left] lower extremity DVT with post-thrombotic changes. No acute DVT identified. Correlate with prior imaging and clinical history.',
+      },
+      {
+        label: 'Superficial Thrombophlebitis',
+        scenario: 'GSV thrombus, deep system clear',
+        text: 'Lower extremity venous duplex ultrasound demonstrates a non-compressible [right/left] great saphenous vein with echogenic thrombus extending from ___ to ___. The deep venous system is fully compressible with no evidence of deep vein thrombosis. The saphenofemoral junction is [patent / not involved / thrombus within ___ cm of SFJ].\n\nImpression: [Right/Left] great saphenous vein superficial thrombophlebitis. No deep vein thrombosis identified. Vascular surgery consultation recommended if thrombus extends to within 3 cm of the saphenofemoral junction. Correlate clinically.',
+      },
+    ],
     tags: ['dvt', 'venous', 'lower extremity', 'deep vein thrombosis', 'le duplex', 'compression'],
   },
   {
@@ -267,6 +318,23 @@ export const protocols: Protocol[] = [
       'Iliac artery diameters',
       'Presence of mural thrombus',
       'Comparison to prior if available',
+    ],
+    reportTemplates: [
+      {
+        label: 'Normal (<3 cm)',
+        scenario: 'No aneurysm identified',
+        text: 'Abdominal aortic ultrasound was performed. The abdominal aorta is visualized from the diaphragm to the bifurcation. Maximum aortic diameter measures ___ cm in the AP dimension and ___ cm transversely (outer-to-outer). No aneurysmal dilatation is identified. No mural thrombus is present. The iliac arteries are within normal caliber.\n\nImpression: Normal abdominal aortic diameter. No abdominal aortic aneurysm identified. Routine surveillance per clinical guidelines.',
+      },
+      {
+        label: 'Small AAA (3–4 cm)',
+        scenario: 'Aneurysm below repair threshold',
+        text: 'Abdominal aortic ultrasound demonstrates infrarenal aortic dilatation with a maximum AP diameter of ___ cm and transverse diameter of ___ cm (outer-to-outer). Mural thrombus is [present / absent]. The proximal extent is [infrarenal / juxta-renal]. The iliac arteries measure ___ cm on the right and ___ cm on the left.\n\nImpression: Small abdominal aortic aneurysm measuring ___ cm. Annual ultrasound surveillance recommended per SVS guidelines (threshold for repair consideration ≥5.5 cm in men, ≥5.0 cm in women). Vascular surgery referral at discretion of ordering provider. Correlate clinically.',
+      },
+      {
+        label: 'Large AAA (≥5 cm) — Urgent',
+        scenario: 'Exceeds repair threshold',
+        text: 'Abdominal aortic ultrasound demonstrates a large infrarenal aortic aneurysm with a maximum AP diameter of ___ cm and transverse diameter of ___ cm (outer-to-outer). Significant mural thrombus is [present / absent]. The aneurysm extends to within approximately ___ cm of the renal arteries. The iliac arteries measure ___ cm on the right and ___ cm on the left.\n\nImpression: Large abdominal aortic aneurysm measuring ___ cm. Exceeds standard threshold for surgical/endovascular repair consideration. Urgent vascular surgery consultation recommended. Correlate clinically with prior imaging and patient surgical risk.',
+      },
     ],
     tags: ['aaa', 'aorta', 'aneurysm', 'screening', 'abdominal', 'vascular'],
   },
@@ -367,6 +435,28 @@ export const protocols: Protocol[] = [
       'Ascites: present/absent',
       'Aorta: diameter if visualized',
     ],
+    reportTemplates: [
+      {
+        label: 'Normal RUQ',
+        scenario: 'All organs unremarkable',
+        text: 'Right upper quadrant ultrasound was performed. The liver is normal in size at ___ cm longitudinally with homogeneous echogenicity and smooth borders. The gallbladder is normal without stones, sludge, or wall thickening. Murphy\'s sign is negative. The common bile duct measures ___ mm without intrahepatic biliary dilatation. The portal vein is patent with hepatopetal flow measuring ___ mm. The right kidney measures ___ cm with normal cortical echogenicity and no hydronephrosis. The spleen measures ___ cm.\n\nImpression: Normal right upper quadrant ultrasound. No acute findings.',
+      },
+      {
+        label: 'Cholelithiasis',
+        scenario: 'Gallstones, no cholecystitis',
+        text: 'Right upper quadrant ultrasound demonstrates multiple [single] echogenic focus/foci within the gallbladder with posterior acoustic shadowing consistent with cholelithiasis. The gallbladder wall measures ___ mm and is not thickened. Murphy\'s sign is negative. No pericholecystic fluid is identified. The common bile duct is normal at ___ mm. The liver demonstrates normal echogenicity.\n\nImpression: Cholelithiasis without sonographic evidence of acute cholecystitis. Correlate clinically.',
+      },
+      {
+        label: 'Acute Cholecystitis',
+        scenario: 'Wall thickening, positive Murphy\'s sign',
+        text: 'Right upper quadrant ultrasound demonstrates cholelithiasis with the largest stone measuring ___ cm. The gallbladder wall is diffusely thickened at ___ mm with surrounding pericholecystic fluid. Sonographic Murphy\'s sign is positive. The common bile duct measures ___ mm.\n\nImpression: Sonographic findings consistent with acute cholecystitis. Surgical consultation recommended. Correlate clinically.',
+      },
+      {
+        label: 'Hepatic Steatosis',
+        scenario: 'Fatty liver, increased echogenicity',
+        text: 'Right upper quadrant ultrasound demonstrates a [mildly/moderately] enlarged liver measuring ___ cm longitudinally. The liver parenchyma demonstrates diffusely increased echogenicity compared to the right renal cortex consistent with hepatic steatosis. Posterior acoustic attenuation is present with diminished visualization of the intrahepatic vasculature. No focal lesion is identified. The gallbladder and bile ducts are unremarkable.\n\nImpression: Sonographic findings consistent with hepatic steatosis (fatty liver). Clinical correlation and consideration for further workup (LFTs, FIB-4) as clinically indicated.',
+      },
+    ],
     tags: ['ruq', 'abdomen', 'liver', 'gallbladder', 'bile duct', 'kidneys', 'spleen', 'pancreas'],
   },
 
@@ -448,6 +538,23 @@ export const protocols: Protocol[] = [
       'Cervix: length',
       'Subchorionic hematoma: if present, size and location',
     ],
+    reportTemplates: [
+      {
+        label: 'Normal Viable IUP',
+        scenario: 'Live embryo, normal anatomy',
+        text: 'Transabdominal and transvaginal pelvic ultrasound was performed. A single intrauterine gestational sac is identified within the endometrial cavity. A live embryo is identified with crown-rump length of ___ mm, corresponding to a gestational age of ___ weeks ___ days (± 5 days). Cardiac activity is present at ___ bpm. The yolk sac is normal in appearance. Nuchal translucency measures ___ mm [if 11–13+6 wks]. No subchorionic hematoma is identified. The uterus and adnexa are unremarkable.\n\nImpression: Single viable intrauterine pregnancy, estimated gestational age ___ weeks ___ days by CRL. Normal first trimester ultrasound.',
+      },
+      {
+        label: 'Subchorionic Hematoma',
+        scenario: 'Live pregnancy with SCH',
+        text: 'Transabdominal and transvaginal pelvic ultrasound was performed. A single viable intrauterine pregnancy is identified with CRL of ___ mm corresponding to ___ weeks ___ days. Cardiac activity is present at ___ bpm. A subchorionic hematoma is identified measuring ___ × ___ × ___ cm along the [anterior/posterior] uterine wall, representing approximately ___% of the gestational sac volume ([small/moderate/large]).\n\nImpression: Single viable intrauterine pregnancy, ___ weeks ___ days by CRL. [Small/Moderate/Large] subchorionic hematoma identified. Obstetric follow-up recommended. Correlate clinically.',
+      },
+      {
+        label: 'Failed Pregnancy',
+        scenario: 'No cardiac activity, embryonic demise',
+        text: 'Transabdominal and transvaginal pelvic ultrasound was performed. An intrauterine gestational sac is identified measuring ___ mm mean sac diameter. A fetal pole measuring ___ mm CRL is identified without detectable cardiac activity on real-time imaging and M-mode evaluation. No Doppler was utilized. Findings were confirmed on a second independent review.\n\nImpression: Intrauterine pregnancy without cardiac activity. Findings are consistent with embryonic demise (missed abortion). CRL of ___ mm without cardiac activity meets diagnostic criteria. Obstetric consultation recommended for management planning.',
+      },
+    ],
     tags: ['ob', 'first trimester', 'crl', 'nt', 'early pregnancy', 'ectopic', 'viability'],
   },
 
@@ -526,6 +633,28 @@ export const protocols: Protocol[] = [
       'Each nodule: size (3 planes), location, TI-RADS score, FNA threshold met?',
       'Lymph nodes',
       'Parathyroid enlargement (if incidental)',
+    ],
+    reportTemplates: [
+      {
+        label: 'Normal Thyroid',
+        scenario: 'No nodules, normal echogenicity',
+        text: 'Thyroid ultrasound was performed. The right thyroid lobe measures ___ × ___ × ___ cm (volume ___ mL). The left thyroid lobe measures ___ × ___ × ___ cm (volume ___ mL). The isthmus measures ___ mm. The parenchyma is homogeneous with normal echogenicity bilaterally. No discrete nodule is identified. Vascularity is normal without hyperemia. No cervical lymphadenopathy is identified.\n\nImpression: Normal thyroid ultrasound. No nodule identified. Total thyroid volume ___ mL.',
+      },
+      {
+        label: 'Multinodular Goiter',
+        scenario: 'Enlarged gland, multiple nodules, no suspicious features',
+        text: 'Thyroid ultrasound demonstrates an enlarged gland with right lobe measuring ___ × ___ × ___ cm (volume ___ mL) and left lobe ___ × ___ × ___ cm (volume ___ mL). Total volume ___ mL, consistent with goiter. Multiple bilateral nodules are identified. The dominant [right/left] nodule measures ___ × ___ × ___ cm (ACR TI-RADS ___). No nodule meets ACR TI-RADS 2017 FNA threshold at this time.\n\nImpression: Multinodular goiter. No nodule meets current ACR TI-RADS 2017 FNA threshold. Ultrasound surveillance in 1–2 years recommended. Correlate clinically with thyroid function.',
+      },
+      {
+        label: 'TI-RADS 3 Nodule',
+        scenario: 'Mildly suspicious, follow-up recommended',
+        text: 'Thyroid ultrasound demonstrates a [right/left] thyroid nodule measuring ___ × ___ × ___ cm in the [upper/mid/lower] pole. The nodule is predominantly solid with [mildly hypoechoic / isoechoic] echotexture and smooth, well-defined margins. No calcifications or lobulated margins are identified. ACR TI-RADS score: 3 (Mildly Suspicious).\n\nImpression: [Right/Left] thyroid nodule, ACR TI-RADS 3. Per ACR TI-RADS 2017: FNA recommended if ≥2.5 cm; ultrasound follow-up in 1–2 years if ≥1.5 cm. Correlate clinically.',
+      },
+      {
+        label: 'TI-RADS 4/5 — FNA Recommended',
+        scenario: 'Suspicious nodule, biopsy threshold met',
+        text: 'Thyroid ultrasound demonstrates a [right/left] thyroid nodule measuring ___ × ___ × ___ cm in the [upper/mid/lower] pole. The nodule is solid with [markedly hypoechoic] echotexture, [irregular/lobulated] margins, and [punctate echogenic foci / rim calcification]. ACR TI-RADS score: [4/5] ([Suspicious/Very Suspicious]).\n\nImpression: [Right/Left] thyroid nodule, ACR TI-RADS [4/5]. Nodule meets size threshold for FNA per ACR TI-RADS 2017 guidelines. Endocrinology or ENT referral and FNA biopsy recommended. Correlate clinically.',
+      },
     ],
     tags: ['thyroid', 'nodule', 'tirads', 'goiter', 'hashimoto', 'thyroid cancer', 'fna'],
   },
@@ -662,6 +791,28 @@ export const protocols: Protocol[] = [
       'IVC: diameter, collapse index, estimated RAP',
       'Aortic root diameter (sinus of Valsalva)',
       'Diastolic function: grade, E/A, e\', E/e\' ratio',
+    ],
+    reportTemplates: [
+      {
+        label: 'Normal Echo',
+        scenario: 'Normal LV function, no valvular disease',
+        text: 'Transthoracic echocardiogram was performed. Left ventricular size is normal (EDD ___ cm, ESD ___ cm). LVEF is visually estimated at ___%, within normal range. Wall thickness is normal (IVS ___ cm, PW ___ cm). No regional wall motion abnormality is identified. Right ventricular size and function appear normal. Left atrial AP dimension measures ___ cm. The aortic valve is trileaflet with peak velocity ___ m/s and no significant gradient. The mitral valve is structurally normal. Estimated RVSP is ___ mmHg. No pericardial effusion.\n\nImpression: Normal transthoracic echocardiogram. Normal left ventricular systolic function, LVEF ___%. No significant valvular abnormality.',
+      },
+      {
+        label: 'Reduced LVEF',
+        scenario: 'Cardiomyopathy, globally reduced function',
+        text: 'Transthoracic echocardiogram demonstrates a [mildly/moderately/severely] dilated left ventricle (EDD ___ cm). LVEF is visually estimated at ___%, [mildly/moderately/severely] reduced. [Regional / Global] hypokinesis is identified. No LV thrombus is identified. Right ventricular size is [normal / mildly enlarged] with [preserved / reduced] function. Functional mitral regurgitation is [mild / moderate] (grade ___+). Estimated RVSP ___ mmHg.\n\nImpression: [Mildly/Moderately/Severely] reduced left ventricular systolic function, LVEF approximately ___%. Pattern consistent with [non-ischemic / ischemic] cardiomyopathy — ischemic etiology cannot be excluded without further workup. Cardiology follow-up recommended.',
+      },
+      {
+        label: 'Moderate Aortic Stenosis',
+        scenario: 'Calcific AS, surgical planning threshold approaching',
+        text: 'Transthoracic echocardiogram demonstrates a trileaflet aortic valve with calcific thickening and reduced cusp excursion. Peak aortic velocity measures ___ m/s with a mean gradient of ___ mmHg. Calculated AVA by continuity equation is ___ cm², consistent with [mild/moderate/severe] aortic stenosis. LV size and systolic function are [preserved / reduced], LVEF ___%. No significant aortic regurgitation.\n\nImpression: [Mild/Moderate/Severe] aortic stenosis (peak velocity ___ m/s, mean gradient ___ mmHg, AVA ___ cm²). [Preserved / Reduced] LV function. Cardiology consultation and serial echocardiographic follow-up recommended per AHA/ACC guidelines.',
+      },
+      {
+        label: 'Pericardial Effusion',
+        scenario: 'Effusion present, assess for tamponade',
+        text: 'Transthoracic echocardiogram demonstrates a [small/moderate/large] [circumferential/loculated] pericardial effusion measuring ___ cm posteriorly. [No / Possible] right ventricular diastolic collapse is identified. [No / Possible] right atrial systolic inversion is present. The IVC is [normal / dilated] at ___ cm with [normal / reduced] inspiratory collapse. LVEF is preserved at ___%. \n\nImpression: [Small/Moderate/Large] pericardial effusion [without / with possible] echocardiographic tamponade physiology. Cardiology consultation recommended. Correlate clinically with etiology (inflammatory, malignant, infectious).',
+      },
     ],
     tags: ['echo', 'echocardiogram', 'tte', 'cardiac', 'lv', 'rv', 'ef', 'valve', 'heart failure', 'aortic stenosis', 'mitral'],
   },
@@ -1124,6 +1275,28 @@ export const protocols: Protocol[] = [
       'Free fluid: present/absent, simple or complex',
       'IUD: if present — confirmed within endometrial cavity (Y/N)',
     ],
+    reportTemplates: [
+      {
+        label: 'Normal Female Pelvis',
+        scenario: 'Unremarkable uterus and ovaries',
+        text: 'Transvaginal and transabdominal pelvic ultrasound was performed. The uterus is [anteverted/retroverted] measuring ___ × ___ × ___ cm with homogeneous myometrial echogenicity. Endometrial thickness measures ___ mm, [normal in appearance / echogenicity is ___]. The cervix is unremarkable. The right ovary measures ___ × ___ × ___ cm with normal follicular activity. The left ovary measures ___ × ___ × ___ cm with normal follicular activity. No free fluid is identified in the cul-de-sac.\n\nImpression: Normal pelvic ultrasound. No sonographic abnormality identified.',
+      },
+      {
+        label: 'Uterine Fibroids',
+        scenario: 'Leiomyomata identified',
+        text: 'Transvaginal pelvic ultrasound demonstrates an enlarged uterus measuring ___ × ___ × ___ cm with heterogeneous myometrial echogenicity. Multiple [intramural/submucosal/subserosal] fibroids are identified, the largest measuring ___ × ___ × ___ cm along the [anterior/posterior] wall. [Endometrial cavity distortion is / is not] present. The endometrium measures ___ mm and appears [regular / irregular]. The ovaries are unremarkable.\n\nImpression: Enlarged uterus with [multiple/a] leiomyoma[ta]. [No endometrial cavity distortion / Endometrial cavity distortion present]. Correlate with clinical symptoms. Gynecology consultation recommended.',
+      },
+      {
+        label: 'Simple Ovarian Cyst',
+        scenario: 'Unilocular anechoic cyst, no internal features',
+        text: 'Transvaginal pelvic ultrasound demonstrates a unilocular anechoic [right/left] ovarian cyst measuring ___ × ___ × ___ cm with smooth thin walls and posterior acoustic enhancement. No internal septations, papillary projections, or solid components are identified. Color Doppler demonstrates no internal vascularity. The contralateral ovary and uterus are unremarkable. No free fluid.\n\nImpression: Simple [right/left] ovarian cyst measuring ___ cm. ACR O-RADS 2 (almost certainly benign). Per guidelines, follow-up ultrasound recommended per ACR O-RADS 2022 guidelines based on patient age and cyst size. Correlate clinically.',
+      },
+      {
+        label: 'Endometrial Thickening',
+        scenario: 'Thickened endometrium requiring evaluation',
+        text: 'Transvaginal pelvic ultrasound demonstrates a [anteverted/retroverted] uterus measuring ___ × ___ × ___ cm. The endometrium is [diffusely/focally] thickened measuring ___ mm with [homogeneous / heterogeneous] echogenicity. [No distinct polyp or mass is identified / A focal echogenic lesion measuring ___ cm is present, concerning for polyp]. Saline infusion sonohysterography may provide further characterization.\n\nImpression: Endometrial thickening measuring ___ mm. [In a postmenopausal patient, this exceeds the 5 mm threshold for further evaluation.] Endometrial biopsy and/or gynecologic referral recommended. Correlate clinically.',
+      },
+    ],
     tags: ['pelvic', 'gynecology', 'uterus', 'ovaries', 'fibroid', 'endometrium', 'ob', 'pelvic pain', 'tvus', 'transvaginal', 'abnormal uterine bleeding'],
   },
 
@@ -1480,6 +1653,28 @@ export const protocols: Protocol[] = [
       'Interpretation: normal / mild PAD / moderate PAD / critical limb ischemia',
       'Comparison to prior study if available — note interval change',
     ],
+    reportTemplates: [
+      {
+        label: 'Normal ABI',
+        scenario: 'No peripheral arterial disease',
+        text: 'Lower extremity arterial evaluation was performed including bilateral ankle-brachial indices and segmental pressure measurements. Brachial pressures: right ___ mmHg, left ___ mmHg. Right ABI: ___ (ankle pressure ___ mmHg). Left ABI: ___ (ankle pressure ___ mmHg). No significant segmental pressure gradient (>20 mmHg) is identified at any level bilaterally. Pulse volume recordings demonstrate normal triphasic waveforms throughout bilaterally.\n\nImpression: Normal bilateral ankle-brachial indices (right ___, left ___). No hemodynamically significant peripheral arterial disease identified. Correlate clinically.',
+      },
+      {
+        label: 'Mild PAD',
+        scenario: 'ABI 0.70–0.90, claudication range',
+        text: 'Lower extremity arterial evaluation demonstrates right ABI of ___ and left ABI of ___, consistent with mild [bilateral/unilateral] peripheral arterial disease. A segmental pressure gradient of ___ mmHg is noted at the [aortoiliac/femoropopliteal/tibial] level on the [right/left]. Waveforms are biphasic bilaterally below the knee.\n\nImpression: Mild peripheral arterial disease (ABI right ___, left ___). Findings suggest [aortoiliac/femoropopliteal] disease on the [right/left]. Vascular surgery or vascular medicine referral recommended. Risk factor modification and supervised exercise therapy advised. Correlate clinically.',
+      },
+      {
+        label: 'Moderate PAD',
+        scenario: 'ABI 0.40–0.69, multilevel disease',
+        text: 'Lower extremity arterial evaluation demonstrates right ABI of ___ and left ABI of ___, consistent with moderate [bilateral/unilateral] peripheral arterial disease. Significant segmental pressure gradients are noted at the ___ level bilaterally [right/left]. Waveforms are monophasic at the ankle level [bilaterally / on the right/left].\n\nImpression: Moderate peripheral arterial disease (ABI right ___, left ___). Multilevel disease pattern. Vascular surgery consultation recommended for intervention planning. Correlate clinically with symptoms of claudication or rest pain.',
+      },
+      {
+        label: 'Non-Compressible Vessels',
+        scenario: 'ABI >1.40, calcified vessels — use TBI',
+        text: 'Lower extremity arterial evaluation demonstrates elevated ankle-brachial index of >1.40 bilaterally, consistent with non-compressible (calcified) tibial arteries. Toe-brachial indices were obtained: right TBI ___, left TBI ___. Pulse volume recordings demonstrate [describe waveform character]. The elevated ABI is a known limitation in patients with diabetes and/or end-stage renal disease secondary to medial calcification.\n\nImpression: Non-compressible lower extremity vessels — ABI is unreliable for PAD assessment. Toe-brachial indices obtained as alternative: right ___, left ___ (normal ≥0.70). Correlate clinically. Vascular referral recommended if TBI is abnormal.',
+      },
+    ],
     tags: ['abi', 'ankle brachial index', 'segmental pressures', 'psr', 'peripheral arterial disease', 'pad', 'claudication', 'pvr', 'pulse volume recording', 'cw doppler', 'tbi', 'toe pressure', 'critical limb ischemia', 'vascular', 'non-compressible'],
   },
 
@@ -1615,6 +1810,28 @@ export const protocols: Protocol[] = [
       'Blood flow: symmetric Y/N; hyperemic Y/N; absent Y/N',
       'Extratesticular: hydrocele (Y/N, size), varicocele (Y/N, grade), hernia (Y/N)',
       'Impression: normal / BPH / epididymo-orchitis / mass / torsion / other',
+    ],
+    reportTemplates: [
+      {
+        label: 'Normal Scrotal',
+        scenario: 'Normal testes, epididymides, no mass',
+        text: 'Scrotal ultrasound was performed. The right testis measures ___ × ___ × ___ cm with normal homogeneous echogenicity and symmetric blood flow on color Doppler. The left testis measures ___ × ___ × ___ cm with normal echogenicity. The epididymides are normal bilaterally without enlargement or increased vascularity. No hydrocele, varicocele, or extratesticular mass is identified. The prostate gland measures ___ × ___ × ___ cm, volume ___ mL. Post-void residual volume measures ___ mL.\n\nImpression: Normal scrotal ultrasound. Prostate volume ___ mL. Post-void residual ___ mL. No acute findings.',
+      },
+      {
+        label: 'Epididymo-Orchitis',
+        scenario: 'Hyperemic epididymis ± testis',
+        text: 'Scrotal ultrasound demonstrates [right/left] epididymal enlargement with heterogeneous echotexture. Marked hyperemia is present in the [right/left] epididymis on color Doppler compared to the contralateral side. The [right/left] testis demonstrates [mild heterogeneity / normal echogenicity] with [increased / symmetric] vascularity [consistent with reactive orchitis]. A small reactive hydrocele is [present / absent]. No abscess is identified.\n\nImpression: Sonographic findings consistent with [right/left] epididymo-orchitis. No abscess identified. Antibiotic therapy and urology consultation recommended. Correlate clinically with STI history and urinalysis.',
+      },
+      {
+        label: 'Hydrocele',
+        scenario: 'Fluid collection around testis, normal underlying testis',
+        text: 'Scrotal ultrasound demonstrates a [right/left] simple anechoic fluid collection surrounding the anterolateral aspect of the [right/left] testis consistent with hydrocele, measuring approximately ___ × ___ × ___ cm. The underlying testis is normal in size and echogenicity with symmetric blood flow. No intratesticular lesion or abnormal vascularity is identified. The contralateral testis and epididymis are unremarkable.\n\nImpression: [Right/Left] simple hydrocele. Normal underlying testis. No associated testicular pathology identified. Correlate clinically.',
+      },
+      {
+        label: 'Testicular Mass — Urgent',
+        scenario: 'Solid intratesticular lesion, concern for malignancy',
+        text: 'Scrotal ultrasound demonstrates a [right/left] intratesticular [hypoechoic/heterogeneous] solid mass measuring ___ × ___ × ___ cm in the [upper/mid/lower] pole. The lesion demonstrates internal vascularity on color Doppler. [No / Punctate] calcifications are identified. The contralateral testis is unremarkable. Inguinal lymphadenopathy was not assessed on this examination.\n\nImpression: [Right/Left] intratesticular solid mass. Findings are highly concerning for testicular malignancy; germ cell tumor cannot be excluded. URGENT urology referral recommended. Serum tumor markers (AFP, beta-HCG, LDH) and staging CT chest/abdomen/pelvis recommended. Correlate clinically.',
+      },
     ],
     tags: ['male pelvis', 'scrotal', 'testicular', 'prostate', 'bladder', 'bph', 'pvr', 'epididymis', 'hydrocele', 'varicocele', 'torsion', 'orchitis', 'urologic', 'infertility', 'psa', 'abdomen'],
   },
