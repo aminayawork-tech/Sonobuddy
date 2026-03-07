@@ -5,12 +5,21 @@ import { protocols, DIFFICULTY_COLORS } from '@/data/protocols';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { Clock, Zap } from 'lucide-react';
+import { Clock, Zap, ChevronDown, Copy, Check } from 'lucide-react';
 
 export default function ProtocolDetailPage() {
   const params = useParams();
   const protocol = protocols.find((p) => p.id === params.id);
   const [activeTab, setActiveTab] = useState<'steps' | 'images' | 'report'>('steps');
+  const [expandedTemplate, setExpandedTemplate] = useState<number | null>(null);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  function copyTemplate(text: string, index: number) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 1500);
+    });
+  }
 
   if (!protocol) {
     return (
@@ -127,6 +136,46 @@ export default function ProtocolDetailPage() {
         {/* Report Tab */}
         {activeTab === 'report' && (
           <div className="space-y-2">
+
+            {/* Report Templates */}
+            {protocol.reportTemplates && protocol.reportTemplates.length > 0 && (
+              <>
+                <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Report Templates</p>
+                <p className="text-xs text-sono-muted mb-3">Tap a template to expand. Replace blanks (___) with your measured values.</p>
+                {protocol.reportTemplates.map((template, i) => (
+                  <div key={i} className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden">
+                    <button
+                      onClick={() => setExpandedTemplate(expandedTemplate === i ? null : i)}
+                      className="w-full flex items-center justify-between px-4 py-3 text-left"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">{template.label}</p>
+                        <p className="text-xs text-sono-muted mt-0.5">{template.scenario}</p>
+                      </div>
+                      <ChevronDown className={clsx('w-4 h-4 text-sono-muted shrink-0 transition-transform', expandedTemplate === i && 'rotate-180')} />
+                    </button>
+                    {expandedTemplate === i && (
+                      <div className="border-t border-sono-border bg-blue-950/30 px-4 py-3">
+                        <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line mb-3">{template.text}</p>
+                        <button
+                          onClick={() => copyTemplate(template.text, i)}
+                          className="flex items-center gap-1.5 text-xs font-medium text-sono-blue hover:text-cyan-400 transition-colors"
+                        >
+                          {copiedIndex === i ? (
+                            <><Check className="w-3.5 h-3.5 text-sono-green" /><span className="text-sono-green">Copied!</span></>
+                          ) : (
+                            <><Copy className="w-3.5 h-3.5" />Copy to clipboard</>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <div className="pt-2 pb-1 border-t border-sono-border/50 mt-4" />
+              </>
+            )}
+
+            {/* Checklist */}
             <p className="text-xs text-sono-muted mb-3">Items to include in your ultrasound report:</p>
             {protocol.reportChecklist.map((item, i) => (
               <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
