@@ -155,8 +155,8 @@ export default function ProtocolDetailPage() {
                       <ChevronDown className={clsx('w-4 h-4 text-sono-muted shrink-0 transition-transform', expandedTemplate === i && 'rotate-180')} />
                     </button>
                     {expandedTemplate === i && (
-                      <div className="border-t border-sono-border bg-sono-dark px-4 py-3">
-                        <p className="text-xs text-slate-100 leading-relaxed whitespace-pre-line mb-3">{template.text}</p>
+                      <div className="border-t border-sono-border bg-slate-50 px-4 py-3">
+                        <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line mb-3">{template.text}</p>
                         <button
                           onClick={() => copyTemplate(template.text, i)}
                           className="flex items-center gap-1.5 text-xs font-medium text-sono-blue hover:text-cyan-400 transition-colors"
