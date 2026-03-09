@@ -82,13 +82,13 @@ function CalculatorContent() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
+          <h1 className="text-xl font-bold text-slate-100 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => { setQuery(e.target.value); setActiveId(null); }}
             placeholder='Search "ABI", "volume", "AFI"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-100 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
       </div>
@@ -104,13 +104,13 @@ function CalculatorContent() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-semibold text-slate-900 text-sm mb-1">{c.name}</h3>
-                  <p className="text-xs text-slate-500 line-clamp-2">{c.description}</p>
+                  <h3 className="font-semibold text-slate-100 text-sm mb-1">{c.name}</h3>
+                  <p className="text-xs text-slate-400 line-clamp-2">{c.description}</p>
                 </div>
                 <span className="text-sono-muted shrink-0">›</span>
               </div>
               <div className="mt-2">
-                <code className="text-[10px] text-sono-blue font-mono bg-blue-50 px-2 py-0.5 rounded">{c.formula}</code>
+                <code className="text-[10px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-0.5 rounded">{c.formula}</code>
               </div>
             </button>
           ))}
@@ -128,16 +128,16 @@ function CalculatorContent() {
           </button>
 
           <div className="bg-sono-card border border-sono-border rounded-2xl p-4 mb-4">
-            <h2 className="font-bold text-slate-900 text-lg mb-1">{activeCalc.name}</h2>
-            <p className="text-xs text-slate-500 mb-3">{activeCalc.description}</p>
-            <code className="text-[11px] text-sono-blue font-mono bg-blue-50 px-2 py-1 rounded block">{activeCalc.formula}</code>
+            <h2 className="font-bold text-slate-100 text-lg mb-1">{activeCalc.name}</h2>
+            <p className="text-xs text-slate-400 mb-3">{activeCalc.description}</p>
+            <code className="text-[11px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-1 rounded block">{activeCalc.formula}</code>
           </div>
 
           {/* Input fields */}
           <div className="space-y-3 mb-4">
             {activeCalc.fields.map((field) => (
               <div key={field.id} className="bg-sono-card border border-sono-border rounded-xl p-3">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   {field.label}
                   <span className="text-sono-muted font-normal ml-1">({field.unit})</span>
                 </label>
@@ -146,7 +146,7 @@ function CalculatorContent() {
                     type="date"
                     value={inputs[field.id] ?? ''}
                     onChange={(e) => setInputs((prev) => ({ ...prev, [field.id]: e.target.value }))}
-                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-sono-blue"
+                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-100 text-sm focus:outline-none focus:border-sono-blue"
                   />
                 ) : (
                   <input
@@ -158,7 +158,7 @@ function CalculatorContent() {
                     min={field.min}
                     max={field.max}
                     step={field.step ?? 'any'}
-                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-sono-blue placeholder-sono-muted"
+                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-100 text-sm focus:outline-none focus:border-sono-blue placeholder-sono-muted"
                   />
                 )}
                 {field.hint && <p className="text-[11px] text-sono-muted mt-1">{field.hint}</p>}

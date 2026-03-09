@@ -45,7 +45,7 @@ export default function ProtocolDetailPage() {
         <Link href="/protocols" className="inline-flex items-center gap-1 text-sono-blue text-sm mb-3 hover:underline">
           ← Protocols
         </Link>
-        <h1 className="text-xl font-bold text-slate-900 mb-2">{protocol.name}</h1>
+        <h1 className="text-xl font-bold text-slate-100 mb-2">{protocol.name}</h1>
         <div className="flex items-center gap-2 flex-wrap text-xs text-sono-muted">
           <span className={clsx('px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[protocol.difficulty])}>
             {protocol.difficulty}
@@ -60,11 +60,11 @@ export default function ProtocolDetailPage() {
       <div className="px-4 pt-4 grid grid-cols-1 gap-2">
         <div className="bg-sono-card border border-sono-border rounded-xl p-3">
           <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Patient Position</p>
-          <p className="text-xs text-slate-700">{protocol.patient}</p>
+          <p className="text-xs text-slate-300">{protocol.patient}</p>
         </div>
         <div className="bg-sono-card border border-sono-border rounded-xl p-3">
           <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Indications</p>
-          <p className="text-xs text-slate-700">{protocol.indication}</p>
+          <p className="text-xs text-slate-300">{protocol.indication}</p>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export default function ProtocolDetailPage() {
                 'flex-1 py-3 text-xs font-medium border-b-2 transition-colors',
                 activeTab === tab.id
                   ? 'text-sono-blue border-sono-blue'
-                  : 'text-sono-muted border-transparent hover:text-slate-700'
+                  : 'text-sono-muted border-transparent hover:text-slate-300'
               )}
             >
               {tab.label}
@@ -96,10 +96,10 @@ export default function ProtocolDetailPage() {
               <div className="w-6 h-6 rounded-full bg-sono-blue/20 border border-sono-blue/50 flex items-center justify-center shrink-0">
                 <span className="text-xs font-bold text-sono-blue">{step.step}</span>
               </div>
-              <h3 className="font-semibold text-slate-900 text-sm">{step.title}</h3>
+              <h3 className="font-semibold text-slate-100 text-sm">{step.title}</h3>
             </div>
             <div className="px-4 py-3 space-y-3">
-              <p className="text-xs text-slate-700 leading-relaxed">{step.description}</p>
+              <p className="text-xs text-slate-300 leading-relaxed">{step.description}</p>
               {step.probe && (
                 <p className="text-xs text-sono-muted italic flex items-center gap-1"><Zap className="w-3 h-3 shrink-0" /> {step.probe}</p>
               )}
@@ -127,7 +127,7 @@ export default function ProtocolDetailPage() {
                 <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
                 </div>
-                <p className="text-sm text-slate-700 pt-0.5">{img}</p>
+                <p className="text-sm text-slate-300 pt-0.5">{img}</p>
               </div>
             ))}
           </div>
@@ -149,14 +149,14 @@ export default function ProtocolDetailPage() {
                       className="w-full flex items-center justify-between px-4 py-3 text-left"
                     >
                       <div>
-                        <p className="text-sm font-semibold text-slate-900">{template.label}</p>
+                        <p className="text-sm font-semibold text-slate-100">{template.label}</p>
                         <p className="text-xs text-sono-muted mt-0.5">{template.scenario}</p>
                       </div>
                       <ChevronDown className={clsx('w-4 h-4 text-sono-muted shrink-0 transition-transform', expandedTemplate === i && 'rotate-180')} />
                     </button>
                     {expandedTemplate === i && (
-                      <div className="border-t border-sono-border bg-slate-50 px-4 py-3">
-                        <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line mb-3">{template.text}</p>
+                      <div className="border-t border-sono-border bg-slate-700/30 px-4 py-3">
+                        <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line mb-3">{template.text}</p>
                         <button
                           onClick={() => copyTemplate(template.text, i)}
                           className="flex items-center gap-1.5 text-xs font-medium text-sono-blue hover:text-cyan-400 transition-colors"
@@ -180,14 +180,14 @@ export default function ProtocolDetailPage() {
             {protocol.reportChecklist.map((item, i) => (
               <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
                 <span className="text-sono-blue shrink-0 mt-0.5">☐</span>
-                <p className="text-sm text-slate-700">{item}</p>
+                <p className="text-sm text-slate-300">{item}</p>
               </div>
             ))}
             {protocol.commonFindings.length > 0 && (
               <>
                 <p className="text-xs font-semibold text-sono-muted uppercase tracking-wide mt-4 mb-2">Common Findings</p>
                 {protocol.commonFindings.map((finding, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                  <div key={i} className="flex items-center gap-2 text-sm text-slate-400">
                     <span className="text-slate-400">•</span> {finding}
                   </div>
                 ))}
