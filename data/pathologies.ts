@@ -23,7 +23,9 @@ export type PathologyCategory =
   | 'abdomen'
   | 'ob'
   | 'thyroid'
-  | 'cardiac';
+  | 'cardiac'
+  | 'msk'
+  | 'superficial';
 
 export const pathologies: Pathology[] = [
   {
