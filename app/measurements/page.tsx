@@ -26,13 +26,13 @@ export default function MeasurementsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-100 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "aorta", "BPD", "endometrium"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-100 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
         {/* Category filter */}
@@ -87,7 +87,7 @@ export default function MeasurementsPage() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-sm font-semibold text-slate-100">{m.name}</span>
+                    <span className="text-sm font-semibold text-slate-900">{m.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[m.category])}>
@@ -107,9 +107,9 @@ export default function MeasurementsPage() {
                 <div className="px-4 pb-4 border-t border-sono-border pt-3 space-y-3">
                   <RangeBar ranges={m.ranges} />
                   {m.clinicalNote && (
-                    <div className="bg-slate-700/30 rounded-xl p-3">
+                    <div className="bg-slate-50 rounded-xl p-3">
                       <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Note</p>
-                      <p className="text-xs text-slate-300 leading-relaxed">{m.clinicalNote}</p>
+                      <p className="text-xs text-slate-700 leading-relaxed">{m.clinicalNote}</p>
                     </div>
                   )}
                 </div>

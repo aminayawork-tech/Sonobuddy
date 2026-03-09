@@ -15,7 +15,7 @@ export default function PageHeader({ title, subtitle, backHref, backLabel }: Pro
           ← {backLabel ?? 'Back'}
         </Link>
       )}
-      <h1 className="text-2xl font-bold text-white">{title}</h1>
+      <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
       {subtitle && <p className="text-sono-muted text-sm mt-1">{subtitle}</p>}
     </div>
   );

@@ -13,13 +13,13 @@ export default function PrivacyPage() {
         ← Back to SonoBuddy
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-100 mb-2">Privacy Policy</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
       <p className="text-xs text-sono-muted mb-8">Last updated: March 2026</p>
 
-      <div className="space-y-6 text-sm text-slate-300 leading-relaxed">
+      <div className="space-y-6 text-sm text-slate-700 leading-relaxed">
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Overview</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Overview</h2>
           <p>
             SonoBuddy (&ldquo;the App&rdquo;) is a free clinical reference tool for sonographers.
             We are committed to protecting your privacy. This policy explains what data we collect
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Data We Do Not Collect</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Data We Do Not Collect</h2>
           <ul className="space-y-1.5 list-none">
             {[
               'No account or registration is required',
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">How the App Works</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">How the App Works</h2>
           <p>
             All clinical content (measurements, protocols, calculators, and pathologies) is bundled
             statically with the App. No data is sent to any server when you use the reference
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Local Storage</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Local Storage</h2>
           <p>
             The App may use your device&apos;s local storage or service worker cache solely to
             enable offline functionality. This data never leaves your device and contains only
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Third-Party Services</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Third-Party Services</h2>
           <p>
             The App is hosted on Vercel. When you first load the App, standard web server logs
             (IP address, browser type, timestamp) may be recorded by Vercel as part of normal
@@ -75,9 +75,9 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Clinical Disclaimer</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Clinical Disclaimer</h2>
           <p>
-            SonoBuddy is a <strong className="text-slate-100">reference tool only</strong> and is
+            SonoBuddy is a <strong className="text-slate-900">reference tool only</strong> and is
             not intended for direct patient care decisions. All clinical decisions must involve
             the ordering provider and interpreting physician. Do not enter real patient data into
             any calculator field.
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Children&apos;s Privacy</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Children&apos;s Privacy</h2>
           <p>
             SonoBuddy is intended for licensed healthcare professionals and students. It is not
             directed at children under 13 and we do not knowingly collect data from minors.
@@ -93,7 +93,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Changes to This Policy</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Changes to This Policy</h2>
           <p>
             If we ever change our data practices, we will update this page and change the
             &ldquo;Last updated&rdquo; date above.
@@ -101,7 +101,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-semibold text-slate-100 mb-2">Contact</h2>
+          <h2 className="text-base font-semibold text-slate-900 mb-2">Contact</h2>
           <p>
             Questions about this privacy policy? Email us at{' '}
             <a href="mailto:privacy@sonobuddy.app" className="text-sono-blue underline">
