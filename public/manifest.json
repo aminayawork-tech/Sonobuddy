@@ -1,13 +1,19 @@
 {
+  "id": "/",
   "name": "SonoBuddy",
   "short_name": "SonoBuddy",
   "description": "Fast ultrasound reference for sonographers — measurements, protocols, calculators, and pathologies.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "browser"],
   "background_color": "#0F172A",
   "theme_color": "#0EA5E9",
   "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
   "categories": ["medical", "education"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -32,6 +38,36 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Home — search across all content",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/measurements.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Measurement reference tables",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/protocols.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Exam protocols with step-by-step guides",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/calculators.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Clinical calculators — ABI, RI, AFI, volume",
+      "form_factor": "narrow"
     }
   ],
   "shortcuts": [
