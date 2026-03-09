@@ -12,6 +12,8 @@ const CATEGORY_LABELS: Record<PathologyCategory, string> = {
   ob: 'OB/GYN',
   thyroid: 'Thyroid',
   cardiac: 'Cardiac',
+  msk: 'MSK',
+  superficial: 'Superficial',
 };
 
 const CATEGORY_COLORS: Record<PathologyCategory, string> = {
@@ -20,6 +22,8 @@ const CATEGORY_COLORS: Record<PathologyCategory, string> = {
   ob: 'bg-pink-100 text-pink-700 border-pink-200',
   thyroid: 'bg-purple-100 text-purple-700 border-purple-200',
   cardiac: 'bg-blue-100 text-blue-700 border-blue-200',
+  msk: 'bg-green-100 text-green-700 border-green-200',
+  superficial: 'bg-teal-100 text-teal-700 border-teal-200',
 };
 
 type Category = PathologyCategory | 'all';
@@ -71,13 +75,13 @@ export default function PathologiesPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-100 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
+          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "DVT", "cholecystitis", "fatty liver"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-100 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
         <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
@@ -129,7 +133,7 @@ export default function PathologiesPage() {
                 onClick={() => setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-slate-100 text-sm mb-1">{p.name}</h3>
+                  <h3 className="font-semibold text-slate-900 text-sm mb-1">{p.name}</h3>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[p.category])}>
                       {CATEGORY_LABELS[p.category]}
@@ -147,7 +151,7 @@ export default function PathologiesPage() {
                   {/* Clinical context */}
                   <div className="px-4 py-3">
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Context</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">{p.clinicalContext}</p>
+                    <p className="text-xs text-slate-700 leading-relaxed">{p.clinicalContext}</p>
                   </div>
 
                   {/* US Findings */}
@@ -155,7 +159,7 @@ export default function PathologiesPage() {
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Ultrasound Findings</p>
                     <ul className="space-y-1">
                       {p.ultrasoundFindings.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-slate-300">
+                        <li key={i} className="flex gap-2 text-xs text-slate-700">
                           <span className="text-sono-blue shrink-0">•</span>
                           <span>{f}</span>
                         </li>
@@ -181,8 +185,8 @@ export default function PathologiesPage() {
                     <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Differentials</p>
                     <ul className="space-y-1">
                       {p.differentials.map((d, i) => (
-                        <li key={i} className="text-xs text-slate-300 flex gap-2">
-                          <span className="text-slate-400 shrink-0">vs</span>
+                        <li key={i} className="text-xs text-slate-700 flex gap-2">
+                          <span className="text-slate-500 shrink-0">vs</span>
                           <span>{d}</span>
                         </li>
                       ))}

@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className="bg-sono-dark min-h-screen">
         <main className="max-w-lg mx-auto relative">
           {children}

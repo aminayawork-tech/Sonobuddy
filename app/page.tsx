@@ -98,7 +98,7 @@ export default function HomePage() {
         <div className="relative px-5 pt-14 pb-7">
           <div className="flex items-center gap-2.5 mb-1">
             <h1 className="text-3xl font-black tracking-tight">
-              <span className="text-white">Sono</span><span className="text-sono-blue">Buddy</span>
+              <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
             </h1>
           </div>
           <p className="text-sono-muted text-sm font-medium">Your pocket sonographer reference</p>
@@ -146,7 +146,7 @@ export default function HomePage() {
               <div className={`${link.iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
                 <link.Icon size={18} className={link.iconColor} strokeWidth={2} />
               </div>
-              <div className="text-[10px] text-slate-300 font-semibold leading-tight">{link.label}</div>
+              <div className="text-[10px] text-slate-700 font-semibold leading-tight">{link.label}</div>
             </button>
           ))}
         </div>
@@ -159,7 +159,7 @@ export default function HomePage() {
             <div className="bg-sky-100 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
             <span className="text-xs font-bold text-sono-blue uppercase tracking-widest">Sono Tip</span>
           </div>
-          <p className="text-sm text-slate-300 leading-relaxed font-medium"
+          <p className="text-sm text-slate-700 leading-relaxed font-medium"
             dangerouslySetInnerHTML={{ __html: tip }}
           />
         </div>
