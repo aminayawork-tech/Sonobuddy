@@ -26,16 +26,16 @@ export default function ProtocolsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-sono-blue" /> Protocols</h1>
+          <h1 className="text-xl font-bold text-slate-100 mb-3 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-sono-blue" /> Protocols</h1>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "carotid", "DVT", "thyroid"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-100 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
           />
         </div>
-        <div className="flex gap-2 px-4 pb-3 overflow-x-auto">
+        <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveCategory('all')}
             className={clsx(
@@ -82,7 +82,7 @@ export default function ProtocolsPage() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-slate-900 text-sm mb-1">{p.name}</h3>
+                <h3 className="font-semibold text-slate-100 text-sm mb-1">{p.name}</h3>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className={clsx('text-[11px] px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[p.difficulty])}>
                     {p.difficulty}
@@ -90,7 +90,7 @@ export default function ProtocolsPage() {
                   <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Clock className="w-3 h-3" /> {p.duration}</span>
                   <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Zap className="w-3 h-3" /> {p.probe.split(' ')[0]}</span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-2 line-clamp-2">{p.indication}</p>
+                <p className="text-[11px] text-slate-400 mt-2 line-clamp-2">{p.indication}</p>
               </div>
               <span className="text-sono-muted shrink-0 mt-1">›</span>
             </div>
