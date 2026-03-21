@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import SearchBar from '@/components/SearchBar';
@@ -208,7 +207,6 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-sky-100 via-blue-50 to-transparent pointer-events-none" />
         <div className="relative px-5 pt-14 pb-7">
           <div className="flex items-center gap-3 mb-1">
-            <Image src="/logo.png" alt="SonoBuddy" width={44} height={44} className="rounded-xl shadow-sm" />
             <h1 className="text-3xl font-black tracking-tight">
               <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
             </h1>
