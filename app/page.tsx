@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Onboarding from '@/components/Onboarding';
 import SearchBar from '@/components/SearchBar';
 import { type SearchResult } from '@/lib/search';
 import {
@@ -85,6 +86,22 @@ const CATEGORY_TILES: CategoryTile[] = [
 export default function HomePage() {
   const router = useRouter();
   const [tip] = useState(() => SONO_TIPS[Math.floor(Math.random() * SONO_TIPS.length)]);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem('sonobuddy_onboarded')) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  function completeOnboarding() {
+    localStorage.setItem('sonobuddy_onboarded', '1');
+    setShowOnboarding(false);
+  }
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={completeOnboarding} />;
+  }
 
   function handleSearchSelect(result: SearchResult) {
     router.push(result.href);
