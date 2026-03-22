@@ -100,10 +100,10 @@ export default function MeasurementsPage() {
             <div
               key={m.id}
               ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
-              className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden shadow-sm"
+              className="bg-sono-card border border-sono-border rounded-2xl shadow-sm"
             >
               <button
-                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3"
+                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky top-[145px] z-20 border-b border-sono-border shadow-sm' : ''}`}
                 onClick={() => setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
