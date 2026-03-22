@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Microscope, X } from 'lucide-react';
 import Image from 'next/image';
 import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
@@ -33,6 +33,7 @@ export default function PathologiesPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<PathologyImage | null>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const filtered = useMemo(() => {
     let results = query ? searchPathologies(query) : pathologies;
@@ -41,6 +42,22 @@ export default function PathologiesPage() {
     }
     return results;
   }, [query, activeCategory]);
+
+  // Smooth-scroll the opened card into view below the sticky header
+  useEffect(() => {
+    if (!expandedId) return;
+    const el = cardRefs.current.get(expandedId);
+    if (!el) return;
+    const timer = setTimeout(() => {
+      const stickyHeight = 145;
+      const rect = el.getBoundingClientRect();
+      if (rect.top < stickyHeight || rect.bottom > window.innerHeight) {
+        const targetY = window.scrollY + rect.top - stickyHeight - 8;
+        window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+      }
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [expandedId]);
 
   return (
     <div className="min-h-screen pb-nav">
@@ -127,7 +144,11 @@ export default function PathologiesPage() {
         {filtered.map((p) => {
           const isExpanded = expandedId === p.id;
           return (
-            <div key={p.id} className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden">
+            <div
+              key={p.id}
+              ref={(el) => { if (el) cardRefs.current.set(p.id, el); else cardRefs.current.delete(p.id); }}
+              className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden"
+            >
               <button
                 className="w-full px-4 py-4 text-left flex items-start justify-between gap-3"
                 onClick={() => setExpandedId(isExpanded ? null : p.id)}
