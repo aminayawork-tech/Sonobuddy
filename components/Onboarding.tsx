@@ -181,9 +181,8 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
         <div className="flex-1 bg-slate-50 rounded-[24px] border border-slate-200 overflow-hidden shadow-xl flex flex-col min-h-0">
           {/* Mock header */}
           <div className="px-4 pt-4 pb-3 bg-gradient-to-b from-sky-50 to-transparent border-b border-slate-100">
-            <div className="flex items-baseline gap-0.5 mb-2">
-              <span className="text-xl font-black text-slate-900">Sono</span>
-              <span className="text-xl font-black text-[#0EA5E9]">Buddy</span>
+            <div className="flex items-baseline gap-0 mb-2">
+              <span className="text-xl font-black text-slate-900">Sono</span><span className="text-xl font-black text-[#0EA5E9]">Buddy</span>
             </div>
             <div className="bg-white border border-slate-200 rounded-xl px-3 py-2 flex items-center gap-2">
               <div className="w-3 h-3 rounded-full border border-slate-300" />

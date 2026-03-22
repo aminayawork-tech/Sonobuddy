@@ -82,7 +82,7 @@ function CalculatorContent() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
+          <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
           <input
             type="text"
             value={query}
@@ -104,8 +104,8 @@ function CalculatorContent() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-semibold text-slate-900 text-sm mb-1">{c.name}</h3>
-                  <p className="text-xs text-slate-600 line-clamp-2">{c.description}</p>
+                  <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{c.name}</h3>
+                  <p className="text-[13px] text-slate-500 line-clamp-2">{c.description}</p>
                 </div>
                 <span className="text-sono-muted shrink-0">›</span>
               </div>
@@ -128,8 +128,8 @@ function CalculatorContent() {
           </button>
 
           <div className="bg-sono-card border border-sono-border rounded-2xl p-4 mb-4">
-            <h2 className="font-bold text-slate-900 text-lg mb-1">{activeCalc.name}</h2>
-            <p className="text-xs text-slate-600 mb-3">{activeCalc.description}</p>
+            <h2 className="font-black text-slate-900 text-lg tracking-tight mb-1">{activeCalc.name}</h2>
+            <p className="text-[13px] text-slate-500 mb-3 leading-relaxed">{activeCalc.description}</p>
             <code className="text-[11px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-1 rounded block">{activeCalc.formula}</code>
           </div>
 
@@ -175,12 +175,12 @@ function CalculatorContent() {
 
           {result && result.value !== '—' && (
             <div className={clsx('mt-4 border rounded-2xl p-4', RESULT_COLORS[result.color ?? 'blue'])}>
-              <p className="text-xs font-semibold uppercase tracking-wide opacity-70 mb-1">Result</p>
-              <p className="text-3xl font-bold mb-1">
-                {result.value} <span className="text-lg opacity-70">{result.unit}</span>
+              <p className="text-[10px] font-bold uppercase tracking-[0.12em] opacity-60 mb-1">Result</p>
+              <p className="text-3xl font-black tracking-tight mb-1">
+                {result.value} <span className="text-lg font-normal opacity-60">{result.unit}</span>
               </p>
               {result.interpretation && (
-                <p className="text-sm font-medium mt-1">{result.interpretation}</p>
+                <p className="text-[14px] font-medium mt-1 leading-snug">{result.interpretation}</p>
               )}
               {activeCalc.reference && (
                 <p className="text-[11px] opacity-50 mt-2">Ref: {activeCalc.reference}</p>
