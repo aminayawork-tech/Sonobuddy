@@ -228,7 +228,7 @@ export default function HomePage() {
               <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
             </h1>
           </div>
-          <p className="text-sono-muted text-sm font-medium">Your pocket sonographer reference</p>
+          <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
         </div>
       </div>
 
@@ -253,8 +253,8 @@ export default function HomePage() {
               <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center mb-3`}>
                 <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
               </div>
-              <div className="font-bold text-slate-800 text-sm">{tile.label}</div>
-              <div className="text-[11px] text-slate-500 mt-0.5 font-medium">{tile.desc}</div>
+              <div className="font-bold text-slate-900 text-[14px] tracking-tight">{tile.label}</div>
+              <div className="text-[12px] text-slate-500 mt-1">{tile.desc}</div>
             </button>
           ))}
         </div>
@@ -288,7 +288,7 @@ export default function HomePage() {
                   <div className={`${iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
                     <Icon size={18} className={iconColor} strokeWidth={2} />
                   </div>
-                  <div className="text-[10px] text-slate-700 font-semibold leading-tight">{item.label}</div>
+                  <div className="text-[11px] text-slate-700 font-semibold leading-tight">{item.label}</div>
                 </button>
                 {editMode && (
                   <button
@@ -326,7 +326,7 @@ export default function HomePage() {
             </div>
             <span className="text-[11px] text-sono-muted font-medium">{tipDate}</span>
           </div>
-          <p className="text-sm text-slate-700 leading-relaxed font-medium"
+          <p className="text-[14px] text-slate-700 leading-relaxed font-normal"
             dangerouslySetInnerHTML={{ __html: tip }}
           />
         </div>
@@ -345,7 +345,7 @@ export default function HomePage() {
               <div className="w-10 h-1 bg-slate-300 rounded-full" />
             </div>
             <div className="px-5 pt-2 pb-3 flex items-center justify-between">
-              <h2 className="text-base font-bold text-slate-900">Add to Quick Access</h2>
+              <h2 className="text-base font-black text-slate-900 tracking-tight">Add to Quick Access</h2>
               <button onClick={() => { setShowPicker(false); setPickerQuery(''); }}>
                 <X size={20} className="text-slate-400" />
               </button>
@@ -379,7 +379,7 @@ export default function HomePage() {
                       <Icon size={18} className={iconColor} strokeWidth={2} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-semibold text-slate-900 truncate">{entry.label}</div>
+                      <div className="text-[14px] font-semibold text-slate-900 truncate">{entry.label}</div>
                       <div className="text-[11px] text-sono-muted">{entry.subtitle}</div>
                     </div>
                     {already && <span className="text-[11px] text-sono-muted shrink-0">Added</span>}

@@ -75,7 +75,7 @@ export default function PathologiesPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
+          <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
           <input
             type="text"
             value={query}
@@ -133,7 +133,7 @@ export default function PathologiesPage() {
                 onClick={() => setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-slate-900 text-sm mb-1">{p.name}</h3>
+                  <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{p.name}</h3>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[p.category])}>
                       {CATEGORY_LABELS[p.category]}
@@ -150,16 +150,16 @@ export default function PathologiesPage() {
                 <div className="border-t border-sono-border divide-y divide-sono-border">
                   {/* Clinical context */}
                   <div className="px-4 py-3">
-                    <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Context</p>
-                    <p className="text-xs text-slate-700 leading-relaxed">{p.clinicalContext}</p>
+                    <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Context</p>
+                    <p className="text-[13px] text-slate-700 leading-relaxed">{p.clinicalContext}</p>
                   </div>
 
                   {/* US Findings */}
                   <div className="px-4 py-3">
-                    <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Ultrasound Findings</p>
-                    <ul className="space-y-1">
+                    <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Ultrasound Findings</p>
+                    <ul className="space-y-1.5">
                       {p.ultrasoundFindings.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-slate-700">
+                        <li key={i} className="flex gap-2 text-[13px] text-slate-700">
                           <span className="text-sono-blue shrink-0">•</span>
                           <span>{f}</span>
                         </li>
@@ -169,10 +169,10 @@ export default function PathologiesPage() {
 
                   {/* Red Flags */}
                   <div className="px-4 py-3 bg-red-50">
-                    <p className="text-[11px] font-semibold text-red-700 uppercase tracking-wide mb-2">⚠ Red Flags</p>
-                    <ul className="space-y-1">
+                    <p className="text-[10px] font-bold text-red-700 uppercase tracking-[0.1em] mb-2">⚠ Red Flags</p>
+                    <ul className="space-y-1.5">
                       {p.redFlags.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-red-800">
+                        <li key={i} className="flex gap-2 text-[13px] text-red-800">
                           <span className="shrink-0">!</span>
                           <span>{f}</span>
                         </li>
@@ -182,10 +182,10 @@ export default function PathologiesPage() {
 
                   {/* Differentials */}
                   <div className="px-4 py-3">
-                    <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Differentials</p>
-                    <ul className="space-y-1">
+                    <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Differentials</p>
+                    <ul className="space-y-1.5">
                       {p.differentials.map((d, i) => (
-                        <li key={i} className="text-xs text-slate-700 flex gap-2">
+                        <li key={i} className="text-[13px] text-slate-700 flex gap-2">
                           <span className="text-slate-500 shrink-0">vs</span>
                           <span>{d}</span>
                         </li>
@@ -195,14 +195,14 @@ export default function PathologiesPage() {
 
                   {/* Reporting Tips */}
                   <div className="px-4 py-3 bg-amber-50">
-                    <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide mb-1">Reporting Tips</p>
-                    <p className="text-xs text-amber-800 leading-relaxed">{p.reportingTips}</p>
+                    <p className="text-[10px] font-bold text-amber-700 uppercase tracking-[0.1em] mb-1.5">Reporting Tips</p>
+                    <p className="text-[13px] text-amber-800 leading-relaxed">{p.reportingTips}</p>
                   </div>
 
                   {/* Images */}
                   {p.images && p.images.length > 0 && (
                     <div className="px-4 py-3">
-                      <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Ultrasound Images</p>
+                      <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Ultrasound Images</p>
                       <div className="flex gap-2 overflow-x-auto pb-1">
                         {p.images.map((img, i) => (
                           <button

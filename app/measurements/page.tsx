@@ -26,7 +26,7 @@ export default function MeasurementsPage() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
-          <h1 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
+          <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
             type="text"
             value={query}
@@ -87,7 +87,7 @@ export default function MeasurementsPage() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-sm font-semibold text-slate-900">{m.name}</span>
+                    <span className="text-[15px] font-semibold text-slate-900">{m.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[m.category])}>
@@ -108,8 +108,8 @@ export default function MeasurementsPage() {
                   <RangeBar ranges={m.ranges} />
                   {m.clinicalNote && (
                     <div className="bg-slate-50 rounded-xl p-3">
-                      <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Clinical Note</p>
-                      <p className="text-xs text-slate-700 leading-relaxed">{m.clinicalNote}</p>
+                      <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Note</p>
+                      <p className="text-[13px] text-slate-700 leading-relaxed">{m.clinicalNote}</p>
                     </div>
                   )}
                 </div>
