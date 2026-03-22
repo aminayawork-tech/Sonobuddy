@@ -85,7 +85,8 @@ function Screen1({ onNext }: { onNext: () => void }) {
     <div className="flex flex-col h-full px-6 pt-20 pb-[calc(env(safe-area-inset-bottom)+160px)]">
       {/* Headline */}
       <h1 className="text-[28px] font-black text-center leading-tight mb-3">
-        <span className="text-slate-900">Welcome to Sono</span><span className="text-[#0EA5E9]">Buddy</span>
+        <span className="text-slate-900">Welcome to</span><br />
+        <span className="text-slate-900">Sono</span><span className="text-[#0EA5E9]">Buddy</span>
       </h1>
       <p className="text-[15px] text-slate-500 text-center leading-relaxed mb-10 font-medium">
         Your pocket sonographer reference — quick access to measurements, protocols, calculators & pathologies
@@ -122,7 +123,7 @@ function Screen1({ onNext }: { onNext: () => void }) {
       {/* CTA */}
       <button
         onClick={onNext}
-        className="mt-4 w-full bg-[#0EA5E9] active:bg-sky-600 rounded-2xl py-4 flex items-center justify-center gap-2 shadow-lg shadow-sky-200 transition-all active:scale-[0.98]"
+        className="mt-6 w-full bg-[#0EA5E9] active:bg-sky-600 rounded-2xl py-4 flex items-center justify-center gap-2 shadow-lg shadow-sky-200 transition-all active:scale-[0.98]"
       >
         <span className="text-white font-bold text-[16px]">Get Started</span>
         <ChevronRight size={18} className="text-white" />
@@ -152,7 +153,7 @@ function Screen2({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col h-full pt-16 pb-[calc(env(safe-area-inset-bottom)+160px)]">
       {/* Headline */}
-      <div className="px-6 mb-5">
+      <div className="px-6 mb-5 text-center">
         <h2 className="text-[26px] font-black text-slate-900 leading-tight mb-2">
           Everything you need,<br />one tap away
         </h2>
@@ -287,7 +288,7 @@ function Screen3({ onNext }: { onNext: () => void }) {
       </div>
 
       {/* Headline */}
-      <h2 className="text-[26px] font-black text-slate-900 leading-tight mb-4">
+      <h2 className="text-[26px] font-black text-slate-900 leading-tight mb-4 text-center">
         Jump in and start scanning smarter
       </h2>
 
