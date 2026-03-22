@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
+import Onboarding from '@/components/Onboarding';
 import SearchBar from '@/components/SearchBar';
 import { type SearchResult } from '@/lib/search';
 import {
@@ -142,6 +143,7 @@ const CATEGORY_TILES: CategoryTile[] = [
 
 export default function HomePage() {
   const router = useRouter();
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Daily tip — same all day, changes at midnight
   const [tip] = useState(() => {
@@ -157,6 +159,12 @@ export default function HomePage() {
   const [editMode, setEditMode] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [pickerQuery, setPickerQuery] = useState('');
+
+  useEffect(() => {
+    if (!localStorage.getItem('sonobuddy_onboarded')) {
+      setShowOnboarding(true);
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -195,6 +203,15 @@ export default function HomePage() {
 
   const addedIds = new Set(quickItems.map((i) => i.id));
   const showAddButton = quickItems.length < MAX_ITEMS;
+
+  function completeOnboarding() {
+    localStorage.setItem('sonobuddy_onboarded', '1');
+    setShowOnboarding(false);
+  }
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={completeOnboarding} />;
+  }
 
   function handleSearchSelect(result: SearchResult) {
     router.push(result.href);
