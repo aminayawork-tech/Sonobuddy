@@ -13,6 +13,18 @@ export default function MeasurementsPage() {
   const [activeCategory, setActiveCategory] = useState<MeasurementCategory | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  // Track sticky header height so card headers stick exactly beneath it
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    setHeaderHeight(el.offsetHeight);
+    const ro = new ResizeObserver(() => setHeaderHeight(el.offsetHeight));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const filtered = useMemo(() => {
     let results = query ? searchMeasurements(query) : measurements;
@@ -28,10 +40,10 @@ export default function MeasurementsPage() {
     const el = cardRefs.current.get(expandedId);
     if (!el) return;
     const timer = setTimeout(() => {
-      const stickyHeight = 145;
+      const offset = headerRef.current?.offsetHeight ?? 145;
       const rect = el.getBoundingClientRect();
-      if (rect.top < stickyHeight || rect.bottom > window.innerHeight) {
-        const targetY = window.scrollY + rect.top - stickyHeight - 8;
+      if (rect.top < offset || rect.bottom > window.innerHeight) {
+        const targetY = window.scrollY + rect.top - offset - 8;
         window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
       }
     }, 50);
@@ -41,7 +53,7 @@ export default function MeasurementsPage() {
   return (
     <div className="min-h-screen pb-nav">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
+      <div ref={headerRef} className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
@@ -103,7 +115,8 @@ export default function MeasurementsPage() {
               className="bg-sono-card border border-sono-border rounded-2xl shadow-sm"
             >
               <button
-                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky top-[145px] z-20 border-b border-sono-border shadow-sm' : ''}`}
+                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-sono-border shadow-sm' : ''}`}
+                style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
                 onClick={() => setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
