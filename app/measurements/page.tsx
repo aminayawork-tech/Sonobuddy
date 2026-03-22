@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Ruler } from 'lucide-react';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
 import RangeBar from '@/components/RangeBar';
@@ -12,6 +12,7 @@ export default function MeasurementsPage() {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<MeasurementCategory | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const filtered = useMemo(() => {
     let results = query ? searchMeasurements(query) : measurements;
@@ -20,6 +21,22 @@ export default function MeasurementsPage() {
     }
     return results;
   }, [query, activeCategory]);
+
+  // Smooth-scroll the opened card into view below the sticky header
+  useEffect(() => {
+    if (!expandedId) return;
+    const el = cardRefs.current.get(expandedId);
+    if (!el) return;
+    const timer = setTimeout(() => {
+      const stickyHeight = 145;
+      const rect = el.getBoundingClientRect();
+      if (rect.top < stickyHeight || rect.bottom > window.innerHeight) {
+        const targetY = window.scrollY + rect.top - stickyHeight - 8;
+        window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+      }
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [expandedId]);
 
   return (
     <div className="min-h-screen pb-nav">
@@ -80,7 +97,11 @@ export default function MeasurementsPage() {
         {filtered.map((m) => {
           const isExpanded = expandedId === m.id;
           return (
-            <div key={m.id} className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden shadow-sm">
+            <div
+              key={m.id}
+              ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
+              className="bg-sono-card border border-sono-border rounded-2xl overflow-hidden shadow-sm"
+            >
               <button
                 className="w-full px-4 py-4 text-left flex items-start justify-between gap-3"
                 onClick={() => setExpandedId(isExpanded ? null : m.id)}
