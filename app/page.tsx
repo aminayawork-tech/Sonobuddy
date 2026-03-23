@@ -1,35 +1,35 @@
 import Link from 'next/link';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
-  CheckCircle2, Star, Zap, ShieldCheck, Stethoscope,
+  Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
 
-// ── Feature data ──────────────────────────────────────────────────────────────
+// ── Data ──────────────────────────────────────────────────────────────────────
 
 const FEATURES = [
   {
     Icon: Ruler,
-    color: 'bg-sky-500/10 text-sky-400',
+    color: 'bg-sky-50 text-sky-500',
     title: 'Measurement Tables',
     desc: 'Instant normal/abnormal values for vascular, OB, thyroid, cardiac, and abdominal exams — with clinical context.',
   },
   {
     Icon: ClipboardList,
-    color: 'bg-emerald-500/10 text-emerald-400',
+    color: 'bg-emerald-50 text-emerald-500',
     title: 'Exam Protocols',
     desc: 'Step-by-step scanning guides with key images, probe tips, and full report checklists. Never miss a view again.',
   },
   {
     Icon: Calculator,
-    color: 'bg-violet-500/10 text-violet-400',
+    color: 'bg-violet-50 text-violet-500',
     title: 'Clinical Calculators',
     desc: 'ABI, Resistive Index, carotid stenosis grading, gestational age, EDD, organ volumes — built-in and instant.',
   },
   {
     Icon: Microscope,
-    color: 'bg-rose-500/10 text-rose-400',
+    color: 'bg-rose-50 text-rose-500',
     title: 'Pathology Library',
-    desc: 'Ultrasound findings, red flags, differentials, and reporting tips for the most common pathologies you\'ll encounter.',
+    desc: "Ultrasound findings, red flags, differentials, and reporting tips for the most common pathologies you'll encounter.",
   },
 ];
 
@@ -60,106 +60,60 @@ const TESTIMONIALS = [
   },
 ];
 
-const PRICING = [
-  {
-    name: 'Basic',
-    price: '$4.99',
-    period: '/month',
-    desc: 'Perfect for students and new grads',
-    highlight: false,
-    features: [
-      'All measurement tables',
-      'Core exam protocols (6)',
-      'Essential calculators (8)',
-      'Basic pathology library',
-      'Offline access (PWA)',
-    ],
-  },
-  {
-    name: 'Pro',
-    price: '$6.99',
-    period: '/month',
-    desc: 'Most popular — everything you need',
-    highlight: true,
-    badge: 'Most Popular',
-    features: [
-      'Everything in Basic',
-      'Full pathology library (20+)',
-      'Advanced protocols (OB survey, echo)',
-      'Favorites & quick access',
-      'Daily clinical tips',
-      'Priority updates',
-    ],
-  },
-  {
-    name: 'Team',
-    price: '$10.99',
-    period: '/month',
-    desc: 'For educators and department leads',
-    highlight: false,
-    features: [
-      'Everything in Pro',
-      'Up to 5 team members',
-      'Custom protocol notes',
-      'Dedicated support',
-      'Early access to new features',
-    ],
-  },
-];
+// ── Logo ──────────────────────────────────────────────────────────────────────
+
+function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
+  const cls = size === 'lg'
+    ? 'text-2xl font-black tracking-tight'
+    : 'text-xl font-black tracking-tight';
+  return (
+    <span className={cls}>
+      <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
+    </span>
+  );
+}
 
 // ── Phone Mockup ──────────────────────────────────────────────────────────────
 
 function PhoneMockup() {
   return (
     <div className="relative mx-auto w-[240px] sm:w-[280px]">
-      {/* glow */}
-      <div className="absolute inset-0 -m-8 bg-sky-500/20 rounded-full blur-3xl" />
-      {/* phone shell */}
-      <div className="relative rounded-[36px] bg-[#1E293B] border-2 border-slate-600 shadow-2xl overflow-hidden">
-        {/* notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#0F172A] rounded-b-2xl z-10" />
-        {/* screen */}
-        <div className="pt-8 pb-4 px-4 bg-[#0F172A] min-h-[480px]">
-          {/* app header */}
+      <div className="absolute inset-0 -m-8 bg-sky-400/15 rounded-full blur-3xl" />
+      <div className="relative rounded-[36px] bg-white border-2 border-gray-200 shadow-2xl overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-gray-100 rounded-b-2xl z-10" />
+        <div className="pt-8 pb-4 px-4 bg-gray-50 min-h-[480px]">
           <div className="mb-4">
-            <div className="flex items-baseline gap-0.5">
-              <span className="text-white font-black text-xl">Sono</span>
-              <span className="text-sky-400 font-black text-xl">Buddy</span>
-            </div>
-            <p className="text-slate-500 text-[10px]">Your pocket sonographer reference</p>
+            <Logo size="lg" />
+            <p className="text-gray-400 text-[10px]">Your pocket sonographer reference</p>
           </div>
-          {/* search bar */}
-          <div className="bg-[#1E293B] rounded-xl px-3 py-2 mb-4 flex items-center gap-2 border border-slate-700">
-            <div className="w-3 h-3 rounded-full border border-slate-500" />
-            <span className="text-slate-500 text-[10px]">Search protocols, measurements…</span>
+          <div className="bg-white rounded-xl px-3 py-2 mb-4 flex items-center gap-2 border border-gray-200">
+            <div className="w-3 h-3 rounded-full border border-gray-300" />
+            <span className="text-gray-400 text-[10px]">Search protocols, measurements…</span>
           </div>
-          {/* tiles */}
           <div className="grid grid-cols-2 gap-2 mb-4">
             {[
-              { label: 'Measurements', color: 'from-sky-900/60 to-blue-900/60 border-blue-800/50', dot: 'bg-sky-400' },
-              { label: 'Protocols', color: 'from-emerald-900/60 to-green-900/60 border-green-800/50', dot: 'bg-emerald-400' },
-              { label: 'Calculators', color: 'from-violet-900/60 to-purple-900/60 border-purple-800/50', dot: 'bg-violet-400' },
-              { label: 'Pathologies', color: 'from-rose-900/60 to-red-900/60 border-red-800/50', dot: 'bg-rose-400' },
+              { label: 'Measurements', color: 'from-sky-50 to-blue-50 border-blue-100', dot: 'bg-sky-400' },
+              { label: 'Protocols', color: 'from-emerald-50 to-green-50 border-green-100', dot: 'bg-emerald-400' },
+              { label: 'Calculators', color: 'from-violet-50 to-purple-50 border-purple-100', dot: 'bg-violet-400' },
+              { label: 'Pathologies', color: 'from-rose-50 to-red-50 border-red-100', dot: 'bg-rose-400' },
             ].map((t) => (
               <div key={t.label} className={`bg-gradient-to-br ${t.color} border rounded-xl p-2.5`}>
-                <div className={`w-4 h-4 rounded-md ${t.dot} mb-1.5 opacity-80`} />
-                <div className="text-white text-[10px] font-semibold">{t.label}</div>
+                <div className={`w-4 h-4 rounded-md ${t.dot} mb-1.5 opacity-90`} />
+                <div className="text-gray-700 text-[10px] font-semibold">{t.label}</div>
               </div>
             ))}
           </div>
-          {/* tip card */}
-          <div className="bg-[#1E293B] border border-slate-700 rounded-xl p-3">
+          <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm">
             <div className="flex items-center gap-1.5 mb-1.5">
               <span className="text-[10px]">💡</span>
-              <span className="text-sky-400 text-[9px] font-bold uppercase tracking-widest">Tip of the Day</span>
+              <span className="text-sky-500 text-[9px] font-bold uppercase tracking-widest">Tip of the Day</span>
             </div>
-            <p className="text-slate-400 text-[9px] leading-relaxed">
+            <p className="text-gray-500 text-[9px] leading-relaxed">
               Always angle-correct to 60° or less for spectral Doppler measurements…
             </p>
           </div>
         </div>
-        {/* bottom bar */}
-        <div className="bg-[#1E293B] border-t border-slate-700 flex justify-around py-2">
+        <div className="bg-white border-t border-gray-100 flex justify-around py-2">
           {['🔍', '📏', '📋', '🧮', '🔬'].map((icon, i) => (
             <div key={i} className="flex flex-col items-center gap-0.5">
               <span className="text-[12px]">{icon}</span>
@@ -176,19 +130,16 @@ function PhoneMockup() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0F172A] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
 
       {/* ── NAV ── */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800">
+      <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
-          <div className="flex items-baseline gap-0.5">
-            <span className="text-white font-black text-xl tracking-tight">Sono</span>
-            <span className="text-sky-400 font-black text-xl tracking-tight">Buddy</span>
-          </div>
+          <Logo />
           <div className="flex items-center gap-3">
             <Link
               href="/home"
-              className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
             >
               Open App
             </Link>
@@ -203,21 +154,20 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="pt-28 pb-20 px-5">
+      <section className="pt-28 pb-20 px-5 bg-gradient-to-b from-sky-50/60 to-white">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center gap-12">
-            {/* left */}
             <div className="flex-1 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-4 py-1.5 mb-6">
-                <Zap size={13} className="text-sky-400" />
-                <span className="text-sky-400 text-xs font-semibold">Built for working sonographers</span>
+              <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-4 py-1.5 mb-6">
+                <Zap size={13} className="text-sky-500" />
+                <span className="text-sky-600 text-xs font-semibold">Built for working sonographers</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-5">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-5 text-gray-900">
                 The reference tool<br />
-                <span className="text-sky-400">sonographers</span><br />
+                <span className="text-sky-500">sonographers</span><br />
                 actually use.
               </h1>
-              <p className="text-slate-400 text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
+              <p className="text-gray-500 text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
                 Instant access to measurement tables, exam protocols, calculators, and pathology guides — right in your pocket, mid-scan.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
@@ -227,23 +177,21 @@ export default function LandingPage() {
                 >
                   Open SonoBuddy Free →
                 </Link>
-                <p className="text-slate-500 text-sm">No account needed. Installs on your phone.</p>
+                <p className="text-gray-400 text-sm">No account needed. Installs on your phone.</p>
               </div>
-              {/* social proof row */}
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={14} className="text-amber-400 fill-amber-400" />
                   ))}
                 </div>
-                <span className="text-slate-400 text-sm">Loved by new grads</span>
+                <span className="text-gray-400 text-sm">Loved by new grads</span>
                 <div className="flex items-center gap-1.5">
-                  <ShieldCheck size={14} className="text-emerald-400" />
-                  <span className="text-slate-400 text-sm">Clinically sourced</span>
+                  <ShieldCheck size={14} className="text-emerald-500" />
+                  <span className="text-gray-400 text-sm">Clinically sourced</span>
                 </div>
               </div>
             </div>
-            {/* right — phone */}
             <div className="flex-1 flex justify-center lg:justify-end">
               <PhoneMockup />
             </div>
@@ -252,14 +200,14 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="py-20 px-5 border-t border-slate-800">
+      <section className="py-20 px-5 border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Everything in one app</p>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+            <p className="text-sky-500 text-sm font-semibold uppercase tracking-widest mb-3">Everything in one app</p>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900">
               Stop Googling mid-scan.
             </h2>
-            <p className="text-slate-400 mt-3 max-w-xl mx-auto">
+            <p className="text-gray-500 mt-3 max-w-xl mx-auto">
               SonoBuddy puts every reference you need in one fast, phone-friendly app — no login, no loading.
             </p>
           </div>
@@ -267,13 +215,13 @@ export default function LandingPage() {
             {FEATURES.map((f) => (
               <div
                 key={f.title}
-                className="bg-[#1E293B] border border-slate-700 rounded-2xl p-5 hover:border-slate-600 transition-colors"
+                className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-gray-300 transition-all"
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${f.color}`}>
                   <f.Icon size={20} />
                 </div>
-                <h3 className="font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="font-bold text-gray-900 mb-2">{f.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -281,23 +229,23 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-20 px-5">
+      <section className="py-20 px-5 bg-gray-50">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Simple by design</p>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-12">
+          <p className="text-sky-500 text-sm font-semibold uppercase tracking-widest mb-3">Simple by design</p>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900 mb-12">
             Ready in seconds, not minutes.
           </h2>
           <div className="flex flex-col sm:flex-row gap-8 justify-center">
             {STEPS.map((s, i) => (
               <div key={s.number} className="flex-1 relative">
                 {i < STEPS.length - 1 && (
-                  <div className="hidden sm:block absolute top-5 left-[calc(50%+2rem)] w-full h-px bg-slate-700" />
+                  <div className="hidden sm:block absolute top-5 left-[calc(50%+2rem)] w-full h-px bg-gray-200" />
                 )}
-                <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-sky-400 font-black text-sm">{s.number}</span>
+                <div className="bg-sky-500 rounded-2xl w-12 h-12 flex items-center justify-center mx-auto mb-4 shadow-md shadow-sky-500/20">
+                  <span className="text-white font-black text-sm">{s.number}</span>
                 </div>
-                <h3 className="font-bold text-white mb-2">{s.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+                <h3 className="font-bold text-gray-900 mb-2">{s.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -305,11 +253,11 @@ export default function LandingPage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="py-20 px-5 border-t border-slate-800">
+      <section className="py-20 px-5 border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Real feedback</p>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+            <p className="text-sky-500 text-sm font-semibold uppercase tracking-widest mb-3">Real feedback</p>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900">
               Sonographers love it.
             </h2>
           </div>
@@ -317,79 +265,18 @@ export default function LandingPage() {
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.name}
-                className="bg-[#1E293B] border border-slate-700 rounded-2xl p-5"
+                className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm"
               >
                 <div className="flex items-center gap-0.5 mb-3">
                   {[...Array(t.stars)].map((_, i) => (
                     <Star key={i} size={13} className="text-amber-400 fill-amber-400" />
                   ))}
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
                 <div>
-                  <div className="text-white font-semibold text-sm">{t.name}</div>
-                  <div className="text-slate-500 text-xs">{t.role}</div>
+                  <div className="text-gray-900 font-semibold text-sm">{t.name}</div>
+                  <div className="text-gray-400 text-xs">{t.role}</div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ── */}
-      <section id="pricing" className="py-20 px-5 border-t border-slate-800">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-              Less than a coffee. Every month.
-            </h2>
-            <p className="text-slate-400 mt-3">Start free. Upgrade when you&apos;re ready.</p>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {PRICING.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-2xl p-6 border ${
-                  plan.highlight
-                    ? 'bg-sky-500/10 border-sky-500/40 shadow-lg shadow-sky-500/10'
-                    : 'bg-[#1E293B] border-slate-700'
-                }`}
-              >
-                {plan.badge && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      {plan.badge}
-                    </span>
-                  </div>
-                )}
-                <div className="mb-4">
-                  <h3 className="font-bold text-white text-lg">{plan.name}</h3>
-                  <p className="text-slate-400 text-sm mt-0.5">{plan.desc}</p>
-                </div>
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className={`text-4xl font-black ${plan.highlight ? 'text-sky-400' : 'text-white'}`}>
-                    {plan.price}
-                  </span>
-                  <span className="text-slate-400 text-sm">{plan.period}</span>
-                </div>
-                <ul className="space-y-2.5 mb-6">
-                  {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-start gap-2.5">
-                      <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
-                      <span className="text-slate-300 text-sm">{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/home"
-                  className={`block text-center font-bold text-sm py-3 rounded-xl transition-colors ${
-                    plan.highlight
-                      ? 'bg-sky-500 hover:bg-sky-400 text-white'
-                      : 'bg-slate-700 hover:bg-slate-600 text-white'
-                  }`}
-                >
-                  {plan.highlight ? 'Get Started' : 'Choose Plan'}
-                </Link>
               </div>
             ))}
           </div>
@@ -397,40 +284,36 @@ export default function LandingPage() {
       </section>
 
       {/* ── BOTTOM CTA ── */}
-      <section className="py-20 px-5 border-t border-slate-800">
+      <section className="py-20 px-5 bg-sky-500">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="w-16 h-16 bg-sky-500/10 border border-sky-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Stethoscope size={28} className="text-sky-400" />
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Stethoscope size={28} className="text-white" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-            Your pocket reference.<br />
-            <span className="text-sky-400">Always ready.</span>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 text-white">
+            Your pocket reference.<br />Always ready.
           </h2>
-          <p className="text-slate-400 mb-8 leading-relaxed">
+          <p className="text-sky-100 mb-8 leading-relaxed">
             Install SonoBuddy as a PWA on your iPhone or Android — works offline, loads instantly, no app store needed.
           </p>
           <Link
             href="/home"
-            className="inline-block bg-sky-500 hover:bg-sky-400 text-white font-bold text-base px-10 py-4 rounded-2xl transition-colors shadow-lg shadow-sky-500/20"
+            className="inline-block bg-white hover:bg-sky-50 text-sky-600 font-bold text-base px-10 py-4 rounded-2xl transition-colors shadow-lg"
           >
             Open SonoBuddy — It&apos;s Free
           </Link>
-          <p className="text-slate-600 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
+          <p className="text-sky-200 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-slate-800 py-8 px-5">
+      <footer className="border-t border-gray-100 py-8 px-5 bg-white">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-baseline gap-0.5">
-            <span className="text-white font-black">Sono</span>
-            <span className="text-sky-400 font-black">Buddy</span>
-          </div>
+          <Logo />
           <div className="flex items-center gap-5">
-            <Link href="/home" className="text-slate-500 hover:text-white text-sm transition-colors">App</Link>
-            <Link href="/privacy" className="text-slate-500 hover:text-white text-sm transition-colors">Privacy</Link>
+            <Link href="/home" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">App</Link>
+            <Link href="/privacy" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Privacy</Link>
           </div>
-          <p className="text-slate-600 text-xs">
+          <p className="text-gray-400 text-xs">
             © {new Date().getFullYear()} SonoBuddy · For reference only. Not a diagnostic tool.
           </p>
         </div>
