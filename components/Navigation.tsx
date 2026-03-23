@@ -27,27 +27,19 @@ export default function Navigation() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex-1 flex flex-col items-center justify-center py-2 px-1 text-center min-h-[60px] relative"
+              className="flex-1 flex flex-col items-center justify-center py-2 px-1 text-center min-h-[60px]"
             >
-              {/* Sliding pill background */}
-              <span
-                className={clsx(
-                  'absolute inset-x-1.5 top-1.5 bottom-3 rounded-xl transition-all duration-200',
-                  isActive ? 'bg-sono-blue/15 scale-100 opacity-100' : 'scale-90 opacity-0'
-                )}
-              />
-
               <item.Icon
                 size={20}
                 strokeWidth={isActive ? 2.5 : 1.8}
                 className={clsx(
-                  'relative z-10 transition-all duration-200',
-                  isActive ? 'text-sono-blue scale-110' : 'text-sono-muted scale-100'
+                  'transition-colors duration-200',
+                  isActive ? 'text-sono-blue' : 'text-sono-muted'
                 )}
               />
               <span
                 className={clsx(
-                  'relative z-10 text-[10px] mt-1 font-medium leading-none transition-all duration-200',
+                  'text-[10px] mt-1 font-medium leading-none transition-colors duration-200',
                   isActive ? 'text-sono-blue font-semibold' : 'text-sono-muted'
                 )}
               >
