@@ -77,13 +77,17 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    <div className={`relative rounded-[38px] bg-gray-900 shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}
-      style={{ aspectRatio: '9/19.5' }}>
-      {/* Dynamic island */}
-      <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-[72px] h-[22px] bg-gray-900 rounded-full z-10" />
-      {/* Screenshot */}
+    <div
+      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 flex flex-col ${className}`}
+      style={{ aspectRatio: '9/19.5' }}
+    >
+      {/* Status bar — white bg matches the app, dynamic island sits here */}
+      <div className="bg-white flex-shrink-0 flex items-center justify-center" style={{ height: '8%' }}>
+        <div className="bg-gray-900 rounded-full" style={{ width: '38%', height: '52%' }} />
+      </div>
+      {/* Screenshot fills the rest — no top status bar bleed */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full h-full object-cover object-top" />
+      <img src={src} alt={alt} className="w-full flex-1 object-cover object-top" />
     </div>
   );
 }
@@ -93,19 +97,13 @@ function PhoneMockup() {
     <div className="relative w-[300px] sm:w-[360px] lg:w-[400px] h-[460px] sm:h-[540px] lg:h-[580px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
-      {/* Back phone — protocols screen */}
-      <div className="absolute right-0 top-8 w-[165px] sm:w-[195px] lg:w-[215px] rotate-3 drop-shadow-2xl">
-        <Phone
-          src="/screenshots/IMG_9590.PNG"
-          alt="SonoBuddy protocols screen"
-        />
+      {/* Back phone — protocols, slight tilt only on mobile (desktop stays flat = no blur) */}
+      <div className="absolute right-0 top-8 w-[165px] sm:w-[195px] lg:w-[215px] rotate-2 lg:rotate-0 lg:translate-x-4 shadow-xl">
+        <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
       {/* Front phone — home screen */}
-      <div className="absolute left-0 top-0 w-[175px] sm:w-[205px] lg:w-[225px] -rotate-2 drop-shadow-2xl z-10">
-        <Phone
-          src="/screenshots/IMG_9588.PNG"
-          alt="SonoBuddy home screen"
-        />
+      <div className="absolute left-0 top-0 w-[175px] sm:w-[205px] lg:w-[225px] -rotate-2 lg:rotate-0 shadow-2xl z-10">
+        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
   );
@@ -159,7 +157,7 @@ export default function LandingPage() {
                   href="/home"
                   className="w-full sm:w-auto bg-sky-500 hover:bg-sky-400 text-white font-bold text-base px-8 py-3.5 rounded-2xl transition-colors shadow-lg shadow-sky-500/20"
                 >
-                  Open SonoBuddy Free →
+                  Try Free →
                 </Link>
                 <p className="text-gray-400 text-sm">No account needed. Installs on your phone.</p>
               </div>
@@ -283,7 +281,7 @@ export default function LandingPage() {
             href="/home"
             className="inline-block bg-white hover:bg-sky-50 text-sky-600 font-bold text-base px-10 py-4 rounded-2xl transition-colors shadow-lg"
           >
-            Open SonoBuddy — It&apos;s Free
+            Try SonoBuddy Free
           </Link>
           <p className="text-sky-200 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
         </div>
