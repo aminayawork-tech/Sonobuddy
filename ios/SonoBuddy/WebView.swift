@@ -13,8 +13,9 @@ struct WebView: UIViewRepresentable {
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.contentInsetAdjustmentBehavior = .automatic
         webView.isOpaque = false
-        webView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
-        webView.scrollView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
+        // sky-100 (#e0f2fe) — matches page top gradient so iOS overscroll doesn't flash dark
+        webView.backgroundColor = UIColor(red: 224/255, green: 242/255, blue: 254/255, alpha: 1)
+        webView.scrollView.backgroundColor = UIColor(red: 224/255, green: 242/255, blue: 254/255, alpha: 1)
 
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         webView.load(request)
