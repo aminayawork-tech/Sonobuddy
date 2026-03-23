@@ -219,17 +219,14 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen pb-nav bg-sono-dark">
-      {/* Gradient Hero Header */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-100 via-blue-50 to-transparent pointer-events-none" />
-        <div className="relative px-5 pt-14 pb-7">
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-3xl font-black tracking-tight">
-              <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
-            </h1>
-          </div>
-          <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
+      {/* Hero Header */}
+      <div className="px-5 pt-14 pb-7">
+        <div className="flex items-center gap-3 mb-1">
+          <h1 className="text-3xl font-black tracking-tight">
+            <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
+          </h1>
         </div>
+        <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
       </div>
 
       {/* Search */}
