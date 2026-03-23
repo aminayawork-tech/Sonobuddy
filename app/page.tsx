@@ -75,52 +75,37 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 // ── Phone Mockup ──────────────────────────────────────────────────────────────
 
+function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
+  return (
+    <div className={`relative rounded-[38px] bg-gray-900 shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}
+      style={{ aspectRatio: '9/19.5' }}>
+      {/* Dynamic island */}
+      <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-[72px] h-[22px] bg-gray-900 rounded-full z-10" />
+      {/* Screenshot */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="w-full h-full object-cover object-top" />
+    </div>
+  );
+}
+
 function PhoneMockup() {
   return (
-    <div className="relative mx-auto w-[240px] sm:w-[280px]">
-      <div className="absolute inset-0 -m-8 bg-sky-400/15 rounded-full blur-3xl" />
-      <div className="relative rounded-[36px] bg-white border-2 border-gray-200 shadow-2xl overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-gray-100 rounded-b-2xl z-10" />
-        <div className="pt-8 pb-4 px-4 bg-gray-50 min-h-[480px]">
-          <div className="mb-4">
-            <Logo size="lg" />
-            <p className="text-gray-400 text-[10px]">Your pocket sonographer reference</p>
-          </div>
-          <div className="bg-white rounded-xl px-3 py-2 mb-4 flex items-center gap-2 border border-gray-200">
-            <div className="w-3 h-3 rounded-full border border-gray-300" />
-            <span className="text-gray-400 text-[10px]">Search protocols, measurements…</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            {[
-              { label: 'Measurements', color: 'from-sky-50 to-blue-50 border-blue-100', dot: 'bg-sky-400' },
-              { label: 'Protocols', color: 'from-emerald-50 to-green-50 border-green-100', dot: 'bg-emerald-400' },
-              { label: 'Calculators', color: 'from-violet-50 to-purple-50 border-purple-100', dot: 'bg-violet-400' },
-              { label: 'Pathologies', color: 'from-rose-50 to-red-50 border-red-100', dot: 'bg-rose-400' },
-            ].map((t) => (
-              <div key={t.label} className={`bg-gradient-to-br ${t.color} border rounded-xl p-2.5`}>
-                <div className={`w-4 h-4 rounded-md ${t.dot} mb-1.5 opacity-90`} />
-                <div className="text-gray-700 text-[10px] font-semibold">{t.label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-[10px]">💡</span>
-              <span className="text-sky-500 text-[9px] font-bold uppercase tracking-widest">Tip of the Day</span>
-            </div>
-            <p className="text-gray-500 text-[9px] leading-relaxed">
-              Always angle-correct to 60° or less for spectral Doppler measurements…
-            </p>
-          </div>
-        </div>
-        <div className="bg-white border-t border-gray-100 flex justify-around py-2">
-          {['🔍', '📏', '📋', '🧮', '🔬'].map((icon, i) => (
-            <div key={i} className="flex flex-col items-center gap-0.5">
-              <span className="text-[12px]">{icon}</span>
-              <div className={`w-1 h-1 rounded-full ${i === 0 ? 'bg-sky-400' : 'bg-transparent'}`} />
-            </div>
-          ))}
-        </div>
+    <div className="relative w-[320px] sm:w-[380px] h-[480px] sm:h-[560px]">
+      {/* Glow */}
+      <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
+      {/* Back phone — protocols screen, offset right + slightly rotated */}
+      <div className="absolute right-0 top-8 w-[175px] sm:w-[205px] rotate-3 drop-shadow-2xl">
+        <Phone
+          src="/screenshots/IMG_9590.PNG"
+          alt="SonoBuddy protocols screen"
+        />
+      </div>
+      {/* Front phone — home screen */}
+      <div className="absolute left-0 top-0 w-[185px] sm:w-[215px] -rotate-2 drop-shadow-2xl z-10">
+        <Phone
+          src="/screenshots/IMG_9588.PNG"
+          alt="SonoBuddy home screen"
+        />
       </div>
     </div>
   );
