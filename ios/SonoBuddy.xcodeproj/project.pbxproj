@@ -11,7 +11,6 @@
 		AA000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000102 /* ContentView.swift */; };
 		AA000003 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000103 /* WebView.swift */; };
 		AA000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000104 /* Assets.xcassets */; };
-		AA000005 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA000105 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,7 +120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA000004 /* Assets.xcassets in Resources */,
-				AA000005 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
