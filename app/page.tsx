@@ -94,16 +94,17 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
 
 function PhoneMockup() {
   return (
-    <div className="relative w-[300px] sm:w-[360px] lg:w-[400px] h-[460px] sm:h-[540px] lg:h-[580px]">
+    /* px/pb padding absorbs corner bleed from CSS rotation */
+    <div className="relative flex items-start px-5 pb-6 pt-2">
       {/* Glow */}
-      <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
-      {/* Back phone — protocols, slight tilt only on mobile (desktop stays flat = no blur) */}
-      <div className="absolute right-0 top-8 w-[165px] sm:w-[195px] lg:w-[215px] rotate-2 lg:rotate-0 lg:translate-x-4 shadow-xl">
-        <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
-      </div>
-      {/* Front phone — home screen */}
-      <div className="absolute left-0 top-0 w-[175px] sm:w-[205px] lg:w-[225px] -rotate-2 lg:rotate-0 shadow-2xl z-10">
+      <div className="absolute -inset-6 bg-sky-400/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Front phone — home screen, slight left tilt on mobile only */}
+      <div className="relative z-10 flex-shrink-0 w-[172px] sm:w-[198px] lg:w-[218px] -rotate-2 lg:rotate-0 shadow-2xl -mr-14 sm:-mr-16 lg:-mr-14">
         <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
+      </div>
+      {/* Back phone — protocols, slight right tilt on mobile only, pushed down */}
+      <div className="relative flex-shrink-0 w-[160px] sm:w-[183px] lg:w-[200px] rotate-2 lg:rotate-0 shadow-xl mt-8 sm:mt-10">
+        <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
     </div>
   );
