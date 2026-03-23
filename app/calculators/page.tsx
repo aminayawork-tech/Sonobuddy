@@ -36,6 +36,7 @@ function CalculatorContent() {
   useEffect(() => {
     setInputs({});
     setResult(null);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [activeId]);
 
   function calculate() {
