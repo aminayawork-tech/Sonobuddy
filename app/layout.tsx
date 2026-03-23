@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
   title: 'SonoBuddy — Sonographer Reference',
@@ -33,12 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="bg-sono-dark min-h-screen">
-        <main className="max-w-lg mx-auto relative">
-          {children}
-        </main>
-        <div className="max-w-lg mx-auto">
-          <Navigation />
-        </div>
+        {children}
       </body>
     </html>
   );

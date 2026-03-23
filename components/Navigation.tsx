@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Search, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { href: '/', label: 'Search', Icon: Search },
+  { href: '/home', label: 'Search', Icon: Search },
   { href: '/measurements', label: 'Measures', Icon: Ruler },
   { href: '/protocols', label: 'Protocols', Icon: ClipboardList },
   { href: '/calculators', label: 'Calc', Icon: Calculator },
@@ -16,12 +16,15 @@ const NAV_ITEMS = [
 export default function Navigation() {
   const pathname = usePathname();
 
+  // Hide nav on the marketing landing page
+  if (pathname === '/') return null;
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-sono-card/95 backdrop-blur-md border-t border-sono-border safe-area-bottom shadow-lg">
       <div className="max-w-lg mx-auto flex items-stretch">
         {NAV_ITEMS.map((item) => {
-          const isActive = item.href === '/'
-            ? pathname === '/'
+          const isActive = item.href === '/home'
+            ? pathname === '/home'
             : pathname.startsWith(item.href);
           return (
             <Link
