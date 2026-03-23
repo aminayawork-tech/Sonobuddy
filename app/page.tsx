@@ -77,33 +77,29 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    // Aspect ratio matches the screenshot (1170×2532 = 9/19.5) so image fills naturally
     <div
       className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}
       style={{ aspectRatio: '9/19.5' }}
     >
-      {/* Image at natural width — no object-fit needed since aspect ratios match */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={alt} className="w-full block" />
-      {/* White bar absolutely overlaid on top — masks iOS time + battery from screenshot */}
-      <div className="absolute top-0 left-0 right-0 z-10 bg-white flex items-center justify-center" style={{ height: '8%' }}>
-        <div className="bg-gray-900 rounded-full" style={{ width: '38%', height: '52%' }} />
-      </div>
     </div>
   );
 }
 
 function PhoneMockup() {
   return (
-    <div className="relative w-[300px] sm:w-[360px] lg:w-[400px] h-[470px] sm:h-[545px] lg:h-[590px]">
+    // Container sized so phones overlap by only ~5px — keeps the 38px corner radius
+    // fully visible at the intersection, giving a clean round edge rather than a sharp cut.
+    <div className="relative w-[325px] sm:w-[390px] lg:w-[430px] h-[415px] sm:h-[485px] lg:h-[535px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
-      {/* Back phone — protocols, flush to right edge (no translate-x to avoid overflow) */}
-      <div className="absolute right-0 top-8 w-[162px] sm:w-[190px] lg:w-[210px] rotate-2 lg:rotate-0 shadow-xl">
+      {/* Back phone — slightly smaller, offset down for depth */}
+      <div className="absolute right-0 top-10 w-[162px] sm:w-[195px] lg:w-[215px] shadow-xl">
         <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
-      {/* Front phone — home screen */}
-      <div className="absolute left-0 top-0 w-[172px] sm:w-[202px] lg:w-[222px] -rotate-2 lg:rotate-0 shadow-2xl z-10">
+      {/* Front phone */}
+      <div className="absolute left-0 top-0 w-[168px] sm:w-[200px] lg:w-[220px] shadow-2xl z-10">
         <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
