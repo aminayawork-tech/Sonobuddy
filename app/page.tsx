@@ -1,392 +1,441 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
-import Onboarding from '@/components/Onboarding';
-import SearchBar from '@/components/SearchBar';
-import { type SearchResult } from '@/lib/search';
+import Link from 'next/link';
 import {
-  Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2, Workflow,
-  Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check,
-  type LucideIcon,
+  Ruler, ClipboardList, Calculator, Microscope,
+  CheckCircle2, Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
-import { protocols } from '@/data/protocols';
-import { calculators } from '@/data/calculators';
 
-const SONO_TIPS = [
-  // Vascular
-  `The "superficial" femoral vein is part of the <b>deep</b> venous system — DVT here still requires anticoagulation. Never let the name mislead you or your provider.`,
-  `Always angle-correct to <b>60° or less</b> for spectral Doppler velocity measurements. Angles above 60° introduce significant error and can falsely elevate or lower your PSV.`,
-  `A monophasic waveform in a lower extremity artery suggests proximal obstruction. Always scan proximally — the problem is upstream.`,
-  `When you see reversed flow in the <b>vertebral artery</b>, think subclavian steal. Ask if the patient has arm claudication or dizziness with arm exercise.`,
-  `Color Doppler aliasing isn't always bad — it can help you quickly locate the jet of a stenosis. Use it to your advantage before switching to spectral.`,
-  `The <b>ICA has no branches</b> in the neck. If you see branches, you're looking at the ECA. Tap the superficial temporal artery to confirm — ECA waveform will bounce.`,
-  `For DVT compression, if the vein doesn't fully collapse with gentle pressure, that's abnormal. You shouldn't need to press hard — excessive force compresses the artery too and gives a false sense of security.`,
-  `Waveform morphology tells a story: <b>triphasic = normal</b>, biphasic = mild disease, monophasic = significant proximal obstruction or high-resistance state.`,
-  `When mapping veins for fistula creation, always document diameter, depth, and compressibility. A vein <b>≥ 2.5 mm</b> at rest (≥ 3.5 mm with tourniquet) is the general threshold for maturation potential.`,
-  `An ABI > <b>1.3</b> is non-compressible and unreliable — calcified vessels in diabetics and renal disease patients won't compress. Consider toe pressures instead.`,
-  `For AVF surveillance, a PSV ratio > <b>3.0</b> across a stenosis or brachial artery flow < 500 mL/min suggests significant stenosis needing referral.`,
-  `When evaluating carotid stenosis, PSV alone isn't enough. Always use the <b>ICA/CCA PSV ratio</b> — a ratio > 4 suggests ≥ 70% stenosis even if PSV seems borderline.`,
-  // Abdominal / General
-  `The <b>right renal artery</b> passes behind the IVC — use the IVC as a window. Angle slightly posterior and you'll find it without needing a flank approach.`,
-  `A RI > <b>0.70</b> in the renal arteries suggests increased parenchymal resistance. Think hydronephrosis, rejection (transplant), or medical renal disease.`,
-  `Bowel gas is your enemy. Have patients fast for abdominal aorta and mesenteric scans, and try gentle graded compression to displace gas. Patience and position changes work.`,
-  `The <b>celiac axis</b> has a classic "seagull" appearance in transverse — two wings spreading left (splenic) and right (hepatic). Once you see it, you'll never forget it.`,
-  `SMA waveform is normally <b>high resistance</b> fasting and low resistance postprandial. A fasting SMA that looks low resistance may indicate bowel ischemia or AVM.`,
-  `Doppler of the <b>portal vein</b> should show hepatopetal (toward liver) flow. Hepatofugal (away) flow is a red flag for portal hypertension — document and alert the reading physician immediately.`,
-  `A normal aorta tapers gradually. Any segment that looks <b>larger than the one above it</b> should raise suspicion. Measure outer wall to outer wall in the true AP diameter.`,
-  `When measuring the AAA, always get both AP and transverse. AP is the hemodynamically important diameter — transverse alone can underestimate due to tortuous vessels.`,
-  // OB / GYN
-  `Crown-rump length (CRL) is the <b>most accurate</b> dating measurement — use it before 14 weeks whenever possible. After 22 weeks, biometry dating windows widen significantly.`,
-  `When you can't find the fetal heartbeat, don't panic the patient. Try the <b>TV probe</b> or wait a few minutes and recheck. Document what you see, not what you assume.`,
-  `A CRL of <b>7 mm or more</b> without a visible heartbeat on transvaginal ultrasound is suspicious for failed pregnancy. A second scan 7–10 days later confirms — never diagnose on one scan alone.`,
-  `The <b>yolk sac</b> appears before the embryo and should be visible by 5.5 weeks TV. A yolk sac without an embryo may mean you're early — correlate with hCG and rescan.`,
-  `Placenta previa diagnosis should always be confirmed with <b>transvaginal ultrasound</b>. Transabdominal images are unreliable for the lower uterine segment — bladder filling causes false positives.`,
-  `The four-chamber view isn't enough for cardiac screening — add the <b>LVOT and RVOT views</b>. Most conotruncal defects (TOF, TGA) won't be caught on four-chamber alone.`,
-  `Umbilical cord should have <b>2 arteries and 1 vein</b>. A single umbilical artery (SUA) is associated with structural and chromosomal anomalies — always document and flag it.`,
-  `AFI and single deepest pocket both have roles. <b>SDP ≥ 2 cm</b> is the threshold for normal. If it's borderline, note it and correlate clinically — fluid levels fluctuate.`,
-  // Thyroid
-  `TI-RADS isn't just about size — it's about <b>composition, echogenicity, shape, margin, and echogenic foci</b>. A 5 mm nodule can be TR5 if it has all the right features.`,
-  `Taller-than-wide orientation (anteroposterior > transverse on transverse image) is the single <b>most suspicious</b> TI-RADS feature. Don't skip measuring both axes.`,
-  `Comet-tail artifacts in thyroid nodules suggest benign colloid — they're different from microcalcifications. <b>True microcalcs are punctate and non-shadowing.</b>`,
-  `Document the parathyroid region whenever you're doing a thyroid scan. An enlarged hypoechoic oval structure posterior to the thyroid lobe on spectral may represent a parathyroid adenoma.`,
-  // Cardiac / Echo
-  `In echo, <b>subcostal views</b> are your friend when parasternal and apical windows are poor — common in COPD, obesity, and post-op patients. Always try it before giving up on windows.`,
-  `A pericardial effusion can look dramatic but be hemodynamically insignificant. Look for <b>RA/RV diastolic collapse</b> and IVC plethora to suggest tamponade physiology.`,
-  `Doppler of the <b>mitral inflow</b>: E/A ratio < 1 in a patient > 50 suggests diastolic dysfunction. But don't over-diagnose — always integrate with tissue Doppler and clinical context.`,
-  `When measuring EF by eye (visual estimation), studies show experienced sonographers are within 5–10% of quantitative methods. Trust your eye but always document biplane if the clinical question matters.`,
-  // Clinical pearls
-  `Always compare <b>bilateral findings</b> on vascular exams — a unilaterally elevated PSV or RI is far more meaningful than bilateral elevation, which may reflect a normal variant or technique issue.`,
-  `Document your probe position and patient position when findings are subtle. The next sonographer re-scanning the patient needs to reproduce your view, not guess how you got there.`,
-  `If your image quality is poor, <b>change something</b> before giving up: patient position, probe position, frequency, harmonic imaging, gain. Never submit a non-diagnostic study without documentation of attempts.`,
-  `Write what you <b>see</b>, not what you think it is. "Heterogeneous hypoechoic mass with irregular margins" is your job. "Malignancy" is the radiologist's call.`,
-  `When a finding surprises you, <b>scan longer</b>. Artifacts disappear, real findings persist. Real structures have consistent anatomy — artifacts change with probe angle.`,
+// ── Feature data ──────────────────────────────────────────────────────────────
+
+const FEATURES = [
+  {
+    Icon: Ruler,
+    color: 'bg-sky-500/10 text-sky-400',
+    title: 'Measurement Tables',
+    desc: 'Instant normal/abnormal values for vascular, OB, thyroid, cardiac, and abdominal exams — with clinical context.',
+  },
+  {
+    Icon: ClipboardList,
+    color: 'bg-emerald-500/10 text-emerald-400',
+    title: 'Exam Protocols',
+    desc: 'Step-by-step scanning guides with key images, probe tips, and full report checklists. Never miss a view again.',
+  },
+  {
+    Icon: Calculator,
+    color: 'bg-violet-500/10 text-violet-400',
+    title: 'Clinical Calculators',
+    desc: 'ABI, Resistive Index, carotid stenosis grading, gestational age, EDD, organ volumes — built-in and instant.',
+  },
+  {
+    Icon: Microscope,
+    color: 'bg-rose-500/10 text-rose-400',
+    title: 'Pathology Library',
+    desc: 'Ultrasound findings, red flags, differentials, and reporting tips for the most common pathologies you\'ll encounter.',
+  },
 ];
 
-// ── Quick Access types & defaults ────────────────────────────────────────────
-
-type QuickAccessItem = {
-  id: string;
-  label: string;
-  href: string;
-  type: 'protocol' | 'calculator';
-  category: string;
-};
-
-const CATEGORY_STYLE: Record<string, { iconBg: string; iconColor: string; Icon: LucideIcon }> = {
-  vascular:       { iconBg: 'bg-sky-100',    iconColor: 'text-sky-600',    Icon: Activity     },
-  abdomen:        { iconBg: 'bg-amber-100',  iconColor: 'text-amber-600',  Icon: Stethoscope  },
-  ob:             { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Heart        },
-  thyroid:        { iconBg: 'bg-violet-100', iconColor: 'text-violet-600', Icon: Scan         },
-  cardiac:        { iconBg: 'bg-rose-100',   iconColor: 'text-rose-600',   Icon: Heart        },
-  msk:            { iconBg: 'bg-green-100',  iconColor: 'text-green-600',  Icon: Ruler        },
-  'calc-vascular':{ iconBg: 'bg-purple-100', iconColor: 'text-purple-600', Icon: BarChart2    },
-  'calc-abdomen': { iconBg: 'bg-amber-100',  iconColor: 'text-amber-600',  Icon: Calculator   },
-  'calc-ob':      { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Calculator   },
-  'calc-general': { iconBg: 'bg-teal-100',   iconColor: 'text-teal-600',   Icon: Gauge        },
-};
-
-function getStyle(item: QuickAccessItem) {
-  const key = item.type === 'calculator' ? `calc-${item.category}` : item.category;
-  return CATEGORY_STYLE[key] ?? { iconBg: 'bg-slate-100', iconColor: 'text-slate-500', Icon: ClipboardList };
-}
-
-const DEFAULT_QUICK_ITEMS: QuickAccessItem[] = [
-  { id: 'carotid-duplex',        label: 'Carotid Duplex',    href: '/protocols/carotid-duplex',        type: 'protocol',   category: 'vascular' },
-  { id: 'dvt-lower',             label: 'DVT Lower',         href: '/protocols/dvt-lower',             type: 'protocol',   category: 'vascular' },
-  { id: 'ue-arterial',           label: 'UE Arterial',       href: '/protocols/ue-arterial',           type: 'protocol',   category: 'vascular' },
-  { id: 'echo-tte',              label: 'Echo / TTE',        href: '/protocols/echo-tte',              type: 'protocol',   category: 'cardiac'  },
-  { id: 'pelvic-us',             label: 'Pelvic US',         href: '/protocols/pelvic-us',             type: 'protocol',   category: 'ob'       },
-  { id: 'thyroid-ultrasound',    label: 'Thyroid US',        href: '/protocols/thyroid-ultrasound',    type: 'protocol',   category: 'thyroid'  },
-  { id: 'calc-abi',              label: 'ABI Calc',          href: '/calculators?id=abi',              type: 'calculator', category: 'vascular' },
-  { id: 'calc-carotid-stenosis', label: 'Carotid Stenosis',  href: '/calculators?id=carotid-stenosis', type: 'calculator', category: 'vascular' },
+const STEPS = [
+  { number: '01', title: 'Open SonoBuddy', desc: 'No login. No loading screen. Opens instantly like a native app from your home screen.' },
+  { number: '02', title: 'Search or Browse', desc: 'Search across everything — measurements, protocols, calculators, and pathologies in one tap.' },
+  { number: '03', title: 'Scan with Confidence', desc: 'Reference normal values mid-exam, follow step-by-step protocols, and generate accurate reports.' },
 ];
 
-const LS_KEY = 'sonobuddy-quick-access';
-const MAX_ITEMS = 8;
-
-// ── Picker data ───────────────────────────────────────────────────────────────
-
-type PickerEntry = QuickAccessItem & { subtitle: string };
-
-const ALL_PICKER_ENTRIES: PickerEntry[] = [
-  ...protocols.map((p) => ({
-    id: p.id,
-    label: p.name,
-    subtitle: `Protocol · ${p.category}`,
-    href: `/protocols/${p.id}`,
-    type: 'protocol' as const,
-    category: p.category,
-  })),
-  ...calculators.map((c) => ({
-    id: `calc-${c.id}`,
-    label: c.name,
-    subtitle: `Calculator · ${c.category}`,
-    href: `/calculators?id=${c.id}`,
-    type: 'calculator' as const,
-    category: c.category,
-  })),
+const TESTIMONIALS = [
+  {
+    name: 'Sarah M.',
+    role: 'Vascular Sonographer, 2 yrs',
+    stars: 5,
+    text: 'I used to keep a stack of papers in my pocket. SonoBuddy replaced all of it. The carotid stenosis calculator alone is worth it.',
+  },
+  {
+    name: 'James R.',
+    role: 'New Grad Sonographer',
+    stars: 5,
+    text: 'As a new grad, I was terrified of getting measurements wrong. Having instant reference to normal ranges mid-scan is a game changer.',
+  },
+  {
+    name: 'Priya K.',
+    role: 'OB/GYN Sonographer',
+    stars: 5,
+    text: 'The OB protocols and gestational age calculator are spot on. I recommend this to every student I mentor.',
+  },
 ];
 
-// ── Category tiles ────────────────────────────────────────────────────────────
-
-type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; color: string; iconBg: string; iconColor: string };
-
-const CATEGORY_TILES: CategoryTile[] = [
-  { label: 'Measurements', href: '/measurements', Icon: Ruler,        desc: 'Normal values + ranges',   color: 'from-sky-50 to-blue-100 border-blue-200',      iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
-  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides', color: 'from-emerald-50 to-green-100 border-green-200', iconBg: 'bg-green-100',  iconColor: 'text-green-600'  },
-  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,   desc: 'ABI, RI, stenosis, OB…',   color: 'from-violet-50 to-purple-100 border-purple-200',iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
-  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,   desc: 'US findings + red flags',  color: 'from-rose-50 to-red-100 border-red-200',        iconBg: 'bg-red-100',    iconColor: 'text-red-600'    },
+const PRICING = [
+  {
+    name: 'Basic',
+    price: '$4.99',
+    period: '/month',
+    desc: 'Perfect for students and new grads',
+    highlight: false,
+    features: [
+      'All measurement tables',
+      'Core exam protocols (6)',
+      'Essential calculators (8)',
+      'Basic pathology library',
+      'Offline access (PWA)',
+    ],
+  },
+  {
+    name: 'Pro',
+    price: '$6.99',
+    period: '/month',
+    desc: 'Most popular — everything you need',
+    highlight: true,
+    badge: 'Most Popular',
+    features: [
+      'Everything in Basic',
+      'Full pathology library (20+)',
+      'Advanced protocols (OB survey, echo)',
+      'Favorites & quick access',
+      'Daily clinical tips',
+      'Priority updates',
+    ],
+  },
+  {
+    name: 'Team',
+    price: '$10.99',
+    period: '/month',
+    desc: 'For educators and department leads',
+    highlight: false,
+    features: [
+      'Everything in Pro',
+      'Up to 5 team members',
+      'Custom protocol notes',
+      'Dedicated support',
+      'Early access to new features',
+    ],
+  },
 ];
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Phone Mockup ──────────────────────────────────────────────────────────────
 
-export default function HomePage() {
-  const router = useRouter();
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
-  // Daily tip — same all day, changes at midnight
-  const [tip] = useState(() => {
-    const dayIndex = Math.floor(Date.now() / 86_400_000);
-    return SONO_TIPS[dayIndex % SONO_TIPS.length];
-  });
-  const [tipDate] = useState(() =>
-    new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  );
-
-  // Quick Access state
-  const [quickItems, setQuickItems] = useState<QuickAccessItem[]>(DEFAULT_QUICK_ITEMS);
-  const [editMode, setEditMode] = useState(false);
-  const [showPicker, setShowPicker] = useState(false);
-  const [pickerQuery, setPickerQuery] = useState('');
-
-  useEffect(() => {
-    if (!localStorage.getItem('sonobuddy_onboarded')) {
-      setShowOnboarding(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LS_KEY);
-      if (saved) setQuickItems(JSON.parse(saved));
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify(quickItems));
-    } catch {}
-  }, [quickItems]);
-
-  const removeItem = useCallback((id: string) => {
-    setQuickItems((prev) => prev.filter((item) => item.id !== id));
-  }, []);
-
-  const addItem = useCallback((entry: PickerEntry) => {
-    setQuickItems((prev) => {
-      if (prev.find((i) => i.id === entry.id)) return prev;
-      if (prev.length >= MAX_ITEMS) return prev;
-      const { subtitle: _s, ...item } = entry;
-      return [...prev, item];
-    });
-    setShowPicker(false);
-    setPickerQuery('');
-  }, []);
-
-  const pickerEntries = pickerQuery.trim()
-    ? ALL_PICKER_ENTRIES.filter((e) =>
-        e.label.toLowerCase().includes(pickerQuery.toLowerCase()) ||
-        e.subtitle.toLowerCase().includes(pickerQuery.toLowerCase())
-      )
-    : ALL_PICKER_ENTRIES;
-
-  const addedIds = new Set(quickItems.map((i) => i.id));
-  const showAddButton = quickItems.length < MAX_ITEMS;
-
-  function completeOnboarding() {
-    localStorage.setItem('sonobuddy_onboarded', '1');
-    setShowOnboarding(false);
-  }
-
-  if (showOnboarding) {
-    return <Onboarding onComplete={completeOnboarding} />;
-  }
-
-  function handleSearchSelect(result: SearchResult) {
-    router.push(result.href);
-  }
-
+function PhoneMockup() {
   return (
-    <div className="min-h-screen pb-nav bg-sono-dark">
-      {/* Hero Header */}
-      <div className="px-5 pt-14 pb-7">
-        <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-3xl font-black tracking-tight">
-            <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
-          </h1>
-        </div>
-        <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
-      </div>
-
-      {/* Search */}
-      <div className="px-5 mb-7">
-        <SearchBar
-          placeholder='Search protocols, measurements, calcs…'
-          onSelect={handleSearchSelect}
-        />
-      </div>
-
-      {/* Category Tiles */}
-      <div className="px-5 mb-7">
-        <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Browse</p>
-        <div className="grid grid-cols-2 gap-3">
-          {CATEGORY_TILES.map((tile) => (
-            <button
-              key={tile.href}
-              onClick={() => router.push(tile.href)}
-              className={`bg-gradient-to-br ${tile.color} border rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm`}
-            >
-              <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center mb-3`}>
-                <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
+    <div className="relative mx-auto w-[240px] sm:w-[280px]">
+      {/* glow */}
+      <div className="absolute inset-0 -m-8 bg-sky-500/20 rounded-full blur-3xl" />
+      {/* phone shell */}
+      <div className="relative rounded-[36px] bg-[#1E293B] border-2 border-slate-600 shadow-2xl overflow-hidden">
+        {/* notch */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#0F172A] rounded-b-2xl z-10" />
+        {/* screen */}
+        <div className="pt-8 pb-4 px-4 bg-[#0F172A] min-h-[480px]">
+          {/* app header */}
+          <div className="mb-4">
+            <div className="flex items-baseline gap-0.5">
+              <span className="text-white font-black text-xl">Sono</span>
+              <span className="text-sky-400 font-black text-xl">Buddy</span>
+            </div>
+            <p className="text-slate-500 text-[10px]">Your pocket sonographer reference</p>
+          </div>
+          {/* search bar */}
+          <div className="bg-[#1E293B] rounded-xl px-3 py-2 mb-4 flex items-center gap-2 border border-slate-700">
+            <div className="w-3 h-3 rounded-full border border-slate-500" />
+            <span className="text-slate-500 text-[10px]">Search protocols, measurements…</span>
+          </div>
+          {/* tiles */}
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            {[
+              { label: 'Measurements', color: 'from-sky-900/60 to-blue-900/60 border-blue-800/50', dot: 'bg-sky-400' },
+              { label: 'Protocols', color: 'from-emerald-900/60 to-green-900/60 border-green-800/50', dot: 'bg-emerald-400' },
+              { label: 'Calculators', color: 'from-violet-900/60 to-purple-900/60 border-purple-800/50', dot: 'bg-violet-400' },
+              { label: 'Pathologies', color: 'from-rose-900/60 to-red-900/60 border-red-800/50', dot: 'bg-rose-400' },
+            ].map((t) => (
+              <div key={t.label} className={`bg-gradient-to-br ${t.color} border rounded-xl p-2.5`}>
+                <div className={`w-4 h-4 rounded-md ${t.dot} mb-1.5 opacity-80`} />
+                <div className="text-white text-[10px] font-semibold">{t.label}</div>
               </div>
-              <div className="font-bold text-slate-900 text-[14px] tracking-tight">{tile.label}</div>
-              <div className="text-[12px] text-slate-500 mt-1">{tile.desc}</div>
-            </button>
+            ))}
+          </div>
+          {/* tip card */}
+          <div className="bg-[#1E293B] border border-slate-700 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <span className="text-[10px]">💡</span>
+              <span className="text-sky-400 text-[9px] font-bold uppercase tracking-widest">Tip of the Day</span>
+            </div>
+            <p className="text-slate-400 text-[9px] leading-relaxed">
+              Always angle-correct to 60° or less for spectral Doppler measurements…
+            </p>
+          </div>
+        </div>
+        {/* bottom bar */}
+        <div className="bg-[#1E293B] border-t border-slate-700 flex justify-around py-2">
+          {['🔍', '📏', '📋', '🧮', '🔬'].map((icon, i) => (
+            <div key={i} className="flex flex-col items-center gap-0.5">
+              <span className="text-[12px]">{icon}</span>
+              <div className={`w-1 h-1 rounded-full ${i === 0 ? 'bg-sky-400' : 'bg-transparent'}`} />
+            </div>
           ))}
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Quick Access */}
-      <div className="px-5 mb-7">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest">Quick Access</p>
-          <button
-            onClick={() => setEditMode((v) => !v)}
-            className="flex items-center gap-1 text-[11px] font-semibold text-sono-blue"
-          >
-            {editMode ? (
-              <><Check size={13} /><span>Done</span></>
-            ) : (
-              <><Pencil size={13} /><span>Edit</span></>
-            )}
-          </button>
-        </div>
+// ── Page ──────────────────────────────────────────────────────────────────────
 
-        <div className="grid grid-cols-3 gap-2">
-          {quickItems.map((item) => {
-            const { Icon, iconBg, iconColor } = getStyle(item);
-            return (
-              <div key={item.id} className="relative">
-                <button
-                  onClick={() => { if (!editMode) router.push(item.href); }}
-                  className="w-full bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm"
-                >
-                  <div className={`${iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
-                    <Icon size={18} className={iconColor} strokeWidth={2} />
-                  </div>
-                  <div className="text-[11px] text-slate-700 font-semibold leading-tight">{item.label}</div>
-                </button>
-                {editMode && (
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="absolute -top-1.5 -right-1.5 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center shadow-md z-10"
-                  >
-                    <X size={11} className="text-white" strokeWidth={3} />
-                  </button>
-                )}
-              </div>
-            );
-          })}
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen bg-[#0F172A] text-white overflow-x-hidden">
 
-          {showAddButton && (
-            <button
-              onClick={() => { setShowPicker(true); setEditMode(false); }}
-              className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+      {/* ── NAV ── */}
+      <header className="fixed top-0 inset-x-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800">
+        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+          <div className="flex items-baseline gap-0.5">
+            <span className="text-white font-black text-xl tracking-tight">Sono</span>
+            <span className="text-sky-400 font-black text-xl tracking-tight">Buddy</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/home"
+              className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block"
             >
-              <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
-                <Plus size={18} className="text-slate-400" strokeWidth={2} />
+              Open App
+            </Link>
+            <Link
+              href="/home"
+              className="bg-sky-500 hover:bg-sky-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+            >
+              Try Free
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* ── HERO ── */}
+      <section className="pt-28 pb-20 px-5">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            {/* left */}
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-sky-500/10 border border-sky-500/20 rounded-full px-4 py-1.5 mb-6">
+                <Zap size={13} className="text-sky-400" />
+                <span className="text-sky-400 text-xs font-semibold">Built for working sonographers</span>
               </div>
-              <div className="text-[10px] text-slate-400 font-semibold leading-tight">Add</div>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Tip Card */}
-      <div className="px-5 mb-6">
-        <div className="bg-sono-card border border-sono-border rounded-2xl p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <div className="bg-sky-100 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
-              <span className="text-xs font-bold text-sono-blue uppercase tracking-widest">Tip of the Day</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-5">
+                The reference tool<br />
+                <span className="text-sky-400">sonographers</span><br />
+                actually use.
+              </h1>
+              <p className="text-slate-400 text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
+                Instant access to measurement tables, exam protocols, calculators, and pathology guides — right in your pocket, mid-scan.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+                <Link
+                  href="/home"
+                  className="w-full sm:w-auto bg-sky-500 hover:bg-sky-400 text-white font-bold text-base px-8 py-3.5 rounded-2xl transition-colors shadow-lg shadow-sky-500/20"
+                >
+                  Open SonoBuddy Free →
+                </Link>
+                <p className="text-slate-500 text-sm">No account needed. Installs on your phone.</p>
+              </div>
+              {/* social proof row */}
+              <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
+                <div className="flex items-center gap-1.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} className="text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <span className="text-slate-400 text-sm">Loved by new grads</span>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-emerald-400" />
+                  <span className="text-slate-400 text-sm">Clinically sourced</span>
+                </div>
+              </div>
             </div>
-            <span className="text-[11px] text-sono-muted font-medium">{tipDate}</span>
-          </div>
-          <p className="text-[14px] text-slate-700 leading-relaxed font-normal"
-            dangerouslySetInnerHTML={{ __html: tip }}
-          />
-        </div>
-      </div>
-
-      <div className="px-5 pb-4 text-center">
-        <p className="text-[11px] text-sono-muted">SonoBuddy · Made for sonographers</p>
-      </div>
-
-      {/* Picker modal */}
-      {showPicker && (
-        <div className="fixed inset-0 z-50 flex flex-col">
-          <div className="flex-1 bg-black/40" onClick={() => { setShowPicker(false); setPickerQuery(''); }} />
-          <div className="bg-sono-dark rounded-t-3xl border-t border-sono-border max-h-[80vh] flex flex-col">
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 bg-slate-300 rounded-full" />
-            </div>
-            <div className="px-5 pt-2 pb-3 flex items-center justify-between">
-              <h2 className="text-base font-black text-slate-900 tracking-tight">Add to Quick Access</h2>
-              <button onClick={() => { setShowPicker(false); setPickerQuery(''); }}>
-                <X size={20} className="text-slate-400" />
-              </button>
-            </div>
-            <div className="px-5 pb-3">
-              <input
-                autoFocus
-                type="text"
-                value={pickerQuery}
-                onChange={(e) => setPickerQuery(e.target.value)}
-                placeholder='Search protocols & calculators…'
-                className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm"
-              />
-            </div>
-            <div className="overflow-y-auto px-5 pb-8 space-y-2">
-              {pickerEntries.map((entry) => {
-                const { Icon, iconBg, iconColor } = getStyle(entry);
-                const already = addedIds.has(entry.id);
-                return (
-                  <button
-                    key={entry.id}
-                    disabled={already}
-                    onClick={() => addItem(entry)}
-                    className={`w-full flex items-center gap-3 bg-sono-card border rounded-2xl px-4 py-3 text-left transition-all ${
-                      already
-                        ? 'border-sono-border opacity-40'
-                        : 'border-sono-border active:scale-[0.98] hover:border-sono-blue/50'
-                    }`}
-                  >
-                    <div className={`${iconBg} w-9 h-9 rounded-xl flex items-center justify-center shrink-0`}>
-                      <Icon size={18} className={iconColor} strokeWidth={2} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-[14px] font-semibold text-slate-900 truncate">{entry.label}</div>
-                      <div className="text-[11px] text-sono-muted">{entry.subtitle}</div>
-                    </div>
-                    {already && <span className="text-[11px] text-sono-muted shrink-0">Added</span>}
-                  </button>
-                );
-              })}
+            {/* right — phone */}
+            <div className="flex-1 flex justify-center lg:justify-end">
+              <PhoneMockup />
             </div>
           </div>
         </div>
-      )}
+      </section>
+
+      {/* ── FEATURES ── */}
+      <section className="py-20 px-5 border-t border-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Everything in one app</p>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+              Stop Googling mid-scan.
+            </h2>
+            <p className="text-slate-400 mt-3 max-w-xl mx-auto">
+              SonoBuddy puts every reference you need in one fast, phone-friendly app — no login, no loading.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="bg-[#1E293B] border border-slate-700 rounded-2xl p-5 hover:border-slate-600 transition-colors"
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${f.color}`}>
+                  <f.Icon size={20} />
+                </div>
+                <h3 className="font-bold text-white mb-2">{f.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="py-20 px-5">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Simple by design</p>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-12">
+            Ready in seconds, not minutes.
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-8 justify-center">
+            {STEPS.map((s, i) => (
+              <div key={s.number} className="flex-1 relative">
+                {i < STEPS.length - 1 && (
+                  <div className="hidden sm:block absolute top-5 left-[calc(50%+2rem)] w-full h-px bg-slate-700" />
+                )}
+                <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-sky-400 font-black text-sm">{s.number}</span>
+                </div>
+                <h3 className="font-bold text-white mb-2">{s.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="py-20 px-5 border-t border-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Real feedback</p>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+              Sonographers love it.
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t) => (
+              <div
+                key={t.name}
+                className="bg-[#1E293B] border border-slate-700 rounded-2xl p-5"
+              >
+                <div className="flex items-center gap-0.5 mb-3">
+                  {[...Array(t.stars)].map((_, i) => (
+                    <Star key={i} size={13} className="text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-slate-300 text-sm leading-relaxed mb-4">&ldquo;{t.text}&rdquo;</p>
+                <div>
+                  <div className="text-white font-semibold text-sm">{t.name}</div>
+                  <div className="text-slate-500 text-xs">{t.role}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRICING ── */}
+      <section id="pricing" className="py-20 px-5 border-t border-slate-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sky-400 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+              Less than a coffee. Every month.
+            </h2>
+            <p className="text-slate-400 mt-3">Start free. Upgrade when you&apos;re ready.</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {PRICING.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative rounded-2xl p-6 border ${
+                  plan.highlight
+                    ? 'bg-sky-500/10 border-sky-500/40 shadow-lg shadow-sky-500/10'
+                    : 'bg-[#1E293B] border-slate-700'
+                }`}
+              >
+                {plan.badge && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      {plan.badge}
+                    </span>
+                  </div>
+                )}
+                <div className="mb-4">
+                  <h3 className="font-bold text-white text-lg">{plan.name}</h3>
+                  <p className="text-slate-400 text-sm mt-0.5">{plan.desc}</p>
+                </div>
+                <div className="flex items-baseline gap-1 mb-6">
+                  <span className={`text-4xl font-black ${plan.highlight ? 'text-sky-400' : 'text-white'}`}>
+                    {plan.price}
+                  </span>
+                  <span className="text-slate-400 text-sm">{plan.period}</span>
+                </div>
+                <ul className="space-y-2.5 mb-6">
+                  {plan.features.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2.5">
+                      <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span className="text-slate-300 text-sm">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/home"
+                  className={`block text-center font-bold text-sm py-3 rounded-xl transition-colors ${
+                    plan.highlight
+                      ? 'bg-sky-500 hover:bg-sky-400 text-white'
+                      : 'bg-slate-700 hover:bg-slate-600 text-white'
+                  }`}
+                >
+                  {plan.highlight ? 'Get Started' : 'Choose Plan'}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BOTTOM CTA ── */}
+      <section className="py-20 px-5 border-t border-slate-800">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="w-16 h-16 bg-sky-500/10 border border-sky-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Stethoscope size={28} className="text-sky-400" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">
+            Your pocket reference.<br />
+            <span className="text-sky-400">Always ready.</span>
+          </h2>
+          <p className="text-slate-400 mb-8 leading-relaxed">
+            Install SonoBuddy as a PWA on your iPhone or Android — works offline, loads instantly, no app store needed.
+          </p>
+          <Link
+            href="/home"
+            className="inline-block bg-sky-500 hover:bg-sky-400 text-white font-bold text-base px-10 py-4 rounded-2xl transition-colors shadow-lg shadow-sky-500/20"
+          >
+            Open SonoBuddy — It&apos;s Free
+          </Link>
+          <p className="text-slate-600 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-slate-800 py-8 px-5">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-baseline gap-0.5">
+            <span className="text-white font-black">Sono</span>
+            <span className="text-sky-400 font-black">Buddy</span>
+          </div>
+          <div className="flex items-center gap-5">
+            <Link href="/home" className="text-slate-500 hover:text-white text-sm transition-colors">App</Link>
+            <Link href="/privacy" className="text-slate-500 hover:text-white text-sm transition-colors">Privacy</Link>
+          </div>
+          <p className="text-slate-600 text-xs">
+            © {new Date().getFullYear()} SonoBuddy · For reference only. Not a diagnostic tool.
+          </p>
+        </div>
+      </footer>
+
     </div>
   );
 }
