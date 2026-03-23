@@ -11,11 +11,14 @@ struct WebView: UIViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
-        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
-        webView.isOpaque = false
-        // sky-100 (#e0f2fe) — matches page top gradient so iOS overscroll doesn't flash dark
-        webView.backgroundColor = UIColor(red: 224/255, green: 242/255, blue: 254/255, alpha: 1)
-        webView.scrollView.backgroundColor = UIColor(red: 224/255, green: 242/255, blue: 254/255, alpha: 1)
+        // .never lets web CSS handle safe areas via env(safe-area-inset-*),
+        // which fixes position:fixed elements (nav bar) moving in WKWebView
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.isOpaque = true
+        // slate-100 (#F1F5F9) — matches sono-dark page background so overscroll doesn't flash a different color
+        let pageColor = UIColor(red: 241/255, green: 245/255, blue: 249/255, alpha: 1)
+        webView.backgroundColor = pageColor
+        webView.scrollView.backgroundColor = pageColor
 
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         webView.load(request)
