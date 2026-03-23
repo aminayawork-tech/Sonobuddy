@@ -83,13 +83,22 @@ function CalculatorContent() {
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => { setQuery(e.target.value); setActiveId(null); }}
-            placeholder='Search "ABI", "volume", "AFI"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
-          />
+          {activeCalc ? (
+            <button
+              onClick={() => { setActiveId(null); setResult(null); }}
+              className="inline-flex items-center gap-1 text-sono-blue text-sm hover:underline"
+            >
+              ← All Calculators
+            </button>
+          ) : (
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setActiveId(null); }}
+              placeholder='Search "ABI", "volume", "AFI"…'
+              className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            />
+          )}
         </div>
       </div>
 
@@ -120,13 +129,6 @@ function CalculatorContent() {
       {/* Active Calculator */}
       {activeCalc && (
         <div className="px-4 py-4">
-          <button
-            onClick={() => { setActiveId(null); setResult(null); }}
-            className="inline-flex items-center gap-1 text-sono-blue text-sm mb-4 hover:underline"
-          >
-            ← All Calculators
-          </button>
-
           <div className="bg-sono-card border border-sono-border rounded-2xl p-4 mb-4">
             <h2 className="font-black text-slate-900 text-lg tracking-tight mb-1">{activeCalc.name}</h2>
             <p className="text-[13px] text-slate-500 mb-3 leading-relaxed">{activeCalc.description}</p>
