@@ -79,7 +79,7 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
   return (
     // No fixed aspect-ratio — div height follows the image's natural height.
     // w-full block renders at exact pixel scale = sharpest possible, no gap at bottom.
-    <div className={`rounded-[38px] overflow-hidden border-[3px] border-gray-800 ${className}`}>
+    <div className={`rounded-[38px] bg-white overflow-hidden border-[3px] border-gray-800 ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={alt} className="w-full block" />
     </div>
