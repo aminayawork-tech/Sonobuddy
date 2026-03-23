@@ -78,11 +78,12 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
     <div
-      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden ${className}`}
+      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 flex flex-col ${className}`}
       style={{ aspectRatio: '9/19.5' }}
     >
+      {/* flex-1 + object-cover fills the frame fully — no white gap at bottom */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full block" />
+      <img src={src} alt={alt} className="w-full flex-1 min-h-0 object-cover object-top" />
     </div>
   );
 }
