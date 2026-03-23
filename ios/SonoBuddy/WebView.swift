@@ -15,12 +15,14 @@ struct WebView: UIViewRepresentable {
         webView.isOpaque = false
         webView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
         webView.scrollView.backgroundColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
+
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        webView.load(request)
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-        webView.load(request)
+        // Intentionally empty — load happens once in makeUIView
     }
 
     func makeCoordinator() -> Coordinator {
