@@ -77,30 +77,26 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    <div
-      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 flex flex-col ${className}`}
-      style={{ aspectRatio: '9/19.5' }}
-    >
-      {/* flex-1 + object-cover fills the frame fully — no white gap at bottom */}
+    // No fixed aspect-ratio — div height follows the image's natural height.
+    // w-full block renders at exact pixel scale = sharpest possible, no gap at bottom.
+    <div className={`rounded-[38px] overflow-hidden border-[3px] border-gray-800 ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full flex-1 min-h-0 object-cover object-top" />
+      <img src={src} alt={alt} className="w-full block" />
     </div>
   );
 }
 
 function PhoneMockup() {
   return (
-    // Container sized so phones overlap by only ~5px — keeps the 38px corner radius
-    // fully visible at the intersection, giving a clean round edge rather than a sharp cut.
-    <div className="relative w-[325px] sm:w-[390px] lg:w-[430px] h-[415px] sm:h-[485px] lg:h-[535px]">
+    <div className="relative w-[370px] sm:w-[440px] lg:w-[490px] h-[480px] sm:h-[560px] lg:h-[620px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
       {/* Back phone — slightly smaller, offset down for depth */}
-      <div className="absolute right-0 top-10 w-[162px] sm:w-[195px] lg:w-[215px] shadow-xl">
+      <div className="absolute right-0 top-10 w-[178px] sm:w-[212px] lg:w-[236px] shadow-xl">
         <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
       {/* Front phone */}
-      <div className="absolute left-0 top-0 w-[168px] sm:w-[200px] lg:w-[220px] shadow-2xl z-10">
+      <div className="absolute left-0 top-0 w-[185px] sm:w-[220px] lg:w-[246px] shadow-2xl z-10">
         <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
