@@ -78,16 +78,16 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
     <div
-      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 flex flex-col ${className}`}
+      className={`relative rounded-[38px] overflow-hidden border-[3px] border-gray-800 ${className}`}
       style={{ aspectRatio: '9/19.5' }}
     >
-      {/* Status bar — white bg matches the app, dynamic island sits here */}
-      <div className="bg-white flex-shrink-0 flex items-center justify-center" style={{ height: '8%' }}>
+      {/* Screenshot fills entire phone frame */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="absolute inset-0 w-full h-full object-cover object-top" />
+      {/* White status bar overlay — sits ON TOP of screenshot, hides iOS time + battery */}
+      <div className="absolute top-0 left-0 right-0 bg-white flex items-center justify-center" style={{ height: '8%' }}>
         <div className="bg-gray-900 rounded-full" style={{ width: '38%', height: '52%' }} />
       </div>
-      {/* Screenshot fills the rest — no top status bar bleed */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full flex-1 object-cover object-top" />
     </div>
   );
 }
@@ -114,7 +114,7 @@ function PhoneMockup() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900">
 
       {/* ── NAV ── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -138,9 +138,9 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="pt-28 pb-20 px-5 bg-gradient-to-b from-sky-50/60 to-white">
+      <section className="pt-28 pb-24 px-5 bg-gradient-to-b from-sky-50/60 to-white overflow-visible">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12">
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-4 py-1.5 mb-6">
                 <Zap size={13} className="text-sky-500" />
