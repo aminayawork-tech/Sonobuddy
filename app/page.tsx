@@ -78,7 +78,7 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
     <div
-      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}
+      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden ${className}`}
       style={{ aspectRatio: '9/19.5' }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
