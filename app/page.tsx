@@ -77,15 +77,16 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
+    // Aspect ratio matches the screenshot (1170×2532 = 9/19.5) so image fills naturally
     <div
-      className={`relative rounded-[38px] overflow-hidden border-[3px] border-gray-800 ${className}`}
+      className={`relative rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}
       style={{ aspectRatio: '9/19.5' }}
     >
-      {/* Screenshot fills entire phone frame */}
+      {/* Image at natural width — no object-fit needed since aspect ratios match */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="absolute inset-0 w-full h-full object-cover object-top" />
-      {/* White status bar overlay — sits ON TOP of screenshot, hides iOS time + battery */}
-      <div className="absolute top-0 left-0 right-0 bg-white flex items-center justify-center" style={{ height: '8%' }}>
+      <img src={src} alt={alt} className="w-full block" />
+      {/* White bar absolutely overlaid on top — masks iOS time + battery from screenshot */}
+      <div className="absolute top-0 left-0 right-0 z-10 bg-white flex items-center justify-center" style={{ height: '8%' }}>
         <div className="bg-gray-900 rounded-full" style={{ width: '38%', height: '52%' }} />
       </div>
     </div>
@@ -94,17 +95,16 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
 
 function PhoneMockup() {
   return (
-    /* px/pb padding absorbs corner bleed from CSS rotation */
-    <div className="relative flex items-start px-5 pb-6 pt-2">
+    <div className="relative w-[300px] sm:w-[360px] lg:w-[400px] h-[470px] sm:h-[545px] lg:h-[590px]">
       {/* Glow */}
-      <div className="absolute -inset-6 bg-sky-400/10 rounded-full blur-3xl pointer-events-none" />
-      {/* Front phone — home screen, slight left tilt on mobile only */}
-      <div className="relative z-10 flex-shrink-0 w-[172px] sm:w-[198px] lg:w-[218px] -rotate-2 lg:rotate-0 shadow-2xl -mr-14 sm:-mr-16 lg:-mr-14">
-        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
-      </div>
-      {/* Back phone — protocols, slight right tilt on mobile only, pushed down */}
-      <div className="relative flex-shrink-0 w-[160px] sm:w-[183px] lg:w-[200px] rotate-2 lg:rotate-0 shadow-xl mt-8 sm:mt-10">
+      <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
+      {/* Back phone — protocols, flush to right edge (no translate-x to avoid overflow) */}
+      <div className="absolute right-0 top-8 w-[162px] sm:w-[190px] lg:w-[210px] rotate-2 lg:rotate-0 shadow-xl">
         <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
+      </div>
+      {/* Front phone — home screen */}
+      <div className="absolute left-0 top-0 w-[172px] sm:w-[202px] lg:w-[222px] -rotate-2 lg:rotate-0 shadow-2xl z-10">
+        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
   );
