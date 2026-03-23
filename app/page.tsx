@@ -90,18 +90,18 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
 
 function PhoneMockup() {
   return (
-    <div className="relative w-[360px] sm:w-[460px] lg:w-[520px] h-[560px] sm:h-[680px] lg:h-[740px]">
+    <div className="relative w-[300px] sm:w-[360px] lg:w-[400px] h-[460px] sm:h-[540px] lg:h-[580px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
       {/* Back phone — protocols screen */}
-      <div className="absolute right-0 top-10 w-[210px] sm:w-[265px] lg:w-[295px] rotate-3 drop-shadow-2xl">
+      <div className="absolute right-0 top-8 w-[165px] sm:w-[195px] lg:w-[215px] rotate-3 drop-shadow-2xl">
         <Phone
           src="/screenshots/IMG_9590.PNG"
           alt="SonoBuddy protocols screen"
         />
       </div>
       {/* Front phone — home screen */}
-      <div className="absolute left-0 top-0 w-[220px] sm:w-[275px] lg:w-[305px] -rotate-2 drop-shadow-2xl z-10">
+      <div className="absolute left-0 top-0 w-[175px] sm:w-[205px] lg:w-[225px] -rotate-2 drop-shadow-2xl z-10">
         <Phone
           src="/screenshots/IMG_9588.PNG"
           alt="SonoBuddy home screen"
@@ -147,7 +147,7 @@ export default function LandingPage() {
                 <Zap size={13} className="text-sky-500" />
                 <span className="text-sky-600 text-xs font-semibold">Built for working sonographers</span>
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] mb-5 text-gray-900">
+              <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-black tracking-tight leading-[1.1] mb-5 text-gray-900">
                 The reference tool<br />
                 <span className="text-sky-500">sonographers</span> use.
               </h1>
