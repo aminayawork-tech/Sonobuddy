@@ -158,7 +158,8 @@ export default function LandingPage() {
   useEffect(() => {
     const standalone =
       window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as { standalone?: boolean }).standalone === true;
+      (window.navigator as { standalone?: boolean }).standalone === true ||
+      navigator.userAgent.includes('SonoBuddyApp');
     setIsStandalone(standalone);
     if (standalone) {
       router.replace('/home');
