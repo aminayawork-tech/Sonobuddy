@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
 import { Calendar, Tag, ArrowRight } from 'lucide-react';
-
-const APP_STORE_URL = '#app-store'; // TODO: replace with App Store URL
+import AppStoreBadge from '@/components/AppStoreBadge';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -30,12 +29,7 @@ export default function BlogPage() {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <a
-            href={APP_STORE_URL}
-            className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
-          >
-            Download on App Store
-          </a>
+          <AppStoreBadge />
         </div>
       </header>
 
