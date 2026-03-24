@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-
-const APP_STORE_URL = '#app-store'; // TODO: replace with App Store URL
+import AppStoreBadge from '@/components/AppStoreBadge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getPostBySlug, getAllPosts } from '@/lib/blog';
@@ -54,12 +53,7 @@ export default function BlogPostPage({ params }: Props) {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <a
-            href={APP_STORE_URL}
-            className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
-          >
-            Download on App Store
-          </a>
+          <AppStoreBadge />
         </div>
       </header>
 
@@ -133,12 +127,7 @@ export default function BlogPostPage({ params }: Props) {
           <div className="mt-16 bg-sky-50 border border-sky-100 rounded-2xl p-6 text-center">
             <p className="text-gray-700 font-semibold mb-2">Get SonoBuddy</p>
             <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, built for the scan room.</p>
-            <a
-              href={APP_STORE_URL}
-              className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
-            >
-              Download on App Store →
-            </a>
+            <AppStoreBadge />
           </div>
         </div>
       </main>
