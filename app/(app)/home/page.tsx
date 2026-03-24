@@ -202,7 +202,7 @@ export default function HomePage() {
     : ALL_PICKER_ENTRIES;
 
   const addedIds = new Set(quickItems.map((i) => i.id));
-  const showAddButton = quickItems.length < MAX_ITEMS;
+  const isFull = quickItems.length >= MAX_ITEMS;
 
   function completeOnboarding() {
     localStorage.setItem('sonobuddy_onboarded', '1');
@@ -299,17 +299,15 @@ export default function HomePage() {
             );
           })}
 
-          {showAddButton && (
-            <button
-              onClick={() => { setShowPicker(true); setEditMode(true); }}
-              className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
-            >
-              <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
-                <Plus size={18} className="text-slate-400" strokeWidth={2} />
-              </div>
-              <div className="text-[10px] text-slate-400 font-semibold leading-tight">Add</div>
-            </button>
-          )}
+          <button
+            onClick={() => { if (!isFull) setShowPicker(true); setEditMode(true); }}
+            className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+          >
+            <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
+              <Plus size={18} className="text-slate-400" strokeWidth={2} />
+            </div>
+            <div className="text-[10px] text-slate-400 font-semibold leading-tight">{isFull ? 'Edit' : 'Add'}</div>
+          </button>
         </div>
       </div>
 
