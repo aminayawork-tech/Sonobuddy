@@ -88,15 +88,17 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
 
 function PhoneMockup() {
   return (
-    <div className="relative w-[370px] sm:w-[440px] lg:w-[490px] h-[480px] sm:h-[560px] lg:h-[620px]">
+    // Overlap is 80px+ (> 38px border-radius) → clean straight vertical edge at intersection
+    // Container tall enough so rounded bottom corners are never clipped
+    <div className="relative w-[355px] sm:w-[412px] lg:w-[470px] h-[520px] sm:h-[590px] lg:h-[660px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
-      {/* Back phone — slightly smaller, offset down for depth */}
-      <div className="absolute right-0 top-10 w-[178px] sm:w-[212px] lg:w-[236px] shadow-xl">
+      {/* Back phone — largely hidden behind front, sticks out to the right like image 2 */}
+      <div className="absolute right-0 top-[30px] w-[205px] sm:w-[232px] lg:w-[260px] shadow-xl">
         <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
-      {/* Front phone */}
-      <div className="absolute left-0 top-0 w-[185px] sm:w-[220px] lg:w-[246px] shadow-2xl z-10">
+      {/* Front phone — large, left side, z-10 */}
+      <div className="absolute left-0 top-0 w-[230px] sm:w-[260px] lg:w-[290px] shadow-2xl z-10">
         <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
