@@ -131,8 +131,8 @@ export default function BlogPostPage({ params }: Props) {
 
           {/* CTA */}
           <div className="mt-16 bg-sky-50 border border-sky-100 rounded-2xl p-6 text-center">
-            <p className="text-gray-700 font-semibold mb-2">Try SonoBuddy free</p>
-            <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, no login required.</p>
+            <p className="text-gray-700 font-semibold mb-2">Get SonoBuddy</p>
+            <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, built for the scan room.</p>
             <a
               href={APP_STORE_URL}
               className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
