@@ -177,18 +177,12 @@ export default function LandingPage() {
             >
               Blog
             </Link>
-            <Link
-              href="/home"
-              className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
+            <a
+              href={APP_STORE_URL}
+              className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
             >
-              Open App
-            </Link>
-            <Link
-              href="/home"
-              className="bg-sky-500 hover:bg-sky-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-            >
-              Try Free
-            </Link>
+              Download on App Store
+            </a>
           </div>
         </div>
       </header>
@@ -212,14 +206,6 @@ export default function LandingPage() {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <AppStoreBadge />
                 <PlayStoreBadge />
-              </div>
-              <div className="mt-4">
-                <Link
-                  href="/home"
-                  className="text-sky-500 hover:text-sky-400 text-sm font-medium transition-colors"
-                >
-                  Or open the web app →
-                </Link>
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
                 <div className="flex items-center gap-1">
@@ -341,14 +327,6 @@ export default function LandingPage() {
             <AppStoreBadge />
             <PlayStoreBadge />
           </div>
-          <div className="mt-5">
-            <Link
-              href="/home"
-              className="text-sky-200 hover:text-white text-sm transition-colors"
-            >
-              Or open the web app →
-            </Link>
-          </div>
           <p className="text-sky-200 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
         </div>
       </section>
@@ -358,7 +336,6 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo />
           <div className="flex items-center gap-5">
-            <Link href="/home" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">App</Link>
             <Link href="/blog" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Blog</Link>
             <Link href="/privacy" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Privacy</Link>
           </div>
