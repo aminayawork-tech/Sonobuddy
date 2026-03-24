@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+
+const APP_STORE_URL = '#app-store'; // TODO: replace with App Store URL
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getPostBySlug, getAllPosts } from '@/lib/blog';
@@ -52,12 +54,12 @@ export default function BlogPostPage({ params }: Props) {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <Link
-            href="/home"
-            className="bg-sky-500 hover:bg-sky-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+          <a
+            href={APP_STORE_URL}
+            className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
           >
-            Open App
-          </Link>
+            Download on App Store
+          </a>
         </div>
       </header>
 
@@ -127,13 +129,13 @@ export default function BlogPostPage({ params }: Props) {
           {/* CTA */}
           <div className="mt-16 bg-sky-50 border border-sky-100 rounded-2xl p-6 text-center">
             <p className="text-gray-700 font-semibold mb-2">Try SonoBuddy free</p>
-            <p className="text-gray-500 text-sm mb-4">All reference tools in one app — no login, works offline.</p>
-            <Link
-              href="/home"
-              className="inline-block bg-sky-500 hover:bg-sky-400 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
+            <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, no login required.</p>
+            <a
+              href={APP_STORE_URL}
+              className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm"
             >
-              Open the App →
-            </Link>
+              Download on App Store →
+            </a>
           </div>
         </div>
       </main>

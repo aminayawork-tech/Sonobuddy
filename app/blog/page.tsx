@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
 import { Calendar, Tag, ArrowRight } from 'lucide-react';
 
+const APP_STORE_URL = '#app-store'; // TODO: replace with App Store URL
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Sonography tips, protocol guides, clinical reference articles, and updates from the SonoBuddy team.',
@@ -28,12 +30,12 @@ export default function BlogPage() {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <Link
-            href="/home"
-            className="bg-sky-500 hover:bg-sky-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+          <a
+            href={APP_STORE_URL}
+            className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
           >
-            Open App
-          </Link>
+            Download on App Store
+          </a>
         </div>
       </header>
 
