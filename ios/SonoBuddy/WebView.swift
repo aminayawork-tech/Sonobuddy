@@ -10,7 +10,9 @@ struct WebView: UIViewRepresentable {
 
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
-        webView.allowsBackForwardNavigationGestures = true
+        webView.allowsBackForwardNavigationGestures = false
+        // Tag requests so the web app knows it's running inside the native wrapper
+        webView.customUserAgent = "SonoBuddyApp/iOS"
         // .never lets web CSS handle safe areas via env(safe-area-inset-*),
         // which fixes position:fixed elements (nav bar) moving in WKWebView
         webView.scrollView.contentInsetAdjustmentBehavior = .never
