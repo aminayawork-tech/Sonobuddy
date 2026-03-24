@@ -77,9 +77,8 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    // No fixed aspect-ratio — div height follows the image's natural height.
-    // w-full block renders at exact pixel scale = sharpest possible, no gap at bottom.
-    <div className={`rounded-[38px] bg-white overflow-hidden border-[3px] border-gray-800 ${className}`}>
+    // Shadow is on the rounded element itself so it follows the round shape — no rect grey corners
+    <div className={`rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={alt} className="w-full block" />
     </div>
@@ -88,17 +87,15 @@ function Phone({ src, alt, className = '' }: { src: string; alt: string; classNa
 
 function PhoneMockup() {
   return (
-    // Overlap is 80px+ (> 38px border-radius) → clean straight vertical edge at intersection
-    // Container tall enough so rounded bottom corners are never clipped
-    <div className="relative w-[355px] sm:w-[412px] lg:w-[470px] h-[520px] sm:h-[590px] lg:h-[660px]">
+    <div className="relative w-[315px] sm:w-[370px] lg:w-[420px] h-[475px] sm:h-[535px] lg:h-[600px]">
       {/* Glow */}
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
-      {/* Back phone — largely hidden behind front, sticks out to the right like image 2 */}
-      <div className="absolute right-0 top-[30px] w-[205px] sm:w-[232px] lg:w-[260px] shadow-xl">
+      {/* Back phone — largely behind front, sticks out right for depth */}
+      <div className="absolute right-0 top-[30px] w-[185px] sm:w-[210px] lg:w-[235px]">
         <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
       </div>
-      {/* Front phone — large, left side, z-10 */}
-      <div className="absolute left-0 top-0 w-[230px] sm:w-[260px] lg:w-[290px] shadow-2xl z-10">
+      {/* Front phone — z-10, larger */}
+      <div className="absolute left-0 top-0 w-[210px] sm:w-[235px] lg:w-[265px] z-10">
         <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
       </div>
     </div>
