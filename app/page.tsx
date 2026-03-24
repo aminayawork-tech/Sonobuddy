@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -153,15 +153,22 @@ function PhoneMockup() {
 
 export default function LandingPage() {
   const router = useRouter();
+  const [isStandalone, setIsStandalone] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const isStandalone =
+    const standalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as { standalone?: boolean }).standalone === true;
-    if (isStandalone) {
+    setIsStandalone(standalone);
+    if (standalone) {
       router.replace('/home');
     }
   }, [router]);
+
+  // Don't render the marketing page while detecting mode, or if we're in-app
+  if (isStandalone === null || isStandalone) {
+    return <div className="min-h-screen bg-sono-dark" />;
+  }
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
