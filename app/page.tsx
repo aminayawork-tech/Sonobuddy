@@ -110,20 +110,16 @@ function PhoneMockup() {
 
 export default function LandingPage() {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as { standalone?: boolean }).standalone === true;
-    if (isStandalone) {
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isStandalone || isIOS) {
       router.replace('/home');
-    } else {
-      setReady(true);
     }
   }, [router]);
-
-  if (!ready) return null;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
