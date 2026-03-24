@@ -172,6 +172,12 @@ export default function LandingPage() {
           <Logo />
           <div className="flex items-center gap-3">
             <Link
+              href="/blog"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
+            >
+              Blog
+            </Link>
+            <Link
               href="/home"
               className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
             >
@@ -353,6 +359,7 @@ export default function LandingPage() {
           <Logo />
           <div className="flex items-center gap-5">
             <Link href="/home" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">App</Link>
+            <Link href="/blog" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Blog</Link>
             <Link href="/privacy" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Privacy</Link>
           </div>
           <p className="text-gray-400 text-xs">
