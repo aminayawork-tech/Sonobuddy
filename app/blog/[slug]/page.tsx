@@ -105,21 +105,24 @@ export default function BlogPostPage({ params }: Props) {
           <hr className="border-gray-100 mb-8" />
 
           {/* Content */}
-          <div className="prose prose-gray prose-sm sm:prose-base max-w-none
+          <div className="prose prose-gray prose-lg max-w-none
             prose-headings:font-black prose-headings:tracking-tight prose-headings:text-gray-900
-            prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-            prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3
-            prose-p:text-gray-600 prose-p:leading-relaxed
+            prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-100
+            prose-h3:text-xl prose-h3:mt-10 prose-h3:mb-4
+            prose-p:text-gray-600 prose-p:leading-[1.85] prose-p:text-[17px]
             prose-a:text-sky-500 prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-gray-900
-            prose-ul:text-gray-600 prose-ol:text-gray-600
-            prose-li:my-1
-            prose-table:text-sm
-            prose-th:text-gray-900 prose-th:font-semibold prose-th:bg-gray-50
-            prose-td:text-gray-600
-            prose-blockquote:border-sky-500 prose-blockquote:text-gray-500
-            prose-code:text-sky-600 prose-code:bg-sky-50 prose-code:px-1 prose-code:rounded
-            prose-hr:border-gray-100
+            prose-strong:text-gray-900 prose-strong:font-semibold
+            prose-ul:text-gray-600 prose-ul:my-5 prose-ul:space-y-2
+            prose-ol:text-gray-600 prose-ol:my-5 prose-ol:space-y-2
+            prose-li:text-[16px] prose-li:leading-relaxed
+            prose-table:text-sm prose-table:w-full
+            prose-thead:bg-gray-50
+            prose-th:text-gray-900 prose-th:font-semibold prose-th:px-4 prose-th:py-3
+            prose-td:text-gray-600 prose-td:px-4 prose-td:py-3
+            prose-blockquote:border-l-4 prose-blockquote:border-sky-400 prose-blockquote:bg-sky-50 prose-blockquote:rounded-r-xl prose-blockquote:px-5 prose-blockquote:py-4 prose-blockquote:text-gray-600 prose-blockquote:not-italic
+            prose-code:text-sky-600 prose-code:bg-sky-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-medium prose-code:before:content-none prose-code:after:content-none
+            prose-hr:border-gray-200 prose-hr:my-10
+            prose-img:rounded-2xl prose-img:shadow-md
           ">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
