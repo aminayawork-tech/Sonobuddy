@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     default: 'SonoBuddy — Ultrasound Reference for Sonographers',
     template: '%s | SonoBuddy',
   },
-  description: 'Instant access to ultrasound measurement tables, exam protocols, clinical calculators, and pathology guides. Built for sonographers — free, no login required.',
+  description: 'Instant access to ultrasound measurement tables, exam protocols, clinical calculators, and pathology guides. Built for sonographers.',
   keywords: [
     'ultrasound reference',
     'sonographer app',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     url: 'https://www.sonobuddy.com',
     siteName: 'SonoBuddy',
     title: 'SonoBuddy — Ultrasound Reference for Sonographers',
-    description: 'Instant access to ultrasound measurement tables, exam protocols, clinical calculators, and pathology guides. Free, no login required.',
+    description: 'Instant access to ultrasound measurement tables, exam protocols, clinical calculators, and pathology guides.',
     images: [
       {
         url: '/og-image.png',

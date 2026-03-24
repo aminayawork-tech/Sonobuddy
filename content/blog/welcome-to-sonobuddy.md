@@ -1,7 +1,7 @@
 ---
 title: "Welcome to SonoBuddy: Your Pocket Ultrasound Reference"
 date: "2026-03-24"
-excerpt: "Introducing SonoBuddy — the fast, free reference tool built specifically for sonographers. No login, no loading, just instant access to everything you need mid-scan."
+excerpt: "Introducing SonoBuddy — the fast reference tool built specifically for sonographers. Instant access to everything you need mid-scan, right in your pocket."
 author: "SonoBuddy Team"
 tags: ["announcement", "sonography", "reference"]
 ---
