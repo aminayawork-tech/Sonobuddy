@@ -1,12 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
   Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
+
+// ── Store URLs — swap in real links when published ─────────────────────────
+const APP_STORE_URL = '#app-store';      // TODO: replace with App Store URL
+const PLAY_STORE_URL = '#google-play';   // TODO: replace with Google Play URL
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -64,6 +68,45 @@ const TESTIMONIALS = [
   },
 ];
 
+// ── Store Badges ──────────────────────────────────────────────────────────────
+
+function AppStoreBadge({ className = '' }: { className?: string }) {
+  return (
+    <a
+      href={APP_STORE_URL}
+      className={`inline-flex items-center gap-2.5 bg-black hover:bg-gray-800 text-white px-5 py-3 rounded-xl transition-colors ${className}`}
+    >
+      {/* Apple logo */}
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.19 1.28-2.17 3.81.03 3.02 2.65 4.03 2.68 4.04l-.06.17zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+      </svg>
+      <div className="text-left">
+        <div className="text-[10px] text-gray-300 leading-none mb-0.5">Download on the</div>
+        <div className="text-[15px] font-semibold leading-none">App Store</div>
+      </div>
+    </a>
+  );
+}
+
+function PlayStoreBadge({ className = '' }: { className?: string }) {
+  return (
+    <a
+      href={PLAY_STORE_URL}
+      className={`inline-flex items-center gap-2.5 bg-black hover:bg-gray-800 text-white px-5 py-3 rounded-xl transition-colors opacity-50 cursor-not-allowed pointer-events-none ${className}`}
+      aria-label="Google Play — coming soon"
+    >
+      {/* Google Play icon */}
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.18 23.76c.37.2.8.2 1.18 0l11.58-6.68-2.45-2.45-10.31 9.13zM.5 1.4C.19 1.74 0 2.23 0 2.88v18.24c0 .65.19 1.14.5 1.48l.08.07 10.21-10.2v-.24L.58 1.33.5 1.4zm19.1 10.01l-2.63-1.52-2.73 2.73 2.73 2.73 2.65-1.53c.76-.44.76-1.97-.02-2.41zM4.36.24L15.94 6.92l-2.45 2.45L3.18.24C3.56.04 3.98.04 4.36.24z" />
+      </svg>
+      <div className="text-left">
+        <div className="text-[10px] text-gray-300 leading-none mb-0.5">Coming soon on</div>
+        <div className="text-[15px] font-semibold leading-none">Google Play</div>
+      </div>
+    </a>
+  );
+}
+
 // ── Logo ──────────────────────────────────────────────────────────────────────
 
 function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
@@ -115,8 +158,7 @@ export default function LandingPage() {
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as { standalone?: boolean }).standalone === true;
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isStandalone || isIOS) {
+    if (isStandalone) {
       router.replace('/home');
     }
   }, [router]);
@@ -162,13 +204,16 @@ export default function LandingPage() {
                 Instant access to measurement tables, exam protocols, calculators, and pathology guides — right in your pocket, mid-scan.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+                <AppStoreBadge />
+                <PlayStoreBadge />
+              </div>
+              <div className="mt-4">
                 <Link
                   href="/home"
-                  className="w-full sm:w-auto bg-sky-500 hover:bg-sky-400 text-white font-bold text-base px-8 py-3.5 rounded-2xl transition-colors shadow-lg shadow-sky-500/20"
+                  className="text-sky-500 hover:text-sky-400 text-sm font-medium transition-colors"
                 >
-                  Try Free →
+                  Or open the web app →
                 </Link>
-                <p className="text-gray-400 text-sm">No account needed. Installs on your phone.</p>
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
                 <div className="flex items-center gap-1">
@@ -284,14 +329,20 @@ export default function LandingPage() {
             Your pocket reference.<br />Always ready.
           </h2>
           <p className="text-sky-100 mb-8 leading-relaxed">
-            Install SonoBuddy as a PWA on your iPhone or Android — works offline, loads instantly, no app store needed.
+            Download SonoBuddy on the App Store — works offline, loads instantly, built for the scan room.
           </p>
-          <Link
-            href="/home"
-            className="inline-block bg-white hover:bg-sky-50 text-sky-600 font-bold text-base px-10 py-4 rounded-2xl transition-colors shadow-lg"
-          >
-            Try SonoBuddy Free
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <AppStoreBadge />
+            <PlayStoreBadge />
+          </div>
+          <div className="mt-5">
+            <Link
+              href="/home"
+              className="text-sky-200 hover:text-white text-sm transition-colors"
+            >
+              Or open the web app →
+            </Link>
+          </div>
           <p className="text-sky-200 text-xs mt-4">No account required · Works on iOS & Android · Offline capable</p>
         </div>
       </section>
