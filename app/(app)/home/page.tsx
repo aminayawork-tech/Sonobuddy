@@ -301,7 +301,7 @@ export default function HomePage() {
 
           {showAddButton && (
             <button
-              onClick={() => { setShowPicker(true); setEditMode(false); }}
+              onClick={() => { setShowPicker(true); setEditMode(true); }}
               className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
             >
               <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
