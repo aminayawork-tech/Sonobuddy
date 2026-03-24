@@ -1,8 +1,26 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
   Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
+
+// Redirect to /home when running as a PWA (iOS home screen or installed app)
+function PwaRedirect() {
+  const router = useRouter();
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as { standalone?: boolean }).standalone === true;
+    if (isStandalone) {
+      router.replace('/home');
+    }
+  }, [router]);
+  return null;
+}
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -107,6 +125,7 @@ function PhoneMockup() {
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
+      <PwaRedirect />
 
       {/* ── NAV ── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
