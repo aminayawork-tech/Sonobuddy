@@ -31,7 +31,7 @@ export type Protocol = {
   tags: string[];
 };
 
-export type ProtocolCategory = 'vascular' | 'abdomen' | 'ob' | 'thyroid' | 'cardiac' | 'msk';
+export type ProtocolCategory = 'vascular' | 'abdomen' | 'ob' | 'thyroid' | 'cardiac' | 'msk' | 'breast';
 
 export const PROTOCOL_CATEGORY_LABELS: Record<ProtocolCategory, string> = {
   vascular: 'Vascular',
@@ -40,6 +40,7 @@ export const PROTOCOL_CATEGORY_LABELS: Record<ProtocolCategory, string> = {
   thyroid: 'Thyroid',
   cardiac: 'Cardiac',
   msk: 'MSK',
+  breast: 'Breast',
 };
 
 export const DIFFICULTY_COLORS = {
