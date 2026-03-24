@@ -110,7 +110,6 @@ function PhoneMockup() {
 
 export default function LandingPage() {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const isStandalone =
@@ -118,12 +117,8 @@ export default function LandingPage() {
       (window.navigator as { standalone?: boolean }).standalone === true;
     if (isStandalone) {
       router.replace('/home');
-    } else {
-      setReady(true);
     }
   }, [router]);
-
-  if (!ready) return null;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
