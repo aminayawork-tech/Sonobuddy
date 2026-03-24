@@ -115,7 +115,8 @@ export default function LandingPage() {
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as { standalone?: boolean }).standalone === true;
-    if (isStandalone) {
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isStandalone || isIOS) {
       router.replace('/home');
     }
   }, [router]);
