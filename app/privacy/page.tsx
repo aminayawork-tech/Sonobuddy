@@ -20,7 +20,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen pb-nav px-5 pt-12">
+    <div className="min-h-screen px-5 pt-12 pb-12 max-w-lg mx-auto">
       <Link href="/" className="inline-flex items-center gap-1 text-sono-blue text-sm mb-6 hover:underline">
         ← Back to SonoBuddy
       </Link>

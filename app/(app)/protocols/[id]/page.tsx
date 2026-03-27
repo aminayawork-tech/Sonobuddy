@@ -137,9 +137,29 @@ export default function ProtocolDetailPage() {
         {activeTab === 'report' && (
           <div className="space-y-2">
 
+            {/* Checklist */}
+            <p className="text-xs text-sono-muted mb-3">Items to include in your ultrasound report:</p>
+            {protocol.reportChecklist.map((item, i) => (
+              <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
+                <span className="text-sono-blue shrink-0 mt-0.5">☐</span>
+                <p className="text-sm text-slate-700">{item}</p>
+              </div>
+            ))}
+            {protocol.commonFindings.length > 0 && (
+              <>
+                <p className="text-xs font-semibold text-sono-muted uppercase tracking-wide mt-4 mb-2">Common Findings</p>
+                {protocol.commonFindings.map((finding, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                    <span className="text-slate-600">•</span> {finding}
+                  </div>
+                ))}
+              </>
+            )}
+
             {/* Report Templates */}
             {protocol.reportTemplates && protocol.reportTemplates.length > 0 && (
               <>
+                <div className="pt-2 pb-1 border-t border-sono-border/50 mt-4" />
                 <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-2">Report Templates</p>
                 <p className="text-xs text-sono-muted mb-3">Tap a template to expand. Replace blanks (___) with your measured values.</p>
                 {protocol.reportTemplates.map((template, i) => (
@@ -169,26 +189,6 @@ export default function ProtocolDetailPage() {
                         </button>
                       </div>
                     )}
-                  </div>
-                ))}
-                <div className="pt-2 pb-1 border-t border-sono-border/50 mt-4" />
-              </>
-            )}
-
-            {/* Checklist */}
-            <p className="text-xs text-sono-muted mb-3">Items to include in your ultrasound report:</p>
-            {protocol.reportChecklist.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
-                <span className="text-sono-blue shrink-0 mt-0.5">☐</span>
-                <p className="text-sm text-slate-700">{item}</p>
-              </div>
-            ))}
-            {protocol.commonFindings.length > 0 && (
-              <>
-                <p className="text-xs font-semibold text-sono-muted uppercase tracking-wide mt-4 mb-2">Common Findings</p>
-                {protocol.commonFindings.map((finding, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                    <span className="text-slate-600">•</span> {finding}
                   </div>
                 ))}
               </>
