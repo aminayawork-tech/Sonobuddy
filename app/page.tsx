@@ -12,6 +12,7 @@ import { SonoIcon } from '@/components/SonoIcon';
 
 // ── Store URLs — swap in real links when published ─────────────────────────
 const APP_STORE_URL = 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726';
+const PLAY_STORE_URL = '#google-play';   // TODO: replace with Google Play URL
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -84,6 +85,25 @@ function AppStoreBadge({ className = '' }: { className?: string }) {
       <div className="text-left">
         <div className="text-[10px] text-gray-300 leading-none mb-0.5">Download on the</div>
         <div className="text-[15px] font-semibold leading-none">App Store</div>
+      </div>
+    </a>
+  );
+}
+
+function PlayStoreBadge({ className = '' }: { className?: string }) {
+  return (
+    <a
+      href={PLAY_STORE_URL}
+      className={`inline-flex items-center gap-2.5 bg-black hover:bg-gray-800 text-white px-5 py-3 rounded-xl transition-colors opacity-50 cursor-not-allowed pointer-events-none ${className}`}
+      aria-label="Google Play — coming soon"
+    >
+      {/* Google Play icon */}
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.18 23.76c.37.2.8.2 1.18 0l11.58-6.68-2.45-2.45-10.31 9.13zM.5 1.4C.19 1.74 0 2.23 0 2.88v18.24c0 .65.19 1.14.5 1.48l.08.07 10.21-10.2v-.24L.58 1.33.5 1.4zm19.1 10.01l-2.63-1.52-2.73 2.73 2.73 2.73 2.65-1.53c.76-.44.76-1.97-.02-2.41zM4.36.24L15.94 6.92l-2.45 2.45L3.18.24C3.56.04 3.98.04 4.36.24z" />
+      </svg>
+      <div className="text-left">
+        <div className="text-[10px] text-gray-300 leading-none mb-0.5">Coming soon on</div>
+        <div className="text-[15px] font-semibold leading-none">Google Play</div>
       </div>
     </a>
   );
@@ -205,6 +225,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <AppStoreBadge />
+                <PlayStoreBadge />
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
                 <div className="flex items-center gap-1">
