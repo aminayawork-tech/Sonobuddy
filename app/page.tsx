@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
   Star, Zap, ShieldCheck,
@@ -91,13 +92,19 @@ function AppStoreBadge({ className = '' }: { className?: string }) {
 // ── Logo ──────────────────────────────────────────────────────────────────────
 
 function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
-  const iconSize = size === 'lg' ? 32 : 26;
+  const iconSize = size === 'lg' ? 38 : 32;
   const cls = size === 'lg'
     ? 'text-2xl font-black tracking-tight'
     : 'text-xl font-black tracking-tight';
   return (
     <span className="inline-flex items-center gap-2">
-      <SonoIcon size={iconSize} className="text-sky-500 shrink-0" />
+      <Image
+        src="/icons/Sonobuddy_icon.png"
+        alt="SonoBuddy"
+        width={iconSize}
+        height={iconSize}
+        className="rounded-xl shadow-sm shrink-0"
+      />
       <span className={cls}>
         <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
       </span>
