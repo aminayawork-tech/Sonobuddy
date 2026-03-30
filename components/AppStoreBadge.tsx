@@ -1,4 +1,4 @@
-const APP_STORE_URL = '#app-store'; // TODO: replace with App Store URL
+const APP_STORE_URL = 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726';
 
 export default function AppStoreBadge({ className = '' }: { className?: string }) {
   return (

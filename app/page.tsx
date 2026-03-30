@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 // ── Store URLs — swap in real links when published ─────────────────────────
-const APP_STORE_URL = '#app-store';      // TODO: replace with App Store URL
+const APP_STORE_URL = 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
