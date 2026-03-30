@@ -3,16 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
-  Star, Zap, ShieldCheck,
+  Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
-import { SonoIcon } from '@/components/SonoIcon';
 
 // ── Store URLs — swap in real links when published ─────────────────────────
 const APP_STORE_URL = 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726';
-const PLAY_STORE_URL = '#google-play';   // TODO: replace with Google Play URL
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -90,44 +87,15 @@ function AppStoreBadge({ className = '' }: { className?: string }) {
   );
 }
 
-function PlayStoreBadge({ className = '' }: { className?: string }) {
-  return (
-    <a
-      href={PLAY_STORE_URL}
-      className={`inline-flex items-center gap-2.5 bg-black hover:bg-gray-800 text-white px-5 py-3 rounded-xl transition-colors opacity-50 cursor-not-allowed pointer-events-none ${className}`}
-      aria-label="Google Play — coming soon"
-    >
-      {/* Google Play icon */}
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3.18 23.76c.37.2.8.2 1.18 0l11.58-6.68-2.45-2.45-10.31 9.13zM.5 1.4C.19 1.74 0 2.23 0 2.88v18.24c0 .65.19 1.14.5 1.48l.08.07 10.21-10.2v-.24L.58 1.33.5 1.4zm19.1 10.01l-2.63-1.52-2.73 2.73 2.73 2.73 2.65-1.53c.76-.44.76-1.97-.02-2.41zM4.36.24L15.94 6.92l-2.45 2.45L3.18.24C3.56.04 3.98.04 4.36.24z" />
-      </svg>
-      <div className="text-left">
-        <div className="text-[10px] text-gray-300 leading-none mb-0.5">Coming soon on</div>
-        <div className="text-[15px] font-semibold leading-none">Google Play</div>
-      </div>
-    </a>
-  );
-}
-
 // ── Logo ──────────────────────────────────────────────────────────────────────
 
 function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
-  const iconSize = size === 'lg' ? 38 : 32;
   const cls = size === 'lg'
     ? 'text-2xl font-black tracking-tight'
     : 'text-xl font-black tracking-tight';
   return (
-    <span className="inline-flex items-center gap-2">
-      <Image
-        src="/icons/Sonobuddy_icon.png"
-        alt="SonoBuddy"
-        width={iconSize}
-        height={iconSize}
-        className="rounded-xl shadow-sm shrink-0"
-      />
-      <span className={cls}>
-        <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
-      </span>
+    <span className={cls}>
+      <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
     </span>
   );
 }
@@ -225,7 +193,6 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <AppStoreBadge />
-                <PlayStoreBadge />
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
                 <div className="flex items-center gap-1">
@@ -334,8 +301,8 @@ export default function LandingPage() {
       {/* ── BOTTOM CTA ── */}
       <section className="py-20 px-5 bg-sky-500">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="mx-auto mb-6 w-fit">
-            <SonoIcon size={72} className="text-white" />
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Stethoscope size={28} className="text-white" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 text-white">
             Your pocket reference.<br />Always ready.
