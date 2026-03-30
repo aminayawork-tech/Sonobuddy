@@ -102,7 +102,7 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
         alt="SonoBuddy icon"
         width={imgSize}
         height={imgSize}
-        className="rounded-lg shadow-sm shrink-0"
+        className="shrink-0"
       />
       <span className={cls}>
         <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
