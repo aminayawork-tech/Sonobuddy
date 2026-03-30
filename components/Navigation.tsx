@@ -20,7 +20,7 @@ export default function Navigation() {
   if (pathname === '/') return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-sono-card/95 backdrop-blur-md border-t border-sono-border safe-area-bottom shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-sono-card/95 backdrop-blur-md border-t border-sono-border safe-area-bottom shadow-lg lg:hidden">
       <div className="max-w-lg mx-auto flex items-stretch">
         {NAV_ITEMS.map((item) => {
           const isActive = item.href === '/home'
