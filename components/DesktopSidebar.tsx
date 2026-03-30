@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Search, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
-import Image from 'next/image';
 
 const NAV_ITEMS = [
   { href: '/home', label: 'Search', Icon: Search },
@@ -21,13 +20,6 @@ export default function DesktopSidebar() {
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <Image
-            src="/icons/Sonobuddy_icon.png"
-            alt="SonoBuddy"
-            width={38}
-            height={38}
-            className="rounded-xl shadow-sm"
-          />
           <span className="text-xl font-black tracking-tight">
             <span className="text-slate-900">Sono</span>
             <span className="text-sky-500">Buddy</span>
