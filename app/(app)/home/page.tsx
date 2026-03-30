@@ -223,7 +223,7 @@ export default function HomePage() {
       <div className="px-5 pt-14 pb-7">
         <div className="flex items-center gap-3 mb-1">
           <h1 className="text-3xl font-black tracking-tight">
-            <span className="text-white">Sono</span><span className="text-sono-blue">Buddy</span>
+            <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
           </h1>
         </div>
         <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
@@ -240,7 +240,7 @@ export default function HomePage() {
       {/* Category Tiles */}
       <div className="px-5 mb-7">
         <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Browse</p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {CATEGORY_TILES.map((tile) => (
             <button
               key={tile.href}
@@ -273,7 +273,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
           {quickItems.map((item) => {
             const { Icon, iconBg, iconColor } = getStyle(item);
             return (
