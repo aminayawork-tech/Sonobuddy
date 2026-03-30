@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
   Star, Zap, ShieldCheck,
 } from 'lucide-react';
+import { SonoIcon } from '@/components/SonoIcon';
 
 // ── Store URLs — swap in real links when published ─────────────────────────
 const APP_STORE_URL = 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726';
@@ -91,19 +91,13 @@ function AppStoreBadge({ className = '' }: { className?: string }) {
 // ── Logo ──────────────────────────────────────────────────────────────────────
 
 function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
-  const imgSize = size === 'lg' ? 36 : 28;
+  const iconSize = size === 'lg' ? 32 : 26;
   const cls = size === 'lg'
     ? 'text-2xl font-black tracking-tight'
     : 'text-xl font-black tracking-tight';
   return (
     <span className="inline-flex items-center gap-2">
-      <Image
-        src="/icons/Sonobuddy_icon.png"
-        alt="SonoBuddy icon"
-        width={imgSize}
-        height={imgSize}
-        className="shrink-0"
-      />
+      <SonoIcon size={iconSize} className="text-sky-500 shrink-0" />
       <span className={cls}>
         <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
       </span>
@@ -313,13 +307,7 @@ export default function LandingPage() {
       <section className="py-20 px-5 bg-sky-500">
         <div className="max-w-2xl mx-auto text-center">
           <div className="mx-auto mb-6 w-fit">
-            <Image
-              src="/icons/Sonobuddy_icon.png"
-              alt="SonoBuddy"
-              width={72}
-              height={72}
-              className="rounded-2xl shadow-lg"
-            />
+            <SonoIcon size={72} className="text-white" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4 text-white">
             Your pocket reference.<br />Always ready.
