@@ -52,6 +52,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'RUQ pain, fever, elevated WBC. Positive Murphy\'s sign. Most common in women aged 20–50.',
     reportingTips: 'State: "Sonographic Murphy\'s sign positive/negative." Always measure anterior wall thickness and GB size. Note any complications.',
     tags: ['cholecystitis', 'gallbladder', 'gallstones', 'murphy', 'ruq', 'infection'],
+    images: [
+      { src: '/pathologies/Acute_cholecystitis.jpg', caption: 'Acute cholecystitis — gallbladder wall thickening with stones' },
+      { src: '/pathologies/Acute_cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
+    ],
   },
   {
     id: 'dvt-acute',
@@ -76,6 +80,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Leg swelling, pain, warmth, elevated D-dimer. Risk factors: prolonged immobility, cancer, surgery, pregnancy, oral contraceptives.',
     reportingTips: 'State extent: "Acute DVT involving CFV, FV from proximal to mid-thigh." Always document to/from specific anatomic landmarks. Note acuity (acute vs chronic vs mixed).',
     tags: ['dvt', 'thrombosis', 'deep vein', 'pulmonary embolism', 'vascular', 'clot'],
+    images: [
+      { src: '/pathologies/deep_vein_thrombosis.jpg', caption: 'DVT — non-compressible vein with echogenic thrombus' },
+      { src: '/pathologies/deep_vein_thrombosis2.png', caption: 'DVT — absent color fill on Doppler' },
+    ],
   },
   {
     id: 'fatty-liver',
@@ -98,6 +106,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Obesity, diabetes, hyperlipidemia, alcohol use, metabolic syndrome. Elevated ALT/AST.',
     reportingTips: 'Grade: mild (slightly > kidney), moderate (obscures vessels), severe (poor penetration). Cannot differentiate steatohepatitis from simple steatosis on US alone.',
     tags: ['fatty liver', 'steatosis', 'nafld', 'masld', 'liver', 'echogenicity'],
+    images: [
+      { src: '/pathologies/Hepatic steatosis.jpg', caption: 'Hepatic steatosis — hyperechoic liver compared to kidney' },
+      { src: '/pathologies/Hepatic Steatosis 2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
+    ],
   },
   {
     id: 'hydronephrosis',
@@ -122,6 +134,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Flank pain, hematuria, recurrent UTIs. Causes: ureteral stone, BPH, ureteral stricture, retroperitoneal mass, pregnancy.',
     reportingTips: 'Grade 1–4 by SFU grading or describe as mild/moderate/severe. Always check bladder for post-void residual. Look for shadowing stones at UVJ.',
     tags: ['hydronephrosis', 'kidney', 'obstruction', 'renal pelvis', 'ureter', 'stone'],
+    images: [
+      { src: '/pathologies/Hydronephrosis .jpg', caption: 'Hydronephrosis — dilated renal pelvis and calyces' },
+      { src: '/pathologies/Hydronephrosis 2.jpg', caption: 'Moderate hydronephrosis — calyceal dilation' },
+      { src: '/pathologies/Hydronephrosis 3.jpg', caption: 'Severe hydronephrosis — cortical thinning' },
+    ],
   },
   {
     id: 'ovarian-cyst',
@@ -145,6 +162,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Pelvic pain, incidental finding. Pre-menopausal: functional cysts very common, resolve in 6–8 weeks. Post-menopausal: lower threshold for concern.',
     reportingTips: 'Report size, walls, internal content, vascularity. Use O-RADS US scoring for risk stratification. Simple cyst ≤3 cm in reproductive age: no follow-up needed.',
     tags: ['ovary', 'cyst', 'ovarian', 'dermoid', 'endometrioma', 'corpus luteum', 'ob'],
+    images: [
+      { src: '/pathologies/Haemorrhagic_ovarian_cyst_ultrasound.jpg', caption: 'Hemorrhagic ovarian cyst — reticular internal echoes' },
+    ],
   },
   {
     id: 'thyroid-cancer-papillary',
@@ -170,6 +190,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common thyroid cancer (80–85%). Often incidentally found. Excellent prognosis with treatment. May present as palpable nodule.',
     reportingTips: 'Calculate TI-RADS score. Report: "TI-RADS X — recommend FNA if ≥Y cm." Do NOT say "cancer" in report — report features and TI-RADS recommendation.',
     tags: ['thyroid', 'cancer', 'papillary', 'malignancy', 'tirads', 'fnab', 'microcalcification'],
+    images: [
+      { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound2.jpg', caption: 'PTC — hypoechoic nodule with microcalcifications' },
+      { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound_37F_20160005.jpg', caption: 'PTC — taller-than-wide nodule, irregular margins' },
+    ],
   },
   {
     id: 'aaa',
@@ -193,6 +217,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Often asymptomatic — found on screening. Risk factors: male, age >65, smoking, hypertension, family history. One-time screen for men 65–75 who ever smoked.',
     reportingTips: 'ALWAYS measure outer-to-outer AP diameter (includes mural thrombus). Report AP and transverse at maximum diameter. Compare to prior — note any change.',
     tags: ['aaa', 'aorta', 'aneurysm', 'abdominal', 'vascular', 'screening'],
+    images: [
+      { src: '/pathologies/Abdomincal aortic aneurysm.jpg', caption: 'AAA — dilated aorta with mural thrombus' },
+    ],
   },
   {
     id: 'placenta-previa',
@@ -292,6 +319,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'RUQ pain, jaundice, elevated bilirubin/ALP. Often presents after cholecystitis. 10–15% of patients with gallstones have CBD stones. US sensitivity for CBD stones ~50% — MRCP or EUS more sensitive.',
     reportingTips: 'Always measure CBD diameter. State: "CBD measures ___ mm. [Stone/Sludge/No stone] visualized within CBD. Intrahepatic ducts [dilated/not dilated]." If CBD dilated without visible stone: "Cannot exclude choledocholithiasis — recommend MRCP."',
     tags: ['cbd', 'choledocholithiasis', 'bile duct', 'gallstone', 'jaundice', 'biliary obstruction', 'cholangitis', 'abdomen'],
+    images: [
+      { src: '/pathologies/choledocholithiasis.jpg', caption: 'Choledocholithiasis — shadowing stone in dilated CBD' },
+    ],
   },
   {
     id: 'liver-hemangioma',
@@ -317,6 +347,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common benign hepatic tumor. Found incidentally in 5–7% of US population. Usually asymptomatic. No malignant potential. Confirmation with MRI when CT/US findings are atypical, or in patients with malignancy history.',
     reportingTips: 'Classic appearance (well-defined hyperechoic nodule with posterior enhancement) in non-cirrhotic liver = "Hemangioma — no follow-up needed." Atypical features → "Atypical hepatic lesion — recommend MRI with contrast for further characterization."',
     tags: ['hemangioma', 'liver', 'hepatic', 'hyperechoic', 'benign', 'abdomen', 'incidental'],
+    images: [
+      { src: '/pathologies/hepatic_hemangioma.jpg', caption: 'Hepatic hemangioma — hyperechoic well-defined lesion' },
+    ],
   },
   {
     id: 'splenic-infarct',
@@ -364,6 +397,12 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Renal cysts are found in >50% of adults over 50. Simple cysts: benign, no follow-up. CT/MRI with contrast required for Bosniak III/IV — ultrasound cannot characterize enhancement (requires contrast).',
     reportingTips: 'Assign Bosniak category on US only for simple (I) or minimally complex (II) cysts. For anything more complex: "Complex renal cyst — recommend CT abdomen with and without contrast for Bosniak classification." Document size, location, wall/septa characteristics.',
     tags: ['renal cyst', 'bosniak', 'kidney cyst', 'complex cyst', 'rcc', 'abdomen', 'kidney'],
+    images: [
+      { src: '/pathologies/Renal cyst.jpg', caption: 'Simple renal cyst — anechoic, posterior enhancement' },
+      { src: '/pathologies/Renal cyst 2.jpg', caption: 'Renal cyst — thin-walled, no internal flow' },
+      { src: '/pathologies/Renal cyst 3.jpg', caption: 'Renal cyst — Bosniak I/II appearance' },
+      { src: '/pathologies/Renal cyst 4.jpg', caption: 'Complex renal cyst — septation, Bosniak IIF' },
+    ],
   },
   {
     id: 'cirrhosis',
@@ -390,6 +429,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'History of hepatitis B/C, alcohol use, NASH, autoimmune hepatitis. Annual HCC surveillance ultrasound recommended (with AFP). Findings guide management: TIPS candidacy, transplant evaluation, variceal screening.',
     reportingTips: 'Document liver surface (smooth/nodular/coarse), echotexture, caudate:right lobe ratio, spleen size, portal vein direction/velocity, and presence of ascites. Use LI-RADS for any new hepatic observations in at-risk patients.',
     tags: ['cirrhosis', 'liver', 'fibrosis', 'portal hypertension', 'hcc surveillance', 'ascites', 'splenomegaly', 'abdomen'],
+    images: [
+      { src: '/pathologies/liver_cirrhosis.jpg', caption: 'Liver cirrhosis — coarse echotexture, nodular surface, ascites' },
+    ],
   },
 
   // ── VASCULAR PATHOLOGIES ─────────────────────────────────────────────────────
@@ -713,6 +755,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Cirrhosis most common cause (hepatitis, alcohol, NASH). Presents with: variceal bleeding, ascites, hepatic encephalopathy, splenomegaly with thrombocytopenia. Doppler assessment of portal vein flow direction and velocity is essential for management planning (TIPS candidacy, transplant evaluation).',
     reportingTips: 'Always document portal vein: diameter (mm), flow direction (hepatopetal or hepatofugal), velocity (cm/s). State spleen size. Document collaterals and ascites. If paraumbilical vein present: state "recanalized paraumbilical vein consistent with portal hypertension." Compare to prior.',
     tags: ['portal hypertension', 'cirrhosis', 'portal vein', 'ascites', 'splenomegaly', 'hepatofugal', 'paraumbilical vein', 'abdomen', 'liver', 'varices'],
+    images: [
+      { src: '/pathologies/portal_hypertension.jpg', caption: 'Portal hypertension — dilated portal vein with hepatofugal flow' },
+    ],
   },
   {
     id: 'testicular-torsion',
@@ -738,6 +783,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Acute severe unilateral scrotal pain, often with nausea/vomiting. Peak ages: neonatal and adolescent (12–18 years). Viability window: >90% salvage <6 hours; ~50% at 12–24 hours; near-zero >24 hours. Cremasteric reflex typically absent. Do NOT delay surgery for imaging if clinical diagnosis is clear.',
     reportingTips: 'NEVER delay surgery for imaging if clinical torsion is obvious. Ultrasound role: confirm diagnosis or evaluate atypical presentations. State: "Absent testicular blood flow right/left testis. Findings consistent with testicular torsion. Urgent urology consultation recommended." Normal Doppler does NOT exclude intermittent torsion.',
     tags: ['testicular torsion', 'torsion', 'testis', 'scrotal', 'absent flow', 'whirlpool sign', 'acute scrotum', 'urologic emergency', 'abdomen'],
+    images: [
+      { src: '/pathologies/testicular_torsion.jpg', caption: 'Testicular torsion — absent Doppler flow to affected testis' },
+      { src: '/pathologies/testicular_torsion 2.jpg', caption: 'Testicular torsion — whirlpool sign of twisted spermatic cord' },
+    ],
   },
   // ── ADDITIONAL OB/GYN PATHOLOGIES ────────────────────────────────────────────
   {
@@ -764,6 +813,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common pelvic tumor in women. Presents with heavy menstrual bleeding, pelvic pressure, bulk symptoms, or incidentally found. African-American women at higher risk. Fibroids regress after menopause.',
     reportingTips: 'Document number, location (submucosal/intramural/subserosal), size (3D), and effect on endometrial cavity. Submucosal grade by FIGO classification. State if endometrium is adequately visualized.',
     tags: ['fibroids', 'leiomyoma', 'uterus', 'myoma', 'ob', 'gynecology', 'heavy bleeding', 'pelvic mass'],
+    images: [
+      { src: '/pathologies/uterine fibroids .png', caption: 'Uterine fibroids — hypoechoic intramural masses with shadowing' },
+      { src: '/pathologies/UterineFirboid 2.png', caption: 'Uterine fibroid — subserosal location with posterior shadowing' },
+    ],
   },
   {
     id: 'adenomyosis',
@@ -788,6 +841,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Dysmenorrhea, menorrhagia, dyspareunia. Uterus tender on exam. Typically presents in reproductive-age women (30–50s). Endometrial glands and stroma embedded within myometrium. Diagnosis confirmed by MRI (junctional zone >12 mm) or histology.',
     reportingTips: 'State uterine shape (globular vs normal), myometrial texture, and presence of myometrial cysts or islands. If diffuse heterogeneous myometrium without discrete mass: "Findings may represent adenomyosis — MRI recommended for definitive assessment."',
     tags: ['adenomyosis', 'uterus', 'dysmenorrhea', 'ob', 'gynecology', 'myometrium', 'heavy periods'],
+    images: [
+      { src: '/pathologies/adenomyosis.jpg', caption: 'Adenomyosis — heterogeneous myometrium, subendometrial cysts' },
+    ],
   },
   {
     id: 'pcos',
@@ -810,6 +866,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Oligomenorrhea/amenorrhea, hirsutism, acne, infertility. Elevated LH:FSH ratio, elevated androgens. Rotterdam criteria: 2 of 3 — oligo-anovulation, hyperandrogenism, polycystic ovary morphology. US alone cannot diagnose PCOS.',
     reportingTips: 'Report ovarian volume and follicle count per ovary. State: "Right ovary measures ___ cm³ with ___ follicles. Left ovary measures ___ cm³ with ___ follicles. Findings are consistent with/do not meet criteria for polycystic ovary morphology." Add: "Clinical and hormonal correlation required for PCOS diagnosis."',
     tags: ['pcos', 'polycystic ovary', 'follicles', 'ob', 'gynecology', 'infertility', 'amenorrhea'],
+    images: [
+      { src: '/pathologies/polycystic_ovaries syndrome.png', caption: 'PCOS — "string of pearls" — ≥12 peripheral follicles' },
+    ],
   },
   {
     id: 'toa',
@@ -882,6 +941,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Painful vaginal bleeding in 2nd/3rd trimester. Uterine tenderness, contractions, fetal distress. Risk factors: trauma, hypertension, cocaine use, prior abruption, smoking. Mortality: fetal (20–30%), maternal (low but significant).',
     reportingTips: 'Examine retroplacental space in all 3rd trimester exams with bleeding. State: "Retroplacental space is [clear/[X] cm hematoma present]." If hematoma present: measure, describe echogenicity (acute vs chronic). Urgent OB notification for any hematoma.',
     tags: ['placental abruption', 'abruption', 'retroplacental hematoma', 'ob', 'third trimester', 'bleeding', 'emergency'],
+    images: [
+      { src: '/pathologies/Placental abruption.jpg', caption: 'Placental abruption — retroplacental hypoechoic hematoma' },
+    ],
   },
 
   // ── THYROID PATHOLOGIES ───────────────────────────────────────────────────────
@@ -954,6 +1016,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Primary hyperparathyroidism: hypercalcemia, elevated PTH, nephrolithiasis, bone disease (osteitis fibrosa cystica), neuropsychiatric symptoms. US + Sestamibi scan for pre-operative localization.',
     reportingTips: 'Describe location (right/left, superior/inferior pole, posterior/inferior to thyroid lobe), size (3D), echogenicity, and Doppler findings. State: "Hypoechoic oval structure with peripheral vascularity posterior to [right/left] inferior thyroid pole — consistent with parathyroid adenoma. Recommend Sestamibi scan for confirmation and localization."',
     tags: ['parathyroid', 'adenoma', 'hyperparathyroidism', 'hypercalcemia', 'thyroid', 'polar vessel'],
+    images: [
+      { src: '/pathologies/parathyroid_ademoma.jpg', caption: 'Parathyroid adenoma — hypoechoic oval nodule posterior to thyroid' },
+      { src: '/pathologies/parathyroid_ademoma 2.jpg', caption: 'Parathyroid adenoma — polar vessel on color Doppler' },
+      { src: '/pathologies/parathyroid_ademoma 3.jpg', caption: 'Parathyroid adenoma — inferior parathyroid location' },
+    ],
   },
 
   // ── CARDIAC PATHOLOGIES ───────────────────────────────────────────────────────
@@ -982,6 +1049,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Muffled heart sounds, hypotension, JVD (Beck\'s triad = tamponade). Causes: idiopathic/viral, malignancy, uremia, bacterial, post-cardiac surgery (Dressler\'s), hypothyroidism, SLE.',
     reportingTips: 'Measure effusion size at PLAX posterior to LV. Document RA/RV collapse status and IVC collapsibility. State: "Moderate/Large circumferential pericardial effusion. Right atrial/ventricular diastolic collapse [present/absent]. IVC [plethoric/normal]. [Tamponade physiology present/absent]."',
     tags: ['pericardial effusion', 'tamponade', 'cardiac', 'echo', 'pericarditis', 'ra collapse', 'rv collapse', 'pocus'],
+    images: [
+      { src: '/pathologies/Pericardia leffusion .PNG', caption: 'Pericardial effusion — anechoic fluid surrounding the heart' },
+      { src: '/pathologies/Hemorragic_effusion 2.jpg', caption: 'Hemorrhagic pericardial effusion — complex echogenic fluid' },
+    ],
   },
   {
     id: 'aortic-stenosis-echo',
@@ -1007,6 +1078,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Ejection murmur radiating to carotids. Symptoms: angina, syncope, dyspnea (SAD triad). Senile calcific AS most common (age >70). Bicuspid AV accelerates calcification (presents age 50–60). TAVR or surgical AVR for severe symptomatic AS.',
     reportingTips: 'Report: peak velocity, mean gradient, AVA (continuity equation), valve morphology (tricuspid/bicuspid/bicuspid-suspected), ascending aorta size, LV function/hypertrophy. Classify: mild (Vmax 2–2.9 m/s), moderate (3–3.9 m/s), severe (≥4 m/s).',
     tags: ['aortic stenosis', 'cardiac', 'echo', 'aortic valve', 'gradient', 'ava', 'calcific', 'lvot'],
+    images: [
+      { src: '/pathologies/Aortic_stenosis.JPG', caption: 'Aortic stenosis — calcified, thickened aortic valve leaflets' },
+      { src: '/pathologies/Aortic_stenosis_2.JPG', caption: 'Aortic stenosis — restricted valve opening, turbulent jet' },
+    ],
   },
   {
     id: 'lvh-diastolic-dysfunction',
@@ -1059,6 +1134,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Shoulder pain, weakness with abduction and external rotation, positive impingement tests (Neer, Hawkins). Common over age 50. Ultrasound is comparable to MRI for full-thickness tears but requires experienced operator. Best for: confirming tendon integrity, guiding injection.',
     reportingTips: 'Systematically evaluate all 4 rotator cuff tendons: supraspinatus, infraspinatus, subscapularis, teres minor. State: full-thickness vs partial-thickness, tear location, retraction distance, bursal fluid. Compare to contralateral side. "Supraspinatus full-thickness tear at critical zone with [X cm] retraction and [X mm] subacromial-subdeltoid bursal fluid."',
     tags: ['rotator cuff', 'supraspinatus', 'shoulder', 'tear', 'msk', 'shoulder pain', 'impingement', 'bursa'],
+    images: [
+      { src: '/pathologies/Rotator_cuff_tear.jpg', caption: 'Rotator cuff tear — hypoechoic defect in supraspinatus' },
+      { src: '/pathologies/Rotator_cuff_tear 2.jpg', caption: 'Full-thickness rotator cuff tear — non-visualization of tendon' },
+    ],
   },
   {
     id: 'achilles-tendinopathy',
@@ -1155,6 +1234,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Posterior knee fullness, discomfort, worse with activity. Often associated with intra-articular pathology (OA, meniscal tear, RA). Communication between joint and bursa via a one-way valve through the cyst neck. Treat underlying joint disease first.',
     reportingTips: 'Measure cyst dimensions. Document the characteristic neck between medial gastrocnemius and semimembranosus. Note internal contents (simple vs complex). State: "Baker\'s cyst measures ___ × ___ cm in the posteromedial popliteal fossa with [simple/complex] contents and [intact/ruptured] appearance."',
     tags: ['baker cyst', 'popliteal cyst', 'knee', 'msk', 'cyst', 'posterior knee', 'bursitis', 'dvt mimic'],
+    images: [
+      { src: "/pathologies/Baker's_cyst.jpg", caption: "Baker's cyst — anechoic popliteal fossa fluid collection" },
+      { src: "/pathologies/Baker's_cyst 2.png", caption: "Baker's cyst — communication with joint space" },
+    ],
   },
   {
     id: 'de-quervain-tenosynovitis',
