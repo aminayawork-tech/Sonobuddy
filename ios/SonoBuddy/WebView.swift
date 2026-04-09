@@ -8,6 +8,19 @@ struct WebView: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.allowsInlineMediaPlayback = true
 
+        // Serve bundled pathology images via sono:// so they work offline
+        config.setURLSchemeHandler(ImageSchemeHandler(), forURLScheme: "sono")
+
+        // Rewrite /pathologies/* image src attributes to sono://pathologies/*
+        // so the native scheme handler intercepts them instead of the network.
+        // Uses MutationObserver to catch images React renders after hydration.
+        let script = WKUserScript(
+            source: imageRewriteJS,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+        config.userContentController.addUserScript(script)
+
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = false
@@ -34,6 +47,37 @@ struct WebView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
+
+    // Rewrites /pathologies/* image src values to sono://pathologies/* so the
+    // native ImageSchemeHandler serves them from the app bundle (works offline).
+    private let imageRewriteJS = """
+    (function () {
+      function rewrite(img) {
+        var src = img.getAttribute('src');
+        if (src && src.indexOf('/pathologies/') === 0) {
+          var file = src.slice('/pathologies/'.length);
+          img.setAttribute('src', 'sono://pathologies/' + encodeURIComponent(file));
+        }
+      }
+
+      function rewriteAll() {
+        document.querySelectorAll('img').forEach(rewrite);
+      }
+
+      // Watch for images React adds after hydration
+      new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+          m.addedNodes.forEach(function (node) {
+            if (node.nodeName === 'IMG') { rewrite(node); }
+            if (node.querySelectorAll) { node.querySelectorAll('img').forEach(rewrite); }
+          });
+        });
+      }).observe(document.documentElement, { childList: true, subtree: true });
+
+      if (document.readyState !== 'loading') { rewriteAll(); }
+      else { document.addEventListener('DOMContentLoaded', rewriteAll); }
+    })();
+    """
 
     class Coordinator: NSObject, WKNavigationDelegate {
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

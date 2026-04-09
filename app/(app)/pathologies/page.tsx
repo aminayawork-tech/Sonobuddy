@@ -91,6 +91,7 @@ export default function PathologiesPage() {
               alt={lightbox.caption}
               width={800}
               height={600}
+              unoptimized
               className="rounded-xl object-contain w-full max-h-[75vh]"
             />
           </div>
@@ -249,6 +250,7 @@ export default function PathologiesPage() {
                               alt={img.caption}
                               width={120}
                               height={90}
+                              unoptimized
                               className="object-cover w-[120px] h-[90px]"
                             />
                             <p className="text-[10px] text-sono-muted px-2 py-1 max-w-[120px] truncate">{img.caption}</p>
