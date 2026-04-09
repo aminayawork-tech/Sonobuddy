@@ -54,7 +54,7 @@ export const pathologies: Pathology[] = [
     tags: ['cholecystitis', 'gallbladder', 'gallstones', 'murphy', 'ruq', 'infection'],
     images: [
       { src: '/pathologies/Acute_cholecystitis.jpg', caption: 'Acute cholecystitis — gallbladder wall thickening with stones' },
-      { src: '/pathologies/acute cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
+      { src: '/pathologies/acute_cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
     ],
   },
   {
@@ -81,9 +81,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State extent: "Acute DVT involving CFV, FV from proximal to mid-thigh." Always document to/from specific anatomic landmarks. Note acuity (acute vs chronic vs mixed).',
     tags: ['dvt', 'thrombosis', 'deep vein', 'pulmonary embolism', 'vascular', 'clot'],
     images: [
-      { src: '/pathologies/Deep vein thrombosis replace.png', caption: 'DVT — non-compressible vein with echogenic thrombus' },
-      { src: '/pathologies/Deep vein thrombosis 2 replace.png', caption: 'DVT — absent color fill on Doppler' },
-      { src: '/pathologies/Deep vein thrombosis 3 replace.png', caption: 'DVT — compressibility technique demonstrating non-compressible vein' },
+      { src: '/pathologies/deep_vein_thrombosis.png', caption: 'DVT — non-compressible vein with echogenic thrombus' },
+      { src: '/pathologies/deep_vein_thrombosis_2.png', caption: 'DVT — absent color fill on Doppler' },
+      { src: '/pathologies/deep_vein_thrombosis_3.png', caption: 'DVT — compressibility technique demonstrating non-compressible vein' },
     ],
   },
   {
@@ -108,9 +108,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Grade: mild (slightly > kidney), moderate (obscures vessels), severe (poor penetration). Cannot differentiate steatohepatitis from simple steatosis on US alone.',
     tags: ['fatty liver', 'steatosis', 'nafld', 'masld', 'liver', 'echogenicity'],
     images: [
-      { src: '/pathologies/Hepatic steatosis.jpg', caption: 'Hepatic steatosis — hyperechoic liver compared to kidney' },
-      { src: '/pathologies/Hepatic Steatosis 2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
-      { src: '/pathologies/hepatic steatosis 2.png', caption: 'Hepatic steatosis — loss of portal vein wall visibility' },
+      { src: '/pathologies/hepatic_steatosis.jpg', caption: 'Hepatic steatosis — hyperechoic liver compared to kidney' },
+      { src: '/pathologies/hepatic_steatosis_2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
+      { src: '/pathologies/hepatic_steatosis_2b.png', caption: 'Hepatic steatosis — loss of portal vein wall visibility' },
     ],
   },
   {
@@ -137,9 +137,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Grade 1–4 by SFU grading or describe as mild/moderate/severe. Always check bladder for post-void residual. Look for shadowing stones at UVJ.',
     tags: ['hydronephrosis', 'kidney', 'obstruction', 'renal pelvis', 'ureter', 'stone'],
     images: [
-      { src: '/pathologies/Hydronephrosis .jpg', caption: 'Hydronephrosis — dilated renal pelvis and calyces' },
-      { src: '/pathologies/Hydronephrosis 2.jpg', caption: 'Moderate hydronephrosis — calyceal dilation' },
-      { src: '/pathologies/Hydronephrosis 3.jpg', caption: 'Severe hydronephrosis — cortical thinning' },
+      { src: '/pathologies/hydronephrosis.jpg', caption: 'Hydronephrosis — dilated renal pelvis and calyces' },
+      { src: '/pathologies/hydronephrosis_2.jpg', caption: 'Moderate hydronephrosis — calyceal dilation' },
+      { src: '/pathologies/hydronephrosis_3.jpg', caption: 'Severe hydronephrosis — cortical thinning' },
     ],
   },
   {
@@ -166,7 +166,7 @@ export const pathologies: Pathology[] = [
     tags: ['ovary', 'cyst', 'ovarian', 'dermoid', 'endometrioma', 'corpus luteum', 'ob'],
     images: [
       { src: '/pathologies/Haemorrhagic_ovarian_cyst_ultrasound.jpg', caption: 'Hemorrhagic ovarian cyst — reticular internal echoes' },
-      { src: '/pathologies/ovarian cyst 2.png', caption: 'Ovarian cyst — simple anechoic cyst with posterior acoustic enhancement' },
+      { src: '/pathologies/ovarian_cyst_2.png', caption: 'Ovarian cyst — simple anechoic cyst with posterior acoustic enhancement' },
     ],
   },
   {
@@ -196,8 +196,8 @@ export const pathologies: Pathology[] = [
     images: [
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound2.jpg', caption: 'PTC — hypoechoic nodule with microcalcifications' },
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound_37F_20160005.jpg', caption: 'PTC — taller-than-wide nodule, irregular margins' },
-      { src: '/pathologies/Papillary Thyroid Carcinoma.png', caption: 'PTC — irregular spiculated margins, hypoechoic solid nodule' },
-      { src: '/pathologies/Papillary Thryroid carcinoma.png', caption: 'PTC — microcalcifications within hypoechoic nodule' },
+      { src: '/pathologies/papillary_thyroid_carcinoma.png', caption: 'PTC — irregular spiculated margins, hypoechoic solid nodule' },
+      { src: '/pathologies/papillary_thyroid_carcinoma_2.png', caption: 'PTC — microcalcifications within hypoechoic nodule' },
     ],
   },
   {
@@ -223,8 +223,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'ALWAYS measure outer-to-outer AP diameter (includes mural thrombus). Report AP and transverse at maximum diameter. Compare to prior — note any change.',
     tags: ['aaa', 'aorta', 'aneurysm', 'abdominal', 'vascular', 'screening'],
     images: [
-      { src: '/pathologies/Abdomincal aortic aneurysm.jpg', caption: 'AAA — dilated aorta with mural thrombus' },
-      { src: '/pathologies/abdominal aortic aneurysm.png', caption: 'AAA — outer-to-outer measurement technique' },
+      { src: '/pathologies/abdominal_aortic_aneurysm.jpg', caption: 'AAA — dilated aorta with mural thrombus' },
+      { src: '/pathologies/abdominal_aortic_aneurysm_2.png', caption: 'AAA — outer-to-outer measurement technique' },
     ],
   },
   {
@@ -277,7 +277,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State: "Appendix visualized/not visualized." If seen: "Measures ___ mm in AP diameter, non-compressible, with [periappendiceal hyperechogenicity/appendicolith/free fluid]." If not seen: "Appendix not identified — CT recommended to exclude appendicitis given clinical concern."',
     tags: ['appendicitis', 'appendix', 'ruq', 'rlq', 'abdomen', 'surgical emergency', 'appendicolith'],
     images: [
-      { src: '/pathologies/acute appendicitis .png', caption: 'Acute appendicitis — non-compressible appendix >6 mm with periappendiceal hyperechogenicity' },
+      { src: '/pathologies/acute_appendicitis.png', caption: 'Acute appendicitis — non-compressible appendix >6 mm with periappendiceal hyperechogenicity' },
     ],
   },
   {
@@ -407,10 +407,10 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Assign Bosniak category on US only for simple (I) or minimally complex (II) cysts. For anything more complex: "Complex renal cyst — recommend CT abdomen with and without contrast for Bosniak classification." Document size, location, wall/septa characteristics.',
     tags: ['renal cyst', 'bosniak', 'kidney cyst', 'complex cyst', 'rcc', 'abdomen', 'kidney'],
     images: [
-      { src: '/pathologies/Renal cyst.jpg', caption: 'Simple renal cyst — anechoic, posterior enhancement' },
-      { src: '/pathologies/Renal cyst 2.jpg', caption: 'Renal cyst — thin-walled, no internal flow' },
-      { src: '/pathologies/Renal cyst 3.jpg', caption: 'Renal cyst — Bosniak I/II appearance' },
-      { src: '/pathologies/Renal cyst 4.jpg', caption: 'Complex renal cyst — septation, Bosniak IIF' },
+      { src: '/pathologies/renal_cyst.jpg', caption: 'Simple renal cyst — anechoic, posterior enhancement' },
+      { src: '/pathologies/renal_cyst_2.jpg', caption: 'Renal cyst — thin-walled, no internal flow' },
+      { src: '/pathologies/renal_cyst_3.jpg', caption: 'Renal cyst — Bosniak I/II appearance' },
+      { src: '/pathologies/renal_cyst_4.jpg', caption: 'Complex renal cyst — septation, Bosniak IIF' },
     ],
   },
   {
@@ -794,7 +794,7 @@ export const pathologies: Pathology[] = [
     tags: ['testicular torsion', 'torsion', 'testis', 'scrotal', 'absent flow', 'whirlpool sign', 'acute scrotum', 'urologic emergency', 'abdomen'],
     images: [
       { src: '/pathologies/testicular_torsion.jpg', caption: 'Testicular torsion — absent Doppler flow to affected testis' },
-      { src: '/pathologies/testicular_torsion 2.jpg', caption: 'Testicular torsion — whirlpool sign of twisted spermatic cord' },
+      { src: '/pathologies/testicular_torsion_2.jpg', caption: 'Testicular torsion — whirlpool sign of twisted spermatic cord' },
     ],
   },
   // ── ADDITIONAL OB/GYN PATHOLOGIES ────────────────────────────────────────────
@@ -823,8 +823,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Document number, location (submucosal/intramural/subserosal), size (3D), and effect on endometrial cavity. Submucosal grade by FIGO classification. State if endometrium is adequately visualized.',
     tags: ['fibroids', 'leiomyoma', 'uterus', 'myoma', 'ob', 'gynecology', 'heavy bleeding', 'pelvic mass'],
     images: [
-      { src: '/pathologies/uterine fibroids .png', caption: 'Uterine fibroids — hypoechoic intramural masses with shadowing' },
-      { src: '/pathologies/UterineFirboid 2.png', caption: 'Uterine fibroid — subserosal location with posterior shadowing' },
+      { src: '/pathologies/uterine_fibroids.png', caption: 'Uterine fibroids — hypoechoic intramural masses with shadowing' },
+      { src: '/pathologies/uterine_fibroid_2.png', caption: 'Uterine fibroid — subserosal location with posterior shadowing' },
     ],
   },
   {
@@ -876,7 +876,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Report ovarian volume and follicle count per ovary. State: "Right ovary measures ___ cm³ with ___ follicles. Left ovary measures ___ cm³ with ___ follicles. Findings are consistent with/do not meet criteria for polycystic ovary morphology." Add: "Clinical and hormonal correlation required for PCOS diagnosis."',
     tags: ['pcos', 'polycystic ovary', 'follicles', 'ob', 'gynecology', 'infertility', 'amenorrhea'],
     images: [
-      { src: '/pathologies/polycystic_ovaries syndrome.png', caption: 'PCOS — "string of pearls" — ≥12 peripheral follicles' },
+      { src: '/pathologies/polycystic_ovaries_syndrome.png', caption: 'PCOS — "string of pearls" — ≥12 peripheral follicles' },
     ],
   },
   {
@@ -951,7 +951,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Examine retroplacental space in all 3rd trimester exams with bleeding. State: "Retroplacental space is [clear/[X] cm hematoma present]." If hematoma present: measure, describe echogenicity (acute vs chronic). Urgent OB notification for any hematoma.',
     tags: ['placental abruption', 'abruption', 'retroplacental hematoma', 'ob', 'third trimester', 'bleeding', 'emergency'],
     images: [
-      { src: '/pathologies/Placental abruption.jpg', caption: 'Placental abruption — retroplacental hypoechoic hematoma' },
+      { src: '/pathologies/placental_abruption.jpg', caption: 'Placental abruption — retroplacental hypoechoic hematoma' },
     ],
   },
 
@@ -1027,8 +1027,8 @@ export const pathologies: Pathology[] = [
     tags: ['parathyroid', 'adenoma', 'hyperparathyroidism', 'hypercalcemia', 'thyroid', 'polar vessel'],
     images: [
       { src: '/pathologies/parathyroid_ademoma.jpg', caption: 'Parathyroid adenoma — hypoechoic oval nodule posterior to thyroid' },
-      { src: '/pathologies/parathyroid_ademoma 2.jpg', caption: 'Parathyroid adenoma — polar vessel on color Doppler' },
-      { src: '/pathologies/parathyroid_ademoma 3.jpg', caption: 'Parathyroid adenoma — inferior parathyroid location' },
+      { src: '/pathologies/parathyroid_adenoma_2.jpg', caption: 'Parathyroid adenoma — polar vessel on color Doppler' },
+      { src: '/pathologies/parathyroid_adenoma_3.jpg', caption: 'Parathyroid adenoma — inferior parathyroid location' },
     ],
   },
 
@@ -1059,8 +1059,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Measure effusion size at PLAX posterior to LV. Document RA/RV collapse status and IVC collapsibility. State: "Moderate/Large circumferential pericardial effusion. Right atrial/ventricular diastolic collapse [present/absent]. IVC [plethoric/normal]. [Tamponade physiology present/absent]."',
     tags: ['pericardial effusion', 'tamponade', 'cardiac', 'echo', 'pericarditis', 'ra collapse', 'rv collapse', 'pocus'],
     images: [
-      { src: '/pathologies/Pericardia leffusion .PNG', caption: 'Pericardial effusion — anechoic fluid surrounding the heart' },
-      { src: '/pathologies/Hemorragic_effusion 2.jpg', caption: 'Hemorrhagic pericardial effusion — complex echogenic fluid' },
+      { src: '/pathologies/pericardial_effusion.PNG', caption: 'Pericardial effusion — anechoic fluid surrounding the heart' },
+      { src: '/pathologies/hemorrhagic_effusion_2.jpg', caption: 'Hemorrhagic pericardial effusion — complex echogenic fluid' },
     ],
   },
   {
@@ -1145,7 +1145,7 @@ export const pathologies: Pathology[] = [
     tags: ['rotator cuff', 'supraspinatus', 'shoulder', 'tear', 'msk', 'shoulder pain', 'impingement', 'bursa'],
     images: [
       { src: '/pathologies/Rotator_cuff_tear.jpg', caption: 'Rotator cuff tear — hypoechoic defect in supraspinatus' },
-      { src: '/pathologies/Rotator_cuff_tear 2.jpg', caption: 'Full-thickness rotator cuff tear — non-visualization of tendon' },
+      { src: '/pathologies/rotator_cuff_tear_2.jpg', caption: 'Full-thickness rotator cuff tear — non-visualization of tendon' },
     ],
   },
   {
@@ -1244,8 +1244,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Measure cyst dimensions. Document the characteristic neck between medial gastrocnemius and semimembranosus. Note internal contents (simple vs complex). State: "Baker\'s cyst measures ___ × ___ cm in the posteromedial popliteal fossa with [simple/complex] contents and [intact/ruptured] appearance."',
     tags: ['baker cyst', 'popliteal cyst', 'knee', 'msk', 'cyst', 'posterior knee', 'bursitis', 'dvt mimic'],
     images: [
-      { src: "/pathologies/Baker's_cyst.jpg", caption: "Baker's cyst — anechoic popliteal fossa fluid collection" },
-      { src: "/pathologies/Baker's_cyst 2.png", caption: "Baker's cyst — communication with joint space" },
+      { src: "/pathologies/bakers_cyst.jpg", caption: "Baker's cyst — anechoic popliteal fossa fluid collection" },
+      { src: "/pathologies/bakers_cyst_2.png", caption: "Baker's cyst — communication with joint space" },
     ],
   },
   {
