@@ -54,7 +54,7 @@ export const pathologies: Pathology[] = [
     tags: ['cholecystitis', 'gallbladder', 'gallstones', 'murphy', 'ruq', 'infection'],
     images: [
       { src: '/pathologies/Acute_cholecystitis.jpg', caption: 'Acute cholecystitis — gallbladder wall thickening with stones' },
-      { src: '/pathologies/Acute_cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
+      { src: '/pathologies/acute cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
     ],
   },
   {
@@ -81,8 +81,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State extent: "Acute DVT involving CFV, FV from proximal to mid-thigh." Always document to/from specific anatomic landmarks. Note acuity (acute vs chronic vs mixed).',
     tags: ['dvt', 'thrombosis', 'deep vein', 'pulmonary embolism', 'vascular', 'clot'],
     images: [
-      { src: '/pathologies/deep_vein_thrombosis.jpg', caption: 'DVT — non-compressible vein with echogenic thrombus' },
-      { src: '/pathologies/deep_vein_thrombosis2.png', caption: 'DVT — absent color fill on Doppler' },
+      { src: '/pathologies/Deep vein thrombosis replace.png', caption: 'DVT — non-compressible vein with echogenic thrombus' },
+      { src: '/pathologies/Deep vein thrombosis 2 replace.png', caption: 'DVT — absent color fill on Doppler' },
+      { src: '/pathologies/Deep vein thrombosis 3 replace.png', caption: 'DVT — compressibility technique demonstrating non-compressible vein' },
     ],
   },
   {
@@ -109,6 +110,7 @@ export const pathologies: Pathology[] = [
     images: [
       { src: '/pathologies/Hepatic steatosis.jpg', caption: 'Hepatic steatosis — hyperechoic liver compared to kidney' },
       { src: '/pathologies/Hepatic Steatosis 2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
+      { src: '/pathologies/hepatic steatosis 2.png', caption: 'Hepatic steatosis — loss of portal vein wall visibility' },
     ],
   },
   {
@@ -164,6 +166,7 @@ export const pathologies: Pathology[] = [
     tags: ['ovary', 'cyst', 'ovarian', 'dermoid', 'endometrioma', 'corpus luteum', 'ob'],
     images: [
       { src: '/pathologies/Haemorrhagic_ovarian_cyst_ultrasound.jpg', caption: 'Hemorrhagic ovarian cyst — reticular internal echoes' },
+      { src: '/pathologies/ovarian cyst 2.png', caption: 'Ovarian cyst — simple anechoic cyst with posterior acoustic enhancement' },
     ],
   },
   {
@@ -193,6 +196,8 @@ export const pathologies: Pathology[] = [
     images: [
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound2.jpg', caption: 'PTC — hypoechoic nodule with microcalcifications' },
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound_37F_20160005.jpg', caption: 'PTC — taller-than-wide nodule, irregular margins' },
+      { src: '/pathologies/Papillary Thyroid Carcinoma.png', caption: 'PTC — irregular spiculated margins, hypoechoic solid nodule' },
+      { src: '/pathologies/Papillary Thryroid carcinoma.png', caption: 'PTC — microcalcifications within hypoechoic nodule' },
     ],
   },
   {
@@ -219,6 +224,7 @@ export const pathologies: Pathology[] = [
     tags: ['aaa', 'aorta', 'aneurysm', 'abdominal', 'vascular', 'screening'],
     images: [
       { src: '/pathologies/Abdomincal aortic aneurysm.jpg', caption: 'AAA — dilated aorta with mural thrombus' },
+      { src: '/pathologies/abdominal aortic aneurysm.png', caption: 'AAA — outer-to-outer measurement technique' },
     ],
   },
   {
@@ -270,6 +276,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'RLQ pain, anorexia, nausea, fever, elevated WBC. McBurney\'s point tenderness. Most common abdominal surgical emergency. Ages 10–30 most common but occurs at any age.',
     reportingTips: 'State: "Appendix visualized/not visualized." If seen: "Measures ___ mm in AP diameter, non-compressible, with [periappendiceal hyperechogenicity/appendicolith/free fluid]." If not seen: "Appendix not identified — CT recommended to exclude appendicitis given clinical concern."',
     tags: ['appendicitis', 'appendix', 'ruq', 'rlq', 'abdomen', 'surgical emergency', 'appendicolith'],
+    images: [
+      { src: '/pathologies/acute appendicitis .png', caption: 'Acute appendicitis — non-compressible appendix >6 mm with periappendiceal hyperechogenicity' },
+    ],
   },
   {
     id: 'pancreatitis-acute',
