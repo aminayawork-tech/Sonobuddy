@@ -11,6 +11,7 @@
 		AA000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000102 /* ContentView.swift */; };
 		AA000003 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000103 /* WebView.swift */; };
 		AA000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000104 /* Assets.xcassets */; };
+		AA000005 /* ImageSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000106 /* ImageSchemeHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		AA000103 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		AA000104 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA000105 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000106 /* ImageSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSchemeHandler.swift; sourceTree = "<group>"; };
 		AA000200 /* SonoBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SonoBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -39,6 +41,7 @@
 				AA000101 /* SonoBuddyApp.swift */,
 				AA000102 /* ContentView.swift */,
 				AA000103 /* WebView.swift */,
+				AA000106 /* ImageSchemeHandler.swift */,
 				AA000104 /* Assets.xcassets */,
 				AA000105 /* Info.plist */,
 			);
@@ -133,6 +136,7 @@
 				AA000001 /* SonoBuddyApp.swift in Sources */,
 				AA000002 /* ContentView.swift in Sources */,
 				AA000003 /* WebView.swift in Sources */,
+				AA000005 /* ImageSchemeHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
