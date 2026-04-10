@@ -30,8 +30,8 @@ struct WebView: UIViewRepresentable {
         // which fixes position:fixed elements (nav bar) moving in WKWebView
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.isOpaque = true
-        // slate-100 (#F1F5F9) — matches sono-dark page background so overscroll doesn't flash a different color
-        let pageColor = UIColor(red: 241/255, green: 245/255, blue: 249/255, alpha: 1)
+        // sono-dark (#0F172A) — matches app background so overscroll doesn't flash a different color
+        let pageColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)
         webView.backgroundColor = pageColor
         webView.scrollView.backgroundColor = pageColor
 
@@ -101,16 +101,31 @@ struct WebView: UIViewRepresentable {
             <head>
             <meta name='viewport' content='width=device-width, initial-scale=1'>
             <style>
-            body { background: #0F172A; color: #94A3B8; font-family: -apple-system; display: flex;
-                   flex-direction: column; align-items: center; justify-content: center;
-                   height: 100vh; margin: 0; text-align: center; padding: 24px; box-sizing: border-box; }
-            h2 { color: #F1F5F9; margin-bottom: 8px; }
-            p  { font-size: 14px; line-height: 1.6; }
+            * { box-sizing: border-box; }
+            body { background: #0F172A; color: #94A3B8; font-family: -apple-system, sans-serif;
+                   display: flex; flex-direction: column; align-items: center; justify-content: center;
+                   height: 100vh; margin: 0; text-align: center; padding: 32px; }
+            svg { margin-bottom: 20px; opacity: 0.4; }
+            h2 { color: #F1F5F9; font-size: 22px; margin: 0 0 10px; }
+            p  { font-size: 14px; line-height: 1.6; margin: 0 0 28px; max-width: 280px; }
+            button { background: #0EA5E9; color: #fff; border: none; border-radius: 12px;
+                     padding: 14px 32px; font-size: 16px; font-weight: 600; cursor: pointer;
+                     -webkit-appearance: none; }
             </style>
             </head>
             <body>
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23"/>
+              <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+              <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+              <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+              <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+              <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
             <h2>You're Offline</h2>
-            <p>SonoBuddy needs an internet connection to load.<br>Please check your connection and try again.</p>
+            <p>Open SonoBuddy once with a connection and all content will be available offline.</p>
+            <button onclick="window.location.reload()">Try Again</button>
             </body>
             </html>
             """
