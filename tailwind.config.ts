@@ -15,9 +15,9 @@ const config: Config = {
         sono: {
           blue: '#0EA5E9',
           cyan: '#06B6D4',
-          dark: '#F1F5F9',
-          card: '#FFFFFF',
-          border: '#E2E8F0',
+          dark: '#0F172A',
+          card: '#1E293B',
+          border: '#334155',
           muted: '#64748B',
           green: '#10B981',
           amber: '#F59E0B',
