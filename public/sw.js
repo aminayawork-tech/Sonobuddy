@@ -1,7 +1,17 @@
 // SonoBuddy Service Worker
-// Handles push notifications and offline image caching
+// Handles push notifications, offline app shell caching, and image caching
 
+const CACHE_NAME = 'sonobuddy-shell-v2';
 const IMAGE_CACHE = 'sonobuddy-images-v1';
+
+// App shell pages to pre-cache so the app works offline
+const APP_SHELL_PAGES = [
+  '/home',
+  '/measurements',
+  '/protocols',
+  '/calculators',
+  '/pathologies',
+];
 
 // All pathology images — pre-cached on install so they work offline
 const PATHOLOGY_IMAGES = [
@@ -64,13 +74,27 @@ const ICON_ASSETS = [
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(IMAGE_CACHE).then((cache) => {
-      // Use individual adds so one 404 doesn't block the rest
-      const allAssets = [...PATHOLOGY_IMAGES, ...ICON_ASSETS];
-      return Promise.allSettled(
-        allAssets.map((path) => cache.add(path).catch(() => {}))
-      );
-    })
+    Promise.all([
+      // Cache app shell pages
+      caches.open(CACHE_NAME).then((cache) => {
+        return Promise.allSettled(
+          APP_SHELL_PAGES.map((url) =>
+            fetch(url, { credentials: 'same-origin' })
+              .then((response) => {
+                if (response.ok) return cache.put(url, response);
+              })
+              .catch(() => {})
+          )
+        );
+      }),
+      // Cache images
+      caches.open(IMAGE_CACHE).then((cache) => {
+        const allAssets = [...PATHOLOGY_IMAGES, ...ICON_ASSETS];
+        return Promise.allSettled(
+          allAssets.map((path) => cache.add(path).catch(() => {}))
+        );
+      }),
+    ])
   );
 });
 
@@ -78,11 +102,11 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     Promise.all([
       clients.claim(),
-      // Remove any old cache versions
+      // Remove outdated cache versions
       caches.keys().then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== IMAGE_CACHE)
+            .filter((key) => key !== CACHE_NAME && key !== IMAGE_CACHE)
             .map((key) => caches.delete(key))
         )
       ),
@@ -90,26 +114,67 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Cache-first strategy for images — serve from cache, fall back to network
-// and store new images for next time
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+  const { pathname } = url;
 
+  // Cache-first for images — serve from cache, fall back to network
   if (
-    url.pathname.startsWith('/pathologies/') ||
-    url.pathname.startsWith('/icons/')
+    pathname.startsWith('/pathologies/') ||
+    pathname.startsWith('/icons/')
   ) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
         if (cached) return cached;
         return fetch(event.request).then((response) => {
-          // Store fresh copy in cache for future offline use
           const clone = response.clone();
           caches.open(IMAGE_CACHE).then((cache) => cache.put(event.request, clone));
           return response;
         });
       })
     );
+    return;
+  }
+
+  // Cache-first for Next.js static assets (content-hashed filenames, safe forever)
+  if (pathname.startsWith('/_next/static/')) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        }).catch(() => caches.match(event.request));
+      })
+    );
+    return;
+  }
+
+  // Network-first for app pages — update cache on success, serve stale if offline
+  if (
+    event.request.mode === 'navigate' ||
+    (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))
+  ) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() =>
+          caches.match(event.request).then((cached) => {
+            // Serve cached version of this page, or fall back to /home
+            return cached || caches.match('/home');
+          })
+        )
+    );
+    return;
   }
 });
 
