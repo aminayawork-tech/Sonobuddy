@@ -29,7 +29,7 @@ mv "$API_DIR" "$API_BACKUP"
 
 echo "==> Building Next.js static export..."
 cd "$SCRIPT_DIR"
-npm run build
+NEXT_STATIC_EXPORT=true npm run build
 
 echo "==> Copying to iOS bundle at ios/SonoBuddy/WebApp/..."
 rm -rf "$IOS_WEBAPP_DIR"
