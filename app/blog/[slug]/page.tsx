@@ -22,12 +22,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: post.tags,
+    alternates: {
+      canonical: `https://www.sonobuddy.com/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
       publishedTime: post.date,
       authors: [post.author],
+      url: `https://www.sonobuddy.com/blog/${post.slug}`,
+      siteName: 'SonoBuddy',
+      tags: post.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }
@@ -44,8 +56,45 @@ export default function BlogPostPage({ params }: Props) {
   const post = getPostBySlug(params.slug);
   if (!post) notFound();
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    author: {
+      '@type': 'Organization',
+      name: 'SonoBuddy',
+      url: 'https://www.sonobuddy.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'SonoBuddy',
+      url: 'https://www.sonobuddy.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.sonobuddy.com/icons/icon-512.png',
+      },
+    },
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `https://www.sonobuddy.com/blog/${post.slug}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.sonobuddy.com/blog/${post.slug}`,
+    },
+    keywords: post.tags.join(', '),
+    about: {
+      '@type': 'MedicalSpecialty',
+      name: 'Sonography / Diagnostic Ultrasound',
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* NAV */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
