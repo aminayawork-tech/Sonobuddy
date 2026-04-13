@@ -1,0 +1,58 @@
+name: Build iOS WebApp Bundle
+
+# Regenerates the Next.js static export and commits ios/SonoBuddy/WebApp/
+# whenever app code changes on main. The folder is bundled into the Xcode
+# archive via the WebAppSchemeHandler (sono-web:// custom URL scheme).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'data/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'content/**'
+      - 'next.config.js'
+      - 'tailwind.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build-webapp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export (hide API routes)
+        run: |
+          mv app/api api_ios_backup
+          NEXT_STATIC_EXPORT=true npm run build
+          mv api_ios_backup app/api
+
+      - name: Update ios/SonoBuddy/WebApp
+        run: |
+          rm -rf ios/SonoBuddy/WebApp
+          cp -r out ios/SonoBuddy/WebApp
+
+      - name: Commit updated WebApp bundle
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ios/SonoBuddy/WebApp
+          git diff --staged --quiet && echo "No changes to WebApp bundle." || \
+            git commit -m "chore: auto-update iOS WebApp bundle [skip ci]" && git push
