@@ -72,9 +72,63 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'SonoBuddy',
+  url: 'https://www.sonobuddy.com',
+  logo: 'https://www.sonobuddy.com/icons/icon-512.png',
+  description: 'Instant access to ultrasound measurement tables, exam protocols, clinical calculators, and pathology guides — built for sonographers.',
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'SonoBuddy',
+  url: 'https://www.sonobuddy.com',
+  description: 'Ultrasound reference app for sonographers — measurement tables, exam protocols, calculators, and pathology guides.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://www.sonobuddy.com/home?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const softwareAppJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'SonoBuddy',
+  operatingSystem: 'iOS',
+  applicationCategory: 'MedicalApplication',
+  description: 'Ultrasound reference for sonographers — measurement tables, protocols, calculators, and pathology guides. Works offline.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  url: 'https://www.sonobuddy.com',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppJsonLd) }}
+        />
+      </head>
       <body className="bg-sono-dark min-h-screen">
         <ServiceWorkerRegistrar />
         {children}
