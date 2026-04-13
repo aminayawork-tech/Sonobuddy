@@ -8,6 +8,9 @@ struct WebView: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.allowsInlineMediaPlayback = true
 
+        // Serve the bundled Next.js static export via sono-web:// (full offline support)
+        config.setURLSchemeHandler(WebAppSchemeHandler(), forURLScheme: "sono-web")
+
         // Serve bundled pathology images via sono:// so they work offline
         config.setURLSchemeHandler(ImageSchemeHandler(), forURLScheme: "sono")
 
@@ -35,7 +38,7 @@ struct WebView: UIViewRepresentable {
         webView.backgroundColor = pageColor
         webView.scrollView.backgroundColor = pageColor
 
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        let request = URLRequest(url: url)
         webView.load(request)
         return webView
     }
@@ -85,8 +88,9 @@ struct WebView: UIViewRepresentable {
                 decisionHandler(.allow)
                 return
             }
-            // Open external links in Safari
-            if let host = url.host, !host.contains("sonobuddy") && navigationAction.navigationType == .linkActivated {
+            // Open external http/https links in Safari; let sono-web:// navigate internally
+            let scheme = url.scheme ?? ""
+            if (scheme == "http" || scheme == "https") && navigationAction.navigationType == .linkActivated {
                 UIApplication.shared.open(url)
                 decisionHandler(.cancel)
                 return
