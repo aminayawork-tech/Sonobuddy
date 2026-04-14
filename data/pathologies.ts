@@ -383,6 +383,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'LUQ or left flank pain, fever. Causes: atrial fibrillation (embolism), endocarditis, myeloproliferative disease, lymphoma, sickle cell disease, portal hypertension with splenomegaly.',
     reportingTips: 'Describe location and size of hypoechoic area. Document Doppler absence of flow. Recommend CT for complete assessment. State underlying cause if identifiable (splenomegaly, known malignancy).',
     tags: ['splenic infarct', 'spleen', 'infarct', 'hypoechoic', 'abdomen', 'embolism', 'sickle cell'],
+    images: [
+      { src: '/pathologies/splenic_infarct.png', caption: 'Splenic infarct — wedge-shaped hypoechoic area with absent Doppler flow' },
+    ],
   },
   {
     id: 'renal-cyst-bosniak',
@@ -467,6 +470,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Sudden blue/purple discoloration of 1–2 toes with intact pedal pulses. Often post-procedure (cardiac cath, aortography) or spontaneous in heavy atherosclerotic burden. Extremely painful. No cold or stress trigger.',
     reportingTips: 'Document source vessel plaque characteristics at aorta, iliac, and femoral levels. Note ABI (often normal or elevated). State: "Complex atherosclerotic plaque identified at [location] — potential embolic source consistent with atheroembolism."',
     tags: ['blue toe', 'atheroembolism', 'cholesterol embolism', 'vascular', 'plaque', 'digital ischemia', 'trash foot'],
+    images: [
+      { src: '/pathologies/blue_toe_syndrome.png', caption: 'Blue toe syndrome — digital ischemia from proximal atheroembolism' },
+    ],
   },
   {
     id: 'subclavian-steal',
@@ -490,6 +496,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Arm fatigue or claudication, dizziness, diplopia, drop attacks, or syncope with ipsilateral arm exercise. Blood pressure differential >15 mmHg between arms. May be entirely asymptomatic (incidental finding).',
     reportingTips: 'State vertebral flow direction explicitly: "Antegrade," "Retrograde," or "Alternating (partial steal)." Document subclavian stenosis location and estimated severity. Note whether provocative arm exercise test was performed.',
     tags: ['subclavian steal', 'vertebral artery', 'retrograde flow', 'subclavian stenosis', 'vascular', 'arm claudication', 'dizziness'],
+    images: [
+      { src: '/pathologies/subclavian_steal_syndrome.png', caption: 'Subclavian steal — retrograde vertebral artery flow on duplex' },
+    ],
   },
   {
     id: 'pseudoaneurysm',
@@ -514,6 +523,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most commonly post-catheterization (femoral, brachial, radial access). Also after vascular surgery, graft anastomosis, or trauma. Presents as pulsatile mass, expanding hematoma, or pain at puncture site 1–7 days post-procedure.',
     reportingTips: 'Measure sac dimensions (3 planes). Measure neck length and width (critical for thrombin injection planning). Document parent artery. Note: ultrasound-guided thrombin injection or compression can be performed therapeutically.',
     tags: ['pseudoaneurysm', 'false aneurysm', 'post-cath', 'femoral', 'brachial', 'yin-yang', 'to-and-fro', 'vascular'],
+    images: [
+      { src: '/pathologies/arterial_pseudoaneurysm.png', caption: 'Arterial pseudoaneurysm — yin-yang swirling color Doppler in sac' },
+      { src: '/pathologies/arterial_pseudoaneurysm_2.png', caption: 'Pseudoaneurysm — to-and-fro spectral waveform at neck' },
+    ],
   },
   {
     id: 'renal-artery-stenosis',
@@ -538,6 +551,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Resistant hypertension, flash pulmonary edema, abrupt-onset hypertension in young patient, deteriorating renal function on ACE inhibitors, audible flank bruits. Most common cause: atherosclerosis (proximal ostial); FMD in young women (mid/distal).',
     reportingTips: 'Document PSV at renal artery origin and along full course. State RAR. Document intrarenal tardus-parvus (indirect indicator of proximal stenosis). Recommend CTA/MRA if >70% stenosis suspected — duplex is screening, not definitive.',
     tags: ['renal artery stenosis', 'renovascular hypertension', 'tardus-parvus', 'rar', 'fmd', 'vascular', 'hypertension'],
+    images: [
+      { src: '/pathologies/renal_artery_stenosis.png', caption: 'Renal artery stenosis — elevated PSV with post-stenotic turbulence' },
+      { src: '/pathologies/renal_artery_stenosis_2.png', caption: 'RAS — tardus-parvus waveform in intrarenal artery (delayed upstroke)' },
+    ],
   },
   {
     id: 'popliteal-aneurysm',
@@ -1246,6 +1263,7 @@ export const pathologies: Pathology[] = [
     images: [
       { src: "/pathologies/bakers_cyst.jpg", caption: "Baker's cyst — anechoic popliteal fossa fluid collection" },
       { src: "/pathologies/bakers_cyst_2.png", caption: "Baker's cyst — communication with joint space" },
+      { src: "/pathologies/bakers_cyst_3.png", caption: "Baker's cyst — posteromedial popliteal cyst with characteristic neck" },
     ],
   },
   {
