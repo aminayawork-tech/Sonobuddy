@@ -42,6 +42,8 @@ const PATHOLOGY_IMAGES = [
   "/pathologies/deep_vein_thrombosis_2.png",
   "/pathologies/deep_vein_thrombosis_3.png",
   "/pathologies/hemorrhagic_effusion_2.jpg",
+  "/pathologies/hepatic_steatosis_2.jpg",
+  "/pathologies/hepatic_steatosis_2b.png",
   "/pathologies/hepatic_hemangioma.jpg",
   "/pathologies/hydronephrosis.jpg",
   "/pathologies/hydronephrosis_2.jpg",
