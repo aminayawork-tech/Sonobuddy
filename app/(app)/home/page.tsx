@@ -3,11 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import Onboarding from '@/components/Onboarding';
+import PaywallModal from '@/components/PaywallModal';
 import SearchBar from '@/components/SearchBar';
 import { type SearchResult } from '@/lib/search';
+import { usePremium, FREE_PROTOCOL_IDS, FREE_CALCULATOR_IDS } from '@/hooks/usePremium';
 import {
-  Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2, Workflow,
-  Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check,
+  Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2,
+  Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check, Lock,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -93,8 +95,15 @@ const CATEGORY_TILES: CategoryTile[] = [
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
+function isItemFree(item: QuickAccessItem): boolean {
+  if (item.type === 'protocol') return FREE_PROTOCOL_IDS.has(item.id);
+  // Quick access calculator ids are prefixed 'calc-'
+  return FREE_CALCULATOR_IDS.has(item.id.replace(/^calc-/, ''));
+}
+
 export default function HomePage() {
   const router = useRouter();
+  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Daily tip — same all day, changes at midnight
@@ -171,6 +180,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen pb-nav bg-sono-dark">
+      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
       {/* Hero Header */}
       <div className="px-5 pt-14 pb-7">
         <div className="flex items-center gap-3 mb-1">
@@ -228,14 +238,22 @@ export default function HomePage() {
         <div className="grid grid-cols-3 lg:grid-cols-5 gap-2">
           {quickItems.map((item) => {
             const { Icon, iconBg, iconColor } = getStyle(item);
+            const locked = !isPremium && !isItemFree(item);
             return (
               <div key={item.id} className="relative">
                 <button
-                  onClick={() => { if (!editMode) router.push(item.href); }}
-                  className="w-full bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm"
+                  onClick={() => {
+                    if (editMode) return;
+                    if (locked) { openPaywall(); return; }
+                    router.push(item.href);
+                  }}
+                  className={`w-full bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm ${locked ? 'opacity-60' : ''}`}
                 >
                   <div className={`${iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
-                    <Icon size={18} className={iconColor} strokeWidth={2} />
+                    {locked
+                      ? <Lock size={15} className="text-slate-400" strokeWidth={2} />
+                      : <Icon size={18} className={iconColor} strokeWidth={2} />
+                    }
                   </div>
                   <div className="text-[11px] text-slate-700 font-semibold leading-tight">{item.label}</div>
                 </button>
@@ -252,11 +270,18 @@ export default function HomePage() {
           })}
 
           <button
-            onClick={() => { if (!isFull) setShowPicker(true); setEditMode(true); }}
+            onClick={() => {
+              if (!isPremium) { openPaywall(); return; }
+              if (!isFull) setShowPicker(true);
+              setEditMode(true);
+            }}
             className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
           >
             <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
-              <Plus size={18} className="text-slate-400" strokeWidth={2} />
+              {isPremium
+                ? <Plus size={18} className="text-slate-400" strokeWidth={2} />
+                : <Lock size={16} className="text-slate-400" strokeWidth={2} />
+              }
             </div>
             <div className="text-[10px] text-slate-400 font-semibold leading-tight">{isFull ? 'Edit' : 'Add'}</div>
           </button>
