@@ -1,8 +1,8 @@
 // SonoBuddy Service Worker
 // Handles push notifications, offline app shell caching, and image caching
 
-const CACHE_NAME = 'sonobuddy-shell-v3';
-const IMAGE_CACHE = 'sonobuddy-images-v2';
+const CACHE_NAME = 'sonobuddy-shell-v4';
+const IMAGE_CACHE = 'sonobuddy-images-v3';
 
 // App shell pages to pre-cache so the app works offline
 const APP_SHELL_PAGES = [
@@ -78,7 +78,15 @@ const PATHOLOGY_IMAGES = [
 const ICON_ASSETS = [
   "/icons/icon-192.png",
   "/icons/icon-512.png",
+  "/icons/icon-maskable-192.png",
+  "/icons/icon-maskable-512.png",
   "/icons/apple-touch-icon.png",
+  "/favicon.ico",
+  "/favicon-16.png",
+  "/favicon-32.png",
+  "/favicon-48.png",
+  "/favicon-96.png",
+  "/og-image.png",
 ];
 
 self.addEventListener('install', (event) => {
