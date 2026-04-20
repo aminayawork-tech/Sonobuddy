@@ -22,83 +22,35 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "screenshots": [
-    {
-      "src": "/screenshots/IMG_9588.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "Home — search across all content",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshots/IMG_9589.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "Measurement reference tables",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshots/IMG_9590.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "Exam protocols with step-by-step guides",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshots/IMG_9591.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "Clinical calculators — ABI, RI, AFI, volume",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshots/IMG_9592.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "Protocol detail — Carotid Duplex Ultrasound",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshots/IMG_9593.PNG",
-      "sizes": "390x844",
-      "type": "image/png",
-      "label": "SonoBuddy app overview",
-      "form_factor": "narrow"
-    }
+    { "src": "/screenshots/IMG_9588.PNG", "sizes": "390x844", "type": "image/png", "label": "Home — search across all content", "form_factor": "narrow" },
+    { "src": "/screenshots/IMG_9589.PNG", "sizes": "390x844", "type": "image/png", "label": "Measurement reference tables", "form_factor": "narrow" },
+    { "src": "/screenshots/IMG_9590.PNG", "sizes": "390x844", "type": "image/png", "label": "Exam protocols with step-by-step guides", "form_factor": "narrow" },
+    { "src": "/screenshots/IMG_9591.PNG", "sizes": "390x844", "type": "image/png", "label": "Clinical calculators — ABI, RI, AFI, volume", "form_factor": "narrow" },
+    { "src": "/screenshots/IMG_9592.PNG", "sizes": "390x844", "type": "image/png", "label": "Protocol detail — Carotid Duplex Ultrasound", "form_factor": "narrow" },
+    { "src": "/screenshots/IMG_9593.PNG", "sizes": "390x844", "type": "image/png", "label": "SonoBuddy app overview", "form_factor": "narrow" }
   ],
   "shortcuts": [
-    {
-      "name": "Measurements",
-      "url": "/measurements",
-      "description": "Normal value tables"
-    },
-    {
-      "name": "Protocols",
-      "url": "/protocols",
-      "description": "Exam protocols"
-    },
-    {
-      "name": "Calculators",
-      "url": "/calculators",
-      "description": "ABI, RI, AFI, volume"
-    }
+    { "name": "Measurements", "url": "/measurements", "description": "Normal value tables" },
+    { "name": "Protocols", "url": "/protocols", "description": "Exam protocols" },
+    { "name": "Calculators", "url": "/calculators", "description": "ABI, RI, AFI, volume" }
   ]
 }
