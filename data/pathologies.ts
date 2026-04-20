@@ -108,7 +108,6 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Grade: mild (slightly > kidney), moderate (obscures vessels), severe (poor penetration). Cannot differentiate steatohepatitis from simple steatosis on US alone.',
     tags: ['fatty liver', 'steatosis', 'nafld', 'masld', 'liver', 'echogenicity'],
     images: [
-      { src: '/pathologies/hepatic_steatosis.jpg', caption: 'Hepatic steatosis — hyperechoic liver compared to kidney' },
       { src: '/pathologies/hepatic_steatosis_2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
       { src: '/pathologies/hepatic_steatosis_2b.png', caption: 'Hepatic steatosis — loss of portal vein wall visibility' },
     ],

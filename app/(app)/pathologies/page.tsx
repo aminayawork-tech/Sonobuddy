@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Microscope, X } from 'lucide-react';
+import { Microscope, X, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
+import { usePremium, FREE_PATHOLOGY_IDS } from '@/hooks/usePremium';
+import PaywallModal from '@/components/PaywallModal';
 import clsx from 'clsx';
 
 const CATEGORY_LABELS: Record<PathologyCategory, string> = {
@@ -29,6 +31,7 @@ const CATEGORY_COLORS: Record<PathologyCategory, string> = {
 type Category = PathologyCategory | 'all';
 
 export default function PathologiesPage() {
+  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -73,6 +76,7 @@ export default function PathologiesPage() {
 
   return (
     <div className="min-h-screen pb-nav">
+      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
       {/* Lightbox */}
       {lightbox && (
         <div
@@ -156,16 +160,17 @@ export default function PathologiesPage() {
 
         {filtered.map((p) => {
           const isExpanded = expandedId === p.id;
+          const locked = !isPremium && !FREE_PATHOLOGY_IDS.has(p.id);
           return (
             <div
               key={p.id}
               ref={(el) => { if (el) cardRefs.current.set(p.id, el); else cardRefs.current.delete(p.id); }}
-              className="bg-sono-card border border-sono-border rounded-2xl"
+              className={`bg-sono-card border border-sono-border rounded-2xl ${locked ? 'opacity-60' : ''}`}
             >
               <button
                 className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-sono-border shadow-sm' : ''}`}
                 style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
-                onClick={() => setExpandedId(isExpanded ? null : p.id)}
+                onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{p.name}</h3>
@@ -176,9 +181,10 @@ export default function PathologiesPage() {
                     <span className="text-[11px] text-red-600">⚠ {p.redFlags.length} red flags</span>
                   </div>
                 </div>
-                <span className="text-sono-muted text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
-                  ⌄
-                </span>
+                {locked
+                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
+                  : <span className="text-sono-muted text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
+                }
               </button>
 
               {isExpanded && (
