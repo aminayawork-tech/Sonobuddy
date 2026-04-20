@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Ruler } from 'lucide-react';
+import { Ruler, Lock } from 'lucide-react';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
+import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
+import PaywallModal from '@/components/PaywallModal';
 import RangeBar from '@/components/RangeBar';
 import clsx from 'clsx';
 
 const CATEGORIES = Object.entries(CATEGORY_LABELS) as [MeasurementCategory, string][];
 
 export default function MeasurementsPage() {
+  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<MeasurementCategory | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -52,6 +55,7 @@ export default function MeasurementsPage() {
 
   return (
     <div className="min-h-screen pb-nav">
+      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
       {/* Header */}
       <div ref={headerRef} className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
@@ -108,16 +112,17 @@ export default function MeasurementsPage() {
         )}
         {filtered.map((m) => {
           const isExpanded = expandedId === m.id;
+          const locked = !isPremium && !FREE_MEASUREMENT_IDS.has(m.id);
           return (
             <div
               key={m.id}
               ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
-              className="bg-sono-card border border-sono-border rounded-2xl shadow-sm"
+              className={`bg-sono-card border border-sono-border rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
             >
               <button
                 className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-sono-border shadow-sm' : ''}`}
                 style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
-                onClick={() => setExpandedId(isExpanded ? null : m.id)}
+                onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -132,9 +137,10 @@ export default function MeasurementsPage() {
                     )}
                   </div>
                 </div>
-                <span className="text-sono-muted text-lg mt-0.5 shrink-0 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
-                  ⌄
-                </span>
+                {locked
+                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
+                  : <span className="text-sono-muted text-lg mt-0.5 shrink-0 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
+                }
               </button>
 
               {isExpanded && (

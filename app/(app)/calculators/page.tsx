@@ -2,7 +2,9 @@
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Calculator } from 'lucide-react';
+import { Calculator, Lock } from 'lucide-react';
+import { usePremium, FREE_CALCULATOR_IDS } from '@/hooks/usePremium';
+import PaywallModal from '@/components/PaywallModal';
 import {
   calculators, searchCalculators,
   calcABI, calcResistiveIndex, calcVolume, calcAFI,
@@ -19,6 +21,7 @@ const RESULT_COLORS: Record<NonNullable<CalcResult['color']>, string> = {
 };
 
 function CalculatorContent() {
+  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const searchParams = useSearchParams();
   const preselected = searchParams.get('id');
 
@@ -80,6 +83,7 @@ function CalculatorContent() {
 
   return (
     <div className="min-h-screen pb-nav">
+      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
@@ -106,24 +110,30 @@ function CalculatorContent() {
       {/* Calculator list */}
       {!activeCalc && (
         <div className="px-4 py-4 space-y-2">
-          {filtered.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setActiveId(c.id)}
-              className="w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98]"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{c.name}</h3>
-                  <p className="text-[13px] text-slate-500 line-clamp-2">{c.description}</p>
+          {filtered.map((c) => {
+            const locked = !isPremium && !FREE_CALCULATOR_IDS.has(c.id);
+            return (
+              <button
+                key={c.id}
+                onClick={() => locked ? openPaywall() : setActiveId(c.id)}
+                className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] ${locked ? 'opacity-60' : ''}`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{c.name}</h3>
+                    <p className="text-[13px] text-slate-500 line-clamp-2">{c.description}</p>
+                  </div>
+                  {locked
+                    ? <Lock className="w-4 h-4 text-sono-muted shrink-0" />
+                    : <span className="text-sono-muted shrink-0">›</span>
+                  }
                 </div>
-                <span className="text-sono-muted shrink-0">›</span>
-              </div>
-              <div className="mt-2">
-                <code className="text-[10px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-0.5 rounded">{c.formula}</code>
-              </div>
-            </button>
-          ))}
+                <div className="mt-2">
+                  <code className="text-[10px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-0.5 rounded">{c.formula}</code>
+                </div>
+              </button>
+            );
+          })}
         </div>
       )}
 

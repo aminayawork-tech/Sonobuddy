@@ -2,13 +2,16 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { ClipboardList, Clock, Zap } from 'lucide-react';
+import { ClipboardList, Clock, Zap, Lock } from 'lucide-react';
 import { protocols, searchProtocols, PROTOCOL_CATEGORY_LABELS, DIFFICULTY_COLORS, type ProtocolCategory } from '@/data/protocols';
+import { usePremium, FREE_PROTOCOL_IDS } from '@/hooks/usePremium';
+import PaywallModal from '@/components/PaywallModal';
 import clsx from 'clsx';
 
 const CATEGORIES = Object.entries(PROTOCOL_CATEGORY_LABELS) as [ProtocolCategory, string][];
 
 export default function ProtocolsPage() {
+  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<ProtocolCategory | 'all'>('all');
   const router = useRouter();
@@ -23,6 +26,7 @@ export default function ProtocolsPage() {
 
   return (
     <div className="min-h-screen pb-nav">
+      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
@@ -74,35 +78,41 @@ export default function ProtocolsPage() {
             <p className="text-sono-muted text-sm">No protocols found for &ldquo;{query}&rdquo;</p>
           </div>
         )}
-        {filtered.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => router.push(`/protocols/${p.id}`)}
-            className="w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] shadow-sm"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{p.name}</h3>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={clsx('text-[11px] px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[p.difficulty])}>
-                    {p.difficulty}
-                  </span>
-                  <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Clock className="w-3 h-3" /> {p.duration}</span>
-                  <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Zap className="w-3 h-3" /> {p.probe.split(' ')[0]}</span>
+        {filtered.map((p) => {
+          const locked = !isPremium && !FREE_PROTOCOL_IDS.has(p.id);
+          return (
+            <button
+              key={p.id}
+              onClick={() => locked ? openPaywall() : router.push(`/protocols/${p.id}`)}
+              className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] shadow-sm ${locked ? 'opacity-60' : ''}`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{p.name}</h3>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={clsx('text-[11px] px-2 py-0.5 rounded border font-medium', DIFFICULTY_COLORS[p.difficulty])}>
+                      {p.difficulty}
+                    </span>
+                    <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Clock className="w-3 h-3" /> {p.duration}</span>
+                    <span className="text-[11px] text-sono-muted flex items-center gap-0.5"><Zap className="w-3 h-3" /> {p.probe.split(' ')[0]}</span>
+                  </div>
+                  <p className="text-[12px] text-slate-500 mt-2 line-clamp-2 leading-relaxed">{p.indication}</p>
                 </div>
-                <p className="text-[12px] text-slate-500 mt-2 line-clamp-2 leading-relaxed">{p.indication}</p>
+                {locked
+                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
+                  : <span className="text-sono-muted shrink-0 mt-1">›</span>
+                }
               </div>
-              <span className="text-sono-muted shrink-0 mt-1">›</span>
-            </div>
-            <div className="flex items-center gap-1 mt-3 text-[11px] text-sono-muted">
-              <span>{p.steps.length} steps</span>
-              <span>·</span>
-              <span>{p.keyImages.length} key images</span>
-              <span>·</span>
-              <span>{p.reportChecklist.length} report items</span>
-            </div>
-          </button>
-        ))}
+              <div className="flex items-center gap-1 mt-3 text-[11px] text-sono-muted">
+                <span>{p.steps.length} steps</span>
+                <span>·</span>
+                <span>{p.keyImages.length} key images</span>
+                <span>·</span>
+                <span>{p.reportChecklist.length} report items</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
