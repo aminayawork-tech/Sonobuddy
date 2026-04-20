@@ -47,10 +47,6 @@ export function usePremium() {
   // Called by paywall buttons to trigger StoreKit in native
   const requestPurchase = useCallback(() => {
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'purchase' });
-    // Dev fallback: unlock immediately if not in native app
-    if (!navigator.userAgent.includes('SonoBuddyApp')) {
-      window.__onPremiumUnlocked?.();
-    }
   }, []);
 
   const requestRestore = useCallback(() => {
