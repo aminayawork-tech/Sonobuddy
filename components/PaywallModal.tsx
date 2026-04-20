@@ -34,7 +34,7 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
           <div className="w-16 h-16 rounded-2xl bg-sono-blue/20 flex items-center justify-center mb-4">
             <Lock className="w-8 h-8 text-sono-blue" />
           </div>
-          <h2 className="text-2xl font-black text-white tracking-tight mb-2">
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-2">
             Unlock SonoBuddy Pro
           </h2>
           <p className="text-sono-muted text-sm leading-relaxed max-w-xs">
