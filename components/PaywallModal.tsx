@@ -34,8 +34,8 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
           <div className="w-16 h-16 rounded-2xl bg-sono-blue/20 flex items-center justify-center mb-4">
             <Lock className="w-8 h-8 text-sono-blue" />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-2">
-            Unlock SonoBuddy Pro
+          <h2 className="text-2xl font-black tracking-tight mb-2">
+            <span className="text-slate-900">Unlock Sono</span><span className="text-[#0EA5E9]">Buddy</span><span className="text-slate-900"> Pro</span>
           </h2>
           <p className="text-sono-muted text-sm leading-relaxed max-w-xs">
             You&apos;ve tried the free preview. Get instant access to every
@@ -46,8 +46,8 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
         {/* Feature list */}
         <div className="space-y-3 mb-8">
           {FEATURES.map(({ icon: Icon, label, sub }) => (
-            <div key={label} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl p-3.5">
-              <CheckCircle2 className="w-5 h-5 text-sono-blue shrink-0 mt-0.5" />
+            <div key={label} className="flex items-center gap-3 bg-sono-card border border-sono-border rounded-xl p-3.5">
+              <CheckCircle2 className="w-5 h-5 text-sono-blue shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-white">{label}</p>
                 <p className="text-xs text-sono-muted mt-0.5">{sub}</p>

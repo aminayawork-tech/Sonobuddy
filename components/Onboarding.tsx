@@ -200,7 +200,7 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
       </div>
 
       {/* Signal bar visual */}
-      <div className="mt-6 flex items-center justify-center gap-2">
+      <div className="mt-8 mb-10 flex items-center justify-center gap-2">
         <div className="flex items-end gap-[3px]">
           {[10, 14, 18, 22].map((h, i) => (
             <div
