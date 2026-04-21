@@ -185,22 +185,12 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
       <h1 className="text-[32px] font-black leading-[1.05] tracking-tight text-slate-900 text-center mb-3">
         Works without WiFi.
       </h1>
-      <p className="text-[15px] text-slate-400 leading-relaxed text-center mb-8 max-w-[300px] mx-auto">
-        Scan rooms have dead zones. Hospitals have spotty signal. SonoBuddy caches everything locally — so it&apos;s always there when you need it.
+      <p className="text-[15px] text-slate-400 leading-relaxed text-center mb-4 max-w-[300px] mx-auto">
+        Scan rooms have dead zones. Hospitals have spotty signal. SonoBuddy has your back.
       </p>
 
-      {/* Benefit list */}
-      <div className="space-y-3">
-        {benefits.map(text => (
-          <div key={text} className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5">
-            <CheckCircle2 size={18} className="text-[#0EA5E9] shrink-0" strokeWidth={2} />
-            <span className="text-[14px] font-medium text-slate-700">{text}</span>
-          </div>
-        ))}
-      </div>
-
       {/* Signal bar visual */}
-      <div className="mt-8 mb-10 flex items-center justify-center gap-2">
+      <div className="mb-6 flex items-center justify-center gap-2">
         <div className="flex items-end gap-[3px]">
           {[10, 14, 18, 22].map((h, i) => (
             <div
@@ -212,6 +202,16 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
         </div>
         <span className="text-[13px] text-slate-400 font-medium">No signal?</span>
         <span className="text-[13px] font-bold text-[#0EA5E9]">No problem.</span>
+      </div>
+
+      {/* Benefit list */}
+      <div className="space-y-3">
+        {benefits.map(text => (
+          <div key={text} className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5">
+            <CheckCircle2 size={18} className="text-[#0EA5E9] shrink-0" strokeWidth={2} />
+            <span className="text-[14px] font-medium text-slate-700">{text}</span>
+          </div>
+        ))}
       </div>
 
       <div className="flex-1" />
