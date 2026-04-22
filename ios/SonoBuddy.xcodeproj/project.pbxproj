@@ -16,7 +16,6 @@
 		AA000008 /* WebAppSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000109 /* WebAppSchemeHandler.swift */; };
 		AA000009 /* WebApp in Resources */ = {isa = PBXBuildFile; fileRef = AA000110 /* WebApp */; };
 		AA000010 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000111 /* PurchaseManager.swift */; };
-		AA000011 /* ReceiptChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000112 /* ReceiptChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,7 +29,6 @@
 		AA000109 /* WebAppSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppSchemeHandler.swift; sourceTree = "<group>"; };
 		AA000110 /* WebApp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WebApp; sourceTree = "<group>"; };
 		AA000111 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
-		AA000112 /* ReceiptChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptChecker.swift; sourceTree = "<group>"; };
 		AA000200 /* SonoBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SonoBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -54,7 +52,6 @@
 				AA000106 /* ImageSchemeHandler.swift */,
 				AA000109 /* WebAppSchemeHandler.swift */,
 				AA000111 /* PurchaseManager.swift */,
-				AA000112 /* ReceiptChecker.swift */,
 				AA000110 /* WebApp */,
 				AA000104 /* Assets.xcassets */,
 				AA000107 /* Pathologies */,
@@ -156,7 +153,6 @@
 				AA000005 /* ImageSchemeHandler.swift in Sources */,
 				AA000008 /* WebAppSchemeHandler.swift in Sources */,
 				AA000010 /* PurchaseManager.swift in Sources */,
-				AA000011 /* ReceiptChecker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
