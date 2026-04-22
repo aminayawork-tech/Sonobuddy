@@ -20,10 +20,6 @@ final class PurchaseManager: ObservableObject {
             grant()
             return
         }
-        // Grant premium to users who bought the original paid app before the freemium transition
-        if ReceiptChecker.isLegacyPaidCustomer() {
-            grant()
-        }
     }
 
     func purchase() async throws {
