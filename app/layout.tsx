@@ -61,6 +61,9 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/manifest.json',
+  verification: {
+    google: 'ULu_r5jRDIhr6xbtBqpOMbUEmJdN_qs0DvYPFWauKSY',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
