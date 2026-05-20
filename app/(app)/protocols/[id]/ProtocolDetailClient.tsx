@@ -55,14 +55,14 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
       </div>
 
       {/* Info Cards */}
-      <div className="px-4 pt-4 grid grid-cols-1 gap-2">
-        <div className="bg-sono-card border border-sono-border rounded-xl p-3">
-          <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Patient Position</p>
-          <p className="text-xs text-slate-700">{protocol.patient}</p>
+      <div className="px-4 pt-4 grid grid-cols-1 gap-3">
+        <div className="bg-slate-900 rounded-2xl p-4">
+          <p className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest mb-2">Patient Position</p>
+          <p className="text-[15px] text-white leading-relaxed">{protocol.patient}</p>
         </div>
-        <div className="bg-sono-card border border-sono-border rounded-xl p-3">
-          <p className="text-[11px] font-semibold text-sono-blue uppercase tracking-wide mb-1">Indications</p>
-          <p className="text-xs text-slate-700">{protocol.indication}</p>
+        <div className="bg-slate-900 rounded-2xl p-4">
+          <p className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest mb-2">Indications</p>
+          <p className="text-[15px] text-white leading-relaxed">{protocol.indication}</p>
         </div>
       </div>
 
