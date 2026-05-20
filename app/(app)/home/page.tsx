@@ -122,6 +122,7 @@ export default function HomePage() {
   const [showPicker, setShowPicker] = useState(false);
   const [pickerQuery, setPickerQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem('sonobuddy_onboarded')) {
@@ -187,51 +188,95 @@ export default function HomePage() {
       {/* Hamburger menu bottom sheet */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 flex flex-col">
-          <div className="flex-1 bg-black/50" onClick={() => setMenuOpen(false)} />
-          <div className="bg-[#111111] rounded-t-3xl px-5 pt-4 pb-10 safe-area-bottom">
-            <div className="flex justify-center mb-5">
-              <div className="w-10 h-1 bg-white/20 rounded-full" />
-            </div>
+          <div className="flex-1 bg-black/60" onClick={() => { setMenuOpen(false); setPrivacyOpen(false); }} />
+          {/* Outer wrapper bg fills the rounded-corner notches so no white bleeds through */}
+          <div className="bg-black">
+            {!privacyOpen ? (
+              /* ── Main menu ── */
+              <div className="bg-black rounded-t-3xl px-5 pt-4 pb-6" style={{ paddingBottom: 'max(24px, env(safe-area-inset-bottom))' }}>
+                <div className="flex justify-center mb-5">
+                  <div className="w-10 h-1 bg-white/20 rounded-full" />
+                </div>
 
-            {/* Share */}
-            <button
-              onClick={() => {
-                setMenuOpen(false);
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'SonoBuddy',
-                    text: 'Check out SonoBuddy — the pocket reference app for sonographers!',
-                    url: 'https://sonobuddy.app',
-                  }).catch(() => {});
-                }
-              }}
-              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 mb-3 active:bg-white/10 transition-colors"
-            >
-              <span className="text-white text-[16px] font-semibold">Share SonoBuddy</span>
-              <Share2 size={20} className="text-white/60" strokeWidth={1.75} />
-            </button>
+                {/* Share */}
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    if (navigator.share) {
+                      navigator.share({
+                        title: 'SonoBuddy',
+                        text: 'Check out SonoBuddy — the pocket reference app for sonographers!',
+                        url: 'https://sonobuddy.app',
+                      }).catch(() => {});
+                    }
+                  }}
+                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
+                >
+                  <span className="text-white text-[16px] font-semibold">Share SonoBuddy</span>
+                  <Share2 size={20} className="text-white/60" strokeWidth={1.75} />
+                </button>
 
-            {/* Feedback */}
-            <a
-              href="mailto:hello@sonobuddy.app?subject=SonoBuddy%20Feedback"
-              onClick={() => setMenuOpen(false)}
-              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 mb-3 active:bg-white/10 transition-colors"
-            >
-              <span className="text-white text-[16px] font-semibold">Send Feedback</span>
-              <MessageSquare size={20} className="text-white/60" strokeWidth={1.75} />
-            </a>
+                {/* Feedback */}
+                <a
+                  href="mailto:support@sonobuddy.com?subject=SonoBuddy%20Feedback"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
+                >
+                  <span className="text-white text-[16px] font-semibold">Send Feedback</span>
+                  <MessageSquare size={20} className="text-white/60" strokeWidth={1.75} />
+                </a>
 
-            {/* Privacy Policy */}
-            <a
-              href="https://sonobuddy.app/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMenuOpen(false)}
-              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 active:bg-white/10 transition-colors"
-            >
-              <span className="text-white text-[16px] font-semibold">Privacy Policy</span>
-              <ShieldCheck size={20} className="text-white/60" strokeWidth={1.75} />
-            </a>
+                {/* Privacy Policy — opens inline */}
+                <button
+                  onClick={() => setPrivacyOpen(true)}
+                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 active:bg-white/[0.15] transition-colors"
+                >
+                  <span className="text-white text-[16px] font-semibold">Privacy Policy</span>
+                  <ShieldCheck size={20} className="text-white/60" strokeWidth={1.75} />
+                </button>
+              </div>
+            ) : (
+              /* ── Privacy Policy inline view ── */
+              <div className="bg-black rounded-t-3xl flex flex-col" style={{ maxHeight: '85vh' }}>
+                {/* Handle */}
+                <div className="flex justify-center pt-4 pb-2 shrink-0">
+                  <div className="w-10 h-1 bg-white/20 rounded-full" />
+                </div>
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 shrink-0">
+                  <button onClick={() => setPrivacyOpen(false)} className="text-[#0EA5E9] text-sm font-medium">← Back</button>
+                  <span className="text-white font-bold text-[15px]">Privacy Policy</span>
+                  <button onClick={() => { setMenuOpen(false); setPrivacyOpen(false); }}>
+                    <X size={18} className="text-white/50" />
+                  </button>
+                </div>
+                {/* Scrollable content */}
+                <div className="overflow-y-auto px-5 py-4 space-y-4" style={{ paddingBottom: 'max(32px, env(safe-area-inset-bottom))' }}>
+                  <p className="text-white/50 text-xs">Last updated: March 24, 2026</p>
+                  <p className="text-white/80 text-[13px] leading-relaxed">SonoBuddy Pro is a clinical reference tool. We do not require an account, we do not sell your data, and we do not share your personal information with third parties for advertising. We may collect anonymous usage analytics to improve the app.</p>
+
+                  {[
+                    { heading: '1. Who We Are', body: 'SonoBuddy Pro is operated by SonoBuddy. We provide a mobile reference application for sonographers and ultrasound technologists. Questions? Email us at support@sonobuddy.com.' },
+                    { heading: '2. Information We Collect', body: 'No account required. You can use all core features without providing any personal information.\n\nSupport contact: If you email us, we receive your name and email address solely to respond to your inquiry.\n\nUsage analytics: We use Google Analytics to collect anonymous, aggregated data about which features are used and session duration. This does not identify you personally.\n\nWe do not collect: your medical records, patient data, precise location, financial information, or any clinical queries you perform within the app. All clinical reference content is stored locally on your device.' },
+                    { heading: '3. What We Don\'t Collect', body: '• Patient data of any kind\n• Real patient information entered into calculators\n• Location data\n• Advertising identifiers\n• Financial or payment information\n• Health records' },
+                    { heading: '4. How We Use Your Information', body: 'To operate and improve SonoBuddy Pro, respond to support requests, understand aggregate usage patterns, and ensure security. We do not use your information for targeted advertising.' },
+                    { heading: '5. How the App Works', body: 'All clinical content — measurements, protocols, calculators, and pathologies — is bundled statically with the app. No clinical data is sent to any server when you use the reference features or calculators. The app functions fully offline once installed.' },
+                    { heading: '6. Sharing of Information', body: 'We do not sell, rent, or trade your personal information. Limited sharing occurs with service providers (Google Analytics, Vercel) under their privacy terms, or if required by law.' },
+                    { heading: '7. Local Storage', body: 'The app may use your device\'s local storage solely to enable offline functionality. This data never leaves your device and contains only app code and content — never personal or patient information.' },
+                    { heading: '8. Children\'s Privacy', body: 'SonoBuddy Pro is intended for licensed healthcare professionals and students 17 years of age and older. We do not knowingly collect personal information from children under 13.' },
+                    { heading: '9. Your Rights', body: 'You may request access to, correction of, or deletion of any personal data we hold by emailing support@sonobuddy.com. You may opt out of Google Analytics via Google\'s opt-out tool.' },
+                    { heading: '10. Clinical Disclaimer', body: 'SonoBuddy Pro is a reference tool only and is not a medical device, diagnostic tool, or substitute for clinical judgment. All clinical decisions must involve the ordering provider and interpreting physician. Do not enter real patient data into any calculator field.' },
+                    { heading: '11. Changes to This Policy', body: 'If we change our data practices, we will update this page. Continued use of the app after changes constitutes acceptance of the updated policy.' },
+                    { heading: '12. Contact', body: 'Questions about this privacy policy? Email us at support@sonobuddy.com' },
+                  ].map(({ heading, body }) => (
+                    <div key={heading}>
+                      <p className="text-white font-bold text-[13px] mb-1">{heading}</p>
+                      <p className="text-white/70 text-[13px] leading-relaxed whitespace-pre-line">{body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
