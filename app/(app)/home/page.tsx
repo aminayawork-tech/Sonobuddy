@@ -297,13 +297,10 @@ export default function HomePage() {
       <div className="px-5 mb-6">
         <div className="bg-slate-900 rounded-2xl p-5 shadow-lg">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="bg-sky-500/20 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
-              <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Tip of the Day</span>
-            </div>
+            <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Tip of the Day</span>
             <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
-          <p className="text-[15px] text-[#f1f5f9] leading-relaxed font-normal"
+          <p className="text-[15px] text-[#f1f5f9] leading-relaxed font-normal [&_strong]:text-[#ea4743] [&_b]:text-[#ea4743]"
             dangerouslySetInnerHTML={{ __html: tip }}
           />
         </div>
