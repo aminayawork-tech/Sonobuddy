@@ -25,18 +25,20 @@ function Base({ children, note }: { children: React.ReactNode; note: string }) {
   );
 }
 
-function Caliper({ x1, y1, x2, y2, tickLen = 7 }: {
-  x1: number; y1: number; x2: number; y2: number; tickLen?: number;
+function Caliper({ x1, y1, x2, y2 }: {
+  x1: number; y1: number; x2: number; y2: number;
 }) {
-  const dx = x2 - x1, dy = y2 - y1;
-  const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  const nx = -dy / len * tickLen;
-  const ny = dx / len * tickLen;
+  const s = 5; // × arm half-length
   return (
     <g stroke={C.caliper} strokeWidth="1.5" fill="none">
+      {/* Measurement line */}
       <line x1={x1} y1={y1} x2={x2} y2={y2} />
-      <line x1={x1 + nx} y1={y1 + ny} x2={x1 - nx} y2={y1 - ny} />
-      <line x1={x2 + nx} y1={y2 + ny} x2={x2 - nx} y2={y2 - ny} />
+      {/* × at start */}
+      <line x1={x1 - s} y1={y1 - s} x2={x1 + s} y2={y1 + s} />
+      <line x1={x1 - s} y1={y1 + s} x2={x1 + s} y2={y1 - s} />
+      {/* × at end */}
+      <line x1={x2 - s} y1={y2 - s} x2={x2 + s} y2={y2 + s} />
+      <line x1={x2 - s} y1={y2 + s} x2={x2 + s} y2={y2 - s} />
     </g>
   );
 }
@@ -105,7 +107,7 @@ export function IVCIllustration() {
       <line x1="218" y1="65" x2="218" y2="71" stroke={C.marker} strokeWidth="1" />
       <text x="197" y="62" textAnchor="middle" fill={C.marker} fontSize="8" fontFamily="system-ui">1–2 cm</text>
       {/* Diameter caliper */}
-      <Caliper x1={176} y1={82} x2={176} y2={106} tickLen={5} />
+      <Caliper x1={176} y1={82} x2={176} y2={106} />
       <CLabel x={163} y={95} text="D" />
       {/* Flow arrow */}
       <line x1="60" y1="99" x2="185" y2="96" stroke={C.dim} strokeWidth="1" strokeDasharray="3 2" opacity="0.5" />
@@ -162,7 +164,7 @@ export function KidneyLengthIllustration() {
       {/* Central echo complex (renal sinus) */}
       <ellipse cx="160" cy="103" rx="22" ry="34" fill={C.wall} opacity="0.7" />
       {/* Length caliper */}
-      <Caliper x1={160} y1={27} x2={160} y2={179} tickLen={8} />
+      <Caliper x1={160} y1={27} x2={160} y2={179} />
       <CLabel x={138} y={105} text="L" />
       {/* Pole labels */}
       <Tag x={178} y={31} text="superior pole" anchor="start" />
@@ -191,7 +193,7 @@ export function GallbladderWallIllustration() {
       <rect x="118" y="64" width="84" height="24" rx="3"
         fill="none" stroke={C.caliper} strokeWidth="1.2" strokeDasharray="3 2" />
       {/* Wall thickness caliper */}
-      <Caliper x1={160} y1={68} x2={160} y2={85} tickLen={5} />
+      <Caliper x1={160} y1={68} x2={160} y2={85} />
       <CLabel x={145} y={78} text="W" />
       {/* Anterior wall label */}
       <Tag x={210} y={78} text="anterior wall" anchor="start" />
@@ -225,7 +227,7 @@ export function BPDIllustration() {
       <Tag x={202} y={91} text="CSP" anchor="start" />
       <line x1="200" y1="89" x2="170" y2="95" stroke={C.label} strokeWidth="0.8" opacity="0.5" />
       {/* BPD caliper — outer-to-inner */}
-      <Caliper x1={55} y1={103} x2={254} y2={103} tickLen={9} />
+      <Caliper x1={55} y1={103} x2={254} y2={103} />
       <CLabel x={155} y={96} text="BPD" />
       {/* Outer / Inner labels */}
       <Tag x={48} y={123} text="outer" anchor="middle" />
@@ -251,10 +253,10 @@ export function ThyroidIllustration() {
       <circle cx="160" cy="105" r="17" fill={C.bg} />
       <Tag x={160} y={109} text="trachea" anchor="middle" />
       {/* Right lobe width caliper */}
-      <Caliper x1={60} y1={105} x2={144} y2={105} tickLen={7} />
+      <Caliper x1={60} y1={105} x2={144} y2={105} />
       <CLabel x={102} y={97} text="W" />
       {/* Right lobe AP caliper */}
-      <Caliper x1={102} y1={74} x2={102} y2={136} tickLen={7} />
+      <Caliper x1={102} y1={74} x2={102} y2={136} />
       <CLabel x={88} y={107} text="AP" />
       {/* Lobe labels */}
       <Tag x={102} y={152} text="R lobe" anchor="middle" />
