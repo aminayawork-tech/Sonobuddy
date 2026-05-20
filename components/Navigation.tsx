@@ -23,9 +23,7 @@ export default function Navigation() {
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-white/10 safe-area-bottom shadow-lg lg:hidden">
       <div className="max-w-lg mx-auto flex items-stretch">
         {NAV_ITEMS.map((item) => {
-          const isActive = item.href === '/home'
-            ? pathname === '/home'
-            : pathname.startsWith(item.href);
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
               key={item.href}
