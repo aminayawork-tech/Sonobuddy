@@ -188,12 +188,6 @@ export default function PathologiesPage() {
 
               {isExpanded && (
                 <div className="border-t border-slate-100 divide-y divide-slate-100">
-                  {/* Clinical context */}
-                  <div className="px-4 py-3">
-                    <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Context</p>
-                    <p className="text-[13px] text-slate-700 leading-relaxed">{p.clinicalContext}</p>
-                  </div>
-
                   {/* US Findings */}
                   <div className="px-4 py-3">
                     <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Ultrasound Findings</p>
@@ -215,19 +209,6 @@ export default function PathologiesPage() {
                         <li key={i} className="flex gap-2 text-[13px] text-red-800">
                           <span className="shrink-0">!</span>
                           <span>{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Differentials */}
-                  <div className="px-4 py-3">
-                    <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Differentials</p>
-                    <ul className="space-y-1.5">
-                      {p.differentials.map((d, i) => (
-                        <li key={i} className="text-[13px] text-slate-700 flex gap-2">
-                          <span className="text-slate-500 shrink-0">vs</span>
-                          <span>{d}</span>
                         </li>
                       ))}
                     </ul>
