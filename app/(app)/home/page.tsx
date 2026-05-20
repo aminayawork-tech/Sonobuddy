@@ -303,7 +303,7 @@ export default function HomePage() {
             </div>
             <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
-          <p className="text-[15px] text-white leading-relaxed font-normal"
+          <p className="text-[15px] text-[#f1f5f9] leading-relaxed font-normal"
             dangerouslySetInnerHTML={{ __html: tip }}
           />
         </div>
