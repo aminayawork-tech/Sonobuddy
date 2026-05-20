@@ -124,7 +124,7 @@ export default function MeasurementsPage() {
                 onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
-                  <span className="text-[17px] font-bold text-slate-900 leading-snug">{m.name}</span>
+                  <span className="text-[15px] font-semibold text-slate-900">{m.name}</span>
                   <div className="flex items-center gap-2 mt-1">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[m.category])}>
                       {CATEGORY_LABELS[m.category]}

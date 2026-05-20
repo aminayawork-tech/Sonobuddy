@@ -165,11 +165,10 @@ export default function PathologiesPage() {
             <div
               key={p.id}
               ref={(el) => { if (el) cardRefs.current.set(p.id, el); else cardRefs.current.delete(p.id); }}
-              className={`bg-sono-card border border-sono-border rounded-2xl ${locked ? 'opacity-60' : ''}`}
+              className={`bg-white border border-slate-100 rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
             >
               <button
-                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-sono-border shadow-sm' : ''}`}
-                style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
+                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
                 onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
@@ -188,7 +187,7 @@ export default function PathologiesPage() {
               </button>
 
               {isExpanded && (
-                <div className="border-t border-sono-border divide-y divide-sono-border">
+                <div className="border-t border-slate-100 divide-y divide-slate-100">
                   {/* Clinical context */}
                   <div className="px-4 py-3">
                     <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Context</p>
