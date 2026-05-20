@@ -117,34 +117,32 @@ export default function MeasurementsPage() {
             <div
               key={m.id}
               ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
-              className={`bg-sono-card border border-sono-border rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
+              className={`rounded-2xl shadow-sm overflow-hidden ${locked ? 'opacity-60' : ''}`}
             >
               <button
-                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-sono-card rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-sono-border shadow-sm' : ''}`}
+                className={`w-full px-4 py-4 text-left flex items-center justify-between gap-3 bg-slate-900 ${isExpanded ? 'sticky z-20 shadow-md' : 'rounded-2xl'}`}
                 style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
                 onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-[15px] font-semibold text-slate-900">{m.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
+                  <span className="text-[17px] font-bold text-white leading-snug">{m.name}</span>
+                  <div className="flex items-center gap-2 mt-1">
                     <span className={clsx('text-[11px] px-2 py-0.5 rounded-full border font-medium', CATEGORY_COLORS[m.category])}>
                       {CATEGORY_LABELS[m.category]}
                     </span>
                     {m.subcategory && (
-                      <span className="text-[11px] text-sono-muted">{m.subcategory}</span>
+                      <span className="text-[11px] text-slate-400">{m.subcategory}</span>
                     )}
                   </div>
                 </div>
                 {locked
-                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
-                  : <span className="text-sono-muted text-lg mt-0.5 shrink-0 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
+                  ? <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+                  : <span className="text-white text-lg shrink-0 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
                 }
               </button>
 
               {isExpanded && (
-                <div className="px-4 pb-4 border-t border-sono-border pt-3 space-y-3">
+                <div className="px-4 pb-4 pt-3 space-y-3 bg-white border border-slate-100 rounded-b-2xl">
                   <RangeBar ranges={m.ranges} />
                   {m.clinicalNote && (
                     <div className="bg-slate-50 rounded-xl p-3">

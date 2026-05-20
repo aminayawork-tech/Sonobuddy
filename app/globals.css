@@ -28,23 +28,12 @@
     background-color: #F1F5F9; /* matches sono-dark page background */
   }
 
-  /* Custom scrollbar (Firefox) */
+  /* Hide scrollbar globally — content still scrolls */
   * {
-    scrollbar-width: thin;
-    scrollbar-color: #CBD5E1 transparent;
+    scrollbar-width: none;
   }
-
-  /* Custom scrollbar (WebKit) */
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 2px;
+    display: none;
   }
 }
 
