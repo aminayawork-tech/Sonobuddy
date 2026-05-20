@@ -129,7 +129,7 @@ function CalculatorContent() {
                   }
                 </div>
                 <div className="mt-2">
-                  <code className="text-[10px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-0.5 rounded">{c.formula}</code>
+                  <code className="text-[10px] text-sono-blue font-mono bg-black px-2 py-0.5 rounded">{c.formula}</code>
                 </div>
               </button>
             );
@@ -143,7 +143,7 @@ function CalculatorContent() {
           <div className="bg-sono-card border border-sono-border rounded-2xl p-4 mb-4">
             <h2 className="font-black text-slate-900 text-lg tracking-tight mb-1">{activeCalc.name}</h2>
             <p className="text-[13px] text-slate-500 mb-3 leading-relaxed">{activeCalc.description}</p>
-            <code className="text-[11px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-1 rounded block">{activeCalc.formula}</code>
+            <code className="text-[11px] text-sono-blue font-mono bg-black px-2 py-1 rounded block">{activeCalc.formula}</code>
           </div>
 
           {/* Input fields */}
