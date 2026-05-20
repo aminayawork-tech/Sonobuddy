@@ -97,7 +97,7 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
               <h3 className="font-semibold text-slate-900 text-sm">{step.title}</h3>
             </div>
             <div className="px-4 py-3 space-y-3">
-              <p className="text-xs text-slate-700 leading-relaxed">{step.description}</p>
+              <p className="text-[14px] text-slate-700 leading-relaxed">{step.description}</p>
               {step.probe && (
                 <p className="text-xs text-sono-muted italic flex items-center gap-1"><Zap className="w-3 h-3 shrink-0" /> {step.probe}</p>
               )}
@@ -106,8 +106,8 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
                   <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">Tips</p>
                   {step.tips.map((tip, i) => (
                     <div key={i} className="flex gap-2">
-                      <span className="text-amber-600 shrink-0 text-xs mt-0.5">→</span>
-                      <p className="text-xs text-amber-800 leading-relaxed">{tip}</p>
+                      <span className="text-amber-600 shrink-0 text-[13px] mt-0.5">→</span>
+                      <p className="text-[13px] text-amber-800 leading-relaxed">{tip}</p>
                     </div>
                   ))}
                 </div>
