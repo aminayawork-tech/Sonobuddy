@@ -218,7 +218,7 @@ export default function HomePage() {
 
                 {/* Feedback */}
                 <a
-                  href="mailto:support@sonobuddy.com?subject=SonoBuddy%20Feedback"
+                  href="mailto:anthony_minaya@ymail.com?subject=SonoBuddy%20Feedback"
                   onClick={() => setMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
@@ -256,7 +256,7 @@ export default function HomePage() {
                   <p className="text-white/80 text-[13px] leading-relaxed">SonoBuddy Pro is a clinical reference tool. We do not require an account, we do not sell your data, and we do not share your personal information with third parties for advertising. We may collect anonymous usage analytics to improve the app.</p>
 
                   {[
-                    { heading: '1. Who We Are', body: 'SonoBuddy Pro is operated by SonoBuddy. We provide a mobile reference application for sonographers and ultrasound technologists. Questions? Email us at support@sonobuddy.com.' },
+                    { heading: '1. Who We Are', body: 'SonoBuddy Pro is operated by SonoBuddy. We provide a mobile reference application for sonographers and ultrasound technologists. Questions? Email us at contact us via the Feedback button.' },
                     { heading: '2. Information We Collect', body: 'No account required. You can use all core features without providing any personal information.\n\nSupport contact: If you email us, we receive your name and email address solely to respond to your inquiry.\n\nUsage analytics: We use Google Analytics to collect anonymous, aggregated data about which features are used and session duration. This does not identify you personally.\n\nWe do not collect: your medical records, patient data, precise location, financial information, or any clinical queries you perform within the app. All clinical reference content is stored locally on your device.' },
                     { heading: '3. What We Don\'t Collect', body: '• Patient data of any kind\n• Real patient information entered into calculators\n• Location data\n• Advertising identifiers\n• Financial or payment information\n• Health records' },
                     { heading: '4. How We Use Your Information', body: 'To operate and improve SonoBuddy Pro, respond to support requests, understand aggregate usage patterns, and ensure security. We do not use your information for targeted advertising.' },
@@ -264,10 +264,10 @@ export default function HomePage() {
                     { heading: '6. Sharing of Information', body: 'We do not sell, rent, or trade your personal information. Limited sharing occurs with service providers (Google Analytics, Vercel) under their privacy terms, or if required by law.' },
                     { heading: '7. Local Storage', body: 'The app may use your device\'s local storage solely to enable offline functionality. This data never leaves your device and contains only app code and content — never personal or patient information.' },
                     { heading: '8. Children\'s Privacy', body: 'SonoBuddy Pro is intended for licensed healthcare professionals and students 17 years of age and older. We do not knowingly collect personal information from children under 13.' },
-                    { heading: '9. Your Rights', body: 'You may request access to, correction of, or deletion of any personal data we hold by emailing support@sonobuddy.com. You may opt out of Google Analytics via Google\'s opt-out tool.' },
+                    { heading: '9. Your Rights', body: 'You may request access to, correction of, or deletion of any personal data we hold by emailing contact us via the Feedback button. You may opt out of Google Analytics via Google\'s opt-out tool.' },
                     { heading: '10. Clinical Disclaimer', body: 'SonoBuddy Pro is a reference tool only and is not a medical device, diagnostic tool, or substitute for clinical judgment. All clinical decisions must involve the ordering provider and interpreting physician. Do not enter real patient data into any calculator field.' },
                     { heading: '11. Changes to This Policy', body: 'If we change our data practices, we will update this page. Continued use of the app after changes constitutes acceptance of the updated policy.' },
-                    { heading: '12. Contact', body: 'Questions about this privacy policy? Email us at support@sonobuddy.com' },
+                    { heading: '12. Contact', body: 'Questions about this privacy policy? Email us at contact us via the Feedback button' },
                   ].map(({ heading, body }) => (
                     <div key={heading}>
                       <p className="text-white font-bold text-[13px] mb-1">{heading}</p>

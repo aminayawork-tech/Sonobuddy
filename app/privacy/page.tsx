@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const LAST_UPDATED = 'March 24, 2026';
-const CONTACT_EMAIL = 'support@sonobuddy.com';
+const CONTACT_EMAIL = 'anthony_minaya@ymail.com';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
           </p>
           <p>
             Questions about this policy? Email us at{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">{CONTACT_EMAIL}</a>.
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">contact us</a>.
           </p>
         </Section>
 
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
             SonoBuddy Pro is intended for licensed healthcare professionals and students 17 years of
             age and older. We do not knowingly collect personal information from children under&nbsp;13.
             If you believe a child has provided us personal information, contact us at{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">{CONTACT_EMAIL}</a>{' '}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">contact us</a>{' '}
             and we will delete it promptly.
           </p>
         </Section>
@@ -159,7 +159,7 @@ export default function PrivacyPage() {
           <p>
             You may request access to, correction of, or deletion of any personal data we hold about
             you by emailing{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">{CONTACT_EMAIL}</a>.
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">contact us</a>.
             You may opt out of Google Analytics via{' '}
             <a
               href="https://tools.google.com/dlpage/gaoptout"
@@ -193,7 +193,7 @@ export default function PrivacyPage() {
           <p>
             Questions about this privacy policy? Email us at{' '}
             <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">
-              {CONTACT_EMAIL}
+              contact us
             </a>
           </p>
         </Section>
