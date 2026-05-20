@@ -120,8 +120,7 @@ export default function MeasurementsPage() {
               className={`bg-white border border-slate-100 rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
             >
               <button
-                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-slate-100 shadow-sm' : ''}`}
-                style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
+                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
                 onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
