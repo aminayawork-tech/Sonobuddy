@@ -117,10 +117,10 @@ export default function MeasurementsPage() {
             <div
               key={m.id}
               ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
-              className={`bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden ${locked ? 'opacity-60' : ''}`}
+              className={`bg-white border border-slate-100 rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
             >
               <button
-                className={`w-full px-4 py-4 text-left flex items-center justify-between gap-3 bg-white ${isExpanded ? 'sticky z-20 shadow-sm border-b border-slate-100' : 'rounded-2xl'}`}
+                className={`w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl ${isExpanded ? 'sticky z-20 border-b border-slate-100 shadow-sm' : ''}`}
                 style={isExpanded && headerHeight ? { top: headerHeight } : undefined}
                 onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
               >
@@ -136,13 +136,13 @@ export default function MeasurementsPage() {
                   </div>
                 </div>
                 {locked
-                  ? <Lock className="w-4 h-4 text-slate-400 shrink-0" />
-                  : <span className="text-slate-400 text-lg shrink-0 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
+                  ? <Lock className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
+                  : <span className="text-slate-400 text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
                 }
               </button>
 
               {isExpanded && (
-                <div className="px-4 pb-4 pt-3 space-y-3 bg-white border border-slate-100 rounded-b-2xl">
+                <div className="px-4 pb-4 pt-3 space-y-3">
                   <RangeBar ranges={m.ranges} />
                   {m.clinicalNote && (
                     <div className="bg-slate-50 rounded-xl p-3">
