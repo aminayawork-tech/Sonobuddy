@@ -295,15 +295,15 @@ export default function HomePage() {
 
       {/* Tip Card */}
       <div className="px-5 mb-6">
-        <div className="bg-sono-card border border-sono-border rounded-2xl p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
+        <div className="bg-slate-900 rounded-2xl p-5 shadow-lg">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="bg-sky-100 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
-              <span className="text-xs font-bold text-sono-blue uppercase tracking-widest">Tip of the Day</span>
+              <div className="bg-sky-500/20 rounded-lg w-7 h-7 flex items-center justify-center text-sm">💡</div>
+              <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Tip of the Day</span>
             </div>
-            <span className="text-[11px] text-sono-muted font-medium">{tipDate}</span>
+            <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
-          <p className="text-[14px] text-slate-700 leading-relaxed font-normal"
+          <p className="text-[15px] text-white leading-relaxed font-normal"
             dangerouslySetInnerHTML={{ __html: tip }}
           />
         </div>
