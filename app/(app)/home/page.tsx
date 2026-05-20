@@ -10,6 +10,7 @@ import { usePremium, FREE_PROTOCOL_IDS, FREE_CALCULATOR_IDS } from '@/hooks/useP
 import {
   Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2,
   Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check, Lock,
+  Menu, Share2, MessageSquare, ShieldCheck,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -120,6 +121,7 @@ export default function HomePage() {
   const [editMode, setEditMode] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [pickerQuery, setPickerQuery] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem('sonobuddy_onboarded')) {
@@ -181,12 +183,72 @@ export default function HomePage() {
   return (
     <div className="min-h-screen pb-nav bg-sono-dark">
       {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
+
+      {/* Hamburger menu bottom sheet */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col">
+          <div className="flex-1 bg-black/50" onClick={() => setMenuOpen(false)} />
+          <div className="bg-[#111111] rounded-t-3xl px-5 pt-4 pb-10 safe-area-bottom">
+            <div className="flex justify-center mb-5">
+              <div className="w-10 h-1 bg-white/20 rounded-full" />
+            </div>
+
+            {/* Share */}
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'SonoBuddy',
+                    text: 'Check out SonoBuddy — the pocket reference app for sonographers!',
+                    url: 'https://sonobuddy.app',
+                  }).catch(() => {});
+                }
+              }}
+              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 mb-3 active:bg-white/10 transition-colors"
+            >
+              <span className="text-white text-[16px] font-semibold">Share SonoBuddy</span>
+              <Share2 size={20} className="text-white/60" strokeWidth={1.75} />
+            </button>
+
+            {/* Feedback */}
+            <a
+              href="mailto:hello@sonobuddy.app?subject=SonoBuddy%20Feedback"
+              onClick={() => setMenuOpen(false)}
+              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 mb-3 active:bg-white/10 transition-colors"
+            >
+              <span className="text-white text-[16px] font-semibold">Send Feedback</span>
+              <MessageSquare size={20} className="text-white/60" strokeWidth={1.75} />
+            </a>
+
+            {/* Privacy Policy */}
+            <a
+              href="https://sonobuddy.app/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="w-full flex items-center justify-between bg-white/[0.07] rounded-2xl px-5 py-4 active:bg-white/10 transition-colors"
+            >
+              <span className="text-white text-[16px] font-semibold">Privacy Policy</span>
+              <ShieldCheck size={20} className="text-white/60" strokeWidth={1.75} />
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Hero Header */}
       <div className="px-5 pt-14 pb-7">
-        <div className="flex items-center gap-3 mb-1">
+        <div className="flex items-center justify-between mb-1">
           <h1 className="text-3xl font-black tracking-tight">
             <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
           </h1>
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl active:bg-slate-100 transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu size={22} className="text-slate-700" strokeWidth={2} />
+          </button>
         </div>
         <p className="text-sono-muted text-[14px] font-normal">Your pocket sonographer reference</p>
       </div>
