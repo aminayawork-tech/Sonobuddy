@@ -210,29 +210,29 @@ export default function HomePage() {
                       }).catch(() => {});
                     }
                   }}
-                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
+                  className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
+                  <Share2 size={18} className="text-white/60" strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Share SonoBuddy</span>
-                  <Share2 size={20} className="text-white/60" strokeWidth={1.75} />
                 </button>
 
                 {/* Feedback */}
                 <a
                   href="mailto:support@sonobuddy.com?subject=SonoBuddy%20Feedback"
                   onClick={() => setMenuOpen(false)}
-                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
+                  className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
+                  <MessageSquare size={18} className="text-white/60" strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Send Feedback</span>
-                  <MessageSquare size={20} className="text-white/60" strokeWidth={1.75} />
                 </a>
 
                 {/* Privacy Policy — opens inline */}
                 <button
                   onClick={() => setPrivacyOpen(true)}
-                  className="w-full flex items-center justify-between bg-white/[0.09] rounded-2xl px-5 py-4 active:bg-white/[0.15] transition-colors"
+                  className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 active:bg-white/[0.15] transition-colors"
                 >
+                  <ShieldCheck size={18} className="text-white/60" strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Privacy Policy</span>
-                  <ShieldCheck size={20} className="text-white/60" strokeWidth={1.75} />
                 </button>
               </div>
             ) : (
