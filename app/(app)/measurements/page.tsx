@@ -2,11 +2,11 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Ruler, Lock } from 'lucide-react';
-import Image from 'next/image';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
 import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import RangeBar from '@/components/RangeBar';
+import { ILLUSTRATIONS } from '@/components/MeasurementIllustrations';
 import clsx from 'clsx';
 
 const CATEGORIES = Object.entries(CATEGORY_LABELS) as [MeasurementCategory, string][];
@@ -144,22 +144,15 @@ export default function MeasurementsPage() {
               {isExpanded && (
                 <div className="px-4 pb-4 pt-3 space-y-3">
                   <RangeBar ranges={m.ranges} />
-                  {m.image && (
-                    <div className="rounded-xl overflow-hidden border border-slate-100">
-                      <Image
-                        src={m.image.src}
-                        alt={m.image.caption}
-                        width={400}
-                        height={280}
-                        unoptimized
-                        className="w-full object-cover"
-                      />
-                      <div className="px-3 py-2 bg-slate-50">
-                        <p className="text-[12px] text-slate-600 leading-snug">{m.image.caption}</p>
-                        {m.image.credit && <p className="text-[10px] text-slate-400 mt-0.5">{m.image.credit}</p>}
+                  {(() => {
+                    const Illustration = ILLUSTRATIONS[m.id];
+                    return Illustration ? (
+                      <div>
+                        <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Measurement Technique</p>
+                        <Illustration />
                       </div>
-                    </div>
-                  )}
+                    ) : null;
+                  })()}
                   {m.clinicalNote && (
                     <div className="bg-slate-50 rounded-xl p-3">
                       <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Note</p>

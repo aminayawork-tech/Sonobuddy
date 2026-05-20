@@ -65,11 +65,6 @@ export const measurements: Measurement[] = [
       { min: 5.5, unit: 'cm', label: 'Surgical threshold', notes: 'Refer to vascular surgery' },
     ],
     clinicalNote: 'Measure outer wall to outer wall in AP plane. AAA defined as >3.0 cm or 1.5× the normal diameter.',
-    image: {
-      src: '/measurements/aorta.jpg',
-      caption: 'Longitudinal view — AP diameter measured outer wall to outer wall',
-      credit: 'Nevit Dilmen · Wikimedia Commons · CC BY-SA 3.0',
-    },
     tags: ['aorta', 'aaa', 'aneurysm', 'vascular', 'abdominal'],
   },
   {
@@ -96,11 +91,6 @@ export const measurements: Measurement[] = [
       { min: 230, unit: 'cm/s', label: '≥70% stenosis', notes: 'Consider surgical intervention' },
     ],
     clinicalNote: 'SRU/SVU consensus criteria. Also check ICA:CCA ratio (>4 = >70% stenosis). Angle ≤60°.',
-    image: {
-      src: '/measurements/carotid-spectral.jpg',
-      caption: 'ICA spectral Doppler — PSV measured at peak of waveform, angle ≤60°',
-      credit: 'Kristoffer Lindskov Hansen · Wikimedia Commons · CC BY-SA 4.0',
-    },
     tags: ['carotid', 'ica', 'psv', 'stenosis', 'doppler', 'velocity'],
   },
   {
@@ -229,11 +219,6 @@ export const measurements: Measurement[] = [
       { min: 3, unit: 'mm', label: 'Thickened — cholecystitis, hepatitis, other', notes: 'Must correlate with clinical (Murphy\'s sign, fever)' },
     ],
     clinicalNote: 'Measure anterior wall when fasting ≥4h. Diffuse thickening: also consider hypoalbuminemia, CHF, hepatitis.',
-    image: {
-      src: '/measurements/gallbladder.jpg',
-      caption: 'Gallbladder long axis — wall thickness measured at the anterior wall (fasting)',
-      credit: 'Wikimedia Commons · CC BY-SA 4.0',
-    },
     tags: ['gallbladder', 'wall', 'cholecystitis', 'murphy', 'abdomen'],
   },
   {
@@ -261,11 +246,6 @@ export const measurements: Measurement[] = [
       { min: 13, unit: 'cm', label: 'Large — hydronephrosis, polycystic, lymphoma' },
     ],
     clinicalNote: 'Normal cortical thickness ≥1.5 cm. Increased echogenicity = medical renal disease. Asymmetry >2 cm is clinically significant.',
-    image: {
-      src: '/measurements/kidney.jpg',
-      caption: 'Long-axis kidney — calipers at superior and inferior poles for length measurement',
-      credit: 'Mikael Häggström · Wikimedia Commons · CC BY 4.0',
-    },
     tags: ['kidney', 'renal', 'hydronephrosis', 'pyelonephritis', 'size'],
   },
   {
@@ -389,11 +369,6 @@ export const measurements: Measurement[] = [
       { label: '40 weeks', unit: 'approx', notes: '~97 mm' },
     ],
     clinicalNote: 'Measure outer-to-inner at widest point (thalami + CSP visible, no cerebellum). Part of EFW biometry.',
-    image: {
-      src: '/measurements/bpd.jpg',
-      caption: 'BPD axial plane — outer-to-inner caliper placement at thalami level',
-      credit: 'Mikael Häggström · Wikimedia Commons · CC0',
-    },
     tags: ['bpd', 'biparietal', 'ob', 'biometry', 'second trimester'],
   },
   {
@@ -452,11 +427,6 @@ export const measurements: Measurement[] = [
       { label: 'Normal male', unit: 'mL', notes: '5–10 mL per lobe (total <25 mL)' },
     ],
     clinicalNote: 'Volume = L × W × H × 0.52 per lobe. Isthmus usually ≤3–5 mm AP. Goiter: total volume >18 mL (F) or >25 mL (M).',
-    image: {
-      src: '/measurements/thyroid.jpg',
-      caption: 'Thyroid lobe transverse — width and AP measured for volume calculation',
-      credit: 'Wikimedia Commons · CC BY-SA 3.0',
-    },
     tags: ['thyroid', 'volume', 'goiter', 'lobe'],
   },
   {
@@ -514,11 +484,6 @@ export const measurements: Measurement[] = [
       { label: '<50% collapse with sniff', unit: 'collapse', notes: 'CVP ≥10 mmHg — elevated RA pressure' },
     ],
     clinicalNote: 'Subcostal view, measure 1–2 cm from RA junction, in M-mode. POCUS essential skill.',
-    image: {
-      src: '/measurements/ivc.jpg',
-      caption: 'Subcostal IVC view — diameter measured 1–2 cm from the right atrial junction',
-      credit: 'Mikael Häggström · Wikimedia Commons · CC BY-SA 3.0',
-    },
     tags: ['ivc', 'inferior vena cava', 'cvp', 'volume', 'pocus', 'cardiac'],
   },
 
