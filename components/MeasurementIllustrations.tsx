@@ -1,3 +1,5 @@
+'use client';
+
 // SVG teaching illustrations — show WHERE and HOW to place calipers.
 // Dark background mimics ultrasound display. Blue = calipers. Gray = anatomy.
 
