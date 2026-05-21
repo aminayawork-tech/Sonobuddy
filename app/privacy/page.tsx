@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — SonoBuddy',
-  description: 'Privacy policy for SonoBuddy Pro — what data we collect and how we use it.',
+  description: 'Privacy policy for SonoBuddy — Ultrasound Reference — what data we collect and how we use it.',
 };
 
 const LAST_UPDATED = 'March 24, 2026';
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
       {/* Summary banner */}
       <div className="bg-sono-blue/10 border border-sono-blue/30 rounded-xl p-4 mb-8">
         <p className="text-sm text-sono-blue leading-relaxed">
-          <strong>Short version:</strong> SonoBuddy Pro is a clinical reference tool. We do not require
+          <strong>Short version:</strong> SonoBuddy — Ultrasound Reference is a clinical reference tool. We do not require
           an account, we do not sell your data, and we do not share your personal information with
           third parties for advertising. We may collect anonymous usage analytics to improve the app.
         </p>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
 
         <Section title="1. Who We Are">
           <p>
-            SonoBuddy Pro is operated by SonoBuddy (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). We provide a mobile
+            SonoBuddy — Ultrasound Reference is operated by SonoBuddy (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;). We provide a mobile
             reference application for sonographers and ultrasound technologists. Our website is{' '}
             <span className="text-slate-200">sonobuddy.com</span>.
           </p>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
 
         <Section title="2. Information We Collect">
           <p>
-            <span className="text-slate-200 font-medium">No account required.</span> SonoBuddy Pro does
+            <span className="text-slate-200 font-medium">No account required.</span> SonoBuddy — Ultrasound Reference does
             not require you to create an account. You can use all core features without providing any
             personal information.
           </p>
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
 
         <Section title="4. How We Use Your Information">
           <ul className="space-y-1.5 list-disc pl-4">
-            <li>To operate and improve SonoBuddy Pro</li>
+            <li>To operate and improve SonoBuddy — Ultrasound Reference</li>
             <li>To respond to support requests you initiate</li>
             <li>To understand aggregate usage patterns and fix bugs</li>
             <li>To ensure the security and integrity of the app</li>
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
 
         <Section title="8. Children's Privacy">
           <p>
-            SonoBuddy Pro is intended for licensed healthcare professionals and students 17 years of
+            SonoBuddy — Ultrasound Reference is intended for licensed healthcare professionals and students 17 years of
             age and older. We do not knowingly collect personal information from children under&nbsp;13.
             If you believe a child has provided us personal information, contact us at{' '}
             <a href={`mailto:${CONTACT_EMAIL}`} className="text-sono-blue hover:underline">contact us</a>{' '}
@@ -174,7 +174,7 @@ export default function PrivacyPage() {
 
         <Section title="10. Clinical Disclaimer">
           <p>
-            SonoBuddy Pro is a <span className="text-slate-200 font-medium">reference tool only</span> and
+            SonoBuddy — Ultrasound Reference is a <span className="text-slate-200 font-medium">reference tool only</span> and
             is not a medical device, diagnostic tool, or substitute for clinical judgment. All clinical
             decisions must involve the ordering provider and interpreting physician. Do not enter real
             patient data into any calculator field.
