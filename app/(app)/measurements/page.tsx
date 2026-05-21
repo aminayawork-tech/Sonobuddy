@@ -6,7 +6,6 @@ import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, typ
 import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import RangeBar from '@/components/RangeBar';
-import { ILLUSTRATIONS } from '@/components/MeasurementIllustrations';
 import clsx from 'clsx';
 
 const CATEGORIES = Object.entries(CATEGORY_LABELS) as [MeasurementCategory, string][];
@@ -144,15 +143,6 @@ export default function MeasurementsPage() {
               {isExpanded && (
                 <div className="px-4 pb-4 pt-3 space-y-3">
                   <RangeBar ranges={m.ranges} />
-                  {(() => {
-                    const Illustration = ILLUSTRATIONS[m.id];
-                    return Illustration ? (
-                      <div>
-                        <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Measurement Technique</p>
-                        <Illustration />
-                      </div>
-                    ) : null;
-                  })()}
                   {m.clinicalNote && (
                     <div className="bg-slate-50 rounded-xl p-3">
                       <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-1.5">Clinical Note</p>
