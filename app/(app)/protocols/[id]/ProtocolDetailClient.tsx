@@ -102,12 +102,12 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
                 <p className="text-xs text-sono-muted italic flex items-center gap-1"><Zap className="w-3 h-3 shrink-0" /> {step.probe}</p>
               )}
               {step.tips && step.tips.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-1.5">
-                  <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">Tips</p>
+                <div className="bg-green-50 border border-green-200 rounded-xl p-3 space-y-1.5">
+                  <p className="text-[11px] font-semibold text-green-700 uppercase tracking-wide">Tips</p>
                   {step.tips.map((tip, i) => (
                     <div key={i} className="flex gap-2">
-                      <span className="text-amber-600 shrink-0 text-[13px] mt-0.5">→</span>
-                      <p className="text-[13px] text-amber-800 leading-relaxed">{tip}</p>
+                      <span className="text-green-600 shrink-0 text-[13px] mt-0.5">→</span>
+                      <p className="text-[13px] text-green-900 leading-relaxed">{tip}</p>
                     </div>
                   ))}
                 </div>
