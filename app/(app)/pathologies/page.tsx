@@ -215,7 +215,7 @@ export default function PathologiesPage() {
                   </div>
 
                   {/* Reporting Tips */}
-                  <div className="px-4 py-3 bg-slate-900 rounded-b-2xl">
+                  <div className="px-4 py-3 bg-slate-900">
                     <p className="text-[10px] font-bold text-[#0EA5E9] uppercase tracking-widest mb-1.5">Reporting Tips</p>
                     <p className="text-[14px] text-[#f1f5f9] leading-relaxed">{p.reportingTips}</p>
                   </div>
