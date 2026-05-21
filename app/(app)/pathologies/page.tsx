@@ -193,7 +193,7 @@ export default function PathologiesPage() {
                     <p className="text-[10px] font-bold text-sono-blue uppercase tracking-[0.1em] mb-2">Ultrasound Findings</p>
                     <ul className="space-y-1.5">
                       {p.ultrasoundFindings.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-[13px] text-slate-700">
+                        <li key={i} className="flex gap-2 text-[14px] text-slate-700">
                           <span className="text-sono-blue shrink-0">•</span>
                           <span>{f}</span>
                         </li>
@@ -206,7 +206,7 @@ export default function PathologiesPage() {
                     <p className="text-[10px] font-bold text-red-700 uppercase tracking-[0.1em] mb-2">⚠ Red Flags</p>
                     <ul className="space-y-1.5">
                       {p.redFlags.map((f, i) => (
-                        <li key={i} className="flex gap-2 text-[13px] text-red-800">
+                        <li key={i} className="flex gap-2 text-[14px] text-red-800">
                           <span className="shrink-0">!</span>
                           <span>{f}</span>
                         </li>
@@ -217,7 +217,7 @@ export default function PathologiesPage() {
                   {/* Reporting Tips */}
                   <div className="px-4 py-3 bg-amber-50">
                     <p className="text-[10px] font-bold text-amber-700 uppercase tracking-[0.1em] mb-1.5">Reporting Tips</p>
-                    <p className="text-[13px] text-amber-800 leading-relaxed">{p.reportingTips}</p>
+                    <p className="text-[14px] text-amber-800 leading-relaxed">{p.reportingTips}</p>
                   </div>
 
                   {/* Images */}
