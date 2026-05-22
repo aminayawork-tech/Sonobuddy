@@ -212,7 +212,7 @@ export default function HomePage() {
                   }}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
-                  <Share2 size={18} className="text-white/60" strokeWidth={1.75} />
+                  <Share2 size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Share SonoBuddy</span>
                 </button>
 
@@ -222,7 +222,7 @@ export default function HomePage() {
                   onClick={() => setMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
-                  <MessageSquare size={18} className="text-white/60" strokeWidth={1.75} />
+                  <MessageSquare size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Send Feedback</span>
                 </a>
 
@@ -231,7 +231,7 @@ export default function HomePage() {
                   onClick={() => setPrivacyOpen(true)}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 active:bg-white/[0.15] transition-colors"
                 >
-                  <ShieldCheck size={18} className="text-white/60" strokeWidth={1.75} />
+                  <ShieldCheck size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Privacy Policy</span>
                 </button>
               </div>
