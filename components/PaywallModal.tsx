@@ -34,9 +34,10 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
           <div className="w-16 h-16 rounded-2xl bg-sky-100 flex items-center justify-center mb-4">
             <Lock className="w-8 h-8 text-[#0EA5E9]" />
           </div>
-          <h2 className="text-2xl font-black tracking-tight mb-2">
-            <span className="text-slate-900">Unlock Sono</span><span className="text-[#0EA5E9]">Buddy</span><span className="text-slate-900"> Pro</span>
+          <h2 className="text-[28px] font-black tracking-tight leading-tight mb-1">
+            <span className="text-slate-900">Unlock </span><span className="text-[#0EA5E9]">SonoBuddy</span>
           </h2>
+          <p className="text-[13px] font-semibold text-slate-400 uppercase tracking-widest mb-3">Ultrasound Reference</p>
           <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
             You&apos;ve tried the free preview. Get instant access to every
             measurement, protocol, calculator, and pathology.
