@@ -14,11 +14,9 @@ export const FREE_MEASUREMENT_IDS = new Set([
 ]);
 export const FREE_PROTOCOL_IDS = new Set([
   'carotid-duplex',    // vascular
-  'ruo',               // abdomen
+  'ruo',              // abdomen
   'ob-first-trimester', // ob
-  'thyroid-ultrasound', // thyroid
-  'echo-tte',          // cardiac
-  'msk-shoulder',      // msk
+  // thyroid, cardiac, msk each have only 1 protocol — keep fully gated
 ]);
 export const FREE_CALCULATOR_IDS = new Set([
   'abi',               // vascular
