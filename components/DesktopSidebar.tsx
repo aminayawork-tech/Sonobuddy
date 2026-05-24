@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
+import { Home, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { href: '/home', label: 'Search', Icon: Search },
+  { href: '/home', label: 'Home', Icon: Home },
   { href: '/measurements', label: 'Measurements', Icon: Ruler },
   { href: '/protocols', label: 'Protocols', Icon: ClipboardList },
   { href: '/calculators', label: 'Calculators', Icon: Calculator },
