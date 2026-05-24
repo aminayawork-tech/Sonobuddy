@@ -116,29 +116,32 @@ function Phone({
   src: string; alt: string; className?: string; activeNav?: number;
 }) {
   return (
-    <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 relative ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full block" />
-      {/* Absolute overlay — sits on top of the old light nav in the screenshot */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black flex flex-col">
-        <div className="border-t border-white/10 flex items-center justify-around px-1 pt-2 pb-1">
-          {NAV_OVERLAY.map(({ label, Icon }, i) => (
-            <div key={label} className="flex flex-col items-center gap-[2px]">
-              <Icon
-                size={14}
-                strokeWidth={i === activeNav ? 2.5 : 1.8}
-                className={i === activeNav ? 'text-sky-400' : 'text-white/70'}
-              />
-              <span className={`text-[7px] leading-none ${i === activeNav ? 'text-sky-400 font-semibold' : 'text-white/70'}`}>
-                {label}
-              </span>
-            </div>
-          ))}
-        </div>
-        {/* iOS home indicator */}
-        <div className="flex items-center justify-center pb-2 pt-0.5">
-          <div className="w-20 h-[3px] bg-white/30 rounded-full" />
-        </div>
+    <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}>
+      {/* Crop wrapper: negative margin hides the old nav bar at the bottom of the screenshot.
+          % margins in CSS are relative to parent WIDTH — at any phone width W, the iPhone nav
+          bar is ~21% of W, so -22% reliably clips it. overflow:hidden on this div does the cut. */}
+      <div style={{ overflow: 'hidden', lineHeight: 0 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={alt} className="w-full block" style={{ marginBottom: '-22%' }} />
+      </div>
+      {/* Replacement black nav bar */}
+      <div className="bg-black border-t border-white/10 flex items-center justify-around px-1 pt-2 pb-1">
+        {NAV_OVERLAY.map(({ label, Icon }, i) => (
+          <div key={label} className="flex flex-col items-center gap-[2px]">
+            <Icon
+              size={14}
+              strokeWidth={i === activeNav ? 2.5 : 1.8}
+              className={i === activeNav ? 'text-sky-400' : 'text-white/70'}
+            />
+            <span className={`text-[7px] leading-none ${i === activeNav ? 'text-sky-400 font-semibold' : 'text-white/70'}`}>
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+      {/* iOS home indicator */}
+      <div className="bg-black flex items-center justify-center pb-2 pt-1">
+        <div className="w-20 h-[3px] bg-white/30 rounded-full" />
       </div>
     </div>
   );
