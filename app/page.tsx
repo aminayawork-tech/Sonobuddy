@@ -125,7 +125,7 @@ function Phone({
         <img src={src} alt={alt} className="w-full block" style={{ marginBottom: '-22%' }} />
       </div>
       {/* Replacement black nav bar */}
-      <div className="bg-black border-t border-white/10 flex items-center justify-around px-1 pt-2 pb-1">
+      <div className="bg-black flex items-center justify-around px-1 pt-2 pb-1 -mt-px">
         {NAV_OVERLAY.map(({ label, Icon }, i) => (
           <div key={label} className="flex flex-col items-center gap-[2px]">
             <Icon
