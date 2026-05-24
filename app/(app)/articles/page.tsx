@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getAllArticles } from '@/lib/articles-data';
-import { Calendar, ChevronRight, BookOpen } from 'lucide-react';
+import { Calendar, ChevronRight, Newspaper } from 'lucide-react';
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -16,7 +16,7 @@ export default function ArticlesPage() {
       {/* Header */}
       <div className="bg-white border-b border-slate-100 px-5 pt-14 pb-4 sticky top-0 z-10">
         <div className="flex items-center gap-2.5">
-          <BookOpen size={20} className="text-sky-500" strokeWidth={2} />
+          <Newspaper size={20} className="text-sky-500" strokeWidth={2} />
           <h1 className="text-[22px] font-black tracking-tight text-slate-900">Articles</h1>
         </div>
         <p className="text-[13px] text-slate-400 mt-0.5">Tips, protocols &amp; career guides</p>
