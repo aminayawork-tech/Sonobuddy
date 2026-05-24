@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         ← Back to SonoBuddy
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-100 mb-1">Privacy Policy</h1>
+      <h1 className="text-2xl font-bold text-slate-100 mb-1"><span className="text-[#39a5e9]">Sono</span>Buddy Privacy Policy</h1>
       <p className="text-xs text-sono-muted mb-8">Last updated: {LAST_UPDATED}</p>
 
       {/* Summary banner */}

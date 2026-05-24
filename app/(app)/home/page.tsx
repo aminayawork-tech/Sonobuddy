@@ -245,7 +245,7 @@ export default function HomePage() {
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 shrink-0">
                   <button onClick={() => setPrivacyOpen(false)} className="text-[#0EA5E9] text-sm font-medium">← Back</button>
-                  <span className="text-white font-bold text-[15px]">Privacy Policy</span>
+                  <span className="font-bold text-[15px]"><span className="text-[#39a5e9]">Sono</span><span className="text-white">Buddy</span> <span className="text-white/60 font-normal">Privacy</span></span>
                   <button onClick={() => { setMenuOpen(false); setPrivacyOpen(false); }}>
                     <X size={18} className="text-white/50" />
                   </button>

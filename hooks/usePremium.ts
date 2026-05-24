@@ -3,10 +3,37 @@
 import { useState, useEffect, useCallback } from 'react';
 
 // Free items per tab — anything not in these sets requires premium
-export const FREE_MEASUREMENT_IDS = new Set(['aorta-diameter', 'carotid-imt']);
-export const FREE_PROTOCOL_IDS    = new Set(['carotid-duplex', 'dvt-lower']);
-export const FREE_CALCULATOR_IDS  = new Set(['abi', 'resistive-index']);
-export const FREE_PATHOLOGY_IDS   = new Set(['cholecystitis-acute', 'dvt-acute']);
+// 1 free item per modality so every sonographer gets a taste
+export const FREE_MEASUREMENT_IDS = new Set([
+  'aorta-diameter',    // vascular
+  'liver-span',        // abdomen
+  'uterus-length',     // ob/gyn
+  'thyroid-lobe-volume', // thyroid
+  'pericardial-effusion-size', // cardiac
+  'lymph-node-size',   // superficial
+]);
+export const FREE_PROTOCOL_IDS = new Set([
+  'carotid-duplex',    // vascular
+  'ruo',               // abdomen
+  'ob-first-trimester', // ob
+  'thyroid-ultrasound', // thyroid
+  'echo-tte',          // cardiac
+  'msk-shoulder',      // msk
+]);
+export const FREE_CALCULATOR_IDS = new Set([
+  'abi',               // vascular
+  'gestational-age-crl', // ob
+  'volume-ellipsoid',  // general
+]);
+export const FREE_PATHOLOGY_IDS = new Set([
+  'dvt-acute',         // vascular
+  'cholecystitis-acute', // abdomen
+  'ovarian-cyst',      // ob
+  'thyroid-cancer-papillary', // thyroid
+  'pericardial-effusion', // cardiac
+  'rotator-cuff-tear', // msk
+  'lymph-node-reactive-vs-malignant', // superficial
+]);
 
 declare global {
   interface Window {

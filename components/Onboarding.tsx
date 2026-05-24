@@ -122,8 +122,8 @@ function Screen1({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
       color: 'text-amber-500',
       bg: 'bg-amber-50',
       border: 'border-amber-100',
-      value: '12+',
-      label: 'textbooks and PDFs where references are scattered',
+      value: '100+',
+      label: 'real sonography images to recognize pathology at a glance',
     },
   ];
 
@@ -166,7 +166,7 @@ function Screen1({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
 /* ── Screen 2 — Works Offline ──────────────────────────────────────────────── */
 function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void }) {
   const benefits = [
-    'All measurements & ranges cached locally',
+    'All measurements & real ultrasound images at your fingertips',
     'Full protocols available without internet',
     'Calculators work with zero signal',
     'No login — open and go',
