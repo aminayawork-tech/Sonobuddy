@@ -2,15 +2,15 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getPostBySlug, getAllPosts } from '@/lib/blog';
+import { ARTICLES, getArticleBySlug } from '@/lib/articles-data';
 import { Calendar, ChevronLeft } from 'lucide-react';
 
 interface Props {
   params: { slug: string };
 }
 
-export async function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
+export function generateStaticParams() {
+  return ARTICLES.map((a) => ({ slug: a.slug }));
 }
 
 function formatDate(dateStr: string) {
@@ -20,8 +20,8 @@ function formatDate(dateStr: string) {
 }
 
 export default function ArticleDetailPage({ params }: Props) {
-  const post = getPostBySlug(params.slug);
-  if (!post) notFound();
+  const article = getArticleBySlug(params.slug);
+  if (!article) notFound();
 
   return (
     <div className="min-h-screen bg-white pb-nav">
@@ -41,20 +41,20 @@ export default function ArticleDetailPage({ params }: Props) {
         {/* Meta */}
         <div className="flex items-center gap-1.5 mb-3">
           <Calendar size={12} className="text-slate-400" />
-          <span className="text-[12px] text-slate-400">{formatDate(post.date)}</span>
+          <span className="text-[12px] text-slate-400">{formatDate(article.date)}</span>
         </div>
 
         <h1 className="text-[24px] font-black tracking-tight text-slate-900 leading-tight mb-3">
-          {post.title}
+          {article.title}
         </h1>
         <p className="text-[15px] text-slate-500 leading-relaxed mb-5 border-b border-slate-100 pb-5">
-          {post.excerpt}
+          {article.excerpt}
         </p>
 
         {/* Tags */}
-        {post.tags.length > 0 && (
+        {article.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-6">
-            {post.tags.map((tag) => (
+            {article.tags.map((tag) => (
               <span
                 key={tag}
                 className="bg-sky-50 text-sky-600 text-[10px] font-semibold px-2.5 py-1 rounded-full"
@@ -85,7 +85,7 @@ export default function ArticleDetailPage({ params }: Props) {
           prose-hr:border-slate-100 prose-hr:my-6
         ">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {post.content}
+            {article.content}
           </ReactMarkdown>
         </div>
 
