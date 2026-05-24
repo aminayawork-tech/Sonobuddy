@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  Ruler, ClipboardList, Calculator, Microscope,
+  Home, Ruler, ClipboardList, Calculator, Microscope,
   Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
 
@@ -102,12 +102,38 @@ function Logo({ size = 'base' }: { size?: 'base' | 'lg' }) {
 
 // ── Phone Mockup ──────────────────────────────────────────────────────────────
 
-function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
+const NAV_OVERLAY = [
+  { label: 'Home',      Icon: Home },
+  { label: 'Measures',  Icon: Ruler },
+  { label: 'Protocols', Icon: ClipboardList },
+  { label: 'Calc',      Icon: Calculator },
+  { label: 'Pathology', Icon: Microscope },
+];
+
+function Phone({
+  src, alt, className = '', activeNav = 0,
+}: {
+  src: string; alt: string; className?: string; activeNav?: number;
+}) {
   return (
-    // Shadow is on the rounded element itself so it follows the round shape — no rect grey corners
-    <div className={`rounded-[38px] bg-white shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}>
+    <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 relative ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full block" />
+      <img src={src} alt={alt} className="w-full block" style={{ marginBottom: '-13%' }} />
+      {/* Black nav bar overlay — covers old light nav in screenshot */}
+      <div className="bg-black border-t border-white/10 flex items-center justify-around px-1 py-2">
+        {NAV_OVERLAY.map(({ label, Icon }, i) => (
+          <div key={label} className="flex flex-col items-center gap-[2px]">
+            <Icon
+              size={13}
+              strokeWidth={i === activeNav ? 2.5 : 1.8}
+              className={i === activeNav ? 'text-sky-400' : 'text-white/70'}
+            />
+            <span className={`text-[7px] leading-none ${i === activeNav ? 'text-sky-400 font-semibold' : 'text-white/70'}`}>
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -119,11 +145,11 @@ function PhoneMockup() {
       <div className="absolute inset-0 bg-sky-400/10 rounded-full blur-3xl scale-110" />
       {/* Back phone — largely behind front, sticks out right for depth */}
       <div className="absolute right-0 top-[30px] w-[185px] sm:w-[210px] lg:w-[235px]">
-        <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" />
+        <Phone src="/screenshots/IMG_9590.PNG" alt="SonoBuddy protocols screen" activeNav={2} />
       </div>
       {/* Front phone — z-10, larger */}
       <div className="absolute left-0 top-0 w-[210px] sm:w-[235px] lg:w-[265px] z-10">
-        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" />
+        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" activeNav={0} />
       </div>
     </div>
   );
