@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  Home, Ruler, ClipboardList, Calculator, Microscope,
+  Home, Ruler, ClipboardList, Calculator, Microscope, Menu,
   Star, Zap, ShieldCheck, Stethoscope,
 } from 'lucide-react';
 
@@ -111,12 +111,12 @@ const NAV_OVERLAY = [
 ];
 
 function Phone({
-  src, alt, className = '', activeNav = 0,
+  src, alt, className = '', activeNav = 0, showMenu = false,
 }: {
-  src: string; alt: string; className?: string; activeNav?: number;
+  src: string; alt: string; className?: string; activeNav?: number; showMenu?: boolean;
 }) {
   return (
-    <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 ${className}`}>
+    <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 relative ${className}`}>
       {/* Crop wrapper: negative margin hides the old nav bar at the bottom of the screenshot.
           % margins in CSS are relative to parent WIDTH — at any phone width W, the iPhone nav
           bar is ~21% of W, so -22% reliably clips it. overflow:hidden on this div does the cut. */}
@@ -143,6 +143,12 @@ function Phone({
       <div className="bg-black flex items-center justify-center pb-2 pt-1">
         <div className="w-20 h-[3px] bg-white/30 rounded-full" />
       </div>
+      {/* Hamburger menu overlay — matches the actual app header */}
+      {showMenu && (
+        <div className="absolute top-[7%] right-[5%] w-7 h-7 flex items-center justify-center">
+          <Menu size={16} className="text-slate-700" strokeWidth={2} />
+        </div>
+      )}
     </div>
   );
 }
@@ -158,7 +164,7 @@ function PhoneMockup() {
       </div>
       {/* Front phone — z-10, larger */}
       <div className="absolute left-0 top-0 w-[210px] sm:w-[235px] lg:w-[265px] z-10">
-        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" activeNav={0} />
+        <Phone src="/screenshots/IMG_9588.PNG" alt="SonoBuddy home screen" activeNav={0} showMenu />
       </div>
     </div>
   );
