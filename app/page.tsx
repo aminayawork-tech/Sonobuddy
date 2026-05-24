@@ -118,21 +118,27 @@ function Phone({
   return (
     <div className={`rounded-[38px] bg-black shadow-2xl overflow-hidden border-[3px] border-gray-800 relative ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} className="w-full block" style={{ marginBottom: '-13%' }} />
-      {/* Black nav bar overlay — covers old light nav in screenshot */}
-      <div className="bg-black border-t border-white/10 flex items-center justify-around px-1 py-2">
-        {NAV_OVERLAY.map(({ label, Icon }, i) => (
-          <div key={label} className="flex flex-col items-center gap-[2px]">
-            <Icon
-              size={13}
-              strokeWidth={i === activeNav ? 2.5 : 1.8}
-              className={i === activeNav ? 'text-sky-400' : 'text-white/70'}
-            />
-            <span className={`text-[7px] leading-none ${i === activeNav ? 'text-sky-400 font-semibold' : 'text-white/70'}`}>
-              {label}
-            </span>
-          </div>
-        ))}
+      <img src={src} alt={alt} className="w-full block" />
+      {/* Absolute overlay — sits on top of the old light nav in the screenshot */}
+      <div className="absolute bottom-0 left-0 right-0 bg-black flex flex-col">
+        <div className="border-t border-white/10 flex items-center justify-around px-1 pt-2 pb-1">
+          {NAV_OVERLAY.map(({ label, Icon }, i) => (
+            <div key={label} className="flex flex-col items-center gap-[2px]">
+              <Icon
+                size={14}
+                strokeWidth={i === activeNav ? 2.5 : 1.8}
+                className={i === activeNav ? 'text-sky-400' : 'text-white/70'}
+              />
+              <span className={`text-[7px] leading-none ${i === activeNav ? 'text-sky-400 font-semibold' : 'text-white/70'}`}>
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+        {/* iOS home indicator */}
+        <div className="flex items-center justify-center pb-2 pt-0.5">
+          <div className="w-20 h-[3px] bg-white/30 rounded-full" />
+        </div>
       </div>
     </div>
   );
