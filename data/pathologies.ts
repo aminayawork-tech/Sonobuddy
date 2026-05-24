@@ -53,8 +53,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State: "Sonographic Murphy\'s sign positive/negative." Always measure anterior wall thickness and GB size. Note any complications.',
     tags: ['cholecystitis', 'gallbladder', 'gallstones', 'murphy', 'ruq', 'infection'],
     images: [
-      { src: '/pathologies/Acute_cholecystitis.jpg', caption: 'Acute cholecystitis — gallbladder wall thickening with stones' },
-      { src: '/pathologies/acute_cholecystitis2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
+      { src: '/pathologies/Acute_cholecystitis-1.jpg', caption: 'Acute cholecystitis — gallbladder wall thickening with stones' },
+      { src: '/pathologies/acute_cholecystitits-2.png', caption: 'Acute cholecystitis — pericholecystic fluid and distended GB' },
+      { src: '/pathologies/acute_cholecysititis-3 MildGBWallthickening(3.5mm).png', caption: 'Mild GB wall thickening (3.5mm) — early acute cholecystitis' },
     ],
   },
   {
@@ -81,9 +82,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State extent: "Acute DVT involving CFV, FV from proximal to mid-thigh." Always document to/from specific anatomic landmarks. Note acuity (acute vs chronic vs mixed).',
     tags: ['dvt', 'thrombosis', 'deep vein', 'pulmonary embolism', 'vascular', 'clot'],
     images: [
-      { src: '/pathologies/deep_vein_thrombosis.png', caption: 'DVT — non-compressible vein with echogenic thrombus' },
-      { src: '/pathologies/deep_vein_thrombosis_2.png', caption: 'DVT — absent color fill on Doppler' },
-      { src: '/pathologies/deep_vein_thrombosis_3.png', caption: 'DVT — compressibility technique demonstrating non-compressible vein' },
+      { src: '/pathologies/DVTInGroinNoCompresible.png', caption: 'DVT in groin — non-compressible vein' },
+      { src: '/pathologies/DVTUS.png', caption: 'DVT ultrasound — echogenic thrombus with absent color flow' },
     ],
   },
   {
@@ -108,8 +108,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Grade: mild (slightly > kidney), moderate (obscures vessels), severe (poor penetration). Cannot differentiate steatohepatitis from simple steatosis on US alone.',
     tags: ['fatty liver', 'steatosis', 'nafld', 'masld', 'liver', 'echogenicity'],
     images: [
-      { src: '/pathologies/hepatic_steatosis_2.jpg', caption: 'Moderate hepatic steatosis — posterior attenuation' },
-      { src: '/pathologies/hepatic_steatosis_2b.png', caption: 'Hepatic steatosis — loss of portal vein wall visibility' },
+      { src: '/pathologies/Hepatic_steatosis.png', caption: 'Hepatic steatosis — increased echogenicity vs right kidney' },
+      { src: '/pathologies/Hepatic_steatosis-2.png', caption: 'Hepatic steatosis — posterior attenuation, loss of vessel wall visibility' },
+      { src: '/pathologies/Hepatic_steatosis-3.png', caption: 'Hepatic steatosis — bright liver with diaphragm attenuation' },
     ],
   },
   {
@@ -165,7 +166,6 @@ export const pathologies: Pathology[] = [
     tags: ['ovary', 'cyst', 'ovarian', 'dermoid', 'endometrioma', 'corpus luteum', 'ob'],
     images: [
       { src: '/pathologies/Haemorrhagic_ovarian_cyst_ultrasound.jpg', caption: 'Hemorrhagic ovarian cyst — reticular internal echoes' },
-      { src: '/pathologies/ovarian_cyst_2.png', caption: 'Ovarian cyst — simple anechoic cyst with posterior acoustic enhancement' },
     ],
   },
   {
@@ -195,8 +195,6 @@ export const pathologies: Pathology[] = [
     images: [
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound2.jpg', caption: 'PTC — hypoechoic nodule with microcalcifications' },
       { src: '/pathologies/Papillary_Thyroid_carcinoma_Ultrasound_37F_20160005.jpg', caption: 'PTC — taller-than-wide nodule, irregular margins' },
-      { src: '/pathologies/papillary_thyroid_carcinoma.png', caption: 'PTC — irregular spiculated margins, hypoechoic solid nodule' },
-      { src: '/pathologies/papillary_thyroid_carcinoma_2.png', caption: 'PTC — microcalcifications within hypoechoic nodule' },
     ],
   },
   {
@@ -222,8 +220,9 @@ export const pathologies: Pathology[] = [
     reportingTips: 'ALWAYS measure outer-to-outer AP diameter (includes mural thrombus). Report AP and transverse at maximum diameter. Compare to prior — note any change.',
     tags: ['aaa', 'aorta', 'aneurysm', 'abdominal', 'vascular', 'screening'],
     images: [
-      { src: '/pathologies/abdominal_aortic_aneurysm.jpg', caption: 'AAA — dilated aorta with mural thrombus' },
-      { src: '/pathologies/abdominal_aortic_aneurysm_2.png', caption: 'AAA — outer-to-outer measurement technique' },
+      { src: '/pathologies/Abdomincal aortic aneurysm.png', caption: 'AAA — dilated aorta with mural thrombus' },
+      { src: '/pathologies/Abdomincal aortic aneurysm2.png', caption: 'AAA — transverse measurement outer-to-outer' },
+      { src: '/pathologies/Abdomincal aortic aneurysm 3.png', caption: 'AAA — sagittal view showing aneurysm extent' },
     ],
   },
   {
@@ -276,7 +275,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State: "Appendix visualized/not visualized." If seen: "Measures ___ mm in AP diameter, non-compressible, with [periappendiceal hyperechogenicity/appendicolith/free fluid]." If not seen: "Appendix not identified — CT recommended to exclude appendicitis given clinical concern."',
     tags: ['appendicitis', 'appendix', 'ruq', 'rlq', 'abdomen', 'surgical emergency', 'appendicolith'],
     images: [
-      { src: '/pathologies/acute_appendicitis.png', caption: 'Acute appendicitis — non-compressible appendix >6 mm with periappendiceal hyperechogenicity' },
+      { src: '/pathologies/acute appendicitis.png', caption: 'Acute appendicitis — non-compressible appendix >6 mm' },
     ],
   },
   {
@@ -328,7 +327,8 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Always measure CBD diameter. State: "CBD measures ___ mm. [Stone/Sludge/No stone] visualized within CBD. Intrahepatic ducts [dilated/not dilated]." If CBD dilated without visible stone: "Cannot exclude choledocholithiasis — recommend MRCP."',
     tags: ['cbd', 'choledocholithiasis', 'bile duct', 'gallstone', 'jaundice', 'biliary obstruction', 'cholangitis', 'abdomen'],
     images: [
-      { src: '/pathologies/choledocholithiasis.jpg', caption: 'Choledocholithiasis — shadowing stone in dilated CBD' },
+      { src: '/pathologies/Choledocholithiasis-1.jpg', caption: 'Choledocholithiasis — shadowing stone in dilated CBD' },
+      { src: '/pathologies/Choledocholithiasis-2.png', caption: 'Choledocholithiasis — CBD dilation with posterior shadowing' },
     ],
   },
   {
@@ -383,7 +383,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Describe location and size of hypoechoic area. Document Doppler absence of flow. Recommend CT for complete assessment. State underlying cause if identifiable (splenomegaly, known malignancy).',
     tags: ['splenic infarct', 'spleen', 'infarct', 'hypoechoic', 'abdomen', 'embolism', 'sickle cell'],
     images: [
-      { src: '/pathologies/splenic_infarct.png', caption: 'Splenic infarct — wedge-shaped hypoechoic area with absent Doppler flow' },
+      { src: '/pathologies/Splenic infarct.png', caption: 'Splenic infarct — wedge-shaped hypoechoic area with absent Doppler flow' },
     ],
   },
   {
@@ -441,7 +441,7 @@ export const pathologies: Pathology[] = [
     reportingTips: 'Document liver surface (smooth/nodular/coarse), echotexture, caudate:right lobe ratio, spleen size, portal vein direction/velocity, and presence of ascites. Use LI-RADS for any new hepatic observations in at-risk patients.',
     tags: ['cirrhosis', 'liver', 'fibrosis', 'portal hypertension', 'hcc surveillance', 'ascites', 'splenomegaly', 'abdomen'],
     images: [
-      { src: '/pathologies/liver_cirrhosis.jpg', caption: 'Liver cirrhosis — coarse echotexture, nodular surface, ascites' },
+      { src: '/pathologies/liver_cirrhosis.png', caption: 'Liver cirrhosis — coarse echotexture, nodular surface, ascites' },
     ],
   },
 
@@ -496,7 +496,12 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State vertebral flow direction explicitly: "Antegrade," "Retrograde," or "Alternating (partial steal)." Document subclavian stenosis location and estimated severity. Note whether provocative arm exercise test was performed.',
     tags: ['subclavian steal', 'vertebral artery', 'retrograde flow', 'subclavian stenosis', 'vascular', 'arm claudication', 'dizziness'],
     images: [
-      { src: '/pathologies/subclavian_steal_syndrome.png', caption: 'Subclavian steal — retrograde vertebral artery flow on duplex' },
+      { src: '/pathologies/Subclavian Steal Syndrome 1.png', caption: 'Subclavian steal — retrograde vertebral artery flow' },
+      { src: '/pathologies/Subclavian Steal Syndrome 2.png', caption: 'Subclavian steal — waveform reversal on Doppler' },
+      { src: '/pathologies/Subclavian Steal Syndrome 3.png', caption: 'Subclavian steal — bunny sign on spectral Doppler' },
+      { src: '/pathologies/Subclavian Steal Syndrome 4.png', caption: 'Subclavian steal — peak systolic velocity comparison' },
+      { src: '/pathologies/Subclavian Steal Syndrome 5.png', caption: 'Subclavian steal — color Doppler reversal' },
+      { src: '/pathologies/Subclavian Steal Syndrome 6.png', caption: 'Subclavian steal — complete steal pattern' },
     ],
   },
   {
@@ -601,6 +606,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Leg heaviness, aching, swelling worse by end of day, relieved by elevation. Varicose veins, skin changes (hyperpigmentation, lipodermatosclerosis), venous ulcers at medial malleolus. CEAP classification C0–C6.',
     reportingTips: 'Document reflux at SFJ, SPJ, and any incompetent perforators. State reflux duration (>0.5 s is pathological). Note GSV and SSV diameter at multiple levels. CEAP classification guides treatment planning (sclerotherapy, thermal ablation, or surgery).',
     tags: ['venous insufficiency', 'reflux', 'varicose veins', 'sfj', 'saphenous', 'perforator', 'vascular', 'cvi', 'ceap'],
+    images: [
+      { src: '/pathologies/Venous reflux .png', caption: 'Chronic venous insufficiency — reflux on Doppler at saphenofemoral junction' },
+      { src: '/pathologies/Venous reflux 2.png', caption: 'Venous reflux — retrograde flow >0.5s after Valsalva' },
+      { src: '/pathologies/Venous reflux 3.png', caption: 'CVI — varicose vein with incompetent perforator' },
+    ],
   },
   {
     id: 'mesenteric-ischemia',
@@ -891,9 +901,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Oligomenorrhea/amenorrhea, hirsutism, acne, infertility. Elevated LH:FSH ratio, elevated androgens. Rotterdam criteria: 2 of 3 — oligo-anovulation, hyperandrogenism, polycystic ovary morphology. US alone cannot diagnose PCOS.',
     reportingTips: 'Report ovarian volume and follicle count per ovary. State: "Right ovary measures ___ cm³ with ___ follicles. Left ovary measures ___ cm³ with ___ follicles. Findings are consistent with/do not meet criteria for polycystic ovary morphology." Add: "Clinical and hormonal correlation required for PCOS diagnosis."',
     tags: ['pcos', 'polycystic ovary', 'follicles', 'ob', 'gynecology', 'infertility', 'amenorrhea'],
-    images: [
-      { src: '/pathologies/polycystic_ovaries_syndrome.png', caption: 'PCOS — "string of pearls" — ≥12 peripheral follicles' },
-    ],
+    images: [],
   },
   {
     id: 'toa',
@@ -966,9 +974,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Painful vaginal bleeding in 2nd/3rd trimester. Uterine tenderness, contractions, fetal distress. Risk factors: trauma, hypertension, cocaine use, prior abruption, smoking. Mortality: fetal (20–30%), maternal (low but significant).',
     reportingTips: 'Examine retroplacental space in all 3rd trimester exams with bleeding. State: "Retroplacental space is [clear/[X] cm hematoma present]." If hematoma present: measure, describe echogenicity (acute vs chronic). Urgent OB notification for any hematoma.',
     tags: ['placental abruption', 'abruption', 'retroplacental hematoma', 'ob', 'third trimester', 'bleeding', 'emergency'],
-    images: [
-      { src: '/pathologies/placental_abruption.jpg', caption: 'Placental abruption — retroplacental hypoechoic hematoma' },
-    ],
+    images: [],
   },
 
   // ── THYROID PATHOLOGIES ───────────────────────────────────────────────────────
