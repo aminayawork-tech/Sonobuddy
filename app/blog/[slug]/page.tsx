@@ -174,7 +174,9 @@ export default function BlogPostPage({ params }: Props) {
 
           {/* CTA */}
           <div className="mt-16 bg-sky-50 border border-sky-100 rounded-2xl p-6 text-center">
-            <p className="text-gray-700 font-semibold mb-2">Get SonoBuddy</p>
+            <p className="text-xl font-black tracking-tight mb-2">
+              Get <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
+            </p>
             <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, built for the scan room.</p>
             <AppStoreBadge />
           </div>
