@@ -245,7 +245,7 @@ export default function HomePage() {
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 shrink-0">
                   <button onClick={() => setPrivacyOpen(false)} className="text-[#0EA5E9] text-sm font-medium">← Back</button>
-                  <span className="font-bold text-[15px]"><span className="text-[#39a5e9]">Sono</span><span className="text-white">Buddy</span> <span className="text-white/60 font-normal">Privacy</span></span>
+                  <span className="font-bold text-[15px]"><span className="text-white">Sono</span><span className="text-[#39a5e9]">Buddy</span> <span className="text-white/60 font-normal">Privacy</span></span>
                   <button onClick={() => { setMenuOpen(false); setPrivacyOpen(false); }}>
                     <X size={18} className="text-white/50" />
                   </button>
@@ -253,11 +253,11 @@ export default function HomePage() {
                 {/* Scrollable content */}
                 <div className="overflow-y-auto px-5 py-4 space-y-4" style={{ paddingBottom: 'max(32px, env(safe-area-inset-bottom))' }}>
                   <p className="text-white/50 text-xs">Last updated: March 24, 2026</p>
-                  <p className="text-white/80 text-[13px] leading-relaxed">SonoBuddy — Ultrasound Reference is a clinical reference tool. We do not require an account, we do not sell your data, and we do not share your personal information with third parties for advertising. We may collect anonymous usage analytics to improve the app.</p>
+                  <p className="text-white/80 text-[13px] leading-relaxed"><span className="text-[#39a5e9] font-medium">SonoBuddy — Ultrasound Reference</span> is a clinical reference tool. We do not require an account, we do not sell your data, and we do not share your personal information with third parties for advertising. We may collect anonymous usage analytics to improve the app.</p>
 
                   {[
-                    { heading: '1. Who We Are', body: 'SonoBuddy — Ultrasound Reference is operated by SonoBuddy. We provide a mobile reference application for sonographers and ultrasound technologists. Questions? Email us at contact us via the Feedback button.' },
-                    { heading: '2. Information We Collect', body: 'No account required. You can use all core features without providing any personal information.\n\nSupport contact: If you email us, we receive your name and email address solely to respond to your inquiry.\n\nUsage analytics: We use Google Analytics to collect anonymous, aggregated data about which features are used and session duration. This does not identify you personally.\n\nWe do not collect: your medical records, patient data, precise location, financial information, or any clinical queries you perform within the app. All clinical reference content is stored locally on your device.' },
+                    { heading: '1. Who We Are', body: null, jsx: <><span className="text-[#39a5e9] font-medium">SonoBuddy — Ultrasound Reference</span> is operated by SonoBuddy. We provide a mobile reference application for sonographers and ultrasound technologists. Questions? Contact us via the Feedback button.</> },
+                    { heading: '2. Information We Collect', body: 'No account required. You can use all core features without providing any personal information.\n\nSupport contact: If you email us, we receive your name and email address solely to respond to your inquiry.\n\nUsage analytics: We use Google Analytics to collect anonymous, aggregated data about which features are used and session duration. This does not identify you personally.\n\nWe do not collect: your medical records, patient data, precise location, financial information, or any clinical queries you perform within the app. All clinical reference content is stored locally on your device.', jsx: null },
                     { heading: '3. What We Don\'t Collect', body: '• Patient data of any kind\n• Real patient information entered into calculators\n• Location data\n• Advertising identifiers\n• Financial or payment information\n• Health records' },
                     { heading: '4. How We Use Your Information', body: 'To operate and improve SonoBuddy — Ultrasound Reference, respond to support requests, understand aggregate usage patterns, and ensure security. We do not use your information for targeted advertising.' },
                     { heading: '5. How the App Works', body: 'All clinical content — measurements, protocols, calculators, and pathologies — is bundled statically with the app. No clinical data is sent to any server when you use the reference features or calculators. The app functions fully offline once installed.' },
@@ -268,10 +268,10 @@ export default function HomePage() {
                     { heading: '10. Clinical Disclaimer', body: 'SonoBuddy — Ultrasound Reference is a reference tool only and is not a medical device, diagnostic tool, or substitute for clinical judgment. All clinical decisions must involve the ordering provider and interpreting physician. Do not enter real patient data into any calculator field.' },
                     { heading: '11. Changes to This Policy', body: 'If we change our data practices, we will update this page. Continued use of the app after changes constitutes acceptance of the updated policy.' },
                     { heading: '12. Contact', body: 'Questions about this privacy policy? Email us at contact us via the Feedback button' },
-                  ].map(({ heading, body }) => (
+                  ].map(({ heading, body, jsx }) => (
                     <div key={heading}>
                       <p className="text-white font-bold text-[13px] mb-1">{heading}</p>
-                      <p className="text-white/70 text-[13px] leading-relaxed whitespace-pre-line">{body}</p>
+                      <p className="text-white/70 text-[13px] leading-relaxed whitespace-pre-line">{jsx ?? body}</p>
                     </div>
                   ))}
                 </div>
