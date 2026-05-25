@@ -116,7 +116,7 @@ function Screen1({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
             {i > 0 && <div className="h-px bg-slate-200 my-5" />}
             <div>
               <p className="text-[52px] font-black leading-none text-slate-900 tracking-tight mb-1.5">
-                {value}
+                {value.replace('+', '')}<span className="text-sky-500">+</span>
               </p>
               <p className="text-[14px] text-slate-500 leading-snug">{label}</p>
             </div>
