@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SonoBuddy</string>
+    <string name="title_activity_main">SonoBuddy</string>
+    <string name="package_name">com.sonobuddy.app</string>
+    <string name="custom_url_scheme">com.sonobuddy.app</string>
+</resources>

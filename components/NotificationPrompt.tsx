@@ -13,6 +13,8 @@ export default function NotificationPrompt() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    // Web Push doesn't work inside native app WebViews — hide entirely
+    if (navigator.userAgent.includes('SonoBuddyApp/iOS') || navigator.userAgent.includes('SonoBuddyApp/Android')) return;
     if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
     if (localStorage.getItem(LS_DISMISSED)) return;
     if (localStorage.getItem(LS_SUBSCRIBED)) {
