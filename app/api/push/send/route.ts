@@ -61,8 +61,14 @@ export async function GET(req: NextRequest) {
   const apnsTeamId = process.env.APNS_TEAM_ID;
 
   if (apnsKey && apnsKeyId && apnsTeamId) {
+    // Vercel stores multiline env vars with literal \n — restore real newlines
+    let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
+    // Add PEM headers if the raw base64 was stored without them
+    if (!apnsKeyPem.includes('-----BEGIN')) {
+      apnsKeyPem = `-----BEGIN PRIVATE KEY-----\n${apnsKeyPem.trim()}\n-----END PRIVATE KEY-----`;
+    }
     const provider = new apn.Provider({
-      token: { key: apnsKey, keyId: apnsKeyId, teamId: apnsTeamId },
+      token: { key: apnsKeyPem, keyId: apnsKeyId, teamId: apnsTeamId },
       production: true,
     });
 
