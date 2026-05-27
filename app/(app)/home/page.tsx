@@ -215,10 +215,14 @@ export default function HomePage() {
                   onClick={() => {
                     setMenuOpen(false);
                     if (navigator.share) {
+                      const isNativeApp = navigator.userAgent.includes('SonoBuddyApp/iOS') || navigator.userAgent.includes('SonoBuddyApp/Android');
+                      const shareUrl = isNativeApp
+                        ? 'https://apps.apple.com/us/app/sonobuddy-pro/id6761020726'
+                        : 'https://sonobuddy.app';
                       navigator.share({
-                        title: 'SonoBuddy',
+                        title: 'SonoBuddy — Ultrasound Reference',
                         text: 'Check out SonoBuddy — the pocket reference app for sonographers!',
-                        url: 'https://sonobuddy.app',
+                        url: shareUrl,
                       }).catch(() => {});
                     }
                   }}
