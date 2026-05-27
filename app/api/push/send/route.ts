@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
 import { getDailyTip } from '@/lib/tips';
+import apn from 'apn';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
   const tipHtml = getDailyTip();
   const tipText = stripHtml(tipHtml);
 
-  // ── 1. Web Push (browser subscribers stored in Upstash Redis) ─────────────
+  // ── 1. Web Push (browser subscribers) ─────────────────────────────────────
   let webSent = 0;
   let webFailed = 0;
 
@@ -30,26 +31,18 @@ export async function GET(req: NextRequest) {
     for (const key of keys) {
       const raw = await redis.get<string>(key);
       if (!raw) continue;
-
       let subscription: PushSubscriptionData;
       try {
         subscription = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      } catch {
-        continue;
-      }
+      } catch { continue; }
 
       try {
         await webpush.sendNotification(
           subscription as unknown as Parameters<typeof webpush.sendNotification>[0],
-          JSON.stringify({
-            title: 'SonoBuddy Tip of the Day 💡',
-            body: tipText,
-            url: '/home',
-          })
+          JSON.stringify({ title: 'SonoBuddy Tip of the Day 💡', body: tipText, url: '/home' })
         );
         webSent++;
       } catch (err: unknown) {
-        // 410 Gone = subscription expired, remove it
         if (err && typeof err === 'object' && 'statusCode' in err && (err as { statusCode: number }).statusCode === 410) {
           await redis.del(key);
         }
@@ -58,40 +51,53 @@ export async function GET(req: NextRequest) {
     }
   } while (cursor !== 0);
 
-  // ── 2. OneSignal Push (iOS native app subscribers) ────────────────────────
-  let oneSignalResult: { sent?: number; error?: string } = {};
+  // ── 2. APNs (iOS native app) ───────────────────────────────────────────────
+  let apnsSent = 0;
+  let apnsFailed = 0;
 
-  const oneSignalAppId = process.env.ONESIGNAL_APP_ID;
-  const oneSignalApiKey = process.env.ONESIGNAL_API_KEY;
+  const apnsKey = process.env.APNS_KEY;
+  const apnsKeyId = process.env.APNS_KEY_ID;
+  const apnsTeamId = process.env.APNS_TEAM_ID;
 
-  if (oneSignalAppId && oneSignalApiKey) {
-    try {
-      const res = await fetch('https://onesignal.com/api/v1/notifications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${oneSignalApiKey}`,
-        },
-        body: JSON.stringify({
-          app_id: oneSignalAppId,
-          included_segments: ['All'],
-          headings: { en: 'SonoBuddy Tip of the Day 💡' },
-          contents: { en: tipText },
-          url: 'sono-web:///home/',
-        }),
-      });
+  if (apnsKey && apnsKeyId && apnsTeamId) {
+    const provider = new apn.Provider({
+      token: { key: apnsKey, keyId: apnsKeyId, teamId: apnsTeamId },
+      production: true,
+    });
 
-      const json = await res.json() as { recipients?: number; errors?: unknown };
-      oneSignalResult = { sent: json.recipients ?? 0 };
-    } catch (err) {
-      oneSignalResult = { error: String(err) };
-    }
-  } else {
-    oneSignalResult = { error: 'ONESIGNAL_APP_ID or ONESIGNAL_API_KEY not set' };
+    let apnsCursor = 0;
+    do {
+      const [nextCursor, keys] = await redis.scan(apnsCursor, { match: 'apns:*', count: 100 });
+      apnsCursor = Number(nextCursor);
+
+      for (const key of keys) {
+        const token = await redis.get<string>(key);
+        if (!token) continue;
+
+        const note = new apn.Notification();
+        note.alert = { title: 'SonoBuddy Tip of the Day 💡', body: tipText };
+        note.sound = 'default';
+        note.topic = 'com.sonobuddy.app';
+
+        const result = await provider.send(note, token);
+        if (result.failed.length > 0) {
+          // Remove invalid tokens
+          const reason = result.failed[0]?.response?.reason;
+          if (reason === 'BadDeviceToken' || reason === 'Unregistered') {
+            await redis.del(key);
+          }
+          apnsFailed++;
+        } else {
+          apnsSent++;
+        }
+      }
+    } while (apnsCursor !== 0);
+
+    provider.shutdown();
   }
 
   return NextResponse.json({
     webPush: { sent: webSent, failed: webFailed },
-    oneSignal: oneSignalResult,
+    apns: { sent: apnsSent, failed: apnsFailed },
   });
 }
