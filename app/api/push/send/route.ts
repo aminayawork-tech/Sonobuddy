@@ -11,6 +11,7 @@ const redis = new Redis({
 
 // Called by Vercel Cron (see vercel.json). Protected by CRON_SECRET.
 export async function GET(req: NextRequest) {
+  try {
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -100,4 +101,8 @@ export async function GET(req: NextRequest) {
     webPush: { sent: webSent, failed: webFailed },
     apns: { sent: apnsSent, failed: apnsFailed },
   });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
