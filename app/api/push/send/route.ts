@@ -67,9 +67,13 @@ export async function GET(req: NextRequest) {
     if (!apnsKeyPem.includes('-----BEGIN')) {
       apnsKeyPem = `-----BEGIN PRIVATE KEY-----\n${apnsKeyPem.trim()}\n-----END PRIVATE KEY-----`;
     }
-    const provider = new apn.Provider({
+    const providerProd = new apn.Provider({
       token: { key: apnsKeyPem, keyId: apnsKeyId, teamId: apnsTeamId },
       production: true,
+    });
+    const providerSandbox = new apn.Provider({
+      token: { key: apnsKeyPem, keyId: apnsKeyId, teamId: apnsTeamId },
+      production: false,
     });
 
     let apnsCursor = 0;
@@ -86,22 +90,26 @@ export async function GET(req: NextRequest) {
         note.sound = 'default';
         note.topic = 'app.sonobuddy';
 
-        const result = await provider.send(note, token);
+        // Try production first, fall back to sandbox
+        let result = await providerProd.send(note, token);
+        if (result.failed.length > 0 && result.failed[0]?.response?.reason === 'BadEnvironmentKeyInToken') {
+          result = await providerSandbox.send(note, token);
+        }
+
         if (result.failed.length > 0) {
           const reason = result.failed[0]?.response?.reason;
-          const errMsg = result.failed[0]?.error?.message ?? 'none';
-          if (reason === 'BadDeviceToken' || reason === 'Unregistered' || reason === 'BadEnvironmentKeyInToken') {
+          if (reason === 'BadDeviceToken' || reason === 'Unregistered') {
             await redis.del(key);
           }
           apnsFailed++;
-          return NextResponse.json({ apnsError: { reason, errMsg, tokenPrefix: (token as string).slice(0, 10) } });
         } else {
           apnsSent++;
         }
       }
     } while (apnsCursor !== 0);
 
-    provider.shutdown();
+    providerProd.shutdown();
+    providerSandbox.shutdown();
   }
 
   return NextResponse.json({
