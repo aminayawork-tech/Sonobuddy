@@ -23,7 +23,11 @@ cleanup() {
 trap cleanup EXIT
 
 echo "==> Temporarily hiding API routes (not needed in Android bundle)..."
-mv "$API_DIR" "$API_BACKUP"
+if [ -d "$API_DIR" ]; then
+  mv "$API_DIR" "$API_BACKUP"
+else
+  echo "    (no app/api directory found, skipping)"
+fi
 
 echo "==> Building Next.js static export..."
 cd "$SCRIPT_DIR"
