@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
         const note = new apn.Notification();
         note.alert = { title: 'SonoBuddy Tip of the Day 💡', body: tipText };
         note.sound = 'default';
-        note.topic = 'com.sonobuddy.app';
+        note.topic = 'app.sonobuddy';
 
         const result = await provider.send(note, token);
         if (result.failed.length > 0) {
