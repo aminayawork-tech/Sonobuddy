@@ -21,7 +21,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     private static func saveToken(_ token: String) async {
-        guard let url = URL(string: "https://www.sonobuddy.com/api/push/apns-token") else { return }
+        guard let url = URL(string: "https://www.sonobuddy.com/api/push/apns-token/") else { return }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
