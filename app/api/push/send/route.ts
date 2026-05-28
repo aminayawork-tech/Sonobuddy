@@ -89,10 +89,12 @@ export async function GET(req: NextRequest) {
         const result = await provider.send(note, token);
         if (result.failed.length > 0) {
           const reason = result.failed[0]?.response?.reason;
+          const errMsg = result.failed[0]?.error?.message ?? 'none';
           if (reason === 'BadDeviceToken' || reason === 'Unregistered' || reason === 'BadEnvironmentKeyInToken') {
             await redis.del(key);
           }
           apnsFailed++;
+          return NextResponse.json({ apnsError: { reason, errMsg, tokenPrefix: (token as string).slice(0, 10) } });
         } else {
           apnsSent++;
         }
