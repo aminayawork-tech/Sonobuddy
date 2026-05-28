@@ -92,7 +92,8 @@ export async function GET(req: NextRequest) {
 
         // Try production first, fall back to sandbox
         let result = await providerProd.send(note, token);
-        if (result.failed.length > 0 && result.failed[0]?.response?.reason === 'BadEnvironmentKeyInToken') {
+        const prodReason = result.failed[0]?.response?.reason;
+        if (result.failed.length > 0 && prodReason === 'BadEnvironmentKeyInToken') {
           result = await providerSandbox.send(note, token);
         }
 
@@ -102,6 +103,7 @@ export async function GET(req: NextRequest) {
             await redis.del(key);
           }
           apnsFailed++;
+          return NextResponse.json({ apnsDebug: { prodReason, finalReason: reason, tokenPrefix: (token as string).slice(0,8) } });
         } else {
           apnsSent++;
         }
