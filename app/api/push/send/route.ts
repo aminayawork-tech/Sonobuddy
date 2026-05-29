@@ -142,6 +142,7 @@ export async function GET(req: NextRequest) {
     const apnsTeamId = process.env.APNS_TEAM_ID;
 
     const apnsDebugLog: object[] = [];
+    let jwtDebug: object = {};
     if (apnsKey && apnsKeyId && apnsTeamId) {
       // Restore real newlines if Vercel stored them escaped
       let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
@@ -150,6 +151,13 @@ export async function GET(req: NextRequest) {
       }
 
       const jwt = await buildApnsJwt(apnsKeyPem, apnsKeyId, apnsTeamId);
+      const [jwtHeaderB64, jwtPayloadB64] = jwt.split('.');
+      jwtDebug = {
+        header: JSON.parse(Buffer.from(jwtHeaderB64, 'base64url').toString()),
+        payload: JSON.parse(Buffer.from(jwtPayloadB64, 'base64url').toString()),
+        keyFirstLine: apnsKeyPem.split('\n')[0],
+        keyLength: apnsKeyPem.length,
+      };
       const notifBody = JSON.stringify({
         aps: {
           alert: { title: 'SonoBuddy Tip of the Day 💡', body: tipText },
@@ -194,7 +202,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
-      apns: { sent: apnsSent, failed: apnsFailed, debug: apnsDebugLog },
+      apns: { sent: apnsSent, failed: apnsFailed, debug: apnsDebugLog, jwtDebug },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
