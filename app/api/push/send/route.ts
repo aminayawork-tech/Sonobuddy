@@ -141,8 +141,6 @@ export async function GET(req: NextRequest) {
     const apnsKeyId = process.env.APNS_KEY_ID;
     const apnsTeamId = process.env.APNS_TEAM_ID;
 
-    const apnsDebugLog: object[] = [];
-    let jwtDebug: object = {};
     if (apnsKey && apnsKeyId && apnsTeamId) {
       // Restore real newlines if Vercel stored them escaped
       let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
@@ -151,24 +149,13 @@ export async function GET(req: NextRequest) {
       }
 
       const jwt = await buildApnsJwt(apnsKeyPem, apnsKeyId, apnsTeamId);
-      const [jwtHeaderB64, jwtPayloadB64] = jwt.split('.');
-      // Send to dummy token — BadDeviceToken means JWT is accepted; anything else means auth is broken
-      const dummyToken = '0'.repeat(64);
-      const dummyNotifBody = JSON.stringify({ aps: { alert: { title: 'test', body: 'test' } } });
-      const dummyResult = await sendOneApns(dummyToken, dummyNotifBody, jwt, 'app.sonobuddy', true);
-      jwtDebug = {
-        header: JSON.parse(Buffer.from(jwtHeaderB64, 'base64url').toString()),
-        payload: JSON.parse(Buffer.from(jwtPayloadB64, 'base64url').toString()),
-        keyFirstLine: apnsKeyPem.split('\n')[0],
-        keyLength: apnsKeyPem.length,
-        dummyTokenTest: dummyResult,
-      };
       const notifBody = JSON.stringify({
         aps: {
           alert: { title: 'SonoBuddy Tip of the Day 💡', body: tipText },
           sound: 'default',
         },
       });
+
       let apnsCursor = 0;
       do {
         const [nextCursor, keys] = await redis.scan(apnsCursor, { match: 'apns:*', count: 100 });
@@ -178,25 +165,12 @@ export async function GET(req: NextRequest) {
           const token = await redis.get<string>(key);
           if (!token) continue;
 
-          // Try production first; always fall back to sandbox so we see both results
-          const prodRes = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
-          const sandboxRes = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', false);
-          const res = prodRes.status === 200 ? prodRes : sandboxRes;
-
-          apnsDebugLog.push({
-            tokenPrefix: (token as string).slice(0, 8),
-            keyId: apnsKeyId,
-            teamId: apnsTeamId,
-            prodStatus: prodRes.status,
-            prodReason: prodRes.reason,
-            sandboxStatus: sandboxRes.status,
-            sandboxReason: sandboxRes.reason,
-          });
+          const res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
 
           if (res.status === 200) {
             apnsSent++;
           } else {
-            if (prodRes.reason === 'BadDeviceToken' || prodRes.reason === 'Unregistered') {
+            if (res.reason === 'BadDeviceToken' || res.reason === 'Unregistered') {
               await redis.del(key);
             }
             apnsFailed++;
@@ -207,7 +181,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
-      apns: { sent: apnsSent, failed: apnsFailed, debug: apnsDebugLog, jwtDebug },
+      apns: { sent: apnsSent, failed: apnsFailed },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
