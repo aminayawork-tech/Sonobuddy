@@ -165,19 +165,25 @@ export async function GET(req: NextRequest) {
           const token = await redis.get<string>(key);
           if (!token) continue;
 
-          // Try production first, fall back to sandbox
+          // Try production first; always fall back to sandbox so we see both results
           const prodRes = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
-          let res = prodRes;
-          if (prodRes.reason === 'BadDeviceToken' || prodRes.reason === 'DeviceTokenNotForTopic') {
-            res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', false);
-          }
+          const sandboxRes = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', false);
+          const res = prodRes.status === 200 ? prodRes : sandboxRes;
 
-          apnsDebugLog.push({ tokenPrefix: (token as string).slice(0, 8), prodStatus: prodRes.status, prodReason: prodRes.reason, finalStatus: res.status, finalReason: res.reason });
+          apnsDebugLog.push({
+            tokenPrefix: (token as string).slice(0, 8),
+            keyId: apnsKeyId,
+            teamId: apnsTeamId,
+            prodStatus: prodRes.status,
+            prodReason: prodRes.reason,
+            sandboxStatus: sandboxRes.status,
+            sandboxReason: sandboxRes.reason,
+          });
 
           if (res.status === 200) {
             apnsSent++;
           } else {
-            if (res.reason === 'BadDeviceToken' || res.reason === 'Unregistered') {
+            if (prodRes.reason === 'BadDeviceToken' || prodRes.reason === 'Unregistered') {
               await redis.del(key);
             }
             apnsFailed++;
