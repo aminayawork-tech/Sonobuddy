@@ -1,123 +1,192 @@
 import { NextRequest, NextResponse } from 'next/server';
+import http2 from 'http2';
+import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
 import { getDailyTip } from '@/lib/tips';
-import apn from 'apn';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
+async function buildApnsJwt(keyPem: string, keyId: string, teamId: string): Promise<string> {
+  const pemStripped = keyPem
+    .replace(/-----BEGIN.*?-----/g, '')
+    .replace(/-----END.*?-----/g, '')
+    .replace(/\s/g, '');
+  const keyDer = Buffer.from(pemStripped, 'base64');
+
+  const key = await crypto.subtle.importKey(
+    'pkcs8',
+    keyDer,
+    { name: 'ECDSA', namedCurve: 'P-256' },
+    false,
+    ['sign']
+  );
+
+  const header = Buffer.from(JSON.stringify({ alg: 'ES256', kid: keyId })).toString('base64url');
+  const payload = Buffer.from(JSON.stringify({ iss: teamId, iat: Math.floor(Date.now() / 1000) })).toString('base64url');
+  const signingInput = `${header}.${payload}`;
+
+  const sig = await crypto.subtle.sign(
+    { name: 'ECDSA', hash: { name: 'SHA-256' } },
+    key,
+    new TextEncoder().encode(signingInput)
+  );
+
+  return `${signingInput}.${Buffer.from(sig).toString('base64url')}`;
+}
+
+function sendOneApns(
+  deviceToken: string,
+  body: string,
+  jwt: string,
+  bundleId: string,
+  production: boolean
+): Promise<{ status: number; reason: string | null }> {
+  const host = production ? 'api.push.apple.com' : 'api.sandbox.push.apple.com';
+
+  return new Promise((resolve) => {
+    const client = http2.connect(`https://${host}`);
+    client.on('error', (err) => resolve({ status: 0, reason: `connect:${err.message}` }));
+
+    const req = client.request({
+      ':method': 'POST',
+      ':path': `/3/device/${deviceToken}`,
+      'authorization': `bearer ${jwt}`,
+      'apns-push-type': 'alert',
+      'apns-topic': bundleId,
+      'apns-priority': '10',
+      'content-type': 'application/json',
+      'content-length': Buffer.byteLength(body).toString(),
+    });
+
+    req.write(body);
+    req.end();
+
+    let status = 0;
+    req.on('response', (headers) => { status = Number(headers[':status']); });
+
+    let data = '';
+    req.on('data', (chunk: Buffer) => { data += chunk; });
+    req.on('end', () => {
+      try { client.close(); } catch { /* ignore */ }
+      if (status === 200) {
+        resolve({ status: 200, reason: null });
+      } else {
+        try {
+          resolve({ status, reason: JSON.parse(data).reason ?? `HTTP_${status}` });
+        } catch {
+          resolve({ status, reason: `HTTP_${status}` });
+        }
+      }
+    });
+
+    req.on('error', (err) => {
+      try { client.close(); } catch { /* ignore */ }
+      resolve({ status: 0, reason: `req:${err.message}` });
+    });
+  });
+}
+
 // Called by Vercel Cron (see vercel.json). Protected by CRON_SECRET.
 export async function GET(req: NextRequest) {
   try {
-  const authHeader = req.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const tipHtml = getDailyTip();
-  const tipText = stripHtml(tipHtml);
-
-  // ── 1. Web Push (browser subscribers) ─────────────────────────────────────
-  let webSent = 0;
-  let webFailed = 0;
-
-  let cursor = 0;
-  do {
-    const [nextCursor, keys] = await redis.scan(cursor, { match: 'push:*', count: 100 });
-    cursor = Number(nextCursor);
-
-    for (const key of keys) {
-      const raw = await redis.get<string>(key);
-      if (!raw) continue;
-      let subscription: PushSubscriptionData;
-      try {
-        subscription = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      } catch { continue; }
-
-      try {
-        await webpush.sendNotification(
-          subscription as unknown as Parameters<typeof webpush.sendNotification>[0],
-          JSON.stringify({ title: 'SonoBuddy Tip of the Day 💡', body: tipText, url: '/home' })
-        );
-        webSent++;
-      } catch (err: unknown) {
-        if (err && typeof err === 'object' && 'statusCode' in err && (err as { statusCode: number }).statusCode === 410) {
-          await redis.del(key);
-        }
-        webFailed++;
-      }
+    const authHeader = req.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  } while (cursor !== 0);
 
-  // ── 2. APNs (iOS native app) ───────────────────────────────────────────────
-  let apnsSent = 0;
-  let apnsFailed = 0;
+    const tipHtml = getDailyTip();
+    const tipText = stripHtml(tipHtml);
 
-  const apnsKey = process.env.APNS_KEY;
-  const apnsKeyId = process.env.APNS_KEY_ID;
-  const apnsTeamId = process.env.APNS_TEAM_ID;
+    // ── 1. Web Push (browser subscribers) ───────────────────────────────────
+    let webSent = 0;
+    let webFailed = 0;
 
-  if (apnsKey && apnsKeyId && apnsTeamId) {
-    // Vercel stores multiline env vars with literal \n — restore real newlines
-    let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
-    // Add PEM headers if the raw base64 was stored without them
-    if (!apnsKeyPem.includes('-----BEGIN')) {
-      apnsKeyPem = `-----BEGIN PRIVATE KEY-----\n${apnsKeyPem.trim()}\n-----END PRIVATE KEY-----`;
-    }
-    const providerProd = new apn.Provider({
-      token: { key: apnsKeyPem, keyId: apnsKeyId, teamId: apnsTeamId },
-      production: true,
-    });
-    const providerSandbox = new apn.Provider({
-      token: { key: apnsKeyPem, keyId: apnsKeyId, teamId: apnsTeamId },
-      production: false,
-    });
-
-    let apnsCursor = 0;
+    let cursor = 0;
     do {
-      const [nextCursor, keys] = await redis.scan(apnsCursor, { match: 'apns:*', count: 100 });
-      apnsCursor = Number(nextCursor);
+      const [nextCursor, keys] = await redis.scan(cursor, { match: 'push:*', count: 100 });
+      cursor = Number(nextCursor);
 
       for (const key of keys) {
-        const token = await redis.get<string>(key);
-        if (!token) continue;
+        const raw = await redis.get<string>(key);
+        if (!raw) continue;
+        let subscription: PushSubscriptionData;
+        try {
+          subscription = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        } catch { continue; }
 
-        const note = new apn.Notification();
-        note.alert = { title: 'SonoBuddy Tip of the Day 💡', body: tipText };
-        note.sound = 'default';
-        note.topic = 'app.sonobuddy';
-
-        // Try production first, fall back to sandbox
-        let result = await providerProd.send(note, token);
-        const prodReason = result.failed[0]?.response?.reason;
-        if (result.failed.length > 0 && prodReason === 'BadEnvironmentKeyInToken') {
-          result = await providerSandbox.send(note, token);
-        }
-
-        if (result.failed.length > 0) {
-          const reason = result.failed[0]?.response?.reason;
-          if (reason === 'BadDeviceToken' || reason === 'Unregistered') {
+        try {
+          await webpush.sendNotification(
+            subscription as unknown as Parameters<typeof webpush.sendNotification>[0],
+            JSON.stringify({ title: 'SonoBuddy Tip of the Day 💡', body: tipText, url: '/home' })
+          );
+          webSent++;
+        } catch (err: unknown) {
+          if (err && typeof err === 'object' && 'statusCode' in err && (err as { statusCode: number }).statusCode === 410) {
             await redis.del(key);
           }
-          apnsFailed++;
-          return NextResponse.json({ apnsDebug: { prodReason, finalReason: reason, tokenPrefix: (token as string).slice(0,8) } });
-        } else {
-          apnsSent++;
+          webFailed++;
         }
       }
-    } while (apnsCursor !== 0);
+    } while (cursor !== 0);
 
-    providerProd.shutdown();
-    providerSandbox.shutdown();
-  }
+    // ── 2. APNs (iOS native app) ─────────────────────────────────────────────
+    let apnsSent = 0;
+    let apnsFailed = 0;
 
-  return NextResponse.json({
-    webPush: { sent: webSent, failed: webFailed },
-    apns: { sent: apnsSent, failed: apnsFailed },
-  });
+    const apnsKey = process.env.APNS_KEY;
+    const apnsKeyId = process.env.APNS_KEY_ID;
+    const apnsTeamId = process.env.APNS_TEAM_ID;
+
+    if (apnsKey && apnsKeyId && apnsTeamId) {
+      // Restore real newlines if Vercel stored them escaped
+      let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
+      if (!apnsKeyPem.includes('-----BEGIN')) {
+        apnsKeyPem = `-----BEGIN PRIVATE KEY-----\n${apnsKeyPem.trim()}\n-----END PRIVATE KEY-----`;
+      }
+
+      const jwt = await buildApnsJwt(apnsKeyPem, apnsKeyId, apnsTeamId);
+      const notifBody = JSON.stringify({
+        aps: {
+          alert: { title: 'SonoBuddy Tip of the Day 💡', body: tipText },
+          sound: 'default',
+        },
+      });
+
+      let apnsCursor = 0;
+      do {
+        const [nextCursor, keys] = await redis.scan(apnsCursor, { match: 'apns:*', count: 100 });
+        apnsCursor = Number(nextCursor);
+
+        for (const key of keys) {
+          const token = await redis.get<string>(key);
+          if (!token) continue;
+
+          // Try production first, fall back to sandbox
+          let res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
+          if (res.reason === 'BadDeviceToken' || res.reason === 'DeviceTokenNotForTopic') {
+            res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', false);
+          }
+
+          if (res.status === 200) {
+            apnsSent++;
+          } else {
+            if (res.reason === 'BadDeviceToken' || res.reason === 'Unregistered') {
+              await redis.del(key);
+            }
+            apnsFailed++;
+          }
+        }
+      } while (apnsCursor !== 0);
+    }
+
+    return NextResponse.json({
+      webPush: { sent: webSent, failed: webFailed },
+      apns: { sent: apnsSent, failed: apnsFailed },
+    });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: msg }, { status: 500 });
