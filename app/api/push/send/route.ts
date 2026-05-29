@@ -141,6 +141,7 @@ export async function GET(req: NextRequest) {
     const apnsKeyId = process.env.APNS_KEY_ID;
     const apnsTeamId = process.env.APNS_TEAM_ID;
 
+    const apnsDebugLog: object[] = [];
     if (apnsKey && apnsKeyId && apnsTeamId) {
       // Restore real newlines if Vercel stored them escaped
       let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
@@ -155,7 +156,6 @@ export async function GET(req: NextRequest) {
           sound: 'default',
         },
       });
-
       let apnsCursor = 0;
       do {
         const [nextCursor, keys] = await redis.scan(apnsCursor, { match: 'apns:*', count: 100 });
@@ -166,10 +166,13 @@ export async function GET(req: NextRequest) {
           if (!token) continue;
 
           // Try production first, fall back to sandbox
-          let res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
-          if (res.reason === 'BadDeviceToken' || res.reason === 'DeviceTokenNotForTopic') {
+          const prodRes = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
+          let res = prodRes;
+          if (prodRes.reason === 'BadDeviceToken' || prodRes.reason === 'DeviceTokenNotForTopic') {
             res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', false);
           }
+
+          apnsDebugLog.push({ tokenPrefix: (token as string).slice(0, 8), prodStatus: prodRes.status, prodReason: prodRes.reason, finalStatus: res.status, finalReason: res.reason });
 
           if (res.status === 200) {
             apnsSent++;
@@ -185,7 +188,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
-      apns: { sent: apnsSent, failed: apnsFailed },
+      apns: { sent: apnsSent, failed: apnsFailed, debug: apnsDebugLog },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
