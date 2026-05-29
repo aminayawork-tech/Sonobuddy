@@ -152,11 +152,16 @@ export async function GET(req: NextRequest) {
 
       const jwt = await buildApnsJwt(apnsKeyPem, apnsKeyId, apnsTeamId);
       const [jwtHeaderB64, jwtPayloadB64] = jwt.split('.');
+      // Send to dummy token — BadDeviceToken means JWT is accepted; anything else means auth is broken
+      const dummyToken = '0'.repeat(64);
+      const dummyNotifBody = JSON.stringify({ aps: { alert: { title: 'test', body: 'test' } } });
+      const dummyResult = await sendOneApns(dummyToken, dummyNotifBody, jwt, 'app.sonobuddy', true);
       jwtDebug = {
         header: JSON.parse(Buffer.from(jwtHeaderB64, 'base64url').toString()),
         payload: JSON.parse(Buffer.from(jwtPayloadB64, 'base64url').toString()),
         keyFirstLine: apnsKeyPem.split('\n')[0],
         keyLength: apnsKeyPem.length,
+        dummyTokenTest: dummyResult,
       };
       const notifBody = JSON.stringify({
         aps: {
