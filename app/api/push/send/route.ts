@@ -1,3 +1,6 @@
+export const runtime = 'nodejs';
+export const maxDuration = 30;
+
 import { NextRequest, NextResponse } from 'next/server';
 import http2 from 'http2';
 import crypto from 'crypto';
