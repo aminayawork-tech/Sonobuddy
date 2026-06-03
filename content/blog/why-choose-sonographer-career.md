@@ -108,6 +108,36 @@ National surveys of working sonographers consistently report:
 - The most-cited positives: patient interaction, diagnostic impact, schedule flexibility in outpatient settings
 - The most-cited negatives: physical strain, high workload, lack of advancement clarity
 - Burnout rates are higher in hospital inpatient and emergency settings than in outpatient
+- Mid-career sonographers (5–15 years) report slightly lower satisfaction than early-career, largely due to physical strain accumulation
+
+---
+
+## How the Job Changes Over a Career
+
+This is worth thinking about before you enter: sonography is not a static experience from year 1 to year 30.
+
+**Years 1–3:** The steepest learning curve. High cognitive load — you're building speed, pattern recognition, and clinical judgment simultaneously. Most new grads feel incompetent for longer than they expected. This is normal and not a reflection of whether you're suited for the career.
+
+**Years 3–7:** The sweet spot for many sonographers. Skills are strong, you move efficiently, and complex cases are interesting rather than terrifying. This is when the job feels most rewarding.
+
+**Years 8–15:** Physical strain starts to accumulate. Career crossroads often appear — stay clinical and optimize, move into specialization, travel, or pivot toward leadership or education. Sonographers who don't make a deliberate choice often find themselves plateaued.
+
+**Years 15+:** Long-term sonographers either have found their equilibrium (a setting and pace that works for them) or they've struggled with physical limitations. The ones who last are those who took ergonomics seriously, managed call and volume intelligently, and found clinical meaning in the work.
+
+---
+
+## What to Do Before You Commit
+
+If you're still in the research phase, the most valuable thing you can do is spend time observing in an actual department — not a career fair, not a YouTube video, but a real outpatient or hospital imaging department.
+
+Contact local hospitals or imaging centers and ask if you can observe. Most will say yes to a motivated pre-student. Spend a full shift if possible. Notice:
+- How fast the day moves
+- How sonographers interact with patients
+- The physical posture required for sustained scanning
+- What the documentation and administrative work looks like
+- Whether the work environment energizes or exhausts you
+
+That observation is worth more than any career guide, including this one.
 
 ---
 

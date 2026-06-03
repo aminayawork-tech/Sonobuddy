@@ -123,6 +123,36 @@ Employers update job descriptions periodically, but they rarely retroactively ch
 
 ---
 
+## New Grad vs. Experienced Hire: What Changes in the Posting
+
+Job descriptions aimed at new grads look different from postings for experienced candidates. Key differences:
+
+| Element | New Grad Posting | Experienced Hire Posting |
+|---|---|---|
+| Experience requirement | 0–1 year, "registry eligible" | 2–5+ years, specific registrations required |
+| Training language | "Orientation provided," "strong preceptor program" | Implied independence from day one |
+| Scope | Single modality focus (e.g., general only) | Multi-modality expected |
+| Call requirements | Often lighter or phased in | Full rotation from start |
+| Salary range | $62,000–$78,000 typical | $80,000–$105,000 typical |
+
+When you're a new grad, look for postings that explicitly mention orientation programs and preceptors. Departments that have hired and trained new grads successfully before are far more likely to give you the ramp you need than a department that expects immediate independence.
+
+---
+
+## Questions to Ask Before Accepting Any Offer
+
+Job postings don't include everything. Before you sign:
+
+1. **"How many studies per shift is the standard expectation?"** — Clarifies actual pace.
+2. **"How often does call get activated, on average?"** — Tells you real call burden.
+3. **"What does the onboarding and orientation period look like for this role?"** — Tells you how supported you'll be.
+4. **"Is overtime voluntary or mandatory?"** — Critical at understaffed departments.
+5. **"How long has this position been open, and why?"** — A position open for 8+ months in a market with normal turnover is a flag.
+
+These questions don't disqualify you; they demonstrate professionalism and seriousness.
+
+---
+
 ## Bottom Line
 
 A sonographer job description in 2026 tells you a lot between the lines. Experience requirements are often softer than listed for strong candidates; call and volume requirements are often buried. Read the full posting, ask specific questions before the offer, and know what the current market pays so you're not negotiating from zero.
