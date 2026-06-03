@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Interview Questions and Answers: What Hiring Managers Actually Ask"
-date: "2026-11-17"
+date: "2026-08-05"
 excerpt: "Sonography interviews cover clinical skills, judgment, and soft skills in a format most candidates aren't prepared for. Here's what hiring managers actually ask and how to answer well."
 author: "SonoBuddy Team"
 tags: ["interview", "job search", "career", "tips"]

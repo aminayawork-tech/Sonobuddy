@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Specializations: Complete Guide to Every Ultrasound Credential and Career Path"
-date: "2027-01-24"
+date: "2026-08-28"
 excerpt: "From AB to RVT, RDMS to RDCS — a complete breakdown of every ARDMS and CCI credential, what each requires, what each pays, and how to decide which path makes sense for your career."
 author: "SonoBuddy Team"
 tags: ["specializations", "credentials", "career", "ARDMS"]

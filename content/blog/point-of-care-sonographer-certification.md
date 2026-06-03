@@ -1,6 +1,6 @@
 ---
 title: "Point-of-Care Ultrasound Certification for Sonographers: POCUS Credentials Explained"
-date: "2026-07-24"
+date: "2026-06-26"
 excerpt: "POCUS programs are expanding in emergency medicine, primary care, and critical care. Here's how credentialing works, what certifications are available, and where credentialed sonographers fit in."
 author: "SonoBuddy Team"
 tags: ["POCUS", "certification", "point-of-care", "career"]

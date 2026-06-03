@@ -1,6 +1,6 @@
 ---
 title: "Online Sonographer Training Courses: What Counts Toward Your Credential"
-date: "2026-07-08"
+date: "2026-06-19"
 excerpt: "A practical guide to online sonography education in 2026 — which courses count toward ARDMS CME, which don't, and what to look for in an online program."
 author: "SonoBuddy Team"
 tags: ["education", "online learning", "training", "CME"]

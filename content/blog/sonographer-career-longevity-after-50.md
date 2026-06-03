@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Career Longevity After 50: Staying in the Field on Your Own Terms"
-date: "2026-11-09"
+date: "2026-08-03"
 excerpt: "Sonography's physical demands accelerate career exit for many techs in their 40s and 50s. Here's a practical guide to extending your career, protecting your body, and transitioning into roles that are sustainable long-term."
 author: "SonoBuddy Team"
 tags: ["career longevity", "ergonomics", "retirement", "career"]

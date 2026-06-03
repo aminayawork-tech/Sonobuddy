@@ -1,6 +1,6 @@
 ---
 title: "Accredited Ultrasound Sonographer Programs: What to Look for in a Professional Course"
-date: "2026-09-22"
+date: "2026-07-16"
 excerpt: "Not all sonography programs are equal — and the wrong program can cost you years of time and tens of thousands of dollars. Here's how to evaluate programs before you apply."
 author: "SonoBuddy Team"
 tags: ["education", "accreditation", "programs", "CAAHEP"]

@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Stress and Burnout: Causes, Signs, and How to Recover"
-date: "2026-08-21"
+date: "2026-07-06"
 excerpt: "Burnout in sonography is measurably common and has specific causes. Here's how to identify it, understand what's driving it, and take steps to recover — whether you're in the middle of it or trying to prevent it."
 author: "SonoBuddy Team"
 tags: ["burnout", "stress", "wellness", "career"]

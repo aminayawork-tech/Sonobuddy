@@ -1,6 +1,6 @@
 ---
 title: "Affordable Sonographer Courses Online: Where to Find Legitimate CME and Training"
-date: "2026-08-09"
+date: "2026-07-01"
 excerpt: "CME doesn't have to cost $800 a conference. Here's where working sonographers find credible, affordable online courses for continuing education and specialty training."
 author: "SonoBuddy Team"
 tags: ["education", "CME", "online courses", "budget"]

@@ -1,6 +1,6 @@
 ---
 title: "International Sonographer Jobs: Working Abroad as an Ultrasound Tech"
-date: "2026-10-08"
+date: "2026-07-22"
 excerpt: "US-trained sonographers are in demand worldwide. Here's what international practice actually looks like — licensing, pay, working conditions, and which countries are actively recruiting."
 author: "SonoBuddy Team"
 tags: ["international", "jobs", "career", "abroad"]

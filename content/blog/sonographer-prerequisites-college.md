@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Prerequisites: What College Courses You Need Before Applying to a Program"
-date: "2026-12-27"
+date: "2026-08-19"
 excerpt: "Diagnostic medical sonography programs are competitive. Getting prerequisites right — and getting strong grades in them — is the difference between getting in and waiting another year."
 author: "SonoBuddy Team"
 tags: ["prerequisites", "education", "college", "anatomy"]

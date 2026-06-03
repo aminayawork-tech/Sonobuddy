@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Salary in 2026: Complete Breakdown by Specialty and State"
-date: "2026-06-22"
+date: "2026-06-15"
 excerpt: "Real salary data for sonographers in 2026 — broken down by specialty, experience level, geography, and setting. Plus what actually moves the needle on your pay."
 author: "SonoBuddy Team"
 tags: ["salary", "career", "2026", "compensation"]

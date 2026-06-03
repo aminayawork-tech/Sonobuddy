@@ -1,6 +1,6 @@
 ---
 title: "Moving Into Management as a Sonographer: Lead Tech, Chief Sonographer, and Beyond"
-date: "2027-01-16"
+date: "2026-08-26"
 excerpt: "Management in sonography isn't handed to you — you build toward it. Here's what lead tech, chief sonographer, and imaging management roles actually involve, what they pay, and how to get there."
 author: "SonoBuddy Team"
 tags: ["management", "advancement", "career", "leadership"]

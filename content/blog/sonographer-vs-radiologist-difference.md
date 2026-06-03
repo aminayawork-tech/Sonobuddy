@@ -1,6 +1,6 @@
 ---
 title: "Sonographer vs Radiologist: Roles, Education, Salary, and Career Paths Explained"
-date: "2026-08-13"
+date: "2026-07-02"
 excerpt: "Patients and students frequently confuse the two roles. This is the definitive breakdown: what each profession does, how long training takes, and what the career trajectories actually look like."
 author: "SonoBuddy Team"
 tags: ["career", "radiologist", "comparison", "education"]

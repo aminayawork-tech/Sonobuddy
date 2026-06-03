@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Burnout Prevention: Practical Strategies That Actually Work"
-date: "2026-08-17"
+date: "2026-07-03"
 excerpt: "Burnout is endemic in sonography. The good news: specific, actionable interventions reduce it. This isn't advice about mindfulness apps — it's what actually changes the daily experience of the job."
 author: "SonoBuddy Team"
 tags: ["burnout", "wellness", "career longevity", "mental health"]

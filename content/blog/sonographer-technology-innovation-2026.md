@@ -1,6 +1,6 @@
 ---
 title: "Ultrasound Technology Innovations in 2026: What's Changing the Profession"
-date: "2026-07-20"
+date: "2026-06-24"
 excerpt: "From matrix array transducers to cloud-based PACS and handheld AI scanners, here's what's new in ultrasound technology in 2026 and how it affects daily practice."
 author: "SonoBuddy Team"
 tags: ["technology", "innovation", "equipment", "2026"]

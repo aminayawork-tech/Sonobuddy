@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Ergonomics and Physical Demands: Protecting Your Body for a Long Career"
-date: "2026-09-26"
+date: "2026-07-17"
 excerpt: "Work-related musculoskeletal injury is the leading cause of career-shortening disability among sonographers. Most injuries are preventable with specific mechanical and workflow interventions — here's what actually works."
 author: "SonoBuddy Team"
 tags: ["ergonomics", "physical health", "injury prevention", "career longevity"]

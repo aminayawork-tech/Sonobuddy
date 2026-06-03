@@ -1,6 +1,6 @@
 ---
 title: "Obstetric Ultrasound Specialization: OB/GYN Sonography Credentials and Career Path"
-date: "2026-12-19"
+date: "2026-08-17"
 excerpt: "OB/GYN sonography is one of the most in-demand specializations in the field. Here's what credentials you need, where you'll work, and what the specialty actually involves day-to-day."
 author: "SonoBuddy Team"
 tags: ["OB/GYN", "obstetrics", "specialization", "RDMS"]

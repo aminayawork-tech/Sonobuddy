@@ -1,6 +1,6 @@
 ---
 title: "Sonographer License Renewal: Step-by-Step Guide for ARDMS, CCI, and State Licenses"
-date: "2027-03-13"
+date: "2026-09-15"
 excerpt: "ARDMS and CCI renewals are straightforward if you stay organized. State licenses add complexity. Here's the exact renewal process for each credentialing body, with deadlines, fees, and what happens if you miss them."
 author: "SonoBuddy Team"
 tags: ["license renewal", "ARDMS", "CCI", "certification"]

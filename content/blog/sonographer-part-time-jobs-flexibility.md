@@ -1,6 +1,6 @@
 ---
 title: "Part-Time Sonographer Jobs: Flexibility, Pay Tradeoffs, and Where to Find Them"
-date: "2026-09-18"
+date: "2026-07-15"
 excerpt: "Part-time sonography is more available than many techs realize — and the hourly rates often hold up better than expected. Here's what part-time work actually looks like, what you give up, and how to find positions that fit your life."
 author: "SonoBuddy Team"
 tags: ["part-time", "flexibility", "jobs", "work-life balance"]
