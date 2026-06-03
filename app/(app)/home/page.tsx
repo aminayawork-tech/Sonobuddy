@@ -107,9 +107,10 @@ export default function HomePage() {
   const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // Daily tip — same all day, changes at midnight
+  // Daily tip — rolls over at 9am ET to match the push notification
+  const ET_ANCHOR_MS = 13 * 3_600_000;
   const [tip] = useState(() => {
-    const dayIndex = Math.floor(Date.now() / 86_400_000);
+    const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
     return SONO_TIPS[dayIndex % SONO_TIPS.length];
   });
   const [tipDate] = useState(() =>
