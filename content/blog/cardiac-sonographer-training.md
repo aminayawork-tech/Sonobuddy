@@ -1,6 +1,6 @@
 ---
 title: "Cardiac Sonographer Training: How to Add Echocardiography to Your Credentials"
-date: "2026-08-29"
+date: "2026-07-08"
 excerpt: "Echocardiography is one of the highest-paying and most in-demand ultrasound specialties. If you're already credentialed in general or vascular sonography, here's the realistic path to adding cardiac to your scope."
 author: "SonoBuddy Team"
 tags: ["cardiac", "echocardiography", "training", "RDCS"]

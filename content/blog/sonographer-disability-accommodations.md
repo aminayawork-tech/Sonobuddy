@@ -1,6 +1,6 @@
 ---
 title: "Sonographers with Disabilities: Accommodations, Rights, and Career Adaptations"
-date: "2026-10-24"
+date: "2026-07-28"
 excerpt: "Sonography is a physically demanding career, but disability doesn't have to end it. Here's what ADA protections apply, what accommodations employers must provide, and how sonographers are adapting to work with various conditions."
 author: "SonoBuddy Team"
 tags: ["disability", "accommodations", "ADA", "career"]

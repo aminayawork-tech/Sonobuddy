@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Continuing Education Credits: How to Meet CME Requirements Without Breaking the Bank"
-date: "2027-02-09"
+date: "2026-09-03"
 excerpt: "ARDMS requires 30 CME credits per 3-year cycle. Here's every legitimate source of cheap or free credits, what counts, what doesn't, and how to track it all without losing your mind at renewal time."
 author: "SonoBuddy Team"
 tags: ["CME", "continuing education", "ARDMS", "certification"]

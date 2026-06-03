@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Consulting and Private Practice: Starting Your Own Ultrasound Business"
-date: "2027-02-05"
+date: "2026-09-02"
 excerpt: "Mobile ultrasound, independent contractor scanning, and supervision consulting are real revenue streams for experienced sonographers. Here's what each model looks like, what it costs to start, and what can go wrong."
 author: "SonoBuddy Team"
 tags: ["consulting", "private practice", "business", "independent"]

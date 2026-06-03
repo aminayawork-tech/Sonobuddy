@@ -1,6 +1,6 @@
 ---
 title: "Best Sonographer Programs in the United States: Accredited Schools Ranked by Outcomes"
-date: "2026-11-01"
+date: "2026-07-30"
 excerpt: "Not all CAAHEP-accredited sonography programs are equal. Here's how to evaluate them by registry pass rates, clinical placement quality, and graduate employment — with specific programs worth knowing."
 author: "SonoBuddy Team"
 tags: ["education", "programs", "schools", "CAAHEP"]

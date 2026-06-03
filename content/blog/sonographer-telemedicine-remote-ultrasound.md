@@ -1,6 +1,6 @@
 ---
 title: "Telemedicine and Remote Ultrasound: What Sonographers Need to Know"
-date: "2026-07-04"
+date: "2026-06-18"
 excerpt: "Teleultrasound is moving from pilot programs to real clinical deployment. Here's what's driving it, how it works technically, and what it means for sonographers on the ground."
 author: "SonoBuddy Team"
 tags: ["telemedicine", "technology", "remote ultrasound"]

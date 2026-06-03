@@ -1,6 +1,6 @@
 ---
 title: "Best Sonographer Certification Programs in 2026: ARDMS, CCI, and ARRT Compared"
-date: "2026-06-26"
+date: "2026-06-16"
 excerpt: "A direct comparison of ARDMS, CCI, and ARRT sonography credentials — which registries employers require, how the exams differ, and which credentials to pursue first."
 author: "SonoBuddy Team"
 tags: ["certification", "ARDMS", "education", "career"]

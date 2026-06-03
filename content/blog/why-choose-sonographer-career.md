@@ -1,6 +1,6 @@
 ---
 title: "Why Choose a Sonographer Career: Real Pros, Real Cons, and Who It's Right For"
-date: "2026-12-11"
+date: "2026-08-13"
 excerpt: "Before you commit two years and $30,000 to a sonography program, read the honest version — what working sonographers actually say about the job, not what the career websites say."
 author: "SonoBuddy Team"
 tags: ["career", "job satisfaction", "pros and cons", "choosing"]

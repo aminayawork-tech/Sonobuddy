@@ -1,6 +1,6 @@
 ---
 title: "Vascular Sonographer Certification Guide: RVT, RPhS, and RPVI Explained"
-date: "2026-10-28"
+date: "2026-07-29"
 excerpt: "Three major credentials exist for vascular sonography — and they're not equivalent. Here's what each certifies, which one your employer wants, and how to pass the exams."
 author: "SonoBuddy Team"
 tags: ["vascular", "RVT", "certification", "ARDMS"]

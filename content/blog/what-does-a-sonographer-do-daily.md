@@ -1,6 +1,6 @@
 ---
 title: "What Does a Sonographer Do Every Day? A Realistic Look at the Job"
-date: "2026-12-23"
+date: "2026-08-18"
 excerpt: "The textbook description leaves out the noise, the difficult patients, the documentation pressure, and the physical toll. Here's what a real shift actually looks like."
 author: "SonoBuddy Team"
 tags: ["job description", "daily life", "career", "new grad"]

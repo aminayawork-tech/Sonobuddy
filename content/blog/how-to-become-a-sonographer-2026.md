@@ -1,6 +1,6 @@
 ---
 title: "How to Become a Sonographer in 2026: Step-by-Step Guide"
-date: "2026-06-18"
+date: "2026-06-12"
 excerpt: "A practical roadmap for becoming a registered sonographer in 2026 — from program selection and clinical hours to registry exams and first jobs."
 author: "SonoBuddy Team"
 tags: ["education", "career", "certification", "2026"]

@@ -1,6 +1,6 @@
 ---
 title: "Best Ultrasound Sonographer Schools: How to Pick the Right Program for Your Goals"
-date: "2026-11-29"
+date: "2026-08-10"
 excerpt: "CAAHEP accreditation, clinical site quality, registry pass rates — what actually determines whether a program sets you up for a career or leaves you scrambling."
 author: "SonoBuddy Team"
 tags: ["schools", "education", "programs", "career"]

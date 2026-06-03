@@ -1,6 +1,6 @@
 ---
 title: "Obstetric Sonographer Jobs: Finding OB/GYN Ultrasound Positions in 2026"
-date: "2026-10-04"
+date: "2026-07-21"
 excerpt: "OB/GYN ultrasound is one of the most in-demand and emotionally rewarding specialties in sonography. Here's what these jobs actually look like, what they pay, and how to land one."
 author: "SonoBuddy Team"
 tags: ["OB/GYN", "obstetrics", "jobs", "specialization"]

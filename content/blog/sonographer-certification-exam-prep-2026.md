@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Certification Exam Prep 2026: ARDMS SPI, OB, AB, and Vascular Study Guide"
-date: "2026-09-10"
+date: "2026-07-13"
 excerpt: "ARDMS registry exams are the gateway to clinical employment. Here's an exam-by-exam study strategy for SPI, Abdomen (AB), OB/GYN, and Vascular Technology — with resources, timelines, and what the tests actually emphasize."
 author: "SonoBuddy Team"
 tags: ["ARDMS", "certification", "exam prep", "study guide"]

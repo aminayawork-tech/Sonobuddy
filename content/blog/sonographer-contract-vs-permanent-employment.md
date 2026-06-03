@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Contract vs. Permanent Employment: Which Is Right for You?"
-date: "2026-09-06"
+date: "2026-07-10"
 excerpt: "Travel and contract sonography can double your take-home pay — but it comes with real tradeoffs. Here's a clear-eyed comparison of contract and permanent employment so you can make the decision that fits your actual life."
 author: "SonoBuddy Team"
 tags: ["contract", "employment", "career", "salary"]
