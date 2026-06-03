@@ -420,3 +420,11 @@ export function getDailyTip(): string {
   const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
   return SONO_TIPS[dayIndex % SONO_TIPS.length];
 }
+
+import { DAILY_HOOKS, type DailyHook } from '@/data/dailyHooks';
+export type { DailyHook };
+
+export function getDailyHook(): DailyHook {
+  const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
+  return DAILY_HOOKS[dayIndex % DAILY_HOOKS.length];
+}

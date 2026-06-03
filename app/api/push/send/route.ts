@@ -6,7 +6,7 @@ import http2 from 'http2';
 import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
-import { getDailyTip } from '@/lib/tips';
+import { getDailyHook } from '@/lib/tips';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -101,8 +101,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const tipHtml = getDailyTip();
-    const tipText = stripHtml(tipHtml);
+    const hook = getDailyHook();
+    const notifTitle = hook.title;
+    const notifBody = hook.preview;
+    const notifUrl = hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home';
 
     // ── 1. Web Push (browser subscribers) ───────────────────────────────────
     let webSent = 0;
@@ -124,7 +126,7 @@ export async function GET(req: NextRequest) {
         try {
           await webpush.sendNotification(
             subscription as unknown as Parameters<typeof webpush.sendNotification>[0],
-            JSON.stringify({ title: 'SonoBuddy Tip of the Day 💡', body: tipText, url: '/home' })
+            JSON.stringify({ title: notifTitle, body: notifBody, url: notifUrl })
           );
           webSent++;
         } catch (err: unknown) {
@@ -152,11 +154,12 @@ export async function GET(req: NextRequest) {
       }
 
       const jwt = await buildApnsJwt(apnsKeyPem, apnsKeyId, apnsTeamId);
-      const notifBody = JSON.stringify({
+      const apnsPayload = JSON.stringify({
         aps: {
-          alert: { title: 'SonoBuddy Tip of the Day 💡', body: tipText },
+          alert: { title: notifTitle, body: notifBody },
           sound: 'default',
         },
+        url: notifUrl,
       });
 
       let apnsCursor = 0;
@@ -168,7 +171,7 @@ export async function GET(req: NextRequest) {
           const token = await redis.get<string>(key);
           if (!token) continue;
 
-          const res = await sendOneApns(token, notifBody, jwt, 'app.sonobuddy', true);
+          const res = await sendOneApns(token, apnsPayload, jwt, 'app.sonobuddy', true);
 
           if (res.status === 200) {
             apnsSent++;

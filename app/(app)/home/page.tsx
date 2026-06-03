@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
 import { calculators } from '@/data/calculators';
-import { SONO_TIPS } from '@/lib/tips';
+import { getDailyHook, type DailyHook } from '@/lib/tips';
 import NotificationPrompt from '@/components/NotificationPrompt';
 
 // ── Quick Access types & defaults ────────────────────────────────────────────
@@ -107,12 +107,8 @@ export default function HomePage() {
   const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // Daily tip — rolls over at 9am ET to match the push notification
-  const ET_ANCHOR_MS = 13 * 3_600_000;
-  const [tip] = useState(() => {
-    const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
-    return SONO_TIPS[dayIndex % SONO_TIPS.length];
-  });
+  // Daily hook — rolls over at 9am ET to match the push notification
+  const [hook] = useState<DailyHook>(() => getDailyHook());
   const [tipDate] = useState(() =>
     new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   );
@@ -417,16 +413,38 @@ export default function HomePage() {
         <NotificationPrompt />
       </div>
 
-      {/* Tip Card */}
+      {/* Daily Insight Card */}
       <div className="px-5 mb-6">
-        <div className="bg-slate-900 rounded-2xl p-5 shadow-lg">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Tip of the Day</span>
+        <div className="bg-slate-900 rounded-2xl overflow-hidden shadow-lg">
+          {/* Header row */}
+          <div className="flex items-center justify-between px-5 pt-5 mb-3">
+            <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Today&apos;s Insight</span>
             <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
-          <p className="text-[15px] text-[#f1f5f9] leading-relaxed font-normal [&_strong]:text-[#ea4743] [&_b]:text-[#ea4743]"
-            dangerouslySetInnerHTML={{ __html: tip }}
+
+          {/* Hook question */}
+          <h2 className="px-5 text-[17px] font-black text-white leading-snug tracking-tight mb-2">
+            {hook.title}
+          </h2>
+
+          {/* Preview / tip */}
+          <p
+            className="px-5 text-[14px] text-slate-300 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
+            dangerouslySetInnerHTML={{ __html: hook.articleSlug ? hook.preview : hook.tip }}
           />
+
+          {/* Read more button — only when there's an article */}
+          {hook.articleSlug ? (
+            <button
+              onClick={() => router.push(`/articles/${hook.articleSlug}`)}
+              className="mx-5 mt-4 mb-5 flex items-center gap-1.5 text-[13px] font-semibold text-[#0EA5E9] active:opacity-70 transition-opacity"
+            >
+              Read full article
+              <span className="text-[16px] leading-none">→</span>
+            </button>
+          ) : (
+            <div className="pb-5" />
+          )}
         </div>
       </div>
 
