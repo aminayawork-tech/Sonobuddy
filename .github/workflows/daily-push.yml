@@ -1,0 +1,15 @@
+name: Daily Push Notification
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # 9am ET (UTC-4 summer / UTC-5 winter — adjust if needed)
+  workflow_dispatch:       # allows manual trigger from GitHub Actions tab
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send daily tip notification
+        run: |
+          curl -sL "https://www.sonobuddy.com/api/push/send" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
