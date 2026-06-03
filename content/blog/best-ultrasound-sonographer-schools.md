@@ -123,6 +123,37 @@ This is not exhaustive — strong programs exist in every state. The CAAHEP prog
 4. Is financial aid available, and do any employer partnerships include tuition reimbursement?
 5. What concentrations can I sit for at graduation (abdominal, OB, vascular)?
 6. What's the student-to-machine ratio in your lab?
+7. What is the cohort size, and how many students are typically in lab at one time?
+
+---
+
+## Red Flags in Program Research
+
+Some signs that a program may underdeliver on its promises:
+
+- **ARDMS pass rates not publicly available or "not tracked"** — This is a serious red flag. Accredited programs are expected to monitor outcomes.
+- **Clinical hours significantly below 1,200** — The lower end of clinical experience leaves graduates underprepared.
+- **High student-to-machine ratio in lab** (more than 4 students per machine) — Insufficient scan practice time.
+- **No confirmed clinical sites in writing** — If a program can't tell you exactly where you'll rotate, that's a problem.
+- **Recent accreditation status change or "probationary" accreditation** — Check the JRC-DMS website for any program you're seriously considering.
+- **Claiming to place 100% of graduates in jobs** — Ask for the actual number and methodology. Self-reporting bias is common.
+
+---
+
+## The Financial Aid and Return on Investment Question
+
+Sonography programs are a significant investment. Run the numbers before you commit:
+
+| Program Type | Estimated Total Cost | Year 1 Salary | Payback Period |
+|---|---|---|---|
+| Community college AAS | $18,000–$30,000 | $72,000–$85,000 | 4–6 months |
+| University BS (4-year) | $60,000–$120,000 | $75,000–$90,000 | 12–24 months |
+| Post-baccalaureate cert | $12,000–$25,000 | $72,000–$85,000 | 2–4 months |
+| Hospital-based cert | $8,000–$18,000 | $68,000–$80,000 | 2–3 months |
+
+The community college AAS is the best ROI for most students without existing degrees. Financial aid (FAFSA, institutional aid, health professions scholarships) is widely available at community colleges and substantially reduces out-of-pocket cost.
+
+Ask the financial aid office specifically about **allied health scholarships** — many states and health systems fund these and they're underutilized by applicants.
 
 ---
 

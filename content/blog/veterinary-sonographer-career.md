@@ -119,6 +119,38 @@ If veterinary ultrasound is a serious goal:
 
 ---
 
+## Species-Specific Considerations
+
+If you pursue veterinary ultrasound, understanding the species differences is essential before doing any clinical work:
+
+### Dogs and Cats (Small Animal)
+The most common veterinary ultrasound. Abdominal scanning is the most frequent indication — liver, spleen, kidneys, adrenal glands, bladder, and GI tract. Echocardiography is a separate subspecialty. Probe selection differs from humans: small animals often require higher-frequency probes (10–15 MHz) for small structure detail; obese dogs may require lower frequencies.
+
+**Key difference from human abdominal work:** The gallbladder is on the right side (as in humans), but adrenal glands sit differently relative to the kidneys, and the spleen has more anatomical mobility. Intestinal loops are easily visualized — peristalsis observation is part of GI assessment.
+
+### Equine (Horses)
+A fundamentally different examination. Horses are large patients scanned externally through skin and muscle. Tendon and joint ultrasound (musculoskeletal) is the most common indication, followed by reproductive ultrasound (ovarian follicle monitoring, early pregnancy detection). Equine abdominal ultrasound is done differently — transcutaneous, with limited access to internal organs.
+
+This is a specialized niche requiring formal equine training beyond general veterinary ultrasound experience.
+
+### Exotic Animals and Avian Species
+A highly specialized area. Reptiles, birds, and exotic mammals have completely different anatomy. Only sonographers who have received specific exotic species training should perform these studies.
+
+---
+
+## Where to Find Veterinary Ultrasound Training for Human Sonographers
+
+A handful of organizations offer formal training programs for experienced human sonographers transitioning to veterinary work:
+
+- **SoundEklin (now part of Heska)** — veterinary ultrasound training, historically offered wet labs
+- **Veterinary Ultrasound Courses** — online and wet lab training in small animal abdominal and cardiac scanning
+- **VISC (Veterinary Imaging School and Courses)** — structured courses for veterinarians and trained technicians
+- **Academic veterinary hospitals** — informal mentorship sometimes available for experienced clinicians making the transition
+
+Expect 3–6 months of dedicated learning before you're independently competent in small animal abdominal scanning. Cardiac and equine scanning require additional specialized training.
+
+---
+
 ## Bottom Line
 
 The skills transfer is real but incomplete. Veterinary ultrasound requires substantial new learning: species anatomy, species-specific normal values, animal handling, and veterinary clinical context. The credential pathway is complicated, and pay is meaningfully lower than human sonography except in niche mobile or academic settings.
