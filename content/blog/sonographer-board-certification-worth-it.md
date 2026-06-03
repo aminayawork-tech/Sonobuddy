@@ -133,6 +133,43 @@ The ROI argument is overwhelming. The only reason to delay credentials is strate
 
 ---
 
+## Exam Preparation: What Actually Works
+
+The SPI and specialty exams are not easy. The first-attempt pass rate of 80–85% means roughly 1 in 6 candidates fails on their first attempt. Preparation matters.
+
+### Effective study resources:
+
+- **Pegasus Lectures** — the most widely used review course for SPI; includes video lectures, physics review, and practice questions. Cost: ~$150–$250 depending on the package.
+- **ARDMS practice exams** — official content blueprints guide what to study; ARDMS publishes exam outlines for each credential.
+- **Ultrasound physics texts** — Hedrick & Hykes *Ultrasound Physics and Instrumentation* is the standard reference.
+- **Mock exams** — timed practice under exam conditions. Don't skip these; pacing is a real issue for some candidates.
+- **Study groups** — cohort-based studying from school programs often continues informally after graduation. If you have access to classmates sitting the same exam, use that resource.
+
+### Timeline guidance:
+
+| Exam | Recommended Study Time (After Program) | Notes |
+|---|---|---|
+| SPI | 4–8 weeks focused review | Physics concepts fade quickly after graduation; don't wait |
+| RDMS (AB) | 6–10 weeks with SPI already passed | Build on clinical experience plus structured review |
+| RDMS (OB/GYN) | 6–10 weeks | OB measurements are very testable |
+| RVT | 8–12 weeks | Vascular hemodynamics and pathology require extra depth |
+| RDCS (AE) | 10–16 weeks | Most technically demanding; requires strong echo clinical base |
+
+Sitting for SPI within 3–4 months of graduation is the standard recommendation. Skills and knowledge are freshest, and the sooner you're registered, the sooner you're earning the credential differential.
+
+---
+
+## What Happens If You Fail
+
+Failing ARDMS boards is not career-ending, but it has consequences:
+- **Retake fees** apply — currently $220–$250 per attempt
+- **Waiting period** — ARDMS requires a 60-day wait between attempts
+- **Employer impact** — if you're working "registry eligible," most facilities give you 12–18 months. Failing once and retaking within that window is manageable. Multiple failures raise concerns.
+
+If you fail: identify where you lost points (ARDMS provides a domain-level score breakdown), target that content specifically, and retake within the allowed window.
+
+---
+
 ## Bottom Line
 
 Board certification is worth it — full stop. The upfront cost is paid back within weeks, it's required for most hiring, and it protects your income during downsizing cycles. The debate isn't whether to get certified; it's which credentials to prioritize, in what order, and how quickly.
