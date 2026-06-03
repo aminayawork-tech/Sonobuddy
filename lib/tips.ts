@@ -413,7 +413,10 @@ export const SONO_TIPS: string[] = [
 ];
 
 /** Returns today's tip (same for the full day, changes at midnight UTC) */
+// Anchor day rollover at 9am ET (1pm UTC) so the notification and app always show the same tip.
+const ET_ANCHOR_MS = 13 * 3_600_000;
+
 export function getDailyTip(): string {
-  const dayIndex = Math.floor(Date.now() / 86_400_000);
+  const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
   return SONO_TIPS[dayIndex % SONO_TIPS.length];
 }
