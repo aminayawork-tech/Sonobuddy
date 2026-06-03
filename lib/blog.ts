@@ -24,6 +24,7 @@ function ensureBlogDir() {
 
 export function getAllPosts(): BlogPostMeta[] {
   ensureBlogDir();
+  const today = new Date().toISOString().slice(0, 10);
   const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.md'));
 
   const posts = files.map((file) => {
@@ -34,14 +35,16 @@ export function getAllPosts(): BlogPostMeta[] {
     return {
       slug,
       title: data.title ?? 'Untitled',
-      date: data.date ?? new Date().toISOString().slice(0, 10),
+      date: data.date ?? today,
       excerpt: data.excerpt ?? '',
       author: data.author ?? 'SonoBuddy Team',
       tags: data.tags ?? [],
     } as BlogPostMeta;
   });
 
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return posts
+    .filter((p) => p.date <= today)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {
