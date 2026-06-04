@@ -427,11 +427,19 @@ export default function HomePage() {
             {hook.title}
           </h2>
 
-          {/* Preview / tip */}
+          {/* Preview — always matches the notification body exactly */}
           <p
             className="px-5 text-[14px] text-slate-300 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
-            dangerouslySetInnerHTML={{ __html: hook.articleSlug ? hook.preview : hook.tip }}
+            dangerouslySetInnerHTML={{ __html: hook.preview }}
           />
+
+          {/* Extra detail for clinical tips (no article) */}
+          {!hook.articleSlug && (
+            <p
+              className="px-5 mt-2 text-[13px] text-slate-400 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
+              dangerouslySetInnerHTML={{ __html: hook.tip }}
+            />
+          )}
 
           {/* Read more button — only when there's an article */}
           {hook.articleSlug ? (
