@@ -1,6 +1,6 @@
 ---
 title: "How AI Is Changing Sonography — And What It Means for Your Career"
-date: "2026-06-11"
+date: "2026-06-04"
 excerpt: "AI is entering ultrasound departments fast. Here's a clear-eyed look at what it will and won't replace, and how to position yourself for the next decade."
 author: "SonoBuddy Team"
 tags: ["technology", "AI", "career", "future"]
