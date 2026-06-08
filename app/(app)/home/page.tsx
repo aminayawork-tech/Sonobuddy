@@ -16,6 +16,8 @@ import {
 import { protocols } from '@/data/protocols';
 import { calculators } from '@/data/calculators';
 import { getDailyHook, type DailyHook } from '@/lib/tips';
+
+const FALLBACK_HOOK: DailyHook = getDailyHook();
 import NotificationPrompt from '@/components/NotificationPrompt';
 
 // ── Quick Access types & defaults ────────────────────────────────────────────
@@ -107,11 +109,18 @@ export default function HomePage() {
   const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // Daily hook — rolls over at 9am ET to match the push notification
-  const [hook] = useState<DailyHook>(() => getDailyHook());
+  // Daily hook — fetched from server so it always matches the push notification
+  const [hook, setHook] = useState<DailyHook>(FALLBACK_HOOK);
   const [tipDate] = useState(() =>
     new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   );
+
+  useEffect(() => {
+    fetch('/api/daily-hook')
+      .then((r) => r.json())
+      .then((data: DailyHook) => setHook(data))
+      .catch(() => { /* keep fallback */ });
+  }, []);
 
   // Quick Access state
   const [quickItems, setQuickItems] = useState<QuickAccessItem[]>(DEFAULT_QUICK_ITEMS);

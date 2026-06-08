@@ -1,6 +1,6 @@
 ---
 title: "AI Tools for Sonographers in 2026: What's Actually Useful at the Console"
-date: "2026-06-10"
+date: "2026-06-04"
 excerpt: "A practical breakdown of which AI tools sonographers are actually using in 2026, what they do well, and where they fall short during real exams."
 author: "SonoBuddy Team"
 tags: ["technology", "AI", "tools", "2026"]
