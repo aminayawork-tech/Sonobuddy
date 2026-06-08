@@ -116,7 +116,7 @@ export default function HomePage() {
   );
 
   useEffect(() => {
-    fetch('/api/daily-hook')
+    fetch('https://www.sonobuddy.com/api/daily-hook')
       .then((r) => r.json())
       .then((data: DailyHook) => setHook(data))
       .catch(() => { /* keep fallback */ });
