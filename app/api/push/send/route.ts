@@ -171,7 +171,8 @@ export async function GET(req: NextRequest) {
           const token = await redis.get<string>(key);
           if (!token) continue;
 
-          const res = await sendOneApns(token, apnsPayload, jwt, 'com.sonobuddy.app', true);
+          const res = await sendOneApns(token, apnsPayload, jwt, 'app.sonobuddy', true);
+          console.log(`APNs token ${token.slice(0, 8)}… → status=${res.status} reason=${res.reason}`);
 
           if (res.status === 200) {
             apnsSent++;
@@ -188,6 +189,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
       apns: { sent: apnsSent, failed: apnsFailed },
+      debug: { hook: hook.title },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
