@@ -2,5 +2,9 @@
 	"appId": "com.sonobuddy.app",
 	"appName": "SonoBuddy",
 	"webDir": "out",
+	"server": {
+		"url": "https://www.sonobuddy.com",
+		"cleartext": false
+	},
 	"packageClassList": []
 }
