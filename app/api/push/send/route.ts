@@ -171,7 +171,7 @@ export async function GET(req: NextRequest) {
           const token = await redis.get<string>(key);
           if (!token) continue;
 
-          const res = await sendOneApns(token, apnsPayload, jwt, 'app.sonobuddy', true);
+          const res = await sendOneApns(token, apnsPayload, jwt, 'com.sonobuddy.app', true);
 
           if (res.status === 200) {
             apnsSent++;
