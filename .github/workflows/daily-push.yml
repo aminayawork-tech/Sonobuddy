@@ -14,5 +14,11 @@ jobs:
           echo "Calling push API..."
           RESPONSE=$(curl -sL "https://www.sonobuddy.com/api/push/send" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
-          echo "Response: $RESPONSE"
-          echo "$RESPONSE" | grep -q '"error"' && echo "ERROR: Push failed" && exit 1 || true
+          echo "Full response: $RESPONSE"
+          # Fail on API error
+          echo "$RESPONSE" | grep -q '"error"' && echo "ERROR: API returned error" && exit 1 || true
+          # Extract sent counts
+          APNS_SENT=$(echo "$RESPONSE" | grep -o '"sent":[0-9]*' | head -2 | tail -1 | grep -o '[0-9]*' || echo "0")
+          WEB_SENT=$(echo "$RESPONSE" | grep -o '"sent":[0-9]*' | head -1 | grep -o '[0-9]*' || echo "0")
+          echo "Web push sent: $WEB_SENT"
+          echo "APNs sent: $APNS_SENT"
