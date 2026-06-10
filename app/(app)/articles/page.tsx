@@ -9,7 +9,7 @@ import { getAllArticles, ARTICLES, getArticleBySlug } from '@/lib/articles-data'
 import type { Article } from '@/lib/articles-data';
 import { Calendar, ChevronRight, ChevronLeft, Newspaper } from 'lucide-react';
 
-const API_BASE = 'https://sonobuddy.app';
+const API_BASE = 'https://www.sonobuddy.com';
 type ArticleMeta = Omit<Article, 'content'>;
 
 // Slugs pre-rendered in the iOS bundle — these work offline via static route
