@@ -11,5 +11,8 @@ jobs:
     steps:
       - name: Send daily tip notification
         run: |
-          curl -sL "https://www.sonobuddy.com/api/push/send" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+          echo "Calling push API..."
+          RESPONSE=$(curl -sL "https://www.sonobuddy.com/api/push/send" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          echo "Response: $RESPONSE"
+          echo "$RESPONSE" | grep -q '"error"' && echo "ERROR: Push failed" && exit 1 || true
