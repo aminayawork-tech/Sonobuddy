@@ -33,7 +33,7 @@ The **Sonography Principles and Instrumentation (SPI)** exam is the gateway. All
 **Exam format:** 110 questions, 2 hours, computer-based  
 **Passing score:** ~70% (scaled scoring, not raw percent)  
 **First-time pass rate:** ~72%  
-**Exam fee:** $200 (2026)
+**Exam fee:** $275 ($100 application fee + $175 exam fee)
 
 The SPI is the exam that most new graduates underestimate. Budget 8–12 weeks of structured study.
 
@@ -144,12 +144,12 @@ For a new graduate pursuing RDMS (AB + OB):
 
 | Expense | Cost |
 |---|---|
-| SPI exam | $200 |
+| SPI exam | $275 ($100 application + $175 exam) |
 | SPI prep course (optional but recommended) | $150–300 |
-| Specialty exam 1 (AB) | $200 |
-| Specialty exam 2 (OB) | $200 |
+| Specialty exam 1 (AB) | $300 ($100 application + $200 exam) |
+| Specialty exam 2 (OB) | $300 ($100 application + $200 exam) |
 | Study materials for specialty exams | $100–200 |
-| **Total** | **$850–1,100** |
+| **Total** | **$1,125–1,375** |
 
 Many employers will reimburse registry fees, especially if you negotiate this at hire. Always ask.
 
