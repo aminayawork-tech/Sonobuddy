@@ -44,13 +44,24 @@ export default function ArticlesPage() {
 }
 
 /* ── Article list ─────────────────────────────────────────────────────────── */
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function filterAndSort(list: ArticleMeta[]): ArticleMeta[] {
+  const today = todayStr();
+  return list
+    .filter((a) => a.date <= today)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 function ArticleList() {
-  const [articles, setArticles] = useState<ArticleMeta[]>(() => getAllArticles());
+  const [articles, setArticles] = useState<ArticleMeta[]>(() => filterAndSort(getAllArticles()));
 
   useEffect(() => {
     fetch(`${API_BASE}/api/articles`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((data) => { if (Array.isArray(data)) setArticles(data); })
+      .then((data) => { if (Array.isArray(data)) setArticles(filterAndSort(data)); })
       .catch(() => {});
   }, []);
 

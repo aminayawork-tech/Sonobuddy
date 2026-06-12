@@ -16,8 +16,6 @@ import {
 import { protocols } from '@/data/protocols';
 import { calculators } from '@/data/calculators';
 import { getDailyHook, type DailyHook } from '@/lib/tips';
-
-const FALLBACK_HOOK: DailyHook = getDailyHook();
 import NotificationPrompt from '@/components/NotificationPrompt';
 
 // ── Quick Access types & defaults ────────────────────────────────────────────
@@ -110,7 +108,7 @@ export default function HomePage() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Daily hook — fetched from server so it always matches the push notification
-  const [hook, setHook] = useState<DailyHook>(FALLBACK_HOOK);
+  const [hook, setHook] = useState<DailyHook>(() => getDailyHook());
   const [tipDate] = useState(() =>
     new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   );
