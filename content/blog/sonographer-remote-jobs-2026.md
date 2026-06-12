@@ -1,6 +1,6 @@
 ---
 title: "Remote Sonographer Jobs in 2026: What's Real and What's Not"
-date: "2026-06-17"
+date: "2026-06-01"
 excerpt: "The honest breakdown of which sonographer jobs are genuinely remote, which require on-site presence, and what the growing teleultrasound market actually looks like."
 author: "SonoBuddy Team"
 tags: ["jobs", "remote work", "telemedicine", "2026"]

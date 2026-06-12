@@ -1,6 +1,6 @@
 ---
 title: "Emergency Medicine Sonographer Training: Breaking Into EM Ultrasound"
-date: "2026-06-30"
+date: "2026-06-05"
 excerpt: "EM ultrasound is one of the fastest-growing niches in sonography. Here's what the training path actually looks like, what skills you need, and how to land your first EM position."
 author: "SonoBuddy Team"
 tags: ["emergency medicine", "POCUS", "training", "specialization"]

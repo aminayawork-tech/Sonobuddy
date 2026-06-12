@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Job Market Outlook for 2026: Demand, Openings, and Where to Find Work"
-date: "2026-07-07"
+date: "2026-06-08"
 excerpt: "The sonographer job market in 2026 is strong but uneven — strong demand in some specialties and geographies, slower in others. Here's what the actual data shows and where the best opportunities are."
 author: "SonoBuddy Team"
 tags: ["job market", "2026", "employment", "career"]

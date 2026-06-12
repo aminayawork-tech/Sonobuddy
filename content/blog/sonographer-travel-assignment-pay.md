@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Travel Assignment Pay: How Contracts Are Structured in 2026"
-date: "2026-06-29"
+date: "2026-06-05"
 excerpt: "Travel sonography pay packages are complex. Here's exactly how contracts are structured in 2026 — taxable vs. tax-free components, what to negotiate, and how to evaluate whether a contract is actually good."
 author: "SonoBuddy Team"
 tags: ["travel sonography", "salary", "contracts", "pay"]

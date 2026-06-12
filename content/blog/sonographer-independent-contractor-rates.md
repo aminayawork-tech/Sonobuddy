@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Independent Contractor Rates: What to Charge and How to Structure Your Business"
-date: "2026-07-20"
+date: "2026-06-11"
 excerpt: "Thinking about going 1099? Here's what sonographers actually charge as independent contractors, how to calculate your break-even rate, and what you need to set up a legitimate business."
 author: "SonoBuddy Team"
 tags: ["independent contractor", "1099", "salary", "business"]

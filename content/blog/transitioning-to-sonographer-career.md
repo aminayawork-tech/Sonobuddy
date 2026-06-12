@@ -1,6 +1,6 @@
 ---
 title: "Transitioning to a Sonographer Career: A Realistic Guide for Career Changers"
-date: "2026-07-09"
+date: "2026-06-09"
 excerpt: "Sonography attracts a lot of career changers — from nurses, rad techs, military medics, and completely unrelated fields. Here's an honest look at what the transition involves, how long it takes, and what the path actually costs."
 author: "SonoBuddy Team"
 tags: ["career change", "education", "career", "new grad"]

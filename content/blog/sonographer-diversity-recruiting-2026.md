@@ -1,6 +1,6 @@
 ---
 title: "Diversity in Sonography: Scholarships, Programs, and Employers Leading the Way in 2026"
-date: "2026-07-23"
+date: "2026-06-12"
 excerpt: "Sonography's workforce doesn't reflect the patients it serves. Here's a practical guide to scholarships, pipeline programs, and employers who have made measurable commitments to diverse hiring in 2026."
 author: "SonoBuddy Team"
 tags: ["diversity", "scholarships", "career", "2026"]

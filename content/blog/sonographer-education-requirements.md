@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Education Requirements: Degrees, Diplomas, and What Each Path Costs"
-date: "2026-07-24"
+date: "2026-06-12"
 excerpt: "There are four main educational paths into sonography — and they differ significantly in cost, duration, and ARDMS eligibility. Here's what each path actually looks like in 2026."
 author: "SonoBuddy Team"
 tags: ["education", "requirements", "degree", "career"]

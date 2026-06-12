@@ -1,6 +1,6 @@
 ---
 title: "Work-From-Home Opportunities for Sonographers: The Realistic Options"
-date: "2026-06-22"
+date: "2026-06-02"
 excerpt: "Which work-from-home paths actually exist for credentialed sonographers in 2026, what they pay, and how to transition into them from a clinical role."
 author: "SonoBuddy Team"
 tags: ["remote work", "career", "jobs", "telemedicine"]
