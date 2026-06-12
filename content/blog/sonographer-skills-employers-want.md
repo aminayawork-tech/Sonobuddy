@@ -1,6 +1,6 @@
 ---
 title: "Top Skills Employers Want in Sonographers in 2026"
-date: "2026-07-14"
+date: "2026-06-10"
 excerpt: "Job postings tell you what employers say they want. Hiring managers tell you what they actually look for. Here's the realistic picture of the skills that get sonographers hired and promoted in 2026."
 author: "SonoBuddy Team"
 tags: ["skills", "employment", "career", "job search"]

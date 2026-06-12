@@ -1,6 +1,6 @@
 ---
 title: "The Sonographer Shortage in 2026: What It Means for Your Salary and Career"
-date: "2026-06-23"
+date: "2026-06-03"
 excerpt: "The sonographer shortage is real, documented, and worsening. Here's the data behind it, which markets are most affected, and how to use this shortage to your advantage."
 author: "SonoBuddy Team"
 tags: ["job market", "shortage", "salary", "2026"]

@@ -1,6 +1,6 @@
 ---
 title: "Portable Ultrasound Machine Costs in 2026: Buyer's Guide for Independent Sonographers"
-date: "2026-06-25"
+date: "2026-06-03"
 excerpt: "A practical cost breakdown of portable and handheld ultrasound systems in 2026 — from $2,500 handheld devices to $80,000 premium cart systems — with guidance on what independent sonographers actually need."
 author: "SonoBuddy Team"
 tags: ["equipment", "portable ultrasound", "technology", "cost"]

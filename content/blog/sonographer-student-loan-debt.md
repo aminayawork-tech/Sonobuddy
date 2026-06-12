@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Student Loan Debt: Repayment Strategies and Forgiveness Options"
-date: "2026-07-27"
+date: "2026-06-12"
 excerpt: "Sonographers carry anywhere from $10,000 to $200,000 in student debt depending on their program. Here's how to repay it efficiently, which forgiveness programs you actually qualify for, and what decisions matter most."
 author: "SonoBuddy Team"
 tags: ["student loans", "debt", "financial", "education"]

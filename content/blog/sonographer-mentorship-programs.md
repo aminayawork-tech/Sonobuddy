@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Mentorship Programs: How to Find a Mentor and Advance Your Career"
-date: "2026-07-31"
+date: "2026-06-12"
 excerpt: "The first two years in sonography are where careers are shaped or derailed. Formal mentorship programs are rare, but effective mentorship is accessible if you know where to look and how to ask."
 author: "SonoBuddy Team"
 tags: ["mentorship", "career development", "new grad", "networking"]
