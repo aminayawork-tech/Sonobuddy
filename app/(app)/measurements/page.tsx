@@ -6,7 +6,6 @@ import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, typ
 import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import RangeBar from '@/components/RangeBar';
-import { ILLUSTRATIONS } from '@/components/MeasurementIllustrations';
 import clsx from 'clsx';
 
 const CATEGORIES = Object.entries(CATEGORY_LABELS) as [MeasurementCategory, string][];
@@ -150,15 +149,6 @@ export default function MeasurementsPage() {
                       <p className="text-[13px] text-slate-700 leading-relaxed">{m.clinicalNote}</p>
                     </div>
                   )}
-                  {ILLUSTRATIONS[m.id] && (() => {
-                    const Illus = ILLUSTRATIONS[m.id];
-                    return (
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.1em] mb-1.5">Measurement Technique</p>
-                        <Illus />
-                      </div>
-                    );
-                  })()}
                 </div>
               )}
             </div>
