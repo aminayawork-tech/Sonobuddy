@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getArticleBySlug } from '@/lib/articles-data';
+import { getArticleBySlug, ARTICLES } from '@/lib/articles-data';
+
+export function generateStaticParams() {
+  return ARTICLES.map((a) => ({ slug: a.slug }));
+}
 
 export function GET(_: Request, { params }: { params: { slug: string } }) {
   const article = getArticleBySlug(params.slug);

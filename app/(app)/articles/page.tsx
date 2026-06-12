@@ -133,7 +133,7 @@ function ArticleView({ slug }: { slug: string }) {
 
   useEffect(() => {
     if (article) return;
-    fetch(`${API_BASE}/api/articles/${slug}`)
+    fetch(`${API_BASE}/api/articles-by-slug/${slug}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data) setArticle(data); })
       .catch(() => {})
