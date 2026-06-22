@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Careers in the Military: Army, Navy, Air Force, and VA Opportunities"
-date: "2026-08-31"
+date: "2026-06-19"
 excerpt: "Military and VA sonographer positions offer loan forgiveness, pension benefits, and stable hours that civilian hospitals rarely match. Here's what each branch actually offers and how to get in."
 author: "SonoBuddy Team"
 tags: ["military", "VA", "career", "government"]

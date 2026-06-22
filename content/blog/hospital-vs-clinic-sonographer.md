@@ -1,6 +1,6 @@
 ---
 title: "Hospital Sonographer vs. Clinic Sonographer: Pay, Hours, and Culture Compared"
-date: "2026-08-14"
+date: "2026-06-16"
 excerpt: "The same credential, very different jobs. What actually changes when you work inpatient vs. outpatient — pay, call, pace, and what kind of scanner you'll become."
 author: "SonoBuddy Team"
 tags: ["hospital", "clinic", "employment", "comparison"]

@@ -1,6 +1,6 @@
 ---
 title: "Clinical Sonographer vs. Registered Sonographer: What the Difference Means for Your Career"
-date: "2026-08-06"
+date: "2026-06-14"
 excerpt: "The difference between a credentialed and uncredentialed sonographer isn't just a letters-after-your-name distinction. It affects your salary, your legal standing in some states, and your career ceiling. Here's what you actually need to know."
 author: "SonoBuddy Team"
 tags: ["credentials", "RDMS", "career", "certification"]

@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Health Insurance Benefits: What Staff, Travel, and PRN Positions Offer"
-date: "2026-09-09"
+date: "2026-06-22"
 excerpt: "Health insurance is often the deciding factor between employment types. Here's what staff, travel, and PRN positions actually offer — with real dollar figures so you can compare accurately."
 author: "SonoBuddy Team"
 tags: ["health insurance", "benefits", "employment", "travel"]

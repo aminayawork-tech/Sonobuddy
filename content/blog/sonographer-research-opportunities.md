@@ -1,6 +1,6 @@
 ---
 title: "Research Opportunities for Sonographers: University Roles, Clinical Studies, and How to Get Involved"
-date: "2026-08-04"
+date: "2026-06-13"
 excerpt: "Most sonographers don't think of research as a career option. It is — and the clinical knowledge you've built is genuinely valuable in research settings. Here's what research roles look like, what they pay, and how to get your first opportunity."
 author: "SonoBuddy Team"
 tags: ["research", "academia", "career", "universities"]

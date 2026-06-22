@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Continuing Education Requirements by State: What You Need to Keep Your License"
-date: "2026-09-14"
+date: "2026-06-22"
 excerpt: "Most US states do not license sonographers separately from ARDMS credentialing — but several do, with their own CE requirements. Here's a state-by-state breakdown and what happens if you let a state license lapse."
 author: "SonoBuddy Team"
 tags: ["continuing education", "state requirements", "license", "CME"]

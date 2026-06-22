@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Union Jobs in 2026: Which Hospitals Are Unionized and What It Means for Pay"
-date: "2026-08-27"
+date: "2026-06-19"
 excerpt: "Union membership can add $8,000–$18,000 to a sonographer's annual salary. Here's which health systems are unionized, what the contracts actually look like, and whether a union job is worth pursuing."
 author: "SonoBuddy Team"
 tags: ["union", "employment", "salary", "2026"]

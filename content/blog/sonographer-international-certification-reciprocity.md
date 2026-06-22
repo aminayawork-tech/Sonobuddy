@@ -1,6 +1,6 @@
 ---
 title: "International Sonographer Certification Reciprocity: Working in the US, Canada, UK, and Australia"
-date: "2026-09-01"
+date: "2026-06-20"
 excerpt: "Moving your sonography credentials across borders is possible but rarely automatic. Here's the actual process for credential recognition in the US, Canada, UK, and Australia — including what gets waived and what doesn't."
 author: "SonoBuddy Team"
 tags: ["international", "certification", "reciprocity", "ARDMS"]

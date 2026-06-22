@@ -1,6 +1,6 @@
 ---
 title: "Ethical Dilemmas in Sonography: How to Handle the Hard Situations at the Console"
-date: "2026-09-07"
+date: "2026-06-21"
 excerpt: "Incidental findings, patient confidentiality, scope of practice pressure, and requests to alter reports. These situations come up in real practice and school doesn't prepare you for them."
 author: "SonoBuddy Team"
 tags: ["ethics", "patient care", "professional", "difficult cases"]
