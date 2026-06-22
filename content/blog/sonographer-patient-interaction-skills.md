@@ -1,6 +1,6 @@
 ---
 title: "Patient Interaction Skills for Sonographers: Communication, Difficult Cases, and Professionalism"
-date: "2026-09-04"
+date: "2026-06-21"
 excerpt: "Sonographers spend more one-on-one time with patients than almost any other imaging professional. The soft skills that make that time go well — and how to handle the cases that don't — are rarely taught in school."
 author: "SonoBuddy Team"
 tags: ["patient care", "communication", "professionalism", "skills"]

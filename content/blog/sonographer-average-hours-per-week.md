@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Hours Per Week: What to Expect in Different Settings"
-date: "2026-08-21"
+date: "2026-06-17"
 excerpt: "Hours vary dramatically by setting — from structured 40-hour outpatient weeks to variable hospital schedules with call, overtime, and weekend requirements. Here's what each setting actually looks like."
 author: "SonoBuddy Team"
 tags: ["hours", "schedule", "work-life balance", "employment"]

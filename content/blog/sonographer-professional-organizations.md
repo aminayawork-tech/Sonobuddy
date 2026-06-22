@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Professional Organizations: SDMS, SVU, ASE, and Which Memberships Are Worth It"
-date: "2026-09-08"
+date: "2026-06-21"
 excerpt: "Sonography has a dozen professional organizations and most sonographers join too many or none at all. Here's what each organization actually offers, what it costs, and which memberships generate real value."
 author: "SonoBuddy Team"
 tags: ["SDMS", "professional organizations", "networking", "career"]

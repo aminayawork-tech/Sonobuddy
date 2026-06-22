@@ -1,6 +1,6 @@
 ---
 title: "Is Sonographer Board Certification Worth It? The Honest Answer"
-date: "2026-08-11"
+date: "2026-06-15"
 excerpt: "Credentialing costs time, money, and stress. Here's what ARDMS, ARRT, and CCI certification actually gives you — and what it doesn't."
 author: "SonoBuddy Team"
 tags: ["certification", "ARDMS", "career", "salary"]

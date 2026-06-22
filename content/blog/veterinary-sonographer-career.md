@@ -1,6 +1,6 @@
 ---
 title: "Veterinary Sonographer: Can You Use Your Ultrasound Skills on Animals?"
-date: "2026-08-24"
+date: "2026-06-18"
 excerpt: "The crossover from human to veterinary ultrasound is real — but the pathway, pay, and credential requirements are very different from what most sonographers expect."
 author: "SonoBuddy Team"
 tags: ["veterinary", "animal ultrasound", "career", "specialization"]

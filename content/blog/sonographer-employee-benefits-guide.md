@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Benefits Guide: What to Negotiate Beyond Your Base Salary"
-date: "2026-08-25"
+date: "2026-06-18"
 excerpt: "Benefits often represent $15,000–$30,000 in additional compensation value. Most sonographers never negotiate them. Here's what's on the table and how to ask for it."
 author: "SonoBuddy Team"
 tags: ["benefits", "negotiation", "salary", "employment"]

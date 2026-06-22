@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Union Contract Negotiation: What to Push For and What to Watch Out For"
-date: "2026-09-11"
+date: "2026-06-22"
 excerpt: "Union contract negotiations happen every 3–5 years and determine your working conditions for the entire cycle. Here's what the best contracts contain for sonographers, and what management language to flag as problematic."
 author: "SonoBuddy Team"
 tags: ["union", "negotiation", "contracts", "salary"]

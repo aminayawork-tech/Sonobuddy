@@ -1,6 +1,6 @@
 ---
 title: "Pediatric Sonographer Requirements: How to Break Into Pediatric Ultrasound"
-date: "2026-09-10"
+date: "2026-06-22"
 excerpt: "Pediatric ultrasound is one of the most technically demanding specializations in sonography. Here's what credentials you need, how to get clinical pediatric experience, and what pediatric positions actually pay."
 author: "SonoBuddy Team"
 tags: ["pediatric", "specialization", "certification", "career"]

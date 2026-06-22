@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Job Description in 2026: What Employers Actually List and What It Means"
-date: "2026-08-07"
+date: "2026-06-14"
 excerpt: "Breaking down real 2026 job postings — what hospitals and clinics are asking for, what's negotiable, and what the fine print actually means for your day-to-day."
 author: "SonoBuddy Team"
 tags: ["job description", "employment", "2026", "career"]

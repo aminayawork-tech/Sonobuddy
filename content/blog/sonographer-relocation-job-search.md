@@ -1,6 +1,6 @@
 ---
 title: "Relocating for a Sonographer Job: How to Search, Negotiate, and Make the Move"
-date: "2026-08-20"
+date: "2026-06-17"
 excerpt: "Sonography is a nationally mobile profession. Here's how to identify the best markets, negotiate relocation packages, and avoid the mistakes that cost new graduates money and time."
 author: "SonoBuddy Team"
 tags: ["relocation", "job search", "career", "negotiation"]

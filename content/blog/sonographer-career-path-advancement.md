@@ -1,6 +1,6 @@
 ---
 title: "Sonographer Career Path and Advancement: Where Can You Go From Here?"
-date: "2026-08-12"
+date: "2026-06-15"
 excerpt: "Most sonographers spend 30+ years in the field. Here's what the actual career ladder looks like — clinical, administrative, and educational tracks — and what each path requires."
 author: "SonoBuddy Team"
 tags: ["career path", "advancement", "management", "education"]
