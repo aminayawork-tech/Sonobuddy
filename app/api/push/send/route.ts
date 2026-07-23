@@ -101,10 +101,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const customTitle = searchParams.get('title');
+    const customBody  = searchParams.get('body');
+    const customUrl   = searchParams.get('url');
+
     const hook = getDailyHook();
-    const notifTitle = hook.title;
-    const notifBody = hook.preview;
-    const notifUrl = hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home';
+    const notifTitle = customTitle ?? hook.title;
+    const notifBody  = customBody  ?? hook.preview;
+    const notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
 
     // ── 1. Web Push (browser subscribers) ───────────────────────────────────
     let webSent = 0;
