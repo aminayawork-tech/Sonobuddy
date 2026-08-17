@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const LAST_UPDATED = 'March 24, 2026';
-const CONTACT_EMAIL = 'anthony_minaya@ymail.com';
+const CONTACT_EMAIL = 'hello@sonobuddy.com';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
