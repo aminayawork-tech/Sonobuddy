@@ -238,7 +238,7 @@ export default function HomePage() {
 
                 {/* Feedback */}
                 <a
-                  href="mailto:anthony_minaya@ymail.com?subject=SonoBuddy%20Feedback"
+                  href="mailto:hello@sonobuddy.com?subject=SonoBuddy%20Feedback"
                   onClick={() => setMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >

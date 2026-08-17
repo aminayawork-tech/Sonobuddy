@@ -365,6 +365,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-5">
             <Link href="/blog" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Blog</Link>
             <Link href="/privacy" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Privacy</Link>
+            <a href="mailto:hello@sonobuddy.com" className="text-gray-400 hover:text-gray-900 text-sm transition-colors">Contact</a>
           </div>
           <p className="text-gray-400 text-xs">
             © {new Date().getFullYear()} SonoBuddy · For reference only. Not a diagnostic tool.
