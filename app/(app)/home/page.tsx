@@ -127,6 +127,10 @@ export default function HomePage() {
   const [pickerQuery, setPickerQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState('');
+  const [feedbackEmail, setFeedbackEmail] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   useEffect(() => {
     if (!localStorage.getItem('sonobuddy_onboarded')) {
@@ -237,14 +241,13 @@ export default function HomePage() {
                 </button>
 
                 {/* Feedback */}
-                <a
-                  href="mailto:hello@sonobuddy.com?subject=SonoBuddy%20Feedback"
-                  onClick={() => setMenuOpen(false)}
+                <button
+                  onClick={() => { setMenuOpen(false); setFeedbackOpen(true); }}
                   className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
                 >
                   <MessageSquare size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Send Feedback</span>
-                </a>
+                </button>
 
                 {/* Privacy Policy — opens inline */}
                 <button
@@ -518,6 +521,78 @@ export default function HomePage() {
                 );
               })}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Feedback Modal ── */}
+      {feedbackOpen && (
+        <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/60 backdrop-blur-sm px-4 pb-8">
+          <div className="w-full max-w-md bg-[#1a2535] rounded-3xl p-6 shadow-2xl">
+            {feedbackStatus === 'sent' ? (
+              <div className="flex flex-col items-center py-6 gap-3">
+                <div className="w-14 h-14 rounded-full bg-sky-500/20 flex items-center justify-center">
+                  <Check size={28} className="text-sky-400" strokeWidth={2.5} />
+                </div>
+                <p className="text-white text-[18px] font-bold">Message sent!</p>
+                <p className="text-slate-400 text-sm text-center">Thanks for your feedback. We&apos;ll be in touch at hello@sonobuddy.com.</p>
+                <button
+                  onClick={() => { setFeedbackOpen(false); setFeedbackMsg(''); setFeedbackEmail(''); setFeedbackStatus('idle'); }}
+                  className="mt-2 w-full bg-sky-500 rounded-2xl py-3 text-white font-semibold"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-white text-[18px] font-bold">Send Feedback</p>
+                  <button onClick={() => { setFeedbackOpen(false); setFeedbackStatus('idle'); }} className="text-slate-400 active:text-white">
+                    <X size={22} />
+                  </button>
+                </div>
+                <input
+                  type="email"
+                  placeholder="Your email (optional)"
+                  value={feedbackEmail}
+                  onChange={(e) => setFeedbackEmail(e.target.value)}
+                  className="w-full bg-white/[0.07] text-white placeholder-slate-500 rounded-xl px-4 py-3 text-[15px] mb-3 outline-none focus:ring-1 focus:ring-sky-500"
+                />
+                <textarea
+                  placeholder="What's on your mind? Bug, suggestion, love note — we read everything."
+                  value={feedbackMsg}
+                  onChange={(e) => setFeedbackMsg(e.target.value)}
+                  rows={5}
+                  className="w-full bg-white/[0.07] text-white placeholder-slate-500 rounded-xl px-4 py-3 text-[15px] resize-none outline-none focus:ring-1 focus:ring-sky-500 mb-4"
+                />
+                {feedbackStatus === 'error' && (
+                  <p className="text-red-400 text-sm mb-3">Something went wrong — please try again.</p>
+                )}
+                <button
+                  disabled={feedbackMsg.trim().length < 5 || feedbackStatus === 'sending'}
+                  onClick={async () => {
+                    setFeedbackStatus('sending');
+                    try {
+                      const res = await fetch('https://www.sonobuddy.com/api/feedback', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: feedbackMsg, senderEmail: feedbackEmail }),
+                      });
+                      if (res.ok) {
+                        setFeedbackStatus('sent');
+                      } else {
+                        setFeedbackStatus('error');
+                      }
+                    } catch {
+                      setFeedbackStatus('error');
+                    }
+                  }}
+                  className="w-full bg-sky-500 disabled:opacity-40 rounded-2xl py-3.5 text-white font-semibold text-[16px] transition-opacity"
+                >
+                  {feedbackStatus === 'sending' ? 'Sending…' : 'Send Feedback'}
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
