@@ -4,7 +4,7 @@ import Link from 'next/link';
 import AppStoreBadge from '@/components/AppStoreBadge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getPostBySlug, getAllPosts } from '@/lib/blog';
+import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
 import { Calendar, ArrowLeft, Tag } from 'lucide-react';
 
 interface Props {
@@ -12,8 +12,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  return getAllPostSlugs().map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
