@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fapi\u002Farticles-by-slug\u002F[slug]","\u002Farticles\u002F[slug]","\u002Fblog\u002F[slug]","\u002Fprotocols\u002F[id]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
