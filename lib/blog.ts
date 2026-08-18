@@ -22,12 +22,12 @@ function ensureBlogDir() {
   }
 }
 
-export function getAllPosts(): BlogPostMeta[] {
+function readAllPosts(): BlogPostMeta[] {
   ensureBlogDir();
   const today = new Date().toISOString().slice(0, 10);
   const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.md'));
 
-  const posts = files.map((file) => {
+  return files.map((file) => {
     const slug = file.replace(/\.md$/, '');
     const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
     const { data } = matter(raw);
@@ -41,10 +41,19 @@ export function getAllPosts(): BlogPostMeta[] {
       tags: data.tags ?? [],
     } as BlogPostMeta;
   });
+}
 
-  return posts
+export function getAllPosts(): BlogPostMeta[] {
+  const today = new Date().toISOString().slice(0, 10);
+  return readAllPosts()
     .filter((p) => p.date <= today)
     .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+// Used by generateStaticParams — pre-renders ALL slugs so future articles
+// are already in the iOS bundle and go live as their date arrives.
+export function getAllPostSlugs(): BlogPostMeta[] {
+  return readAllPosts();
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {
