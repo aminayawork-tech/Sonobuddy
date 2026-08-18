@@ -114,7 +114,7 @@ export default function HomePage() {
   );
 
   useEffect(() => {
-    fetch('https://www.sonobuddy.com/api/daily-hook')
+    fetch('https://www.sonobuddy.com/api/daily-hook/')
       .then((r) => r.json())
       .then((data: DailyHook) => setHook(data))
       .catch(() => { /* keep fallback */ });
@@ -573,7 +573,7 @@ export default function HomePage() {
                   onClick={async () => {
                     setFeedbackStatus('sending');
                     try {
-                      const res = await fetch('https://www.sonobuddy.com/api/feedback', {
+                      const res = await fetch('https://www.sonobuddy.com/api/feedback/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: feedbackMsg, senderEmail: feedbackEmail }),

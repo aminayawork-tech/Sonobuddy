@@ -7,6 +7,9 @@ export async function GET() {
     .filter((a) => a.date <= today)
     .sort((a, b) => (a.date < b.date ? 1 : -1));
   return NextResponse.json(articles, {
-    headers: { 'Cache-Control': 'no-store' },
+    headers: {
+      'Cache-Control': 'no-store',
+      'Access-Control-Allow-Origin': '*',
+    },
   });
 }

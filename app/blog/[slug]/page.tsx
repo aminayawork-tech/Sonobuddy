@@ -5,6 +5,7 @@ import AppStoreBadge from '@/components/AppStoreBadge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
+import { parseLocalDate } from '@/lib/date';
 import { Calendar, ArrowLeft, Tag } from 'lucide-react';
 
 interface Props {
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return parseLocalDate(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

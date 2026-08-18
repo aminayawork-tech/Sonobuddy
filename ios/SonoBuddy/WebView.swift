@@ -122,6 +122,14 @@ struct WebView: UIViewRepresentable {
                 decisionHandler(.cancel)
                 return
             }
+            // mailto:/tel:/sms: can't be loaded by WKWebView — letting them
+            // through fails the navigation and drops the user on the offline
+            // screen. Hand them to the system instead.
+            if ["mailto", "tel", "sms", "facetime"].contains(scheme) {
+                UIApplication.shared.open(url)
+                decisionHandler(.cancel)
+                return
+            }
             decisionHandler(.allow)
         }
 

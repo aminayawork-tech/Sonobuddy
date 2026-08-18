@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
+import { parseLocalDate } from '@/lib/date';
 import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import AppStoreBadge from '@/components/AppStoreBadge';
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return parseLocalDate(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
