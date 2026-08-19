@@ -33,6 +33,14 @@ export async function POST(req: NextRequest) {
       ? `From: ${senderEmail}\n\n${message.trim()}`
       : message.trim();
 
+    // Until sonobuddy.com is verified at resend.com/domains, Resend's sandbox
+    // only delivers to the account owner's own address and rejects anything
+    // else with a 403. Once the domain is verified, set FEEDBACK_FROM to an
+    // address on it and FEEDBACK_TO to hello@sonobuddy.com in Vercel — no code
+    // change needed.
+    const from = process.env.FEEDBACK_FROM ?? 'SonoBuddy Feedback <onboarding@resend.dev>';
+    const to = process.env.FEEDBACK_TO ?? 'aminayawork@gmail.com';
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -40,8 +48,9 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'SonoBuddy Feedback <onboarding@resend.dev>',
-        to: 'hello@sonobuddy.com',
+        from,
+        to,
+        reply_to: senderEmail || undefined,
         subject: senderEmail
           ? `SonoBuddy Feedback from ${senderEmail}`
           : 'SonoBuddy App Feedback',
