@@ -33,6 +33,12 @@ export async function POST(req: NextRequest) {
       ? `From: ${senderEmail}\n\n${message.trim()}`
       : message.trim();
 
+    // sonobuddy.com is verified at resend.com/domains, so mail can be sent
+    // from the domain to any recipient. The env vars are escape hatches for
+    // redirecting feedback without a deploy.
+    const from = process.env.FEEDBACK_FROM ?? 'SonoBuddy Feedback <feedback@sonobuddy.com>';
+    const to = process.env.FEEDBACK_TO ?? 'hello@sonobuddy.com';
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -40,8 +46,9 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'SonoBuddy Feedback <onboarding@resend.dev>',
-        to: 'hello@sonobuddy.com',
+        from,
+        to,
+        reply_to: senderEmail || undefined,
         subject: senderEmail
           ? `SonoBuddy Feedback from ${senderEmail}`
           : 'SonoBuddy App Feedback',
