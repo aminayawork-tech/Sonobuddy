@@ -14,12 +14,15 @@ const CORS = {
 };
 
 const MAX_EVENTS = 500;
+// Keep six months of daily counters; older days expire automatically.
+const RETENTION_SECONDS = 60 * 60 * 24 * 180;
 
 interface TapEvent {
   surface?: unknown;
   route?: unknown;
   label?: unknown;
   cell?: unknown;
+  pcell?: unknown;
   vw?: unknown;
   ts?: unknown;
   session?: unknown;
@@ -70,6 +73,7 @@ export async function POST(req: NextRequest) {
       const route = clean(e.route, 120);
       const label = clean(e.label, 60);
       const cell = clean(e.cell, 8);
+      const pcell = clean(e.pcell, 10);
       const ts = typeof e.ts === 'number' && isFinite(e.ts) ? e.ts : Date.now();
       const vw = typeof e.vw === 'number' && isFinite(e.vw) ? Math.round(e.vw) : 0;
       if (!surface || !route) continue;
@@ -79,6 +83,11 @@ export async function POST(req: NextRequest) {
 
       if (cell && /^\d{1,2},\d{1,2}$/.test(cell)) {
         cmds.push(['HINCRBY', `heat:${day}:${surface}:${vw}:${route}`, cell, '1']);
+      }
+      // Page-relative heat, keyed separately from the viewport grid — this is
+      // what gets overlaid on a rendering of the real page.
+      if (pcell && /^\d{1,2},\d{1,3}$/.test(pcell)) {
+        cmds.push(['HINCRBY', `page:${day}:${surface}:${vw}:${route}`, pcell, '1']);
       }
       if (label) {
         cmds.push(['HINCRBY', `elem:${day}:${surface}:${route}`, label, '1']);
@@ -93,6 +102,16 @@ export async function POST(req: NextRequest) {
     // Track which days have data so the viewer can enumerate them without
     // a SCAN across the keyspace.
     Array.from(days).forEach((day) => cmds.push(['SADD', 'days', day]));
+
+    // Expire the day's counters so storage stays bounded — without this the
+    // keyspace grows forever and eventually runs into the plan's size cap.
+    // NX sets the TTL only if the key has none, so repeated writes through
+    // the day don't keep pushing expiry forward.
+    Array.from(new Set(cmds.filter((c) => c[0] === 'HINCRBY').map((c) => c[1])))
+      .forEach((key) => cmds.push(['EXPIRE', key, String(RETENTION_SECONDS), 'NX']));
+    // The day index is small; give it a rolling window rather than NX so it
+    // outlives the counters it points at.
+    cmds.push(['EXPIRE', 'days', String(RETENTION_SECONDS)]);
 
     const res = await fetch(`${cfg.url}/pipeline`, {
       method: 'POST',

@@ -25,6 +25,10 @@ const MAX_QUEUE = 400;
 // meaningful counts rather than scattering one tap each.
 const GRID_COLS = 20;
 const GRID_ROWS = 40;
+// Page-relative vertical resolution: one band per 20 CSS pixels, capped so a
+// pathological scroll height can't produce unbounded keys.
+export const BAND_PX = 20;
+const MAX_BAND = 600;
 
 export interface TapEvent {
   /** 'ios' for the native app shell, 'web' for the site */
@@ -35,6 +39,12 @@ export interface TapEvent {
   label: string;
   /** Grid cell as "col,row" — viewport-relative, for thumb-reach heatmaps */
   cell: string;
+  /**
+   * Page-relative position as "col,band", where band is a 20px slice down the
+   * document. Viewport coordinates move with scroll, so only this can be
+   * overlaid on a rendering of the actual page.
+   */
+  pcell: string;
   /** Viewport bucket, so phone and tablet taps aren't averaged together */
   vw: number;
   ts: number;
@@ -166,12 +176,14 @@ function record(e: MouseEvent): void {
 
   const col = Math.min(GRID_COLS - 1, Math.floor((e.clientX / vw) * GRID_COLS));
   const row = Math.min(GRID_ROWS - 1, Math.floor((e.clientY / vh) * GRID_ROWS));
+  const band = Math.min(MAX_BAND, Math.floor((e.clientY + window.scrollY) / BAND_PX));
 
   const event: TapEvent = {
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
     label,
     cell: `${col},${row}`,
+    pcell: `${col},${band}`,
     // Bucket the viewport so phone and tablet layouts stay separable.
     vw: vw < 480 ? 480 : vw < 768 ? 768 : vw < 1024 ? 1024 : 1440,
     ts: Date.now(),
@@ -191,8 +203,12 @@ export function startTapTracking(): () => void {
   if (started || typeof window === 'undefined') return () => {};
   started = true;
 
-  // The admin viewer would otherwise pollute its own data.
-  if (window.location.pathname.startsWith('/admin')) {
+  // The admin viewer would otherwise pollute its own data — both directly,
+  // and via the page previews it renders in an iframe.
+  const embedded = (() => {
+    try { return window.self !== window.top; } catch { return true; }
+  })();
+  if (window.location.pathname.startsWith('/admin') || embedded) {
     started = false;
     return () => {};
   }
