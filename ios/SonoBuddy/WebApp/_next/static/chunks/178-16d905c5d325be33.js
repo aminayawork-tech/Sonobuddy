@@ -73,7 +73,7 @@
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
- */let n=(0,r(8030).Z)("Lock",[["rect",{width:"18",height:"11",x:"3",y:"11",rx:"2",ry:"2",key:"1w4ew1"}],["path",{d:"M7 11V7a5 5 0 0 1 10 0v4",key:"fwvmzm"}]])},2873:function(e,t,r){"use strict";r.d(t,{Z:function(){return n}});/**
+ */let n=(0,r(8030).Z)("Lock",[["rect",{width:"18",height:"11",x:"3",y:"11",rx:"2",ry:"2",key:"1w4ew1"}],["path",{d:"M7 11V7a5 5 0 0 1 10 0v4",key:"fwvmzm"}]])},5246:function(e,t,r){"use strict";r.d(t,{Z:function(){return n}});/**
  * @license lucide-react v0.400.0 - ISC
  *
  * This source code is licensed under the ISC license.
