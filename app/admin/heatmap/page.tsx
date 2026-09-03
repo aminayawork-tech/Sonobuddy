@@ -9,7 +9,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 const GRID_COLS = 20;
 const GRID_ROWS = 40;
-const API = 'https://www.sonobuddy.com/api/events/summary/';
+// Relative on purpose: keeps the call same-origin, so the endpoint needs no
+// CORS headers and the Authorization header triggers no preflight.
+const API = '/api/events/summary/';
 const TOKEN_KEY = 'sb_analytics_token';
 
 interface Pair { name: string; count: number }
@@ -44,9 +46,14 @@ export default function HeatmapAdminPage() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ token, day, surface });
+      const params = new URLSearchParams({ day, surface });
       if (route) params.set('route', route);
-      const res = await fetch(`${API}?${params}`);
+      // Token goes in a header, never the query string — query strings leak
+      // into server logs, browser history, and referrer headers.
+      const res = await fetch(`${API}?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        referrerPolicy: 'no-referrer',
+      });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || `Request failed (${res.status})`);
