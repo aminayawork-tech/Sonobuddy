@@ -40,7 +40,16 @@ export async function GET(req: NextRequest) {
   const cfg = redisConfig();
 
   if (!expected || !cfg) {
-    return NextResponse.json({ error: 'Analytics not configured' }, { status: 503 });
+    // Name which half is missing — without it a 503 is indistinguishable
+    // between "no token" and "no store", which costs a deploy cycle to
+    // narrow down. Neither value is revealed, only whether it resolved.
+    const missing: string[] = [];
+    if (!expected) missing.push('ANALYTICS_TOKEN');
+    if (!cfg) missing.push('redis credentials (UPSTASH_REDIS_REST_* or KV_REST_API_*)');
+    return NextResponse.json(
+      { error: 'Analytics not configured', missing },
+      { status: 503 }
+    );
   }
 
   const redis = (cmd: string[]) => redisCommand(cfg, cmd);
