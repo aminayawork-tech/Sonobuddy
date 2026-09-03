@@ -31,6 +31,8 @@ export const BAND_PX = 20;
 const MAX_BAND = 600;
 
 export interface TapEvent {
+  /** 'tap' for a click, 'view' for arriving on a screen */
+  type: 'tap' | 'view';
   /** 'ios' for the native app shell, 'web' for the site */
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
@@ -130,6 +132,33 @@ function writeQueue(events: TapEvent[]): void {
   }
 }
 
+function enqueue(event: TapEvent): void {
+  const queue = readQueue();
+  queue.push(event);
+  writeQueue(queue);
+  if (queue.length >= FLUSH_AT) void flush();
+}
+
+/**
+ * Record arriving on a screen. Taps alone leave a blind spot: a screen people
+ * open, read and leave without touching anything registers as unused. Views
+ * also give the ordering needed to reconstruct a session's path.
+ */
+export function recordView(path: string): void {
+  if (typeof window === 'undefined' || !trackingActive) return;
+  enqueue({
+    type: 'view',
+    surface: surface(),
+    route: normalizeRoute(path),
+    label: '',
+    cell: '',
+    pcell: '',
+    vw: window.innerWidth < 480 ? 480 : window.innerWidth < 768 ? 768 : 1024,
+    ts: Date.now(),
+    session: sessionId(),
+  });
+}
+
 let flushing = false;
 
 export async function flush(): Promise<void> {
@@ -179,6 +208,7 @@ function record(e: MouseEvent): void {
   const band = Math.min(MAX_BAND, Math.floor((e.clientY + window.scrollY) / BAND_PX));
 
   const event: TapEvent = {
+    type: 'tap',
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
     label,
@@ -190,14 +220,11 @@ function record(e: MouseEvent): void {
     session: sessionId(),
   };
 
-  const queue = readQueue();
-  queue.push(event);
-  writeQueue(queue);
-
-  if (queue.length >= FLUSH_AT) void flush();
+  enqueue(event);
 }
 
 let started = false;
+let trackingActive = false;
 
 export function startTapTracking(): () => void {
   if (started || typeof window === 'undefined') return () => {};
@@ -212,6 +239,7 @@ export function startTapTracking(): () => void {
     started = false;
     return () => {};
   }
+  trackingActive = true;
 
   document.addEventListener('click', record, { capture: true, passive: true });
 
@@ -225,6 +253,7 @@ export function startTapTracking(): () => void {
   setTimeout(() => void flush(), 3000);
 
   return () => {
+    trackingActive = false;
     document.removeEventListener('click', record, { capture: true });
     document.removeEventListener('visibilitychange', onHide);
     window.removeEventListener('pagehide', onHide);

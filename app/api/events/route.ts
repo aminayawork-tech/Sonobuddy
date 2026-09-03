@@ -18,6 +18,7 @@ const MAX_EVENTS = 500;
 const RETENTION_SECONDS = 60 * 60 * 24 * 180;
 
 interface TapEvent {
+  type?: unknown;
   surface?: unknown;
   route?: unknown;
   label?: unknown;
@@ -80,6 +81,22 @@ export async function POST(req: NextRequest) {
 
       const day = dayKey(ts);
       days.add(day);
+      const session = clean(e.session, 24);
+
+      if (e.type === 'view') {
+        // Screen opens, tracked separately from taps so a screen that is read
+        // but never touched still registers as used.
+        cmds.push(['HINCRBY', `views:${day}:${surface}`, route, '1']);
+        if (session) {
+          cmds.push(['SADD', `sessions:${day}:${surface}`, session]);
+          // The ordered path through the app for this session. Trimmed so a
+          // long session can't grow without bound.
+          const trailKey = `trail:${day}:${surface}:${session}`;
+          cmds.push(['RPUSH', trailKey, route]);
+          cmds.push(['LTRIM', trailKey, '-40', '-1']);
+        }
+        continue;
+      }
 
       if (cell && /^\d{1,2},\d{1,2}$/.test(cell)) {
         cmds.push(['HINCRBY', `heat:${day}:${surface}:${vw}:${route}`, cell, '1']);
@@ -107,8 +124,14 @@ export async function POST(req: NextRequest) {
     // keyspace grows forever and eventually runs into the plan's size cap.
     // NX sets the TTL only if the key has none, so repeated writes through
     // the day don't keep pushing expiry forward.
-    Array.from(new Set(cmds.filter((c) => c[0] === 'HINCRBY').map((c) => c[1])))
-      .forEach((key) => cmds.push(['EXPIRE', key, String(RETENTION_SECONDS), 'NX']));
+    Array.from(
+      new Set(
+        cmds
+          .filter((c) => c[0] === 'HINCRBY' || c[0] === 'RPUSH' || c[0] === 'SADD')
+          .map((c) => c[1])
+          .filter((k) => k !== 'days')
+      )
+    ).forEach((key) => cmds.push(['EXPIRE', key, String(RETENTION_SECONDS), 'NX']));
     // The day index is small; give it a rolling window rather than NX so it
     // outlives the counters it points at.
     cmds.push(['EXPIRE', 'days', String(RETENTION_SECONDS)]);

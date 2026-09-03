@@ -30,3 +30,23 @@ export async function redisCommand(
   if (!res.ok) throw new Error(`Redis ${res.status}`);
   return (await res.json())?.result;
 }
+
+/** Run several commands in one round trip. Returns results in order. */
+export async function redisPipeline(
+  cfg: { url: string; token: string },
+  cmds: string[][]
+): Promise<unknown[]> {
+  if (cmds.length === 0) return [];
+  const res = await fetch(`${cfg.url}/pipeline`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${cfg.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(cmds),
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(`Redis pipeline ${res.status}`);
+  const body = await res.json();
+  return Array.isArray(body) ? body.map((r) => r?.result) : [];
+}

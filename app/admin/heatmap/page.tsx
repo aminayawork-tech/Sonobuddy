@@ -18,12 +18,16 @@ const API = '/api/events/summary/';
 const TOKEN_KEY = 'sb_analytics_token';
 
 interface Pair { name: string; count: number }
+interface Journey { session: string; path: string[] }
 interface Summary {
   day: string;
   surface: string;
   route: string | null;
   days: string[];
   routes: Pair[];
+  views: Pair[];
+  sessionCount: number;
+  journeys: Journey[];
   elements: Pair[];
   cells: Pair[];
   pageCells: Pair[];
@@ -114,6 +118,21 @@ export default function HeatmapAdminPage() {
   const url = route ? previewUrl(route) : null;
   const maxPage = data?.pageCells.reduce((m, c) => Math.max(m, c.count), 0) ?? 0;
   const totalTaps = data?.routes.reduce((s, r) => s + r.count, 0) ?? 0;
+  const totalViews = data?.views.reduce((s, r) => s + r.count, 0) ?? 0;
+
+  // Merge views and taps into one list so a screen that was opened but never
+  // touched still appears — that gap is exactly what taps alone hide.
+  const screenRows = (() => {
+    if (!data) return [];
+    const byRoute = new Map<string, { name: string; views: number; taps: number }>();
+    for (const v of data.views) byRoute.set(v.name, { name: v.name, views: v.count, taps: 0 });
+    for (const t of data.routes) {
+      const row = byRoute.get(t.name) ?? { name: t.name, views: 0, taps: 0 };
+      row.taps = t.count;
+      byRoute.set(t.name, row);
+    }
+    return Array.from(byRoute.values()).sort((a, b) => (b.views - a.views) || (b.taps - a.taps));
+  })();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 px-5 py-10">
@@ -170,14 +189,17 @@ export default function HeatmapAdminPage() {
           <div className="grid lg:grid-cols-[280px_1fr_260px] gap-8 items-start">
             {/* Screens */}
             <section>
-              <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
-                Screens · {totalTaps} taps
+              <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                Screens
               </h2>
-              {data.routes.length === 0 ? (
-                <p className="text-slate-500 text-sm">No taps recorded for this day.</p>
+              <p className="text-xs text-slate-500 mb-3">
+                {data.sessionCount} sessions · {totalViews} views · {totalTaps} taps
+              </p>
+              {screenRows.length === 0 ? (
+                <p className="text-slate-500 text-sm">Nothing recorded for this day.</p>
               ) : (
                 <ul className="space-y-1">
-                  {data.routes.map((r) => (
+                  {screenRows.map((r) => (
                     <li key={r.name}>
                       <button
                         onClick={() => setRoute(r.name)}
@@ -186,12 +208,17 @@ export default function HeatmapAdminPage() {
                         }`}
                       >
                         <span className="font-mono truncate text-xs">{r.name}</span>
-                        <span className="tabular-nums text-slate-400 shrink-0">{r.count}</span>
+                        <span className="tabular-nums text-xs shrink-0">
+                          <span className="text-slate-200">{r.views}</span>
+                          <span className="text-slate-600"> / </span>
+                          <span className="text-slate-500">{r.taps}</span>
+                        </span>
                       </button>
                     </li>
                   ))}
                 </ul>
               )}
+              <p className="text-[11px] text-slate-600 mt-2">views / taps</p>
             </section>
 
             {/* The screen, with heat on top */}
@@ -276,6 +303,50 @@ export default function HeatmapAdminPage() {
                   No positional data yet for this screen. Positions are recorded from the
                   next build onward.
                 </p>
+              )}
+            </section>
+
+            {/* Journeys */}
+            <section className="lg:col-span-3">
+              <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                Journeys
+              </h2>
+              <p className="text-xs text-slate-500 mb-3">
+                The path each session took through the app, longest first.
+              </p>
+              {data.journeys.length === 0 ? (
+                <p className="text-slate-500 text-sm">
+                  No journeys yet. These are recorded from this deploy onward.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {data.journeys.slice(0, 20).map((j) => (
+                    <li
+                      key={j.session}
+                      className="bg-slate-900 rounded-lg px-3 py-2.5 flex items-start gap-3"
+                    >
+                      <span className="text-[10px] font-mono text-slate-600 shrink-0 mt-1 w-14 truncate">
+                        {j.session}
+                      </span>
+                      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 min-w-0">
+                        {j.path.map((step, i) => (
+                          <span key={i} className="flex items-center gap-1.5">
+                            {i > 0 && <span className="text-slate-700">&rarr;</span>}
+                            <button
+                              onClick={() => setRoute(step)}
+                              className="font-mono text-[11px] text-sky-300/80 hover:text-sky-300"
+                            >
+                              {step}
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <span className="ml-auto text-[11px] text-slate-500 tabular-nums shrink-0">
+                        {j.path.length}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </section>
 
