@@ -132,6 +132,9 @@ export async function POST(req: NextRequest) {
       // what gets overlaid on a rendering of the real page.
       if (pcell && /^\d{1,2},\d{1,3}$/.test(pcell)) {
         cmds.push(['HINCRBY', `page:${day}:${surface}:${vw}:${route}`, pcell, '1']);
+        // Record which viewport widths actually have heat, so the dashboard
+        // can offer them instead of guessing one and showing an empty overlay.
+        cmds.push(['SADD', `vws:${day}:${surface}:${route}`, String(vw)]);
       }
       if (label) {
         cmds.push(['HINCRBY', `elem:${day}:${surface}:${route}`, label, '1']);

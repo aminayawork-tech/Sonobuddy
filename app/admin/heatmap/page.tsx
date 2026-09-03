@@ -31,6 +31,8 @@ interface Summary {
   deadRoutes: Pair[];
   deadCells: Pair[];
   scroll: Pair[];
+  viewports: string[];
+  vw: string;
   sessionCount: number;
   journeys: Journey[];
   elements: Pair[];
@@ -70,6 +72,7 @@ export default function HeatmapAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showHeat, setShowHeat] = useState(true);
+  const [vw, setVw] = useState<string | null>(null);
   const [frameH, setFrameH] = useState(844);
   const frameRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -87,6 +90,7 @@ export default function HeatmapAdminPage() {
     try {
       const params = new URLSearchParams({ day, surface });
       if (route) params.set('route', route);
+      if (vw) params.set('vw', vw);
       // Token goes in a header, never the query string — query strings leak
       // into server logs, browser history, and referrer headers.
       const res = await fetch(`${API}?${params}`, {
@@ -105,7 +109,7 @@ export default function HeatmapAdminPage() {
     } finally {
       setLoading(false);
     }
-  }, [token, day, surface, route]);
+  }, [token, day, surface, route, vw]);
 
   useEffect(() => { if (token) void load(); }, [load, token]);
 
@@ -226,7 +230,7 @@ export default function HeatmapAdminPage() {
                   {screenRows.map((r) => (
                     <li key={r.name}>
                       <button
-                        onClick={() => setRoute(r.name)}
+                        onClick={() => { setRoute(r.name); setVw(null); }}
                         className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-sm text-left transition-colors ${
                           route === r.name ? 'bg-sky-500/20 text-sky-300' : 'bg-slate-900 hover:bg-slate-800'
                         }`}
@@ -252,14 +256,30 @@ export default function HeatmapAdminPage() {
                   {route ? `Screen · ${route}` : 'Screen'}
                 </h2>
                 {route && (
-                  <label className="flex items-center gap-2 text-xs text-slate-400">
-                    <input
-                      type="checkbox"
-                      checked={showHeat}
-                      onChange={(e) => setShowHeat(e.target.checked)}
-                    />
-                    Show heat
-                  </label>
+                  <div className="flex items-center gap-3">
+                    {data.viewports.length > 0 && (
+                      <select
+                        value={data.vw}
+                        onChange={(e) => setVw(e.target.value)}
+                        title="Screen width the taps came from"
+                        className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs"
+                      >
+                        {data.viewports.map((v) => (
+                          <option key={v} value={v}>
+                            {v === '480' ? 'Phone' : v === '768' ? 'Tablet' : `Desktop ${v}`}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    <label className="flex items-center gap-2 text-xs text-slate-400">
+                      <input
+                        type="checkbox"
+                        checked={showHeat}
+                        onChange={(e) => setShowHeat(e.target.checked)}
+                      />
+                      Show heat
+                    </label>
+                  </div>
                 )}
               </div>
 
@@ -348,8 +368,10 @@ export default function HeatmapAdminPage() {
               )}
               {route && url && maxPage === 0 && (
                 <p className="text-slate-500 text-sm mt-3">
-                  No positional data yet for this screen. Positions are recorded from the
-                  next build onward.
+                  No tap positions recorded at this screen width. Taps are grouped by the
+                  width they happened at — if you tested on a desktop browser, narrow the
+                  window below 480px (or use device emulation) so they land in the phone
+                  bucket that matches this preview.
                 </p>
               )}
             </section>
