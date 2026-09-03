@@ -109,10 +109,12 @@ export async function GET(req: NextRequest) {
 
     let elements: { name: string; count: number }[] = [];
     let cells: { name: string; count: number }[] = [];
+    let pageCells: { name: string; count: number }[] = [];
 
     if (route) {
       elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${route}`]));
       cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${route}`]));
+      pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${route}`]));
     }
 
     return NextResponse.json(
@@ -124,6 +126,7 @@ export async function GET(req: NextRequest) {
         routes,
         elements,
         cells,
+        pageCells,
       },
       {
         headers: {

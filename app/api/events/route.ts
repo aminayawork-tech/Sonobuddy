@@ -22,6 +22,7 @@ interface TapEvent {
   route?: unknown;
   label?: unknown;
   cell?: unknown;
+  pcell?: unknown;
   vw?: unknown;
   ts?: unknown;
   session?: unknown;
@@ -72,6 +73,7 @@ export async function POST(req: NextRequest) {
       const route = clean(e.route, 120);
       const label = clean(e.label, 60);
       const cell = clean(e.cell, 8);
+      const pcell = clean(e.pcell, 10);
       const ts = typeof e.ts === 'number' && isFinite(e.ts) ? e.ts : Date.now();
       const vw = typeof e.vw === 'number' && isFinite(e.vw) ? Math.round(e.vw) : 0;
       if (!surface || !route) continue;
@@ -81,6 +83,11 @@ export async function POST(req: NextRequest) {
 
       if (cell && /^\d{1,2},\d{1,2}$/.test(cell)) {
         cmds.push(['HINCRBY', `heat:${day}:${surface}:${vw}:${route}`, cell, '1']);
+      }
+      // Page-relative heat, keyed separately from the viewport grid — this is
+      // what gets overlaid on a rendering of the real page.
+      if (pcell && /^\d{1,2},\d{1,3}$/.test(pcell)) {
+        cmds.push(['HINCRBY', `page:${day}:${surface}:${vw}:${route}`, pcell, '1']);
       }
       if (label) {
         cmds.push(['HINCRBY', `elem:${day}:${surface}:${route}`, label, '1']);
