@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
   const day = req.nextUrl.searchParams.get('day') || new Date().toISOString().slice(0, 10);
   const surface = req.nextUrl.searchParams.get('surface') || 'ios';
   const route = req.nextUrl.searchParams.get('route');
-  const vw = req.nextUrl.searchParams.get('vw') || '480';
+  const requestedVw = req.nextUrl.searchParams.get('vw');
 
   /** Upstash returns hashes as a flat [field, value, ...] array. */
   function toPairs(flat: unknown): { name: string; count: number }[] {
@@ -134,7 +134,19 @@ export async function GET(req: NextRequest) {
     let deadCells: { name: string; count: number }[] = [];
     let scroll: { name: string; count: number }[] = [];
 
+    let viewports: string[] = [];
+    let vw = requestedVw || '480';
+
     if (route) {
+      const vwsRaw = await redis(['SMEMBERS', `vws:${day}:${surface}:${route}`]);
+      viewports = (Array.isArray(vwsRaw) ? vwsRaw.map(String) : []).sort(
+        (a, b) => Number(a) - Number(b)
+      );
+      // Default to a width that actually has data rather than an empty overlay.
+      if (!requestedVw || !viewports.includes(vw)) {
+        vw = viewports[0] ?? '480';
+      }
+
       elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${route}`]));
       cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${route}`]));
       pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${route}`]));
@@ -155,6 +167,8 @@ export async function GET(req: NextRequest) {
         deadRoutes,
         deadCells,
         scroll,
+        viewports,
+        vw,
         sessionCount: sessionIds.length,
         journeys,
         elements,
