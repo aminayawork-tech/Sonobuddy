@@ -27,6 +27,7 @@ interface Summary {
   routes: Pair[];
   views: Pair[];
   named: Pair[];
+  searchMisses: Pair[];
   deadRoutes: Pair[];
   deadCells: Pair[];
   scroll: Pair[];
@@ -440,6 +441,32 @@ export default function HeatmapAdminPage() {
                   </ul>
                 )}
               </div>
+            </section>
+
+            {/* Searches that found nothing */}
+            <section className="lg:col-span-3">
+              <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                Searches with no results
+              </h2>
+              <p className="text-xs text-slate-500 mb-3">
+                What people looked for and didn&apos;t find — a direct list of content worth
+                adding. Successful searches are not recorded.
+              </p>
+              {data.searchMisses.length === 0 ? (
+                <p className="text-slate-500 text-sm">None recorded.</p>
+              ) : (
+                <ul className="flex flex-wrap gap-2">
+                  {data.searchMisses.slice(0, 40).map((q) => (
+                    <li
+                      key={q.name}
+                      className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full text-sm"
+                    >
+                      <span>{q.name}</span>
+                      <span className="tabular-nums text-slate-500 text-xs">{q.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </section>
 
             {/* Journeys */}

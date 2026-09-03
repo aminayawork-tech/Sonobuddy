@@ -83,6 +83,12 @@ export async function POST(req: NextRequest) {
       days.add(day);
       const session = clean(e.session, 24);
 
+      if (e.type === 'searchmiss' && label) {
+        // Queries that found nothing — the content gap list.
+        cmds.push(['HINCRBY', `searchmiss:${day}:${surface}`, label, '1']);
+        continue;
+      }
+
       if (e.type === 'event' && label) {
         // Named milestones (paywall funnel steps and similar).
         cmds.push(['HINCRBY', `named:${day}:${surface}`, label, '1']);

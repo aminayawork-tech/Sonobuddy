@@ -36,7 +36,7 @@ export interface TapEvent {
    * something non-interactive, 'scroll' how far down a screen was read,
    * 'event' a named milestone such as a paywall step.
    */
-  type: 'tap' | 'view' | 'dead' | 'scroll' | 'event';
+  type: 'tap' | 'view' | 'dead' | 'scroll' | 'event' | 'searchmiss';
   /** 'ios' for the native app shell, 'web' for the site */
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
@@ -224,6 +224,47 @@ export function resetDepth(route: string): void {
   depthRoute = normalizeRoute(route);
   maxDepth = 0;
   trackDepth();
+}
+
+/**
+ * Queries that returned nothing, which is the one piece of typed input worth
+ * recording: it names the reference content sonographers expect and can't
+ * find. Searches that succeed are not logged — they teach nothing the view
+ * counts don't already show, and logging them would mean capturing far more
+ * of what users type for no added insight.
+ *
+ * Anything resembling an identifier rather than a clinical term is dropped
+ * before it leaves the device.
+ */
+function sanitizeQuery(raw: string): string | null {
+  const q = raw.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (q.length < 3 || q.length > 40) return null;
+  if (!/[a-z]/.test(q)) return null;      // must contain letters
+  if (q.includes('@')) return null;       // email-shaped
+  if (/\d{4,}/.test(q)) return null;      // MRNs, dates, phone numbers
+  return q;
+}
+
+// One report per distinct miss per session — a user retrying the same term
+// shouldn't inflate the count.
+const reportedMisses = new Set<string>();
+
+export function recordSearchMiss(raw: string): void {
+  if (typeof window === 'undefined' || !trackingActive) return;
+  const q = sanitizeQuery(raw);
+  if (!q || reportedMisses.has(q)) return;
+  reportedMisses.add(q);
+  enqueue({
+    type: 'searchmiss',
+    surface: surface(),
+    route: normalizeRoute(window.location.pathname),
+    label: q,
+    cell: '',
+    pcell: '',
+    vw: window.innerWidth,
+    ts: Date.now(),
+    session: sessionId(),
+  });
 }
 
 let flushing = false;

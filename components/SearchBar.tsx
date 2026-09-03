@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X, Ruler, ClipboardList, Calculator, Microscope } from 'lucide-react';
 import { globalSearch, type SearchResult, TYPE_LABELS, TYPE_COLORS } from '@/lib/search';
+import { recordSearchMiss } from '@/lib/tap-tracking';
 import clsx from 'clsx';
 
 const TYPE_ICON_COMPONENTS: Record<SearchResult['type'], React.ElementType> = {
@@ -35,6 +36,13 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
     const found = globalSearch(query);
     setResults(found.slice(0, 12));
     setOpen(found.length > 0);
+
+    // Report only once typing settles. Firing per keystroke would log every
+    // prefix of a word that eventually matches, which is noise, not a gap.
+    if (found.length === 0) {
+      const t = setTimeout(() => recordSearchMiss(query), 1200);
+      return () => clearTimeout(t);
+    }
   }, [query]);
 
   function handleSelect(result: SearchResult) {

@@ -108,6 +108,7 @@ export async function GET(req: NextRequest) {
     const routes = toPairs(await redis(['HGETALL', `routes:${day}:${surface}`]));
     const views = toPairs(await redis(['HGETALL', `views:${day}:${surface}`]));
     const named = toPairs(await redis(['HGETALL', `named:${day}:${surface}`]));
+    const searchMisses = toPairs(await redis(['HGETALL', `searchmiss:${day}:${surface}`]));
     const deadRoutes = toPairs(await redis(['HGETALL', `deadroutes:${day}:${surface}`]));
 
     // Session paths. Capped: this is for reading patterns at a glance, not
@@ -150,6 +151,7 @@ export async function GET(req: NextRequest) {
         routes,
         views,
         named,
+        searchMisses,
         deadRoutes,
         deadCells,
         scroll,
