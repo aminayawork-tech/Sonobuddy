@@ -29,11 +29,27 @@ interface Summary {
   pageCells: Pair[];
 }
 
-/** Routes that exist as real pages we can render behind the heat. */
+/**
+ * Routes with a real page behind them. Anything else — a dynamic route, or a
+ * stale entry for a page that no longer exists — would render a 404 inside
+ * the frame, which reads as a broken dashboard rather than missing data.
+ */
+const PREVIEWABLE = new Set([
+  '/home',
+  '/measurements',
+  '/protocols',
+  '/calculators',
+  '/pathologies',
+  '/articles',
+  '/app',
+  '/',
+  '/blog',
+  '/privacy',
+]);
+
 function previewUrl(route: string): string | null {
-  if (route.includes('[')) return null; // dynamic — no single page to show
-  if (!route.startsWith('/')) return null;
-  return `${route}/`;
+  if (!PREVIEWABLE.has(route)) return null;
+  return route === '/' ? '/' : `${route}/`;
 }
 
 export default function HeatmapAdminPage() {
@@ -200,7 +216,8 @@ export default function HeatmapAdminPage() {
                 <p className="text-slate-500 text-sm">Select a screen on the left.</p>
               ) : !url ? (
                 <p className="text-slate-500 text-sm">
-                  {route} covers many pages, so there is no single screen to render.
+                  No single page to render for <span className="font-mono">{route}</span> —
+                  it is either a dynamic route covering many pages, or not a real screen.
                   Control counts are still shown on the right.
                 </p>
               ) : (
