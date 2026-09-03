@@ -14,6 +14,8 @@ const CORS = {
 };
 
 const MAX_EVENTS = 500;
+// Keep six months of daily counters; older days expire automatically.
+const RETENTION_SECONDS = 60 * 60 * 24 * 180;
 
 interface TapEvent {
   surface?: unknown;
@@ -93,6 +95,16 @@ export async function POST(req: NextRequest) {
     // Track which days have data so the viewer can enumerate them without
     // a SCAN across the keyspace.
     Array.from(days).forEach((day) => cmds.push(['SADD', 'days', day]));
+
+    // Expire the day's counters so storage stays bounded — without this the
+    // keyspace grows forever and eventually runs into the plan's size cap.
+    // NX sets the TTL only if the key has none, so repeated writes through
+    // the day don't keep pushing expiry forward.
+    Array.from(new Set(cmds.filter((c) => c[0] === 'HINCRBY').map((c) => c[1])))
+      .forEach((key) => cmds.push(['EXPIRE', key, String(RETENTION_SECONDS), 'NX']));
+    // The day index is small; give it a rolling window rather than NX so it
+    // outlives the counters it points at.
+    cmds.push(['EXPIRE', 'days', String(RETENTION_SECONDS)]);
 
     const res = await fetch(`${cfg.url}/pipeline`, {
       method: 'POST',
