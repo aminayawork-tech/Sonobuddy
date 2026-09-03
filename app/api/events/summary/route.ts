@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { redisConfig, redisCommand } from '@/lib/redis';
+import { redisConfig, redisCommand, redisPipeline } from '@/lib/redis';
 
 export const runtime = 'edge';
 
@@ -106,15 +106,40 @@ export async function GET(req: NextRequest) {
   try {
     const days = await redis(['SMEMBERS', 'days']);
     const routes = toPairs(await redis(['HGETALL', `routes:${day}:${surface}`]));
+    const views = toPairs(await redis(['HGETALL', `views:${day}:${surface}`]));
+    const named = toPairs(await redis(['HGETALL', `named:${day}:${surface}`]));
+    const searchMisses = toPairs(await redis(['HGETALL', `searchmiss:${day}:${surface}`]));
+    const deadRoutes = toPairs(await redis(['HGETALL', `deadroutes:${day}:${surface}`]));
+
+    // Session paths. Capped: this is for reading patterns at a glance, not
+    // for auditing individuals, and unbounded reads would be slow and costly.
+    const allSessions = await redis(['SMEMBERS', `sessions:${day}:${surface}`]);
+    const sessionIds = Array.isArray(allSessions) ? allSessions.map(String) : [];
+    const sampled = sessionIds.slice(0, 40);
+    const trailLists = await redisPipeline(
+      cfg,
+      sampled.map((sid) => ['LRANGE', `trail:${day}:${surface}:${sid}`, '0', '-1'])
+    );
+    const journeys = sampled
+      .map((sid, i) => ({
+        session: sid,
+        path: Array.isArray(trailLists[i]) ? (trailLists[i] as unknown[]).map(String) : [],
+      }))
+      .filter((j) => j.path.length > 0)
+      .sort((a, b) => b.path.length - a.path.length);
 
     let elements: { name: string; count: number }[] = [];
     let cells: { name: string; count: number }[] = [];
     let pageCells: { name: string; count: number }[] = [];
+    let deadCells: { name: string; count: number }[] = [];
+    let scroll: { name: string; count: number }[] = [];
 
     if (route) {
       elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${route}`]));
       cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${route}`]));
       pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${route}`]));
+      deadCells = toPairs(await redis(['HGETALL', `dead:${day}:${surface}:${vw}:${route}`]));
+      scroll = toPairs(await redis(['HGETALL', `scroll:${day}:${surface}:${route}`]));
     }
 
     return NextResponse.json(
@@ -124,6 +149,14 @@ export async function GET(req: NextRequest) {
         route,
         days: Array.isArray(days) ? days.sort().reverse() : [],
         routes,
+        views,
+        named,
+        searchMisses,
+        deadRoutes,
+        deadCells,
+        scroll,
+        sessionCount: sessionIds.length,
+        journeys,
         elements,
         cells,
         pageCells,
