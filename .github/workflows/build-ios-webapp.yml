@@ -53,6 +53,11 @@ jobs:
         run: |
           rm -rf ios/SonoBuddy/WebApp
           cp -r out ios/SonoBuddy/WebApp
+          # The analytics dashboard is owner-only tooling. Shipping it inside
+          # the app would put the page in every user's hands via the IPA, and
+          # it can't work there anyway — it calls a same-origin API that does
+          # not exist under the sono-web:// scheme.
+          rm -rf ios/SonoBuddy/WebApp/admin
 
       - name: Commit updated WebApp bundle
         run: |
