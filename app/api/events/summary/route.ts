@@ -107,6 +107,8 @@ export async function GET(req: NextRequest) {
     const days = await redis(['SMEMBERS', 'days']);
     const routes = toPairs(await redis(['HGETALL', `routes:${day}:${surface}`]));
     const views = toPairs(await redis(['HGETALL', `views:${day}:${surface}`]));
+    const named = toPairs(await redis(['HGETALL', `named:${day}:${surface}`]));
+    const deadRoutes = toPairs(await redis(['HGETALL', `deadroutes:${day}:${surface}`]));
 
     // Session paths. Capped: this is for reading patterns at a glance, not
     // for auditing individuals, and unbounded reads would be slow and costly.
@@ -128,11 +130,15 @@ export async function GET(req: NextRequest) {
     let elements: { name: string; count: number }[] = [];
     let cells: { name: string; count: number }[] = [];
     let pageCells: { name: string; count: number }[] = [];
+    let deadCells: { name: string; count: number }[] = [];
+    let scroll: { name: string; count: number }[] = [];
 
     if (route) {
       elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${route}`]));
       cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${route}`]));
       pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${route}`]));
+      deadCells = toPairs(await redis(['HGETALL', `dead:${day}:${surface}:${vw}:${route}`]));
+      scroll = toPairs(await redis(['HGETALL', `scroll:${day}:${surface}:${route}`]));
     }
 
     return NextResponse.json(
@@ -143,6 +149,10 @@ export async function GET(req: NextRequest) {
         days: Array.isArray(days) ? days.sort().reverse() : [],
         routes,
         views,
+        named,
+        deadRoutes,
+        deadCells,
+        scroll,
         sessionCount: sessionIds.length,
         journeys,
         elements,

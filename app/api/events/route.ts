@@ -83,6 +83,27 @@ export async function POST(req: NextRequest) {
       days.add(day);
       const session = clean(e.session, 24);
 
+      if (e.type === 'event' && label) {
+        // Named milestones (paywall funnel steps and similar).
+        cmds.push(['HINCRBY', `named:${day}:${surface}`, label, '1']);
+        continue;
+      }
+
+      if (e.type === 'scroll' && label && /^\d{1,3}$/.test(label)) {
+        // How far down the screen was read, bucketed to 25s.
+        cmds.push(['HINCRBY', `scroll:${day}:${surface}:${route}`, label, '1']);
+        continue;
+      }
+
+      if (e.type === 'dead') {
+        // Taps that hit nothing interactive — a frustration signal.
+        cmds.push(['HINCRBY', `deadroutes:${day}:${surface}`, route, '1']);
+        if (pcell && /^\d{1,2},\d{1,3}$/.test(pcell)) {
+          cmds.push(['HINCRBY', `dead:${day}:${surface}:${vw}:${route}`, pcell, '1']);
+        }
+        continue;
+      }
+
       if (e.type === 'view') {
         // Screen opens, tracked separately from taps so a screen that is read
         // but never touched still registers as used.

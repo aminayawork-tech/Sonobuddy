@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
+import { recordEvent } from '@/lib/tap-tracking';
+
 import { Lock, X, CheckCircle2 } from 'lucide-react';
 
 interface Props {
@@ -16,11 +19,19 @@ const FEATURES = [
 ];
 
 export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) {
+  // Instrumented here rather than at each call site — the modal is rendered
+  // from six screens and they should all report the funnel identically.
+  useEffect(() => { recordEvent('paywall:shown'); }, []);
+
+  const handlePurchase = () => { recordEvent('paywall:purchase'); onPurchase(); };
+  const handleRestore = () => { recordEvent('paywall:restore'); onRestore(); };
+  const handleClose = () => { recordEvent('paywall:dismissed'); onClose(); };
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white">
       {/* Close */}
       <button
-        onClick={onClose}
+        onClick={handleClose}
         className="absolute top-12 right-4 text-slate-400 hover:text-slate-700 p-2"
         aria-label="Close"
       >
@@ -66,7 +77,7 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
       {/* Sticky purchase footer */}
       <div className="px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 border-t border-slate-100 bg-white">
         <button
-          onClick={onPurchase}
+          onClick={handlePurchase}
           className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-sky-200/60"
         >
           Unlock Full Access — $9.99
@@ -75,7 +86,7 @@ export default function PaywallModal({ onClose, onPurchase, onRestore }: Props) 
           One-time purchase · No subscription · Offline access
         </p>
         <button
-          onClick={onRestore}
+          onClick={handleRestore}
           className="w-full text-slate-400 text-xs py-2 hover:text-slate-700 transition-colors"
         >
           Restore Purchase

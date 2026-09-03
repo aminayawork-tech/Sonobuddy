@@ -31,8 +31,12 @@ export const BAND_PX = 20;
 const MAX_BAND = 600;
 
 export interface TapEvent {
-  /** 'tap' for a click, 'view' for arriving on a screen */
-  type: 'tap' | 'view';
+  /**
+   * 'tap' a click on a control, 'view' arriving on a screen, 'dead' a tap on
+   * something non-interactive, 'scroll' how far down a screen was read,
+   * 'event' a named milestone such as a paywall step.
+   */
+  type: 'tap' | 'view' | 'dead' | 'scroll' | 'event';
   /** 'ios' for the native app shell, 'web' for the site */
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
@@ -159,6 +163,69 @@ export function recordView(path: string): void {
   });
 }
 
+/**
+ * Record a named milestone — paywall steps, and anything else worth counting
+ * that isn't a tap. The name is a fixed string chosen in code, never derived
+ * from anything the user typed.
+ */
+export function recordEvent(name: string): void {
+  if (typeof window === 'undefined' || !trackingActive) return;
+  enqueue({
+    type: 'event',
+    surface: surface(),
+    route: normalizeRoute(window.location.pathname),
+    label: name.slice(0, 60),
+    cell: '',
+    pcell: '',
+    vw: window.innerWidth,
+    ts: Date.now(),
+    session: sessionId(),
+  });
+}
+
+// Deepest point reached on the current screen, reported when leaving it.
+let maxDepth = 0;
+let depthRoute = '';
+
+function currentDepth(): number {
+  const doc = document.documentElement;
+  const scrollable = doc.scrollHeight - window.innerHeight;
+  if (scrollable <= 40) return 100; // Screen fits; treat as fully seen.
+  return Math.round(((window.scrollY + window.innerHeight) / doc.scrollHeight) * 100);
+}
+
+function trackDepth(): void {
+  const d = currentDepth();
+  if (d > maxDepth) maxDepth = Math.min(100, d);
+}
+
+/** Flush the depth reached on the screen being left, bucketed to 25s. */
+function reportDepth(): void {
+  if (!trackingActive || !depthRoute || maxDepth <= 0) return;
+  const bucket = maxDepth >= 90 ? 100 : maxDepth >= 75 ? 75 : maxDepth >= 50 ? 50 : maxDepth >= 25 ? 25 : 10;
+  enqueue({
+    type: 'scroll',
+    surface: surface(),
+    route: depthRoute,
+    label: String(bucket),
+    cell: '',
+    pcell: '',
+    vw: window.innerWidth,
+    ts: Date.now(),
+    session: sessionId(),
+  });
+  maxDepth = 0;
+}
+
+/** Called on navigation: bank the previous screen's depth, then reset. */
+export function resetDepth(route: string): void {
+  if (typeof window === 'undefined') return;
+  if (depthRoute && depthRoute !== normalizeRoute(route)) reportDepth();
+  depthRoute = normalizeRoute(route);
+  maxDepth = 0;
+  trackDepth();
+}
+
 let flushing = false;
 
 export async function flush(): Promise<void> {
@@ -197,7 +264,6 @@ function record(e: MouseEvent): void {
   if (isSensitive(el)) return;
 
   const label = labelFor(el);
-  if (!label) return;
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -208,10 +274,12 @@ function record(e: MouseEvent): void {
   const band = Math.min(MAX_BAND, Math.floor((e.clientY + window.scrollY) / BAND_PX));
 
   const event: TapEvent = {
-    type: 'tap',
+    // A tap that hits nothing interactive is a frustration signal worth
+    // seeing, not noise to discard.
+    type: label ? 'tap' : 'dead',
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
-    label,
+    label: label ?? '',
     cell: `${col},${row}`,
     pcell: `${col},${band}`,
     // Bucket the viewport so phone and tablet layouts stay separable.
@@ -242,10 +310,13 @@ export function startTapTracking(): () => void {
   trackingActive = true;
 
   document.addEventListener('click', record, { capture: true, passive: true });
+  window.addEventListener('scroll', trackDepth, { passive: true });
 
   // Send whatever is pending when the app is backgrounded — on iOS this is
   // frequently the last chance before the webview is suspended.
-  const onHide = () => { if (document.visibilityState === 'hidden') void flush(); };
+  const onHide = () => {
+    if (document.visibilityState === 'hidden') { reportDepth(); void flush(); }
+  };
   document.addEventListener('visibilitychange', onHide);
   window.addEventListener('pagehide', onHide);
   // Drain anything left over from a previous offline session.
@@ -255,6 +326,7 @@ export function startTapTracking(): () => void {
   return () => {
     trackingActive = false;
     document.removeEventListener('click', record, { capture: true });
+    window.removeEventListener('scroll', trackDepth);
     document.removeEventListener('visibilitychange', onHide);
     window.removeEventListener('pagehide', onHide);
     started = false;

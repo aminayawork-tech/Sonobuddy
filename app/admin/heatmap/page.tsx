@@ -26,6 +26,10 @@ interface Summary {
   days: string[];
   routes: Pair[];
   views: Pair[];
+  named: Pair[];
+  deadRoutes: Pair[];
+  deadCells: Pair[];
+  scroll: Pair[];
   sessionCount: number;
   journeys: Journey[];
   elements: Pair[];
@@ -119,6 +123,25 @@ export default function HeatmapAdminPage() {
   const maxPage = data?.pageCells.reduce((m, c) => Math.max(m, c.count), 0) ?? 0;
   const totalTaps = data?.routes.reduce((s, r) => s + r.count, 0) ?? 0;
   const totalViews = data?.views.reduce((s, r) => s + r.count, 0) ?? 0;
+
+  // Paywall steps in funnel order, each as a share of how many saw it.
+  const funnel = (() => {
+    if (!data) return [] as { label: string; count: number; pct: number | null }[];
+    const get = (n: string) => data.named.find((x) => x.name === n)?.count ?? 0;
+    const shown = get('paywall:shown');
+    const step = (label: string, count: number, isBase = false) => ({
+      label,
+      count,
+      pct: isBase || shown === 0 ? null : Math.round((count / shown) * 100),
+    });
+    if (shown === 0 && data.named.length === 0) return [];
+    return [
+      step('Saw paywall', shown, true),
+      step('Tapped purchase', get('paywall:purchase')),
+      step('Tapped restore', get('paywall:restore')),
+      step('Dismissed', get('paywall:dismissed')),
+    ];
+  })();
 
   // Merge views and taps into one list so a screen that was opened but never
   // touched still appears — that gap is exactly what taps alone hide.
@@ -294,6 +317,30 @@ export default function HeatmapAdminPage() {
                           />
                         );
                       })}
+                      {data.deadCells.map((c) => {
+                        const [colStr, bandStr] = c.name.split(',');
+                        const col = Number(colStr);
+                        const band = Number(bandStr);
+                        if (!isFinite(col) || !isFinite(band)) return null;
+                        const x = ((col + 0.5) / GRID_COLS) * PHONE_W;
+                        const y = (band + 0.5) * BAND_PX;
+                        return (
+                          <div
+                            key={`dead-${c.name}`}
+                            title={`${c.count} taps on nothing`}
+                            style={{
+                              position: 'absolute',
+                              left: x - 7,
+                              top: y - 7,
+                              width: 14,
+                              height: 14,
+                              borderRadius: '50%',
+                              border: '2px solid rgba(148,163,184,0.9)',
+                              background: 'rgba(15,23,42,0.35)',
+                            }}
+                          />
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -304,6 +351,95 @@ export default function HeatmapAdminPage() {
                   next build onward.
                 </p>
               )}
+            </section>
+
+            {/* Paywall funnel, reading depth, dead taps */}
+            <section className="lg:col-span-3 grid md:grid-cols-3 gap-6">
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                  Paywall funnel
+                </h2>
+                {funnel.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No paywall activity this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {funnel.map((f) => (
+                      <li
+                        key={f.label}
+                        className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                      >
+                        <span>{f.label}</span>
+                        <span className="tabular-nums text-slate-300">
+                          {f.count}
+                          {f.pct !== null && (
+                            <span className="text-slate-500 text-xs"> · {f.pct}%</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                  Reading depth {route ? `· ${route}` : ''}
+                </h2>
+                {!route ? (
+                  <p className="text-slate-500 text-sm">Select a screen.</p>
+                ) : data.scroll.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No depth data for this screen.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {['10', '25', '50', '75', '100'].map((b) => {
+                      const hit = data.scroll.find((x) => x.name === b);
+                      const count = hit?.count ?? 0;
+                      const total = data.scroll.reduce((s2, x) => s2 + x.count, 0) || 1;
+                      return (
+                        <li key={b} className="bg-slate-900 px-3 py-2 rounded-lg text-sm">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-slate-300">{b === '10' ? '<25' : b}% read</span>
+                            <span className="tabular-nums text-slate-400">{count}</span>
+                          </div>
+                          <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-sky-500"
+                              style={{ width: `${Math.round((count / total) * 100)}%` }}
+                            />
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Dead taps
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  Taps that hit nothing interactive — often something that looks tappable
+                  but isn&apos;t. Shown as grey rings on the screen.
+                </p>
+                {data.deadRoutes.length === 0 ? (
+                  <p className="text-slate-500 text-sm">None recorded.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {data.deadRoutes.map((d) => (
+                      <li key={d.name}>
+                        <button
+                          onClick={() => setRoute(d.name)}
+                          className="w-full flex items-center justify-between gap-3 bg-slate-900 hover:bg-slate-800 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span className="font-mono text-xs truncate">{d.name}</span>
+                          <span className="tabular-nums text-slate-400">{d.count}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </section>
 
             {/* Journeys */}
