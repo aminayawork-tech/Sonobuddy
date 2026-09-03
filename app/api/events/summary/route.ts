@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { redisConfig, redisCommand } from '@/lib/redis';
 
 export const runtime = 'edge';
 
@@ -36,26 +37,13 @@ function clientIp(req: NextRequest): string {
 
 export async function GET(req: NextRequest) {
   const expected = process.env.ANALYTICS_TOKEN;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const cfg = redisConfig();
 
-  if (!expected || !url || !redisToken) {
+  if (!expected || !cfg) {
     return NextResponse.json({ error: 'Analytics not configured' }, { status: 503 });
   }
 
-  async function redis(cmd: string[]): Promise<unknown> {
-    const res = await fetch(url!, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${redisToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(cmd),
-      cache: 'no-store',
-    });
-    if (!res.ok) throw new Error(`Redis ${res.status}`);
-    return (await res.json())?.result;
-  }
+  const redis = (cmd: string[]) => redisCommand(cfg, cmd);
 
   const ip = clientIp(req);
   const failKey = `authfail:${ip}`;
