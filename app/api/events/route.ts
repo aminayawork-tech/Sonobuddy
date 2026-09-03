@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { redisConfig } from '@/lib/redis';
 
 export const runtime = 'edge';
 
@@ -49,13 +50,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid batch' }, { status: 400, headers: CORS });
     }
 
-    const url = process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    const cfg = redisConfig();
 
     // Not configured yet: accept and discard. Returning ok is deliberate —
     // a client that never gets a success response would retry the same batch
     // forever and grow its offline queue until the cap.
-    if (!url || !token) {
+    if (!cfg) {
       return NextResponse.json({ ok: true, stored: false }, { headers: CORS });
     }
 
@@ -94,10 +94,10 @@ export async function POST(req: NextRequest) {
     // a SCAN across the keyspace.
     Array.from(days).forEach((day) => cmds.push(['SADD', 'days', day]));
 
-    const res = await fetch(`${url}/pipeline`, {
+    const res = await fetch(`${cfg.url}/pipeline`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${cfg.token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(cmds),
