@@ -58,6 +58,22 @@ jobs:
           # it can't work there anyway — it calls a same-origin API that does
           # not exist under the sono-web:// scheme.
           rm -rf ios/SonoBuddy/WebApp/admin
+          # The app opens /articles, never /blog — the blog is the SEO copy of
+          # the same content and is ~19MB of an 82MB bundle. The marketing
+          # landing page is likewise unreachable from the app's navigation, and
+          # carries a "Coming soon to Google Play" button that has no business
+          # shipping inside an iOS build.
+          rm -rf ios/SonoBuddy/WebApp/blog
+          rm -f ios/SonoBuddy/WebApp/index.html ios/SonoBuddy/WebApp/index.txt
+          # Removing the landing page orphans its JS chunk. Drop any chunk no
+          # remaining page references, so the Play Store copy isn't sitting in
+          # the IPA as dead code.
+          for f in ios/SonoBuddy/WebApp/_next/static/chunks/app/page-*.js; do
+            [ -e "$f" ] || continue
+            if ! grep -rqF "$(basename "$f")" ios/SonoBuddy/WebApp --include=*.html; then
+              rm -f "$f"
+            fi
+          done
 
       - name: Commit updated WebApp bundle
         run: |
