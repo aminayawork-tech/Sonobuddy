@@ -63,10 +63,23 @@ export default function PrivacyPage() {
           support, we receive your name and email address solely to respond to your inquiry.
         </p>
         <p>
-          <span className="font-semibold text-slate-900">Usage analytics.</span> We use Google Analytics
-          to collect anonymous, aggregated data about how users interact with the app — such as which
-          features are used and session duration. This data does not identify you personally and is used
-          only to improve the app.
+          <span className="font-semibold text-slate-900">Usage analytics.</span> We record which screens
+          are opened, which buttons are tapped and roughly where on the screen, how far down a screen is
+          read, and the order screens are visited in. Each visit is grouped by a random identifier that
+          is discarded when you close the app — it is not tied to you or your device and does not persist
+          between sessions. We store aggregate counts, not a record of individual people.
+        </p>
+        <p>
+          <span className="font-semibold text-slate-900">Searches that find nothing.</span> If a search
+          returns no results, we record the search term so we know what reference content is missing.
+          Searches that return results are not recorded. Terms that look like identifiers — anything
+          containing an @ or a run of four or more digits — are discarded on your device before being
+          sent.
+        </p>
+        <p>
+          <span className="font-semibold text-slate-900">Waitlist.</span> If you join the Android
+          waitlist, we store the email address you provide and use it only to tell you when the Android
+          app launches.
         </p>
         <p>
           <span className="font-semibold text-slate-900">Device information.</span> Standard technical
@@ -123,9 +136,15 @@ export default function PrivacyPage() {
         </p>
         <ul className="space-y-2 list-disc pl-4">
           <li>
-            <span className="font-semibold text-slate-900">Service providers:</span> Google Analytics
-            processes anonymous usage data on our behalf under their privacy terms. Vercel (our hosting
-            provider) may log standard server access data.
+            <span className="font-semibold text-slate-900">Service providers:</span> Vercel (hosting)
+            may log standard server access data, Upstash stores aggregate usage counts, and Resend
+            delivers feedback and waitlist email. Each processes data on our behalf under their privacy
+            terms.
+          </li>
+          <li>
+            <span className="font-semibold text-slate-900">No advertising or tracking:</span> We do not
+            use your data for advertising, do not share it with data brokers, and do not track you
+            across other apps or websites.
           </li>
           <li>
             <span className="font-semibold text-slate-900">Legal requirements:</span> We may disclose
@@ -140,9 +159,13 @@ export default function PrivacyPage() {
 
       <Section title="7. Local Storage">
         <p>
-          The app may use your device&apos;s local storage or service worker cache solely to enable
-          offline functionality. This data never leaves your device and contains only app code and
-          content — never any personal or patient information.
+          The app stores its reference content on your device so it works offline. That content never
+          leaves your device and contains no personal or patient information.
+        </p>
+        <p>
+          Usage events are also queued in local storage while you are offline and sent once a connection
+          is available, so that use in areas without signal still informs which features we improve.
+          Nothing you type is queued.
         </p>
       </Section>
 
@@ -161,15 +184,9 @@ export default function PrivacyPage() {
           You may request access to, correction of, or deletion of any personal data we hold about you
           by emailing{' '}
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-[#0EA5E9] hover:underline">contact us</a>.
-          You may opt out of Google Analytics via{' '}
-          <a
-            href="https://tools.google.com/dlpage/gaoptout"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#0EA5E9] hover:underline"
-          >
-            Google&apos;s opt-out tool
-          </a>.
+          Usage analytics are aggregate counts that are not linked to you, so there is no individual
+          record to retrieve or erase. Feedback messages, any email address you provide, and waitlist
+          entries can be deleted on request.
         </p>
       </Section>
 
