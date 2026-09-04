@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
+import TapTracker from '@/components/TapTracker';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
@@ -158,6 +159,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-sono-dark min-h-screen">
+        <TapTracker />
         <ServiceWorkerRegistrar />
         {children}
         <Analytics />

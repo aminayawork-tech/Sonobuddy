@@ -113,6 +113,32 @@ export default function HeatmapAdminPage() {
 
   useEffect(() => { if (token) void load(); }, [load, token]);
 
+  const [resetting, setResetting] = useState(false);
+
+  /** Wipe a day so test traffic can't be mistaken for real usage. */
+  const reset = useCallback(async () => {
+    if (!token) return;
+    if (!window.confirm(`Delete all ${surface} analytics for ${day}? This cannot be undone.`)) return;
+    setResetting(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/events/reset/?day=${day}&surface=${surface}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        referrerPolicy: 'no-referrer',
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || `Reset failed (${res.status})`);
+      setRoute(null);
+      setVw(null);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Reset failed');
+    } finally {
+      setResetting(false);
+    }
+  }, [token, day, surface, load]);
+
   /** Grow the iframe to the full document height so nothing needs scrolling. */
   const onFrameLoad = useCallback(() => {
     try {
@@ -187,16 +213,13 @@ export default function HeatmapAdminPage() {
             <option value="web">Website</option>
             <option value="ios">iOS app</option>
           </select>
-          <select
+          <input
+            type="date"
             value={day}
-            onChange={(e) => { setDay(e.target.value); setRoute(null); }}
-            className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm"
-          >
-            <option value={day}>{day}</option>
-            {data?.days.filter((d) => d !== day).map((d) => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => { if (e.target.value) { setDay(e.target.value); setRoute(null); setVw(null); } }}
+            className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm [color-scheme:dark]"
+          />
           <button
             onClick={() => void load()}
             className="bg-sky-500 text-white font-semibold rounded-lg px-4 py-2 text-sm"
@@ -204,6 +227,33 @@ export default function HeatmapAdminPage() {
             {loading ? 'Loading…' : 'Refresh'}
           </button>
         </div>
+
+        {data && data.days.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 mb-6 -mt-4">
+            <span className="text-[11px] uppercase tracking-wide text-slate-500">Days with data</span>
+            {data.days.slice(0, 14).map((d) => (
+              <button
+                key={d}
+                onClick={() => { setDay(d); setRoute(null); setVw(null); }}
+                className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                  d === day
+                    ? 'bg-sky-500/20 border-sky-600 text-sky-300'
+                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {d}
+              </button>
+            ))}
+            <button
+              onClick={reset}
+              disabled={resetting}
+              className="ml-auto text-xs px-3 py-1 rounded-full border border-red-900 text-red-400 hover:bg-red-950 disabled:opacity-50 transition-colors"
+              title="Delete all recorded data for this day and surface"
+            >
+              {resetting ? 'Clearing…' : `Clear ${day} (${surface})`}
+            </button>
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-950 border border-red-800 text-red-300 rounded-lg px-4 py-3 text-sm mb-6">
