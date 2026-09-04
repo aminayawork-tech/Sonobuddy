@@ -19,6 +19,9 @@ const SESSION_KEY = 'sb_tap_session_v1';
 
 // Flush once the queue reaches this size, so a busy session reports promptly.
 const FLUSH_AT = 15;
+// Also flush this long after the last event, so a short visit that never hits
+// the batch size still reports without waiting for the tab to be backgrounded.
+const IDLE_FLUSH_MS = 8000;
 // Hard cap so a long offline stretch can never fill the storage quota.
 const MAX_QUEUE = 400;
 // Grid resolution for the heatmap. Coarse enough that cells accumulate
@@ -136,11 +139,18 @@ function writeQueue(events: TapEvent[]): void {
   }
 }
 
+let idleTimer: ReturnType<typeof setTimeout> | null = null;
+
 function enqueue(event: TapEvent): void {
   const queue = readQueue();
   queue.push(event);
   writeQueue(queue);
-  if (queue.length >= FLUSH_AT) void flush();
+  if (queue.length >= FLUSH_AT) {
+    void flush();
+    return;
+  }
+  if (idleTimer) clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { idleTimer = null; void flush(); }, IDLE_FLUSH_MS);
 }
 
 /**
