@@ -416,6 +416,32 @@ export default function HeatmapAdminPage() {
                   )}
                 </div>
               )}
+              {route && url && (
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-xs text-slate-400">
+                  <span className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-5 h-5 rounded-full shrink-0"
+                      style={{
+                        background:
+                          'radial-gradient(circle, rgba(239,68,68,0.8) 0%, rgba(245,158,11,0.45) 45%, rgba(14,165,233,0) 75%)',
+                      }}
+                    />
+                    Tap on a link or button — bigger and brighter means more taps
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3.5 h-3.5 rounded-full shrink-0"
+                      style={{
+                        border: '2px solid rgba(148,163,184,0.9)',
+                        background: 'rgba(15,23,42,0.35)',
+                      }}
+                    />
+                    Tap that hit nothing interactive
+                  </span>
+                  <span className="text-slate-500">Hover any mark for its count.</span>
+                </div>
+              )}
+
               {route && url && maxPage === 0 && (
                 <p className="text-slate-500 text-sm mt-3">
                   No tap positions recorded at this screen width. Taps are grouped by the
