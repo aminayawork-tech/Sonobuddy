@@ -107,17 +107,26 @@ export default function HomePage() {
   const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // Daily hook — fetched from server so it always matches the push notification
-  const [hook, setHook] = useState<DailyHook>(() => getDailyHook());
-  const [tipDate] = useState(() =>
-    new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  );
+  // Daily hook — computed on the client, not at build time. This is a static
+  // export, so a build-time initial value gets baked verbatim into the HTML
+  // shipped in the app, and the card body renders via dangerouslySetInnerHTML,
+  // which React does not re-diff on hydration — so a value computed before
+  // mount would stay frozen at the build date until something forced a real
+  // re-render. Computing it inside an effect guarantees the first paint is a
+  // genuine client render, using the date on the user's device.
+  const [hook, setHook] = useState<DailyHook | null>(null);
+  const [tipDate, setTipDate] = useState('');
 
   useEffect(() => {
+    setHook(getDailyHook());
+    setTipDate(new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+    // Then try the server's version, so it exactly matches the push
+    // notification when a connection is available.
     fetch('https://www.sonobuddy.com/api/daily-hook/')
-      .then((r) => r.json())
-      .then((data: DailyHook) => setHook(data))
-      .catch(() => { /* keep fallback */ });
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: DailyHook | null) => { if (data) setHook(data); })
+      .catch(() => { /* keep the locally computed hook */ });
   }, []);
 
   // Quick Access state
@@ -432,36 +441,49 @@ export default function HomePage() {
             <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
 
-          {/* Hook question */}
-          <h2 className="px-5 text-[17px] font-black text-white leading-snug tracking-tight mb-2">
-            {hook.title}
-          </h2>
-
-          {/* Preview — always matches the notification body exactly */}
-          <p
-            className="px-5 text-[14px] text-slate-300 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
-            dangerouslySetInnerHTML={{ __html: hook.preview }}
-          />
-
-          {/* Extra detail for clinical tips (no article) */}
-          {!hook.articleSlug && (
-            <p
-              className="px-5 mt-2 text-[13px] text-slate-400 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
-              dangerouslySetInnerHTML={{ __html: hook.tip }}
-            />
-          )}
-
-          {/* Read more button — only when there's an article */}
-          {hook.articleSlug ? (
-            <button
-              onClick={() => router.push(`/articles/${hook.articleSlug}`)}
-              className="mx-5 mt-4 mb-5 flex items-center gap-1.5 text-[13px] font-semibold text-[#0EA5E9] active:opacity-70 transition-opacity"
-            >
-              Read full article
-              <span className="text-[16px] leading-none">→</span>
-            </button>
+          {!hook ? (
+            // Brief skeleton for the one tick before the mount effect sets the
+            // hook — this content is date-dependent, so it is never computed
+            // before mount (see the effect above for why).
+            <div className="px-5 pb-6 space-y-2 animate-pulse">
+              <div className="h-4 bg-slate-800 rounded w-3/4" />
+              <div className="h-3 bg-slate-800 rounded w-full" />
+              <div className="h-3 bg-slate-800 rounded w-5/6" />
+            </div>
           ) : (
-            <div className="pb-5" />
+            <>
+              {/* Hook question */}
+              <h2 className="px-5 text-[17px] font-black text-white leading-snug tracking-tight mb-2">
+                {hook.title}
+              </h2>
+
+              {/* Preview — always matches the notification body exactly */}
+              <p
+                className="px-5 text-[14px] text-slate-300 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
+                dangerouslySetInnerHTML={{ __html: hook.preview }}
+              />
+
+              {/* Extra detail for clinical tips (no article) */}
+              {!hook.articleSlug && (
+                <p
+                  className="px-5 mt-2 text-[13px] text-slate-400 leading-relaxed [&_b]:text-[#ea4743] [&_strong]:text-[#ea4743]"
+                  dangerouslySetInnerHTML={{ __html: hook.tip }}
+                />
+              )}
+
+              {/* Read more button — only when there's an article */}
+              {hook.articleSlug ? (
+                <button
+                  onClick={() => router.push(`/articles/${hook.articleSlug}`)}
+                  className="mx-5 mt-4 mb-5 flex items-center gap-1.5 text-[13px] font-semibold text-[#0EA5E9] active:opacity-70 transition-opacity"
+                >
+                  Read full article
+                  <span className="text-[16px] leading-none">→</span>
+                </button>
+              ) : (
+                <div className="pb-5" />
+              )}
+            </>
           )}
         </div>
       </div>
