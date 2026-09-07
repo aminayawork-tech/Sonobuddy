@@ -21,6 +21,7 @@ interface TapEvent {
   type?: unknown;
   surface?: unknown;
   route?: unknown;
+  path?: unknown;
   label?: unknown;
   cell?: unknown;
   pcell?: unknown;
@@ -72,6 +73,8 @@ export async function POST(req: NextRequest) {
     for (const e of events) {
       const surface = clean(e.surface, 12);
       const route = clean(e.route, 120);
+      // Fall back to route for events sent by app builds that predate `path`.
+      const path = clean(e.path, 160) ?? route;
       const label = clean(e.label, 60);
       const cell = clean(e.cell, 8);
       const pcell = clean(e.pcell, 10);
@@ -97,13 +100,13 @@ export async function POST(req: NextRequest) {
 
       if (e.type === 'scroll' && label && /^\d{1,3}$/.test(label)) {
         // How far down the screen was read, bucketed to 25s.
-        cmds.push(['HINCRBY', `scroll:${day}:${surface}:${route}`, label, '1']);
+        cmds.push(['HINCRBY', `scroll:${day}:${surface}:${path}`, label, '1']);
         continue;
       }
 
       if (e.type === 'dead') {
         // Taps that hit nothing interactive — a frustration signal.
-        cmds.push(['HINCRBY', `deadroutes:${day}:${surface}`, route, '1']);
+        cmds.push(['HINCRBY', `deadroutes:${day}:${surface}`, path!, '1']);
         if (pcell && /^\d{1,2},\d{1,3}$/.test(pcell)) {
           cmds.push(['HINCRBY', `dead:${day}:${surface}:${vw}:${route}`, pcell, '1']);
         }
@@ -113,13 +116,13 @@ export async function POST(req: NextRequest) {
       if (e.type === 'view') {
         // Screen opens, tracked separately from taps so a screen that is read
         // but never touched still registers as used.
-        cmds.push(['HINCRBY', `views:${day}:${surface}`, route, '1']);
+        cmds.push(['HINCRBY', `views:${day}:${surface}`, path!, '1']);
         if (session) {
           cmds.push(['SADD', `sessions:${day}:${surface}`, session]);
           // The ordered path through the app for this session. Trimmed so a
           // long session can't grow without bound.
           const trailKey = `trail:${day}:${surface}:${session}`;
-          cmds.push(['RPUSH', trailKey, route]);
+          cmds.push(['RPUSH', trailKey, path!]);
           cmds.push(['LTRIM', trailKey, '-40', '-1']);
         }
         continue;
@@ -139,7 +142,7 @@ export async function POST(req: NextRequest) {
       if (label) {
         cmds.push(['HINCRBY', `elem:${day}:${surface}:${route}`, label, '1']);
       }
-      cmds.push(['HINCRBY', `routes:${day}:${surface}`, route, '1']);
+      cmds.push(['HINCRBY', `routes:${day}:${surface}`, path!, '1']);
     }
 
     if (cmds.length === 0) {

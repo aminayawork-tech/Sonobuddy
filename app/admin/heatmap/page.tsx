@@ -33,6 +33,7 @@ interface Summary {
   scroll: Pair[];
   viewports: string[];
   vw: string;
+  heatRoute: string | null;
   sessionCount: number;
   journeys: Journey[];
   elements: Pair[];
@@ -59,8 +60,12 @@ const PREVIEWABLE = new Set([
 ]);
 
 function previewUrl(route: string): string | null {
-  if (!PREVIEWABLE.has(route)) return null;
-  return route === '/' ? '/' : `${route}/`;
+  if (PREVIEWABLE.has(route)) return route === '/' ? '/' : `${route}/`;
+  // Concrete article and protocol pages are real, renderable pages — only the
+  // collapsed [slug] form has nothing single to show.
+  if (route.includes('[')) return null;
+  if (/^\/(blog|articles|protocols)\/[^/]+$/.test(route)) return `${route}/`;
+  return null;
 }
 
 export default function HeatmapAdminPage() {
@@ -439,6 +444,13 @@ export default function HeatmapAdminPage() {
                     Tap that hit nothing interactive
                   </span>
                   <span className="text-slate-500">Hover any mark for its count.</span>
+                  {data.heatRoute && data.heatRoute !== route && (
+                    <span className="text-amber-500/80">
+                      Positions pooled across{' '}
+                      <span className="font-mono">{data.heatRoute}</span> — every page of this
+                      type shares one layout. Reading depth below is for this page alone.
+                    </span>
+                  )}
                 </div>
               )}
 
