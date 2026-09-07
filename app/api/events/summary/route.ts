@@ -43,6 +43,18 @@ export async function GET(req: NextRequest) {
   const route = req.nextUrl.searchParams.get('route');
   const requestedVw = req.nextUrl.searchParams.get('vw');
 
+  /**
+   * Positional heat pools across pages that share a layout, so a concrete
+   * article path has to be collapsed back to its route to find it. Reading
+   * depth stays keyed to the actual page.
+   */
+  function toRoute(p: string): string {
+    return p
+      .replace(/\/articles\/[^/?#]+/, '/articles/[slug]')
+      .replace(/\/blog\/[^/?#]+/, '/blog/[slug]')
+      .replace(/\/protocols\/[^/?#]+/, '/protocols/[id]');
+  }
+
   /** Upstash returns hashes as a flat [field, value, ...] array. */
   function toPairs(flat: unknown): { name: string; count: number }[] {
     if (!Array.isArray(flat)) return [];
@@ -88,7 +100,8 @@ export async function GET(req: NextRequest) {
     let vw = requestedVw || '480';
 
     if (route) {
-      const vwsRaw = await redis(['SMEMBERS', `vws:${day}:${surface}:${route}`]);
+      const heatRoute = toRoute(route);
+      const vwsRaw = await redis(['SMEMBERS', `vws:${day}:${surface}:${heatRoute}`]);
       viewports = (Array.isArray(vwsRaw) ? vwsRaw.map(String) : []).sort(
         (a, b) => Number(a) - Number(b)
       );
@@ -97,10 +110,11 @@ export async function GET(req: NextRequest) {
         vw = viewports[0] ?? '480';
       }
 
-      elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${route}`]));
-      cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${route}`]));
-      pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${route}`]));
-      deadCells = toPairs(await redis(['HGETALL', `dead:${day}:${surface}:${vw}:${route}`]));
+      elements = toPairs(await redis(['HGETALL', `elem:${day}:${surface}:${heatRoute}`]));
+      cells = toPairs(await redis(['HGETALL', `heat:${day}:${surface}:${vw}:${heatRoute}`]));
+      pageCells = toPairs(await redis(['HGETALL', `page:${day}:${surface}:${vw}:${heatRoute}`]));
+      deadCells = toPairs(await redis(['HGETALL', `dead:${day}:${surface}:${vw}:${heatRoute}`]));
+      // Depth is per page — how far people read *this* article.
       scroll = toPairs(await redis(['HGETALL', `scroll:${day}:${surface}:${route}`]));
     }
 
@@ -119,6 +133,7 @@ export async function GET(req: NextRequest) {
         scroll,
         viewports,
         vw,
+        heatRoute: route ? toRoute(route) : null,
         sessionCount: sessionIds.length,
         journeys,
         elements,

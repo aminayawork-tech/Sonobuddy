@@ -44,6 +44,12 @@ export interface TapEvent {
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
   route: string;
+  /**
+   * The actual path, slug intact. Positional heat pools under `route` because
+   * every article shares one layout, but traffic has to be attributed to the
+   * specific page or there is no way to tell which article people read.
+   */
+  path: string;
   /** Human-readable identifier for the tapped control */
   label: string;
   /** Grid cell as "col,row" — viewport-relative, for thumb-reach heatmaps */
@@ -63,6 +69,11 @@ export interface TapEvent {
 function surface(): string {
   if (typeof navigator === 'undefined') return 'unknown';
   return navigator.userAgent.includes('SonoBuddyApp/iOS') ? 'ios' : 'web';
+}
+
+/** Strip query, hash and trailing slash, keeping the slug intact. */
+export function cleanPath(path: string): string {
+  return path.replace(/[?#].*$/, '').replace(/\/$/, '') || '/';
 }
 
 /** Collapse dynamic segments so all article taps aggregate onto one route. */
@@ -164,6 +175,7 @@ export function recordView(path: string): void {
     type: 'view',
     surface: surface(),
     route: normalizeRoute(path),
+    path: cleanPath(path),
     label: '',
     cell: '',
     pcell: '',
@@ -184,6 +196,7 @@ export function recordEvent(name: string): void {
     type: 'event',
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
+    path: cleanPath(window.location.pathname),
     label: name.slice(0, 60),
     cell: '',
     pcell: '',
@@ -216,7 +229,8 @@ function reportDepth(): void {
   enqueue({
     type: 'scroll',
     surface: surface(),
-    route: depthRoute,
+    route: normalizeRoute(depthRoute),
+    path: depthRoute,
     label: String(bucket),
     cell: '',
     pcell: '',
@@ -230,8 +244,8 @@ function reportDepth(): void {
 /** Called on navigation: bank the previous screen's depth, then reset. */
 export function resetDepth(route: string): void {
   if (typeof window === 'undefined') return;
-  if (depthRoute && depthRoute !== normalizeRoute(route)) reportDepth();
-  depthRoute = normalizeRoute(route);
+  if (depthRoute && depthRoute !== cleanPath(route)) reportDepth();
+  depthRoute = cleanPath(route);
   maxDepth = 0;
   trackDepth();
 }
@@ -268,6 +282,7 @@ export function recordSearchMiss(raw: string): void {
     type: 'searchmiss',
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
+    path: cleanPath(window.location.pathname),
     label: q,
     cell: '',
     pcell: '',
@@ -330,6 +345,7 @@ function record(e: MouseEvent): void {
     type: label ? 'tap' : 'dead',
     surface: surface(),
     route: normalizeRoute(window.location.pathname),
+    path: cleanPath(window.location.pathname),
     label: label ?? '',
     cell: `${col},${row}`,
     pcell: `${col},${band}`,
