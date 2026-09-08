@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { recordEvent } from '@/lib/tap-tracking';
 
 // Free items per tab — anything not in these sets requires premium
 // 1 free item per modality so every sonographer gets a taste
@@ -66,7 +67,14 @@ export function usePremium() {
     };
   }, []);
 
-  const openPaywall = useCallback(() => setPaywallOpen(true), []);
+  // `source` says which locked feature drove the tap — the paywall itself is
+  // identical from every screen, so without this every trigger looked the
+  // same and there was no way to tell which limit actually pushes people
+  // toward buying.
+  const openPaywall = useCallback((source: string = 'unknown') => {
+    recordEvent(`paywall:trigger:${source}`);
+    setPaywallOpen(true);
+  }, []);
   const closePaywall = useCallback(() => setPaywallOpen(false), []);
 
   // Called by paywall buttons to trigger StoreKit in native

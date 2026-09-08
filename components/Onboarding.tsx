@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Ruler, ClipboardList, Calculator, Microscope,
   ChevronRight, WifiOff,
 } from 'lucide-react';
+import { recordEvent } from '@/lib/tap-tracking';
 
 interface OnboardingProps {
   onComplete: () => void;
@@ -17,14 +18,20 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [exiting, setExiting] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  function finish() {
+  // The route never changes during onboarding — it's an overlay on /home —
+  // so without this every screen and every skip/complete looked identical to
+  // an ordinary /home tap. Named events give each step a distinct row.
+  useEffect(() => { recordEvent(`onboarding:screen-${screen + 1}`); }, [screen]);
+
+  function finish(reason: 'completed' | 'skipped') {
+    recordEvent(`onboarding:${reason}`);
     setExiting(true);
     setTimeout(onComplete, 350);
   }
 
   function next() {
     if (screen < TOTAL - 1) setScreen(screen + 1);
-    else finish();
+    else finish('completed');
   }
 
   function handleTouchStart(e: React.TouchEvent) {
@@ -57,10 +64,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
       {/* Screen content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {screen === 0 && <Screen1 onNext={next} onSkip={finish} />}
-        {screen === 1 && <Screen2 onNext={next} onSkip={finish} />}
+        {screen === 0 && <Screen1 onNext={next} onSkip={() => finish('skipped')} />}
+        {screen === 1 && <Screen2 onNext={next} onSkip={() => finish('skipped')} />}
         {screen === 2 && <Screen3 onNext={next} />}
-        {screen === 3 && <Screen4 onNext={finish} />}
+        {screen === 3 && <Screen4 onNext={() => finish('completed')} />}
       </div>
     </div>
   );

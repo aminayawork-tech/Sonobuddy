@@ -115,7 +115,7 @@ function CalculatorContent() {
             return (
               <button
                 key={c.id}
-                onClick={() => locked ? openPaywall() : setActiveId(c.id)}
+                onClick={() => locked ? openPaywall('calculators') : setActiveId(c.id)}
                 className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] ${locked ? 'opacity-60' : ''}`}
               >
                 <div className="flex items-start justify-between gap-3">

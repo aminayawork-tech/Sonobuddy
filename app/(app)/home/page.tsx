@@ -383,7 +383,7 @@ export default function HomePage() {
                 <button
                   onClick={() => {
                     if (editMode) return;
-                    if (locked) { openPaywall(); return; }
+                    if (locked) { openPaywall('quick-access'); return; }
                     router.push(item.href);
                   }}
                   className={`w-full bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm ${locked ? 'opacity-60' : ''}`}
@@ -410,7 +410,7 @@ export default function HomePage() {
 
           <button
             onClick={() => {
-              if (!isPremium) { openPaywall(); return; }
+              if (!isPremium) { openPaywall('quick-access-edit'); return; }
               if (!isFull) setShowPicker(true);
               setEditMode(true);
             }}
