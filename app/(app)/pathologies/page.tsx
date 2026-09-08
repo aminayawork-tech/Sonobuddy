@@ -169,7 +169,7 @@ export default function PathologiesPage() {
             >
               <button
                 className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
-                onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : p.id)}
+                onClick={() => locked ? openPaywall('pathologies') : setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-slate-900 text-[15px] mb-1">{p.name}</h3>

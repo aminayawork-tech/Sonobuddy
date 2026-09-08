@@ -83,7 +83,7 @@ export default function ProtocolsPage() {
           return (
             <button
               key={p.id}
-              onClick={() => locked ? openPaywall() : router.push(`/protocols/${p.id}`)}
+              onClick={() => locked ? openPaywall('protocols') : router.push(`/protocols/${p.id}`)}
               className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] shadow-sm ${locked ? 'opacity-60' : ''}`}
             >
               <div className="flex items-start justify-between gap-3">

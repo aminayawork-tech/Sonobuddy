@@ -121,7 +121,7 @@ export default function MeasurementsPage() {
             >
               <button
                 className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
-                onClick={() => locked ? openPaywall() : setExpandedId(isExpanded ? null : m.id)}
+                onClick={() => locked ? openPaywall('measurements') : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
                   <span className="text-[15px] font-semibold text-slate-900">{m.name}</span>
