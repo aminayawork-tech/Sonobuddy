@@ -60,19 +60,37 @@ jobs:
           rm -rf ios/SonoBuddy/WebApp/admin
           # The app opens /articles, never /blog — the blog is the SEO copy of
           # the same content and is ~19MB of an 82MB bundle. The marketing
-          # landing page is likewise unreachable from the app's navigation, and
+          # landing page is likewise unreachable from the app's navigation and
           # carries a "Coming soon to Google Play" button that has no business
-          # shipping inside an iOS build.
+          # shipping inside an iOS build. /app is a bare redirect('/home') with
+          # no caller anywhere in the app — dead weight, same as the others.
           rm -rf ios/SonoBuddy/WebApp/blog
+          rm -rf ios/SonoBuddy/WebApp/app
           rm -f ios/SonoBuddy/WebApp/index.html ios/SonoBuddy/WebApp/index.txt
-          # Removing the landing page orphans its JS chunk. Drop any chunk no
-          # remaining page references, so the Play Store copy isn't sitting in
-          # the IPA as dead code.
-          for f in ios/SonoBuddy/WebApp/_next/static/chunks/app/page-*.js; do
-            [ -e "$f" ] || continue
-            if ! grep -rqF "$(basename "$f")" ios/SonoBuddy/WebApp --include=*.html; then
-              rm -f "$f"
-            fi
+
+          # Removing those routes orphans their JS chunks. A route-specific
+          # glob here is exactly what missed /admin's own chunks and /blog's
+          # last time — this sweeps every chunk once and drops any that
+          # nothing points to any more.
+          #
+          # "Points to" has to include other JS files, not only HTML: some
+          # chunks (e.g. /_not-found) are referenced only from Next's
+          # client-side route manifest inside main-*.js, never from a <script>
+          # tag. Checking HTML alone would call that an orphan and delete a
+          # chunk the router still needs. Repeats while a pass finds
+          # something, since removing one orphan can free up a chunk that
+          # existed only to serve it.
+          removed=1
+          while [ "$removed" -eq 1 ]; do
+            removed=0
+            for f in $(find ios/SonoBuddy/WebApp/_next/static/chunks -name '*.js'); do
+              [ -e "$f" ] || continue
+              bn=$(basename "$f")
+              if ! grep -rqF "$bn" ios/SonoBuddy/WebApp --include=*.html --include=*.js --exclude="$bn"; then
+                rm -f "$f"
+                removed=1
+              fi
+            done
           done
 
       - name: Commit updated WebApp bundle
