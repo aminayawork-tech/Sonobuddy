@@ -179,6 +179,39 @@ export default function HeatmapAdminPage() {
     ];
   })();
 
+  // Onboarding never changes route — it's an overlay on /home — so its steps
+  // only exist as named events, the same mechanism as the paywall funnel.
+  const onboardingFunnel = (() => {
+    if (!data) return [] as { label: string; count: number; pct: number | null }[];
+    const get = (n: string) => data.named.find((x) => x.name === n)?.count ?? 0;
+    const shown = get('onboarding:screen-1');
+    if (shown === 0) return [];
+    const step = (label: string, count: number, isBase = false) => ({
+      label,
+      count,
+      pct: isBase || shown === 0 ? null : Math.round((count / shown) * 100),
+    });
+    return [
+      step('Screen 1', shown, true),
+      step('Screen 2', get('onboarding:screen-2')),
+      step('Screen 3', get('onboarding:screen-3')),
+      step('Screen 4', get('onboarding:screen-4')),
+      step('Completed', get('onboarding:completed')),
+      step('Skipped', get('onboarding:skipped')),
+    ];
+  })();
+
+  // Which locked feature actually sent someone to the paywall — the paywall
+  // screen itself is identical everywhere, so this is the only place that
+  // shows what people were doing right before they considered buying.
+  const paywallTriggers = (() => {
+    if (!data) return [];
+    return data.named
+      .filter((n) => n.name.startsWith('paywall:trigger:'))
+      .map((n) => ({ name: n.name.replace('paywall:trigger:', ''), count: n.count }))
+      .sort((a, b) => b.count - a.count);
+  })();
+
   // Merge views and taps into one list so a screen that was opened but never
   // touched still appears — that gap is exactly what taps alone hide.
   const screenRows = (() => {
@@ -462,6 +495,62 @@ export default function HeatmapAdminPage() {
                   bucket that matches this preview.
                 </p>
               )}
+            </section>
+
+            {/* Onboarding funnel + what drove people to the paywall */}
+            <section className="lg:col-span-3 grid md:grid-cols-2 gap-6">
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Onboarding
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  The intro screens shown on first launch — where people finish or bail.
+                </p>
+                {onboardingFunnel.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No onboarding activity this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {onboardingFunnel.map((f) => (
+                      <li
+                        key={f.label}
+                        className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                      >
+                        <span>{f.label}</span>
+                        <span className="tabular-nums text-slate-300">
+                          {f.count}
+                          {f.pct !== null && (
+                            <span className="text-slate-500 text-xs"> · {f.pct}%</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Paywall triggered by
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  Which locked feature someone was using right before hitting the paywall.
+                </p>
+                {paywallTriggers.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No paywall activity this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {paywallTriggers.map((t) => (
+                      <li
+                        key={t.name}
+                        className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                      >
+                        <span className="font-mono">{t.name}</span>
+                        <span className="tabular-nums text-slate-300">{t.count}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </section>
 
             {/* Paywall funnel, reading depth, dead taps */}
