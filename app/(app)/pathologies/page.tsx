@@ -31,7 +31,10 @@ const CATEGORY_COLORS: Record<PathologyCategory, string> = {
 type Category = PathologyCategory | 'all';
 
 export default function PathologiesPage() {
-  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -76,7 +79,16 @@ export default function PathologiesPage() {
 
   return (
     <div className="min-h-screen pb-nav">
-      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
+      {paywallOpen && <PaywallModal
+          onClose={closePaywall}
+          onPurchase={requestPurchase}
+          onRestore={requestRestore}
+          shareUnlocked={shareUnlocked}
+          onShare={requestShare}
+          onDiscountPurchase={requestDiscountPurchase}
+          purchaseError={purchaseError}
+          onClearError={clearPurchaseError}
+        />}
       {/* Lightbox */}
       {lightbox && (
         <div

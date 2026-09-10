@@ -212,6 +212,27 @@ export default function HeatmapAdminPage() {
       .sort((a, b) => b.count - a.count);
   })();
 
+  // Share-to-save: how many people offered the discount actually share, and
+  // how many of those go on to buy at $6.99. Counted against the offer
+  // itself, not against total paywall views — most people never hit X.
+  const shareFunnel = (() => {
+    if (!data) return [] as { label: string; count: number; pct: number | null }[];
+    const get = (n: string) => data.named.find((x) => x.name === n)?.count ?? 0;
+    const offered = get('paywall:discount-offer-shown');
+    if (offered === 0) return [];
+    const step = (label: string, count: number, isBase = false) => ({
+      label,
+      count,
+      pct: isBase || offered === 0 ? null : Math.round((count / offered) * 100),
+    });
+    return [
+      step('Offer shown', offered, true),
+      step('Tapped share', get('paywall:share-tapped')),
+      step('Share completed', get('paywall:share-completed')),
+      step('Tapped $6.99 unlock', get('paywall:discount-purchase')),
+    ];
+  })();
+
   // Merge views and taps into one list so a screen that was opened but never
   // touched still appears — that gap is exactly what taps alone hide.
   const screenRows = (() => {
@@ -497,8 +518,8 @@ export default function HeatmapAdminPage() {
               )}
             </section>
 
-            {/* Onboarding funnel + what drove people to the paywall */}
-            <section className="lg:col-span-3 grid md:grid-cols-2 gap-6">
+            {/* Onboarding funnel, what drove people to the paywall, share-to-save */}
+            <section className="lg:col-span-3 grid md:grid-cols-3 gap-6">
               <div>
                 <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
                   Onboarding
@@ -546,6 +567,35 @@ export default function HeatmapAdminPage() {
                       >
                         <span className="font-mono">{t.name}</span>
                         <span className="tabular-nums text-slate-300">{t.count}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Share to save $3
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  Of the people offered the discount for sharing, how many actually did.
+                </p>
+                {shareFunnel.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No share offers shown this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {shareFunnel.map((f) => (
+                      <li
+                        key={f.label}
+                        className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                      >
+                        <span>{f.label}</span>
+                        <span className="tabular-nums text-slate-300">
+                          {f.count}
+                          {f.pct !== null && (
+                            <span className="text-slate-500 text-xs"> · {f.pct}%</span>
+                          )}
+                        </span>
                       </li>
                     ))}
                   </ul>

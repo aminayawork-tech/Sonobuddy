@@ -94,11 +94,19 @@ struct WebView: UIViewRepresentable {
                   let body = message.body as? [String: Any],
                   let action = body["action"] as? String else { return }
             let webView = message.webView
+
+            if action == "share" {
+                presentShareSheet(webView: webView)
+                return
+            }
+
             Task { @MainActor in
                 do {
                     switch action {
                     case "purchase":
                         try await PurchaseManager.shared.purchase()
+                    case "purchaseDiscount":
+                        try await PurchaseManager.shared.purchaseDiscount()
                     case "restore":
                         try await PurchaseManager.shared.restore()
                     default:
@@ -109,9 +117,47 @@ struct WebView: UIViewRepresentable {
                         webView?.evaluateJavaScript("window.__onPremiumUnlocked?.()") { _, _ in }
                     }
                 } catch {
-                    // Purchase was cancelled or product unavailable — no action needed
+                    // A silent failure here reads to the user as "the button did
+                    // nothing," which is exactly what drives someone to tap
+                    // Restore Purchase over and over — surface it instead.
+                    let message = (error as? PurchaseError)?.message ?? "Something went wrong — please try again."
+                    let escaped = message.replacingOccurrences(of: "'", with: "\\'")
+                    webView?.evaluateJavaScript("window.__onPurchaseError?.('\(escaped)')") { _, _ in }
                 }
             }
+        }
+
+        /// Presents the system share sheet for the App Store listing. Calls back
+        /// into JS only when the user actually completes a share (picks a
+        /// target) — cancelling leaves the paywall's share offer untouched so
+        /// they can try again, rather than silently unlocking the discount for
+        /// someone who backed out.
+        @MainActor
+        private func presentShareSheet(webView: WKWebView?) {
+            guard let presenter = Self.topViewController() else { return }
+            let text = "I've been using SonoBuddy for ultrasound reference on the job — measurements, protocols, calculators, and pathology, all offline. Worth a look:"
+            let url = URL(string: "https://apps.apple.com/us/app/sonobuddy-pro/id6761020726")!
+            let activity = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
+            if let popover = activity.popoverPresentationController {
+                popover.sourceView = presenter.view
+                popover.sourceRect = CGRect(x: presenter.view.bounds.midX, y: presenter.view.bounds.maxY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
+            activity.completionWithItemsHandler = { _, completed, _, _ in
+                guard completed else { return }
+                webView?.evaluateJavaScript("window.__onShareCompleted?.()") { _, _ in }
+            }
+            presenter.present(activity, animated: true)
+        }
+
+        private static func topViewController() -> UIViewController? {
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let root = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
+                return nil
+            }
+            var top = root
+            while let presented = top.presentedViewController { top = presented }
+            return top
         }
 
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

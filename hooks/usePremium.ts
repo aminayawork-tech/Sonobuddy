@@ -34,10 +34,14 @@ export const FREE_PATHOLOGY_IDS = new Set([
   'lymph-node-reactive-vs-malignant', // superficial
 ]);
 
+const SHARE_UNLOCKED_KEY = 'sb_share_unlocked';
+
 declare global {
   interface Window {
     __isPremium?: boolean;
     __onPremiumUnlocked?: () => void;
+    __onShareCompleted?: () => void;
+    __onPurchaseError?: (message: string) => void;
     webkit?: {
       messageHandlers?: {
         sonobuddy?: { postMessage: (msg: unknown) => void };
@@ -49,6 +53,10 @@ declare global {
 export function usePremium() {
   const [isPremium, setIsPremium] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  // Persisted once someone completes a share, so the discounted price stays
+  // available on future paywall visits without asking them to share again.
+  const [shareUnlocked, setShareUnlocked] = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   useEffect(() => {
     // Native injects window.__isPremium = true before the page loads.
@@ -58,12 +66,29 @@ export function usePremium() {
       localStorage.getItem('sb_premium') === '1';
 
     setIsPremium(alreadyPremium);
+    setShareUnlocked(localStorage.getItem(SHARE_UNLOCKED_KEY) === '1');
 
     // Called by native after a successful purchase or restore
     window.__onPremiumUnlocked = () => {
       localStorage.setItem('sb_premium', '1');
       setIsPremium(true);
       setPaywallOpen(false);
+    };
+
+    // Called by native only when the share sheet completes (a target was
+    // picked) — cancelling it does not call this, so backing out of the
+    // share sheet never unlocks the discount.
+    window.__onShareCompleted = () => {
+      localStorage.setItem(SHARE_UNLOCKED_KEY, '1');
+      setShareUnlocked(true);
+      recordEvent('paywall:share-completed');
+    };
+
+    // Called by native when a purchase/restore/discount attempt throws.
+    // Without this the button looked broken on failure, which is what was
+    // driving people to tap Restore Purchase repeatedly.
+    window.__onPurchaseError = (message: string) => {
+      setPurchaseError(message);
     };
   }, []);
 
@@ -73,18 +98,40 @@ export function usePremium() {
   // toward buying.
   const openPaywall = useCallback((source: string = 'unknown') => {
     recordEvent(`paywall:trigger:${source}`);
+    setPurchaseError(null);
     setPaywallOpen(true);
   }, []);
   const closePaywall = useCallback(() => setPaywallOpen(false), []);
+  const clearPurchaseError = useCallback(() => setPurchaseError(null), []);
 
   // Called by paywall buttons to trigger StoreKit in native
   const requestPurchase = useCallback(() => {
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'purchase' });
   }, []);
 
+  const requestDiscountPurchase = useCallback(() => {
+    window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'purchaseDiscount' });
+  }, []);
+
   const requestRestore = useCallback(() => {
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'restore' });
   }, []);
 
-  return { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore };
+  const requestShare = useCallback(() => {
+    window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'share' });
+  }, []);
+
+  return {
+    isPremium,
+    paywallOpen,
+    openPaywall,
+    closePaywall,
+    requestPurchase,
+    requestRestore,
+    shareUnlocked,
+    requestShare,
+    requestDiscountPurchase,
+    purchaseError,
+    clearPurchaseError,
+  };
 }
