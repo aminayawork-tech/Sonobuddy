@@ -23,11 +23,15 @@ const FEATURES = [
   { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips' },
 ];
 
-// The X button interrupts the FIRST time someone tries to leave the main
-// pricing screen — 'offer' asks them to share for a discount, or if they've
-// already shared before, 'discount' goes straight to the cheaper purchase.
-// Any exit from either of those actually closes the modal.
+// The X button interrupts the first time someone ever tries to leave the
+// main pricing screen — 'offer' asks them to share for a discount. Every
+// paywall visit after that closes normally on X, on any device where the
+// offer has already been shown once. 'discount' is the exception: once
+// someone has actually shared, they see it every time — that's not a nag,
+// it's a discount they already earned.
 type Screen = 'main' | 'offer' | 'discount';
+
+const OFFER_SEEN_KEY = 'sb_paywall_offer_seen';
 
 export default function PaywallModal({
   onClose, onPurchase, onRestore,
@@ -35,10 +39,24 @@ export default function PaywallModal({
   purchaseError, onClearError,
 }: Props) {
   const [screen, setScreen] = useState<Screen>('main');
+  // Whether THIS visit is allowed to show the offer — decided once at mount
+  // from localStorage, then immediately marked seen for every future visit.
+  const [offerEligible, setOfferEligible] = useState(false);
 
   // Instrumented here rather than at each call site — the modal is rendered
   // from six screens and they should all report the funnel identically.
-  useEffect(() => { recordEvent('paywall:shown'); }, []);
+  useEffect(() => {
+    recordEvent('paywall:shown');
+    try {
+      const alreadySeen = localStorage.getItem(OFFER_SEEN_KEY) === '1';
+      setOfferEligible(!alreadySeen);
+      localStorage.setItem(OFFER_SEEN_KEY, '1');
+    } catch {
+      // Storage blocked (private mode, etc.) — default to allowing it once
+      // rather than never showing the offer at all.
+      setOfferEligible(true);
+    }
+  }, []);
 
   // The share sheet completing is reported async from native. If that lands
   // while the offer screen is still up, move straight to the discounted
@@ -63,9 +81,11 @@ export default function PaywallModal({
     if (shareUnlocked) {
       recordEvent('paywall:discount-shown');
       setScreen('discount');
-    } else {
+    } else if (offerEligible) {
       recordEvent('paywall:discount-offer-shown');
       setScreen('offer');
+    } else {
+      reallyClose();
     }
   }
 
