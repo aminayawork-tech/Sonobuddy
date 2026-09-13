@@ -11,7 +11,10 @@ import clsx from 'clsx';
 const CATEGORIES = Object.entries(PROTOCOL_CATEGORY_LABELS) as [ProtocolCategory, string][];
 
 export default function ProtocolsPage() {
-  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<ProtocolCategory | 'all'>('all');
   const router = useRouter();
@@ -26,7 +29,16 @@ export default function ProtocolsPage() {
 
   return (
     <div className="min-h-screen pb-nav">
-      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
+      {paywallOpen && <PaywallModal
+          onClose={closePaywall}
+          onPurchase={requestPurchase}
+          onRestore={requestRestore}
+          shareUnlocked={shareUnlocked}
+          onShare={requestShare}
+          onDiscountPurchase={requestDiscountPurchase}
+          purchaseError={purchaseError}
+          onClearError={clearPurchaseError}
+        />}
       {/* Header */}
       <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">

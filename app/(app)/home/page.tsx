@@ -104,7 +104,10 @@ function isItemFree(item: QuickAccessItem): boolean {
 
 export default function HomePage() {
   const router = useRouter();
-  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Daily hook — computed on the client, not at build time. This is a static
@@ -200,7 +203,16 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen pb-nav bg-sono-dark">
-      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
+      {paywallOpen && <PaywallModal
+          onClose={closePaywall}
+          onPurchase={requestPurchase}
+          onRestore={requestRestore}
+          shareUnlocked={shareUnlocked}
+          onShare={requestShare}
+          onDiscountPurchase={requestDiscountPurchase}
+          purchaseError={purchaseError}
+          onClearError={clearPurchaseError}
+        />}
 
       {/* Hamburger menu bottom sheet */}
       {menuOpen && (

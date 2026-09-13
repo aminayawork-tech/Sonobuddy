@@ -15,10 +15,26 @@ const GRID_COLS = 20;
 const BAND_PX = 20;
 const PHONE_W = 390;
 const API = '/api/events/summary/';
+const INSIGHTS_API = '/api/events/insights/';
 const TOKEN_KEY = 'sb_analytics_token';
 
 interface Pair { name: string; count: number }
 interface Journey { session: string; path: string[] }
+interface MonthTotals { month: string; label: string; views: number; taps: number; sessions: number }
+interface Insights {
+  surface: string;
+  dayCount: number;
+  range: { from: string; to: string } | null;
+  totals: { views: number; taps: number; sessions: number };
+  topPages: Pair[];
+  topArticles: Pair[];
+  months: MonthTotals[];
+  monthOverMonth: {
+    current: MonthTotals;
+    previous: MonthTotals | null;
+    deltaPct: { views: number | null; taps: number | null; sessions: number | null } | null;
+  } | null;
+}
 interface Summary {
   day: string;
   surface: string;
@@ -118,6 +134,36 @@ export default function HeatmapAdminPage() {
 
   useEffect(() => { if (token) void load(); }, [load, token]);
 
+  // Cross-day overview — independent of the selected day, so it only needs
+  // to refetch when the token or surface changes, not on every day click.
+  const [insights, setInsights] = useState<Insights | null>(null);
+  const [insightsError, setInsightsError] = useState<string | null>(null);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+
+  const loadInsights = useCallback(async () => {
+    if (!token) return;
+    setInsightsLoading(true);
+    setInsightsError(null);
+    try {
+      const res = await fetch(`${INSIGHTS_API}?surface=${surface}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        referrerPolicy: 'no-referrer',
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Request failed (${res.status})`);
+      }
+      setInsights(await res.json());
+    } catch (e) {
+      setInsightsError(e instanceof Error ? e.message : 'Failed to load');
+      setInsights(null);
+    } finally {
+      setInsightsLoading(false);
+    }
+  }, [token, surface]);
+
+  useEffect(() => { if (token) void loadInsights(); }, [loadInsights, token]);
+
   const [resetting, setResetting] = useState(false);
 
   /** Wipe a day so test traffic can't be mistaken for real usage. */
@@ -174,7 +220,9 @@ export default function HeatmapAdminPage() {
     return [
       step('Saw paywall', shown, true),
       step('Tapped purchase', get('paywall:purchase')),
+      step('  → completed', get('paywall:completed:purchase')),
       step('Tapped restore', get('paywall:restore')),
+      step('  → completed', get('paywall:completed:restore')),
       step('Dismissed', get('paywall:dismissed')),
     ];
   })();
@@ -210,6 +258,30 @@ export default function HeatmapAdminPage() {
       .filter((n) => n.name.startsWith('paywall:trigger:'))
       .map((n) => ({ name: n.name.replace('paywall:trigger:', ''), count: n.count }))
       .sort((a, b) => b.count - a.count);
+  })();
+
+  // Share-to-save: how many people offered the discount actually share, and
+  // how many of those go on to buy at $6.99. Counted against the offer
+  // itself, not against total paywall views — most people never hit X.
+  const shareFunnel = (() => {
+    if (!data) return [] as { label: string; count: number; pct: number | null }[];
+    const get = (n: string) => data.named.find((x) => x.name === n)?.count ?? 0;
+    const offered = get('paywall:discount-offer-shown');
+    if (offered === 0) return [];
+    const step = (label: string, count: number, isBase = false) => ({
+      label,
+      count,
+      pct: isBase || offered === 0 ? null : Math.round((count / offered) * 100),
+    });
+    return [
+      step('Offer shown', offered, true),
+      step('Declined to share', get('paywall:offer-declined')),
+      step('Tapped share', get('paywall:share-tapped')),
+      step('Share completed', get('paywall:share-completed')),
+      step('Tapped $6.99 unlock', get('paywall:discount-purchase')),
+      step('  → completed', get('paywall:completed:purchaseDiscount')),
+      step('Declined at $6.99', get('paywall:discount-declined')),
+    ];
   })();
 
   // Merge views and taps into one list so a screen that was opened but never
@@ -266,22 +338,142 @@ export default function HeatmapAdminPage() {
           </button>
         </div>
 
+        {/* Cross-day overview — independent of the day picker below */}
+        {token && (
+          <section className="mb-10 pb-10 border-b border-slate-800">
+            <h2 className="text-lg font-black tracking-tight text-white mb-1">Insights</h2>
+            <p className="text-slate-400 text-xs mb-5">
+              Across every day on record for {surface === 'ios' ? 'the iOS app' : 'the website'}
+              {insights?.range ? ` (${insights.range.from} – ${insights.range.to})` : ''}.
+            </p>
+
+            {insightsLoading && !insights && (
+              <p className="text-slate-500 text-sm">Loading…</p>
+            )}
+            {insightsError && (
+              <p className="text-red-400 text-sm">{insightsError}</p>
+            )}
+
+            {insights && insights.dayCount === 0 && (
+              <p className="text-slate-500 text-sm">No data recorded yet for this surface.</p>
+            )}
+
+            {insights && insights.dayCount > 0 && (
+              <div className="grid lg:grid-cols-3 gap-6">
+                {/* Month over month */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Month over month
+                  </h3>
+                  {insights.monthOverMonth ? (
+                    <div className="space-y-2">
+                      <div className="bg-slate-900 rounded-lg px-3 py-2.5">
+                        <p className="text-xs text-slate-500 mb-1">{insights.monthOverMonth.current.label}</p>
+                        <div className="flex items-baseline gap-4 text-sm">
+                          <span>{insights.monthOverMonth.current.views} <span className="text-slate-500 text-xs">views</span></span>
+                          <span>{insights.monthOverMonth.current.taps} <span className="text-slate-500 text-xs">taps</span></span>
+                          <span>{insights.monthOverMonth.current.sessions} <span className="text-slate-500 text-xs">sessions</span></span>
+                        </div>
+                      </div>
+                      {insights.monthOverMonth.previous ? (
+                        <>
+                          <div className="bg-slate-900/50 rounded-lg px-3 py-2.5">
+                            <p className="text-xs text-slate-500 mb-1">{insights.monthOverMonth.previous.label}</p>
+                            <div className="flex items-baseline gap-4 text-sm text-slate-400">
+                              <span>{insights.monthOverMonth.previous.views} views</span>
+                              <span>{insights.monthOverMonth.previous.taps} taps</span>
+                              <span>{insights.monthOverMonth.previous.sessions} sessions</span>
+                            </div>
+                          </div>
+                          {insights.monthOverMonth.deltaPct && (
+                            <div className="flex gap-3 text-xs pt-1">
+                              {(['views', 'taps', 'sessions'] as const).map((k) => {
+                                const pct = insights.monthOverMonth!.deltaPct![k];
+                                const positive = pct !== null && pct >= 0;
+                                return (
+                                  <span
+                                    key={k}
+                                    className={pct === null ? 'text-slate-500' : positive ? 'text-emerald-400' : 'text-red-400'}
+                                  >
+                                    {k} {pct === null ? 'new' : `${positive ? '+' : ''}${pct}%`}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <p className="text-slate-500 text-xs">No prior month to compare against yet.</p>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-slate-500 text-sm">Not enough data yet.</p>
+                  )}
+                </div>
+
+                {/* Top pages */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Most tapped pages · all time
+                  </h3>
+                  {insights.topPages.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No taps recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {insights.topPages.map((p) => (
+                        <li
+                          key={p.name}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span className="font-mono text-xs truncate">{p.name}</span>
+                          <span className="tabular-nums text-slate-300 shrink-0">{p.count}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Top articles */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Most viewed articles · all time
+                  </h3>
+                  {insights.topArticles.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No article views recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {insights.topArticles.map((a) => (
+                        <li
+                          key={a.name}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span className="font-mono text-xs truncate">{a.name}</span>
+                          <span className="tabular-nums text-slate-300 shrink-0">{a.count}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+
         {data && data.days.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 mb-6 -mt-4">
-            <span className="text-[11px] uppercase tracking-wide text-slate-500">Days with data</span>
-            {data.days.slice(0, 14).map((d) => (
-              <button
-                key={d}
-                onClick={() => { setDay(d); setRoute(null); setVw(null); }}
-                className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                  d === day
-                    ? 'bg-sky-500/20 border-sky-600 text-sky-300'
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
+          <div className="flex flex-wrap items-center gap-3 mb-6 -mt-4">
+            <label className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="uppercase tracking-wide">Days with data</span>
+              <select
+                value={data.days.includes(day) ? day : ''}
+                onChange={(e) => { if (e.target.value) { setDay(e.target.value); setRoute(null); setVw(null); } }}
+                className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300"
               >
-                {d}
-              </button>
-            ))}
+                {!data.days.includes(day) && <option value="">— pick a day —</option>}
+                {data.days.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </label>
             <button
               onClick={reset}
               disabled={resetting}
@@ -497,8 +689,8 @@ export default function HeatmapAdminPage() {
               )}
             </section>
 
-            {/* Onboarding funnel + what drove people to the paywall */}
-            <section className="lg:col-span-3 grid md:grid-cols-2 gap-6">
+            {/* Onboarding funnel, what drove people to the paywall, share-to-save */}
+            <section className="lg:col-span-3 grid md:grid-cols-3 gap-6">
               <div>
                 <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
                   Onboarding
@@ -546,6 +738,35 @@ export default function HeatmapAdminPage() {
                       >
                         <span className="font-mono">{t.name}</span>
                         <span className="tabular-nums text-slate-300">{t.count}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Share to save $3
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  Of the people offered the discount for sharing, how many actually did.
+                </p>
+                {shareFunnel.length === 0 ? (
+                  <p className="text-slate-500 text-sm">No share offers shown this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {shareFunnel.map((f) => (
+                      <li
+                        key={f.label}
+                        className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                      >
+                        <span>{f.label}</span>
+                        <span className="tabular-nums text-slate-300">
+                          {f.count}
+                          {f.pct !== null && (
+                            <span className="text-slate-500 text-xs"> · {f.pct}%</span>
+                          )}
+                        </span>
                       </li>
                     ))}
                   </ul>

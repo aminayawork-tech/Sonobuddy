@@ -11,7 +11,10 @@ import clsx from 'clsx';
 const CATEGORIES = Object.entries(CATEGORY_LABELS) as [MeasurementCategory, string][];
 
 export default function MeasurementsPage() {
-  const { isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore } = usePremium();
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<MeasurementCategory | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -55,7 +58,16 @@ export default function MeasurementsPage() {
 
   return (
     <div className="min-h-screen pb-nav">
-      {paywallOpen && <PaywallModal onClose={closePaywall} onPurchase={requestPurchase} onRestore={requestRestore} />}
+      {paywallOpen && <PaywallModal
+          onClose={closePaywall}
+          onPurchase={requestPurchase}
+          onRestore={requestRestore}
+          shareUnlocked={shareUnlocked}
+          onShare={requestShare}
+          onDiscountPurchase={requestDiscountPurchase}
+          purchaseError={purchaseError}
+          onClearError={clearPurchaseError}
+        />}
       {/* Header */}
       <div ref={headerRef} className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
         <div className="px-4 pt-12 pb-3">
