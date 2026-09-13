@@ -39,7 +39,7 @@ const SHARE_UNLOCKED_KEY = 'sb_share_unlocked';
 declare global {
   interface Window {
     __isPremium?: boolean;
-    __onPremiumUnlocked?: () => void;
+    __onPremiumUnlocked?: (action?: string) => void;
     __onShareCompleted?: () => void;
     __onPurchaseError?: (message: string) => void;
     webkit?: {
@@ -68,11 +68,18 @@ export function usePremium() {
     setIsPremium(alreadyPremium);
     setShareUnlocked(localStorage.getItem(SHARE_UNLOCKED_KEY) === '1');
 
-    // Called by native after a successful purchase or restore
-    window.__onPremiumUnlocked = () => {
+    // Called by native after a successful purchase or restore. `action` is
+    // the request that succeeded — 'purchase' | 'purchaseDiscount' |
+    // 'restore' — passed only from a live tap, never from the silent
+    // checkStatus() sync on launch, so a real completed sale can finally be
+    // told apart from someone merely tapping the button. Recording the
+    // completion here, not in PaywallModal, since the modal is already
+    // closed by the time this fires.
+    window.__onPremiumUnlocked = (action?: string) => {
       localStorage.setItem('sb_premium', '1');
       setIsPremium(true);
       setPaywallOpen(false);
+      if (action) recordEvent(`paywall:completed:${action}`);
     };
 
     // Called by native only when the share sheet completes (a target was

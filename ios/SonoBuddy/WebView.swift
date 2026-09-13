@@ -114,7 +114,11 @@ struct WebView: UIViewRepresentable {
                     }
                     if PurchaseManager.shared.isPremium {
                         didNotifyPremium = true
-                        webView?.evaluateJavaScript("window.__onPremiumUnlocked?.()") { _, _ in }
+                        // Passing which action succeeded lets the web side tell a
+                        // genuine completed purchase apart from a button tap —
+                        // those were previously indistinguishable in analytics,
+                        // which is exactly what read as "purchases with no sales."
+                        webView?.evaluateJavaScript("window.__onPremiumUnlocked?.('\(action)')") { _, _ in }
                     }
                 } catch {
                     // A silent failure here reads to the user as "the button did

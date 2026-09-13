@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import AppStoreBadge from '@/components/AppStoreBadge';
+import PlayStoreWaitlist from '@/components/PlayStoreWaitlist';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
@@ -178,7 +179,10 @@ export default function BlogPostPage({ params }: Props) {
               Get <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
             </p>
             <p className="text-gray-500 text-sm mb-4">All reference tools in one app — works offline, built for the scan room.</p>
-            <AppStoreBadge />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <AppStoreBadge />
+              <PlayStoreWaitlist />
+            </div>
           </div>
         </div>
       </main>

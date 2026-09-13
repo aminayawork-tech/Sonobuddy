@@ -71,12 +71,19 @@ export default function PaywallModal({
 
   const handleShare = () => { recordEvent('paywall:share-tapped'); onShare(); };
 
-  function reallyClose() {
+  // `abandonedFrom` names which interstitial someone left from, if either —
+  // 'offer' means they wouldn't share, 'discount' means they shared but still
+  // wouldn't buy at $6.99. Both matter separately from the generic dismiss
+  // count: they're the two distinct places this specific flow loses someone.
+  function reallyClose(abandonedFrom?: 'offer' | 'discount') {
+    if (abandonedFrom === 'offer') recordEvent('paywall:offer-declined');
+    if (abandonedFrom === 'discount') recordEvent('paywall:discount-declined');
     recordEvent('paywall:dismissed');
     onClose();
   }
 
   function handleXTap() {
+    if (screen === 'offer' || screen === 'discount') { reallyClose(screen); return; }
     if (screen !== 'main') { reallyClose(); return; }
     if (shareUnlocked) {
       recordEvent('paywall:discount-shown');
@@ -169,7 +176,7 @@ export default function PaywallModal({
               <Share2 className="w-8 h-8 text-[#0EA5E9]" />
             </div>
             <h2 className="text-[26px] font-black tracking-tight leading-tight text-slate-900 mb-2">
-              Wait — save $3
+              Hold up — save $3
             </h2>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs mb-1">
               Share SonoBuddy with a friend or colleague and unlock full access
@@ -177,6 +184,7 @@ export default function PaywallModal({
             </p>
             <p className="text-slate-400 text-xs max-w-xs">
               Just open the share sheet — no confirmation needed from them.
+              This offer is shown once, so grab it now.
             </p>
           </div>
 
@@ -189,7 +197,7 @@ export default function PaywallModal({
               Share &amp; Save $3
             </button>
             <button
-              onClick={reallyClose}
+              onClick={() => reallyClose('offer')}
               className="w-full text-slate-400 text-xs py-3 hover:text-slate-700 transition-colors"
             >
               No thanks, maybe later
@@ -227,7 +235,7 @@ export default function PaywallModal({
               One-time purchase · No subscription · Offline access
             </p>
             <button
-              onClick={reallyClose}
+              onClick={() => reallyClose('discount')}
               className="w-full text-slate-400 text-xs py-2 hover:text-slate-700 transition-colors"
             >
               No thanks
