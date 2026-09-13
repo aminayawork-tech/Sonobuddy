@@ -338,7 +338,33 @@ export default function HeatmapAdminPage() {
           </button>
         </div>
 
-        {/* Cross-day overview — independent of the day picker below */}
+        {data && data.days.length > 0 && (
+          <div className="flex flex-wrap items-center gap-3 mb-6 -mt-4">
+            <label className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="uppercase tracking-wide">Days with data</span>
+              <select
+                value={data.days.includes(day) ? day : ''}
+                onChange={(e) => { if (e.target.value) { setDay(e.target.value); setRoute(null); setVw(null); } }}
+                className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300"
+              >
+                {!data.days.includes(day) && <option value="">— pick a day —</option>}
+                {data.days.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </label>
+            <button
+              onClick={reset}
+              disabled={resetting}
+              className="ml-auto text-xs px-3 py-1 rounded-full border border-red-900 text-red-400 hover:bg-red-950 disabled:opacity-50 transition-colors"
+              title="Delete all recorded data for this day and surface"
+            >
+              {resetting ? 'Clearing…' : `Clear ${day} (${surface})`}
+            </button>
+          </div>
+        )}
+
+        {/* Cross-day overview — independent of the day picker above */}
         {token && (
           <section className="mb-10 pb-10 border-b border-slate-800">
             <h2 className="text-lg font-black tracking-tight text-white mb-1">Insights</h2>
@@ -457,32 +483,6 @@ export default function HeatmapAdminPage() {
               </div>
             )}
           </section>
-        )}
-
-        {data && data.days.length > 0 && (
-          <div className="flex flex-wrap items-center gap-3 mb-6 -mt-4">
-            <label className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="uppercase tracking-wide">Days with data</span>
-              <select
-                value={data.days.includes(day) ? day : ''}
-                onChange={(e) => { if (e.target.value) { setDay(e.target.value); setRoute(null); setVw(null); } }}
-                className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300"
-              >
-                {!data.days.includes(day) && <option value="">— pick a day —</option>}
-                {data.days.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
-            </label>
-            <button
-              onClick={reset}
-              disabled={resetting}
-              className="ml-auto text-xs px-3 py-1 rounded-full border border-red-900 text-red-400 hover:bg-red-950 disabled:opacity-50 transition-colors"
-              title="Delete all recorded data for this day and surface"
-            >
-              {resetting ? 'Clearing…' : `Clear ${day} (${surface})`}
-            </button>
-          </div>
         )}
 
         {error && (
