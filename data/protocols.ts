@@ -1836,6 +1836,135 @@ export const protocols: Protocol[] = [
     ],
     tags: ['male pelvis', 'scrotal', 'testicular', 'prostate', 'bladder', 'bph', 'pvr', 'epididymis', 'hydrocele', 'varicocele', 'torsion', 'orchitis', 'urologic', 'infertility', 'psa', 'abdomen'],
   },
+  {
+    id: 'hernia-abdominal-wall',
+    name: 'Abdominal Wall & Groin Hernia Ultrasound',
+    shortName: 'Hernia US',
+    category: 'abdomen',
+    duration: '15–25 min',
+    difficulty: 'beginner',
+    probe: 'High-frequency linear (7–15 MHz); curvilinear (2–5 MHz) for large body habitus or deep incisional defects',
+    patient: 'Supine initially, then standing and/or Valsalva for dynamic evaluation — many hernias are only demonstrable with increased intra-abdominal pressure. Expose the full area from costal margin to mid-thigh so the exam isn\'t confined to the area of pointed pain.',
+    indication: 'Palpable groin or abdominal wall bulge, focal pain with straining/lifting, post-surgical bulge at incision site, rule out incarceration/strangulation in a tender irreducible mass',
+    steps: [
+      {
+        step: 1,
+        title: 'Localize & Survey at Rest',
+        description: 'Start directly over the area of patient-reported bulge or tenderness — palpate first, then scan in both orthogonal planes. Survey the abdominal wall layers (skin, subcutaneous fat, fascia, muscle, peritoneum) for a focal discontinuity.',
+        tips: [
+          'Ask the patient to point to the bulge with one finger before you put the probe down — this focuses the exam',
+          'A resting (non-Valsalva) study can be entirely normal even with a real hernia — don\'t stop here if history is convincing',
+          'Compare to the contralateral side for any asymmetry',
+        ],
+      },
+      {
+        step: 2,
+        title: 'Dynamic Valsalva / Standing Maneuver',
+        description: 'With the probe held still over the suspected defect, have the patient Valsalva or cough. Watch in real time for fat or bowel loops protruding through the fascial defect. If supine Valsalva is negative but suspicion remains, repeat standing.',
+        tips: [
+          'This is the single most important step — most inguinal and umbilical hernias are occult at rest and only bulge with increased intra-abdominal pressure',
+          'Record a cine clip through the Valsalva, not just a static image — the motion is the finding',
+          'Measure the fascial defect (neck) width during Valsalva — this predicts incarceration risk',
+        ],
+      },
+      {
+        step: 3,
+        title: 'Inguinal Region — Indirect vs. Direct',
+        description: 'Identify the inferior epigastric vessels with color Doppler at the level of the internal inguinal ring — they are the key landmark separating indirect (lateral to vessels, follows the spermatic cord/round ligament through the internal ring) from direct (medial to vessels, through Hesselbach\'s triangle) inguinal hernias.',
+        probe: 'Linear 10–15 MHz',
+        tips: [
+          'Indirect hernia: lateral to inferior epigastric vessels, contents track along the inguinal canal toward the scrotum/labium',
+          'Direct hernia: medial to inferior epigastric vessels, bulges straight anteriorly through a weak Hesselbach\'s triangle floor',
+          'In males, follow the sac to the scrotum if it extends there — document extent',
+        ],
+      },
+      {
+        step: 4,
+        title: 'Femoral Canal',
+        description: 'Scan just inferior and medial to the femoral vein at the femoral crease — the femoral canal is a common miss on exam and imaging, especially in women. Look for fat or bowel medial to the femoral vein, below the inguinal ligament.',
+        tips: [
+          'Femoral hernias are more common in women and have a higher incarceration rate than inguinal hernias — do not skip this step',
+          'The femoral vein is the landmark: hernia contents sit medial to it, below the inguinal ligament level',
+        ],
+      },
+      {
+        step: 5,
+        title: 'Umbilical / Paraumbilical & Epigastric Midline',
+        description: 'Transverse and sagittal through the umbilicus and along the linea alba above and below it. Measure the fascial defect. Look for protruding preperitoneal fat or bowel with Valsalva.',
+        tips: [
+          'Epigastric hernias occur in the linea alba above the umbilicus — usually small, fat-containing, easily missed if you only scan the umbilicus itself',
+          'Diastasis recti (widened but intact linea alba, no discrete fascial defect) is not a hernia — measure inter-recti distance to distinguish',
+        ],
+      },
+      {
+        step: 6,
+        title: 'Incisional Site (if applicable)',
+        description: 'For a bulge at a prior surgical scar: scan directly along and perpendicular to the incision. Measure the fascial defect width and the size of any protruding contents. Note mesh, if present, and its position relative to the defect.',
+        tips: [
+          'Mesh appears as an echogenic, linear-to-curvilinear structure — document whether the defect is at the mesh edge or a separate site',
+          'Multiple defects along a single incision are common — survey the entire scar, not just the point of maximal bulge',
+        ],
+      },
+      {
+        step: 7,
+        title: 'Reducibility, Peristalsis & Color Doppler',
+        description: 'With gentle probe pressure (or having the patient lie down/relax), assess whether the herniated contents reduce back into the abdomen. If bowel is present, look for peristalsis. Apply color Doppler to the hernia contents and wall to assess for compromised blood flow.',
+        tips: [
+          'Reducible: contents freely slide back with gentle pressure or recumbency — reassuring',
+          'Irreducible/incarcerated: contents remain fixed despite pressure — cannot exclude strangulation on this alone',
+          'Absent flow within herniated bowel, wall thickening, free fluid, or loss of peristalsis: strangulation — surgical emergency, notify the ordering provider immediately',
+        ],
+      },
+    ],
+    keyImages: [
+      'Area of interest at rest — two orthogonal planes',
+      'Cine/still through Valsalva showing protrusion',
+      'Inferior epigastric vessels with color Doppler (inguinal cases)',
+      'Fascial defect measurement (neck width)',
+      'Hernia contents — grayscale + color Doppler',
+      'Contralateral side for comparison',
+      'Mesh position, if incisional',
+    ],
+    commonFindings: [
+      'Reducible indirect inguinal hernia',
+      'Reducible direct inguinal hernia',
+      'Femoral hernia',
+      'Umbilical or paraumbilical hernia',
+      'Epigastric hernia',
+      'Incisional/ventral hernia',
+      'Incarcerated or strangulated hernia',
+      'Diastasis recti (not a true hernia — intact fascia)',
+    ],
+    reportChecklist: [
+      'Location: inguinal (direct/indirect), femoral, umbilical, epigastric, or incisional',
+      'Fascial defect (neck) width',
+      'Contents: fat only vs. bowel',
+      'Reducibility: reducible vs. irreducible/incarcerated',
+      'Peristalsis present/absent (if bowel)',
+      'Color Doppler: flow present/absent within contents and wall',
+      'Free fluid adjacent to hernia sac',
+      'Comparison to contralateral side',
+      'Mesh location, if prior repair',
+    ],
+    reportTemplates: [
+      {
+        label: 'Reducible Inguinal Hernia',
+        scenario: 'Indirect or direct, no incarceration',
+        text: 'Ultrasound of the [right/left] groin was performed. With Valsalva maneuver, [preperitoneal fat / a loop of bowel] is seen protruding through the [internal inguinal ring, lateral to the inferior epigastric vessels, consistent with an indirect / Hesselbach\'s triangle, medial to the inferior epigastric vessels, consistent with a direct] inguinal hernia. The fascial defect measures approximately ___ cm. The hernia contents reduce freely with gentle pressure. No bowel wall thickening or free fluid is identified. Peristalsis is present within the herniated bowel loop, if applicable.',
+      },
+      {
+        label: 'Umbilical/Incisional Hernia',
+        scenario: 'Reducible, fat-containing',
+        text: 'Ultrasound of the [umbilical / incisional] region was performed. A fascial defect measuring approximately ___ cm is identified at the [umbilicus / site of prior surgical incision]. With Valsalva, herniation of preperitoneal fat is demonstrated through the defect, which reduces with gentle pressure. No bowel is identified within the hernia sac. No secondary defects are identified along the remainder of the incision.',
+      },
+      {
+        label: 'Incarcerated/Strangulated Hernia — Urgent',
+        scenario: 'Irreducible, concerning for compromised bowel',
+        text: 'Ultrasound demonstrates a [right/left] [inguinal/femoral/umbilical/incisional] hernia containing a loop of bowel measuring ___ cm within the sac. The contents remain fixed and do not reduce with graded compression or patient repositioning. [Peristalsis is absent within the involved loop. / Wall thickening is present.] Color Doppler demonstrates [absent / markedly diminished] flow within the bowel wall. A small amount of free fluid is present adjacent to the hernia sac. Findings are concerning for incarceration with possible strangulation — surgical consultation recommended urgently.',
+      },
+    ],
+    tags: ['hernia', 'inguinal hernia', 'direct hernia', 'indirect hernia', 'femoral hernia', 'umbilical hernia', 'epigastric hernia', 'incisional hernia', 'ventral hernia', 'groin', 'abdominal wall', 'valsalva', 'incarcerated', 'strangulated', 'diastasis recti', 'abdomen'],
+  },
 
   // ── MSK ──────────────────────────────────────────────────────────────────────
   {
