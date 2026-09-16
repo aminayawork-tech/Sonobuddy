@@ -1396,6 +1396,53 @@ export const pathologies: Pathology[] = [
     reportingTips: 'State: "Complex fluid collection measuring ___ × ___ × ___ cm with [internal debris/septations]. Surrounding fat stranding present. Findings consistent with abscess — I&D vs US-guided drainage recommended." If no discrete collection: "Diffuse soft tissue edema with cobblestone appearance consistent with cellulitis — no drainable collection identified."',
     tags: ['abscess', 'soft tissue infection', 'cellulitis', 'superficial', 'skin', 'ssti', 'drainage', 'fluid collection'],
   },
+  {
+    id: 'inguinal-hernia',
+    name: 'Inguinal Hernia',
+    aliases: ['inguinal hernia', 'groin hernia', 'direct hernia', 'indirect hernia', 'femoral hernia'],
+    category: 'superficial',
+    ultrasoundFindings: [
+      'Protrusion of preperitoneal fat or bowel through a fascial defect, best seen with Valsalva or standing',
+      'Indirect: contents lateral to the inferior epigastric vessels, tracking along the inguinal canal (± into the scrotum/labium)',
+      'Direct: contents medial to the inferior epigastric vessels, bulging through Hesselbach\'s triangle',
+      'Femoral: contents medial to the femoral vein, below the inguinal ligament',
+      'Peristalsis within herniated bowel loop (real-time, dynamic finding)',
+      'Reduces with gentle probe compression or recumbency in an uncomplicated hernia',
+    ],
+    redFlags: [
+      'Irreducible (incarcerated) sac that does not reduce with compression or repositioning',
+      'Absent or markedly diminished color Doppler flow within herniated bowel wall — strangulation, surgical emergency',
+      'Bowel wall thickening, loss of peristalsis, or free fluid adjacent to the sac — all support strangulation',
+      'Femoral hernias carry a higher incarceration rate than inguinal hernias despite often being smaller',
+    ],
+    differentials: ['Hydrocele of the spermatic cord (anechoic, no bowel/fat, no peristalsis)', 'Inguinal lymphadenopathy (reniform node with fatty hilum, no fascial defect)', 'Lipoma (well-defined, no dynamic protrusion with Valsalva)', 'Varicocele (compressible tubular structures, venous flow on Doppler, no fascial defect)'],
+    clinicalContext: 'Palpable groin bulge, worse with standing/straining/lifting, may reduce when lying down. Indirect hernias are more common overall and in younger patients (patent processus vaginalis); direct hernias are more common in older men with weakened abdominal wall musculature.',
+    reportingTips: 'Always image with Valsalva or standing if the supine resting study is negative but history is convincing — a normal resting exam does not exclude a hernia. State laterality relative to the inferior epigastric vessels (indirect vs. direct), measure the fascial defect, and explicitly document reducibility and Doppler flow within any contained bowel.',
+    tags: ['hernia', 'inguinal hernia', 'groin hernia', 'direct hernia', 'indirect hernia', 'femoral hernia', 'incarcerated', 'strangulated', 'valsalva', 'groin', 'superficial'],
+  },
+  {
+    id: 'ventral-hernia',
+    name: 'Umbilical, Epigastric & Incisional (Ventral) Hernia',
+    aliases: ['umbilical hernia', 'ventral hernia', 'incisional hernia', 'epigastric hernia', 'paraumbilical hernia'],
+    category: 'superficial',
+    ultrasoundFindings: [
+      'Discrete fascial defect along the linea alba (umbilical, epigastric) or at a prior surgical incision',
+      'Protrusion of preperitoneal fat, omentum, or bowel through the defect, accentuated with Valsalva',
+      'Umbilical: defect centered at the umbilicus; epigastric: defect in the linea alba above the umbilicus, typically small and fat-containing',
+      'Incisional: defect anywhere along a surgical scar — may be a single defect or multiple defects along the same incision',
+      'Mesh (if prior repair): echogenic linear-to-curvilinear structure — document defect location relative to the mesh',
+      'Reduces with gentle compression or recumbency in an uncomplicated hernia',
+    ],
+    redFlags: [
+      'Irreducible contents with bowel wall thickening, absent peristalsis, or absent Doppler flow — strangulation until proven otherwise',
+      'Rapidly enlarging or increasingly tender incisional hernia — risk of incarceration',
+      'Recurrent bulge at the edge of previously placed mesh — mesh-edge recurrence, distinct from a new defect',
+    ],
+    differentials: ['Diastasis recti (widened but intact linea alba — inter-recti distance increased but no discrete fascial defect, contents do not protrude through a defect)', 'Seroma at incision site (anechoic/fluid collection, no fascial defect, no bowel)', 'Umbilical granuloma (superficial, no deep fascial communication)'],
+    clinicalContext: 'Umbilical hernias are common in adults (higher incidence with obesity, ascites, pregnancy) and in infants (usually resolve spontaneously). Incisional hernias occur at prior surgical sites, more common with midline incisions, wound infection history, or obesity. Epigastric hernias are frequently small and easily overlooked on physical exam.',
+    reportingTips: 'Measure the fascial defect width — this is the key number surgeons use for repair planning. Distinguish clearly from diastasis recti (measure inter-recti distance, note absence of a discrete defect) since diastasis rarely requires surgical repair. For incisional hernias, survey the entire scar for multiple defects, not just the site of maximal bulge.',
+    tags: ['hernia', 'umbilical hernia', 'ventral hernia', 'incisional hernia', 'epigastric hernia', 'paraumbilical hernia', 'diastasis recti', 'mesh', 'abdominal wall', 'superficial'],
+  },
 ];
 
 export function searchPathologies(query: string): Pathology[] {
