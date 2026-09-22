@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { todayLocalStr } from '@/lib/date';
 
 /**
  * Tap analytics viewer. Client-only so it survives the static export, and
@@ -87,7 +88,7 @@ function previewUrl(route: string): string | null {
 export default function HeatmapAdminPage() {
   const [token, setToken] = useState('');
   const [surface, setSurface] = useState('web');
-  const [day, setDay] = useState(() => new Date().toISOString().slice(0, 10));
+  const [day, setDay] = useState(() => todayLocalStr());
   const [route, setRoute] = useState<string | null>(null);
   const [data, setData] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -326,7 +327,7 @@ export default function HeatmapAdminPage() {
           <input
             type="date"
             value={day}
-            max={new Date().toISOString().slice(0, 10)}
+            max={todayLocalStr()}
             onChange={(e) => { if (e.target.value) { setDay(e.target.value); setRoute(null); setVw(null); } }}
             className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm [color-scheme:dark]"
           />
