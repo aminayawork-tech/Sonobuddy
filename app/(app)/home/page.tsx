@@ -564,7 +564,7 @@ export default function HomePage() {
       {/* ── Feedback Modal ── */}
       {feedbackOpen && (
         <div className="fixed inset-0 z-[200] flex items-end justify-center bg-black/60 backdrop-blur-sm px-4 pb-8">
-          <div className="w-full max-w-md bg-[#1a2535] rounded-3xl p-6 shadow-2xl">
+          <div className="w-full max-w-md bg-black rounded-3xl p-6 shadow-2xl">
             {feedbackStatus === 'sent' ? (
               <div className="flex flex-col items-center py-6 gap-3">
                 <div className="w-14 h-14 rounded-full bg-sky-500/20 flex items-center justify-center">
