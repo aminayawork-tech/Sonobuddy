@@ -1,16 +1,18 @@
 'use client';
 
-import { protocols, DIFFICULTY_COLORS } from '@/data/protocols';
+import { protocols, DIFFICULTY_COLORS, type KeyImage } from '@/data/protocols';
 import Link from 'next/link';
+import Image from 'next/image';
 import clsx from 'clsx';
 import { useState } from 'react';
-import { Clock, Zap, ChevronDown, Copy, Check } from 'lucide-react';
+import { Clock, Zap, ChevronDown, Copy, Check, X } from 'lucide-react';
 
 export default function ProtocolDetailClient({ id }: { id: string }) {
   const protocol = protocols.find((p) => p.id === id);
   const [activeTab, setActiveTab] = useState<'steps' | 'images' | 'report'>('steps');
   const [expandedTemplate, setExpandedTemplate] = useState<number | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<KeyImage | null>(null);
 
   function copyTemplate(text: string, index: number) {
     navigator.clipboard.writeText(text).then(() => {
@@ -38,6 +40,35 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen pb-nav">
+      {/* Lightbox */}
+      {lightbox && lightbox.src && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white/70 hover:text-white"
+            onClick={() => setLightbox(null)}
+          >
+            <X className="w-7 h-7" />
+          </button>
+          <div className="relative w-full max-w-lg max-h-[75vh]" onClick={(e) => e.stopPropagation()}>
+            <Image
+              src={lightbox.src}
+              alt={lightbox.label}
+              width={800}
+              height={600}
+              unoptimized
+              className="rounded-xl object-contain w-full max-h-[75vh]"
+            />
+          </div>
+          <p className="text-white/80 text-sm mt-3 text-center max-w-sm">{lightbox.label}</p>
+          {lightbox.credit && (
+            <p className="text-white/40 text-[11px] mt-1 text-center max-w-sm">{lightbox.credit}</p>
+          )}
+        </div>
+      )}
+
       {/* Header */}
       <div className="px-4 pt-12 pb-4 border-b border-sono-border">
         <Link href="/protocols" className="inline-flex items-center gap-1 text-sono-blue text-sm mb-3 hover:underline">
@@ -121,11 +152,26 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
           <div className="space-y-2">
             <p className="text-xs text-sono-muted mb-3">Required images to document for this exam:</p>
             {protocol.keyImages.map((img, i) => (
-              <div key={i} className="flex items-start gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
+              <div key={i} className="flex items-center gap-3 bg-sono-card border border-sono-border rounded-xl px-4 py-3">
                 <div className="w-6 h-6 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0">
                   <span className="text-[10px] font-bold text-green-700">{i + 1}</span>
                 </div>
-                <p className="text-sm text-slate-700 pt-0.5">{img}</p>
+                <p className="text-sm text-slate-700 flex-1">{img.label}</p>
+                {img.src && (
+                  <button
+                    onClick={() => setLightbox(img)}
+                    className="shrink-0 rounded-lg overflow-hidden border border-sono-border active:scale-95 transition-transform"
+                  >
+                    <Image
+                      src={img.src}
+                      alt={img.label}
+                      width={64}
+                      height={48}
+                      unoptimized
+                      className="object-cover w-16 h-12"
+                    />
+                  </button>
+                )}
               </div>
             ))}
           </div>
