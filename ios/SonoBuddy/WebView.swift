@@ -1,5 +1,42 @@
 import SwiftUI
 import WebKit
+import LinkPresentation
+
+/// Supplies the share sheet's link preview explicitly instead of letting it
+/// fetch og:image from the App Store page — that fetch is what was showing a
+/// generic Safari/compass icon instead of the app icon.
+final class AppStoreShareSource: NSObject, UIActivityItemSource {
+    private let url: URL
+    private let title: String
+
+    init(url: URL, title: String) {
+        self.url = url
+        self.title = title
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        url
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        url
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        title
+    }
+
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        let metadata = LPLinkMetadata()
+        metadata.title = title
+        metadata.url = url
+        metadata.originalURL = url
+        if let icon = UIImage(named: "ShareIcon") {
+            metadata.iconProvider = NSItemProvider(object: icon)
+        }
+        return metadata
+    }
+}
 
 struct WebView: UIViewRepresentable {
     let url: URL
@@ -141,7 +178,8 @@ struct WebView: UIViewRepresentable {
             guard let presenter = Self.topViewController() else { return }
             let text = "I've been using SonoBuddy for ultrasound reference on the job — measurements, protocols, calculators, and pathology, all offline. Worth a look:"
             let url = URL(string: "https://apps.apple.com/us/app/sonobuddy-pro/id6761020726")!
-            let activity = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
+            let linkSource = AppStoreShareSource(url: url, title: "SonoBuddy — Ultrasound Reference")
+            let activity = UIActivityViewController(activityItems: [text, linkSource], applicationActivities: nil)
             if let popover = activity.popoverPresentationController {
                 popover.sourceView = presenter.view
                 popover.sourceRect = CGRect(x: presenter.view.bounds.midX, y: presenter.view.bounds.maxY, width: 0, height: 0)

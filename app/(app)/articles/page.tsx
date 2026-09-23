@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import { getAllArticles, ARTICLES, getArticleBySlug } from '@/lib/articles-data';
 import type { Article } from '@/lib/articles-data';
 import { parseLocalDate, todayLocalStr } from '@/lib/date';
-import { Calendar, ChevronRight, ChevronLeft, Newspaper } from 'lucide-react';
+import { Calendar, ChevronRight, ChevronLeft, Newspaper, Search } from 'lucide-react';
 
 const API_BASE = 'https://www.sonobuddy.com';
 type ArticleMeta = Omit<Article, 'content'>;
@@ -54,6 +54,7 @@ function filterAndSort(list: ArticleMeta[]): ArticleMeta[] {
 
 function ArticleList() {
   const [articles, setArticles] = useState<ArticleMeta[]>(() => filterAndSort(getAllArticles()));
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     fetch(`${API_BASE}/api/articles/`)
@@ -62,6 +63,15 @@ function ArticleList() {
       .catch(() => {});
   }, []);
 
+  const q = query.trim().toLowerCase();
+  const visibleArticles = q
+    ? articles.filter((a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.excerpt.toLowerCase().includes(q) ||
+        a.tags.some((tag) => tag.toLowerCase().includes(q))
+      )
+    : articles;
+
   return (
     <div className="min-h-screen bg-white pb-nav">
       <div className="bg-white border-b border-slate-100 px-5 pt-14 pb-4 sticky top-0 z-10">
@@ -69,14 +79,26 @@ function ArticleList() {
           <Newspaper size={20} className="text-sky-500" strokeWidth={2} />
           <h1 className="text-[22px] font-black tracking-tight text-slate-900">Articles</h1>
         </div>
-        <p className="text-[13px] text-slate-400 mt-0.5">Tips, protocols &amp; career guides</p>
+        <p className="text-[13px] text-slate-400 mt-0.5 mb-3">Tips, protocols &amp; career guides</p>
+        <div className="relative">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search articles…"
+            className="w-full bg-slate-50 text-slate-700 placeholder-slate-400 text-[13px] rounded-xl pl-9 pr-3 py-2.5 outline-none focus:ring-1 focus:ring-sky-200"
+          />
+        </div>
       </div>
 
       <div className="px-4 pt-4 space-y-3">
-        {articles.length === 0 ? (
-          <p className="text-slate-400 text-sm text-center py-12">No articles yet — check back soon.</p>
+        {visibleArticles.length === 0 ? (
+          <p className="text-slate-400 text-sm text-center py-12">
+            {q ? 'No articles match your search.' : 'No articles yet — check back soon.'}
+          </p>
         ) : (
-          articles.map((article) => {
+          visibleArticles.map((article) => {
             // Bundled articles → pre-rendered static page (works offline)
             // New API-only articles → ?slug= query on this same page (fetches live)
             const href = BUNDLED_SLUGS.has(article.slug)
