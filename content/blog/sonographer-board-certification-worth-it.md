@@ -64,9 +64,9 @@ Some employers pay a credential differential; many don't. Before assuming your s
 
 | Body | Key Credentials | Cost (Initial) | CME Cycle |
 |---|---|---|---|
-| ARDMS | RDMS (AB, OB, FE, BR, MS, PE), RVT, RDCS | $220–$295/exam | 30 CME / 3 years |
-| ARRT | RT(S), RT(VS) | $200/exam | 24 CE / 2 years |
-| CCI | RCS, RCCS, RVS, RPhS | $195–$290/exam | 30 CME / 3 years |
+| ARDMS | RDMS (AB, OB, FE, BR, MS, PE), RVT, RDCS | $300/specialty exam (plus $275 SPI prerequisite) | 30 CME / 3 years |
+| ARRT | RT(S), RT(VS) | $225/exam | 24 CE / 2 years |
+| CCI | RCS, RCCS, RVS, RPhS | $365/exam | 30 CME / 3 years |
 
 All three are widely accepted. ARDMS is the historical standard and most recognized nationally. CCI credentials are broadly equivalent and accepted at nearly all facilities. ARRT(S) has strong acceptance in radiology-run departments and at systems where radiographers are the dominant technical workforce.
 
@@ -76,8 +76,8 @@ All three are widely accepted. ARDMS is the historical standard and most recogni
 
 The **Sonography Principles and Instrumentation (SPI)** exam is the gateway — you must pass it before sitting for any specialty exam. It covers physics, instrumentation, and basic hemodynamics.
 
-- Cost: $220 (as of 2026)
-- 110 questions, 3-hour window
+- Cost: $275 (as of 2026)
+- 110 questions, 2-hour window
 - Pass rate for first-time candidates from accredited programs: approximately 80–85%
 - Content areas: ultrasound physics, transducer design, image artifacts, Doppler principles, bioeffects, quality assurance
 
@@ -102,12 +102,12 @@ For most general sonographers: **one specialty credential plus SPI** is the func
 
 ## The Cost of Credentialing Over a Career
 
-Don't forget the ongoing costs. Credentials require renewal every 3 years (ARDMS, CCI) or 2 years (ARRT). That means CME hours — which cost money if your employer doesn't cover them.
+Don't forget the ongoing costs. CME compliance is tracked in 3-year cycles for ARDMS and CCI, and 2-year cycles for ARRT — though ARDMS now bills its renewal fee annually rather than all at once every 3 years. Either way, that's CME hours, which cost money if your employer doesn't cover them.
 
 Annual true cost per active ARDMS credential:
 - CME courses: $50–$300/year depending on source (free CME exists through SDMS, free webinars, employer-provided)
-- Renewal fee: ~$175 every 3 years (~$58/year)
-- Total: $100–$360/year per credential
+- Renewal fee: ~$100/year (Inteleos moved ARDMS renewal to an annual cycle, paid each fall — not a triennial fee anymore, though the CME requirement itself is still tracked over 3 years)
+- Total: $150–$400/year per credential
 
 Most hospital employers cover CME costs as a benefit. Confirm this before you accept any offer.
 
@@ -119,15 +119,15 @@ Scenario: new grad pursuing RDMS (AB) + RDMS (OB)
 
 | Item | Cost |
 |---|---|
-| SPI exam | $220 |
-| RDMS AB exam | $250 |
-| RDMS OB exam | $250 |
+| SPI exam | $275 |
+| RDMS AB exam | $300 |
+| RDMS OB exam | $300 |
 | Study materials (Pegasus, review courses) | $200–$400 |
-| Total upfront investment | ~$920–$1,120 |
+| Total upfront investment | ~$1,075–$1,275 |
 
 Annual salary premium over uncredentialed: $14,000–$18,000
 
-**Payback period: 3–4 weeks of work.**
+**Payback period: 3–5 weeks of work.**
 
 The ROI argument is overwhelming. The only reason to delay credentials is strategic — passing boards before starting a job locks in higher starting salary from day one. Every month you're working without credentials is money left on the table.
 
@@ -162,7 +162,7 @@ Sitting for SPI within 3–4 months of graduation is the standard recommendation
 ## What Happens If You Fail
 
 Failing ARDMS boards is not career-ending, but it has consequences:
-- **Retake fees** apply — currently $220–$250 per attempt
+- **Retake fees** apply — the full exam fee again each attempt ($275 for SPI, $300 for a specialty exam)
 - **Waiting period** — ARDMS requires a 60-day wait between attempts
 - **Employer impact** — if you're working "registry eligible," most facilities give you 12–18 months. Failing once and retaking within that window is manageable. Multiple failures raise concerns.
 
