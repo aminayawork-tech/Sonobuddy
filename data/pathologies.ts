@@ -774,6 +774,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Hematuria (most common presenting symptom), flank pain, palpable mass — "classic triad" present in only 10%. Most now incidentally found on CT/MRI for other indications. Risk factors: smoking, obesity, hypertension, von Hippel-Lindau syndrome. Ultrasound confirms mass; CT/MRI for staging.',
     reportingTips: 'Any solid renal mass requires CT or MRI for characterization and staging. State mass size (3D), location, vascularity, and renal vein/IVC assessment. Use Bosniak classification only for cystic masses. Recommend: "CT abdomen/pelvis with contrast for characterization and staging."',
     tags: ['rcc', 'renal cell carcinoma', 'kidney cancer', 'renal mass', 'kidney', 'abdomen', 'ivc thrombus', 'hematuria', 'bosniak'],
+    images: [
+      { src: '/pathologies/renal_cell_carcinoma_1.jpg', caption: 'RCC — solid renal mass with cystic and solid components', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
+      { src: '/pathologies/renal_cell_carcinoma_2.jpg', caption: 'RCC — contrast-enhanced ultrasound after successful thermal ablation', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
+      { src: '/pathologies/renal_cell_carcinoma_3.jpg', caption: 'RCC — cortical solid renal mass with caliper measurement', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
+    ],
   },
   {
     id: 'portal-hypertension',
@@ -1204,6 +1209,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Posterior heel/calf pain, stiffness (worse in morning), pain with activity. Thompson test (squeeze calf — absent plantarflexion = complete rupture). Peak in 30–50 year-old athletes. Non-insertional tendinopathy (2–6 cm above insertion) vs insertional (at bone attachment).',
     reportingTips: 'Measure tendon AP diameter, document fibrillar pattern, focal vs diffuse changes, and neovascularity. Dynamic assessment: passively dorsiflex foot and observe tendon fibers — complete rupture confirmed by persistent gap. Measure gap distance if present.',
     tags: ['achilles', 'tendinopathy', 'tendon', 'msk', 'heel pain', 'rupture', 'insertional', 'plantar'],
+    images: [
+      { src: '/pathologies/achilles_tendinopathy_1.jpg', caption: 'Achilles tendon rupture — longitudinal ultrasound alongside correlating X-ray', credit: 'Wikimedia Commons — CC BY-SA 3.0, Hellerhoff' },
+    ],
   },
   {
     id: 'plantar-fasciitis',
@@ -1227,6 +1235,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Inferior heel pain worst with first steps in morning ("post-static dyskinesia") or after prolonged standing. Most common cause of heel pain. Risk factors: obesity, prolonged standing, running, pes planus. 90% resolve with conservative treatment.',
     reportingTips: 'Measure plantar fascia thickness at calcaneal origin (longitudinal view). Document Doppler vascularity and any calcaneal spur. State: "Plantar fascia at calcaneal origin measures ___ mm (normal <4 mm), with [hypoechoic/normal] echotexture consistent with [fasciitis/normal]."',
     tags: ['plantar fasciitis', 'heel pain', 'plantar fascia', 'msk', 'calcaneus', 'fascia', 'tendinopathy'],
+    images: [
+      { src: '/pathologies/plantar_fasciitis_1.png', caption: 'Plantar fascia thickness measurement at the calcaneal origin', credit: 'Wikimedia Commons — CC BY-SA 4.0, Mme Mim' },
+    ],
   },
   {
     id: 'carpal-tunnel-syndrome',
