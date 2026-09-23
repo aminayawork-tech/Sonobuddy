@@ -224,7 +224,7 @@ export const protocols: Protocol[] = [
       { label: 'Popliteal — uncompressed + compressed' },
       { label: 'CFV — spectral Doppler (phasicity)' },
       { label: 'Popliteal — augmentation' },
-      { label: 'Any thrombus: location, extent, echogenicity (acute vs chronic)' },
+      { label: 'Any thrombus: location, extent, echogenicity (acute vs chronic)', src: '/protocols/dvt-lower/cfv-thrombus.png', credit: 'Wikimedia Commons — CC BY-SA 4.0, Cerevisae' },
     ],
     commonFindings: [
       'Acute DVT (echogenic, non-compressible, expanded vein)',
@@ -303,7 +303,7 @@ export const protocols: Protocol[] = [
       },
     ],
     keyImages: [
-      { label: 'Proximal aorta — transverse with measurement' },
+      { label: 'Proximal aorta — transverse with measurement', src: '/protocols/aorta-screening/aorta-transverse.jpg', credit: 'Wikimedia Commons — CC BY-SA 3.0, James Heilman, MD' },
       { label: 'Mid aorta — transverse at widest point' },
       { label: 'Distal aorta — transverse' },
       { label: 'Bifurcation — transverse' },
