@@ -88,10 +88,10 @@ const ALL_PICKER_ENTRIES: PickerEntry[] = [
 type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; iconColor: string };
 
 const CATEGORY_TILES: CategoryTile[] = [
-  { label: 'Measurements', href: '/measurements', Icon: Ruler,         desc: 'Normal values + ranges',   iconColor: 'text-blue-600'   },
-  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides', iconColor: 'text-green-600'  },
-  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,    desc: 'ABI, RI, stenosis, OB…',   iconColor: 'text-purple-600' },
-  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,    desc: 'US findings + red flags',  iconColor: 'text-red-600'    },
+  { label: 'Measurements', href: '/measurements', Icon: Ruler,         desc: '20+ normal value tables — vascular, OB, thyroid, cardiac', iconColor: 'text-blue-600'   },
+  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides with key images & checklists',    iconColor: 'text-green-600'  },
+  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,    desc: 'ABI, RI, gestational age, EDD, thyroid volume & more',      iconColor: 'text-purple-600' },
+  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,    desc: '50+ conditions with red flags & reporting tips',            iconColor: 'text-red-600'    },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -353,18 +353,20 @@ export default function HomePage() {
       {/* Category Tiles */}
       <div className="px-5 mb-7">
         <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Browse</p>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="flex flex-col gap-2.5">
           {CATEGORY_TILES.map((tile) => (
             <button
               key={tile.href}
               onClick={() => router.push(tile.href)}
-              className="bg-white rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm"
+              className="bg-white rounded-2xl px-4 py-3.5 flex items-center gap-4 text-left active:scale-[0.98] transition-all shadow-sm"
             >
-              <div className="bg-slate-100 w-10 h-10 rounded-xl flex items-center justify-center mb-3">
-                <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
+              <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+                <tile.Icon size={17} className={tile.iconColor} strokeWidth={1.75} />
               </div>
-              <div className="font-bold text-slate-900 text-[14px] tracking-tight">{tile.label}</div>
-              <div className="text-[12px] text-slate-500 mt-1">{tile.desc}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[14px] font-bold text-slate-900">{tile.label}</p>
+                <p className="text-[11px] text-slate-400 leading-snug">{tile.desc}</p>
+              </div>
             </button>
           ))}
         </div>
