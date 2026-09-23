@@ -85,13 +85,13 @@ const ALL_PICKER_ENTRIES: PickerEntry[] = [
 
 // ── Category tiles ────────────────────────────────────────────────────────────
 
-type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; color: string; iconBg: string; iconColor: string };
+type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; iconColor: string };
 
 const CATEGORY_TILES: CategoryTile[] = [
-  { label: 'Measurements', href: '/measurements', Icon: Ruler,        desc: 'Normal values + ranges',   color: 'from-sky-50 to-blue-100 border-blue-200',      iconBg: 'bg-blue-100',   iconColor: 'text-blue-600'   },
-  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides', color: 'from-emerald-50 to-green-100 border-green-200', iconBg: 'bg-green-100',  iconColor: 'text-green-600'  },
-  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,   desc: 'ABI, RI, stenosis, OB…',   color: 'from-violet-50 to-purple-100 border-purple-200',iconBg: 'bg-purple-100', iconColor: 'text-purple-600' },
-  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,   desc: 'US findings + red flags',  color: 'from-rose-50 to-red-100 border-red-200',        iconBg: 'bg-red-100',    iconColor: 'text-red-600'    },
+  { label: 'Measurements', href: '/measurements', Icon: Ruler,         desc: 'Normal values + ranges',   iconColor: 'text-blue-600'   },
+  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides', iconColor: 'text-green-600'  },
+  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,    desc: 'ABI, RI, stenosis, OB…',   iconColor: 'text-purple-600' },
+  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,    desc: 'US findings + red flags',  iconColor: 'text-red-600'    },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -358,9 +358,9 @@ export default function HomePage() {
             <button
               key={tile.href}
               onClick={() => router.push(tile.href)}
-              className={`bg-gradient-to-br ${tile.color} border rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm`}
+              className="bg-white rounded-2xl p-4 text-left active:scale-95 transition-all shadow-sm"
             >
-              <div className={`${tile.iconBg} w-10 h-10 rounded-xl flex items-center justify-center mb-3`}>
+              <div className="bg-slate-100 w-10 h-10 rounded-xl flex items-center justify-center mb-3">
                 <tile.Icon size={20} className={tile.iconColor} strokeWidth={2} />
               </div>
               <div className="font-bold text-slate-900 text-[14px] tracking-tight">{tile.label}</div>
