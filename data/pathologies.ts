@@ -687,6 +687,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'First-trimester pain and/or bleeding with positive beta-hCG and empty uterus on ultrasound. Risk factors: prior ectopic, PID/tubal damage, IUD, IVF, tubal surgery. Most common site: fallopian tube (ampullary). Discriminatory zone: hCG ~1,500–2,000 mIU/mL (IUP should be visible by TVUS above this level).',
     reportingTips: 'The combination of empty uterus + positive hCG + adnexal finding = ectopic until proven otherwise. State: "No intrauterine pregnancy identified. Adnexal ring sign present at [location]. Free fluid: [simple/complex/absent]." Do NOT diagnose "probable IUP" in first trimester without a clear IUP — risk missing ectopic.',
     tags: ['ectopic', 'ectopic pregnancy', 'tubal ectopic', 'adnexal ring', 'hemoperitoneum', 'ob', 'first trimester', 'pelvic pain', 'empty uterus', 'beta-hcg'],
+    images: [
+      { src: '/pathologies/ectopic_pregnancy_1.jpg', caption: 'Transvaginal scan of a tubal ectopic pregnancy (labeled G.E.U.)', credit: 'Wikimedia Commons — Public Domain, X. Compagnion' },
+      { src: '/pathologies/ectopic_pregnancy_2.png', caption: 'Adnexal ring sign — echogenic ring with anechoic center, separate from the ovary', credit: 'Wikimedia Commons — CC BY-SA 3.0, James Heilman, MD' },
+      { src: '/pathologies/ectopic_pregnancy_3.png', caption: 'Free fluid in Morison\'s pouch — sign of hemoperitoneum from a ruptured ectopic', credit: 'Wikimedia Commons — CC BY-SA 3.0, James Heilman, MD' },
+    ],
   },
   {
     id: 'ovarian-torsion',
@@ -739,6 +744,11 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common primary liver cancer. Almost always in cirrhotic liver (hepatitis B, C, alcohol, NASH). AFP may be elevated. Annual ultrasound surveillance recommended in cirrhotic patients. LI-RADS system standardizes reporting. Screening detects HCC at curative stage.',
     reportingTips: 'Use LI-RADS lexicon for any liver observation in at-risk patients (cirrhosis, chronic HBV). State: "New [X cm] hypoechoic hepatic nodule — LI-RADS [category]. Recommend multiphasic CT or MRI liver for further characterization." Do NOT diagnose HCC on ultrasound alone — CT/MRI with arterial washout pattern required.',
     tags: ['hcc', 'hepatocellular carcinoma', 'liver cancer', 'cirrhosis', 'li-rads', 'portal vein thrombus', 'liver', 'abdomen', 'hepatoma', 'surveillance'],
+    images: [
+      { src: '/pathologies/hepatocellular_carcinoma_1.jpg', caption: 'HCC — arterial hypervascularity within a hepatic nodule on color Doppler', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
+      { src: '/pathologies/hepatocellular_carcinoma_2.jpg', caption: 'HCC — contrast-enhanced ultrasound before and after transarterial embolization', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
+      { src: '/pathologies/hepatocellular_carcinoma_3.jpg', caption: 'Early HCC arising in a dysplastic nodule — hypoechoic lesion with internal vascularity', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
+    ],
   },
   {
     id: 'rcc',
