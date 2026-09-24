@@ -916,7 +916,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Oligomenorrhea/amenorrhea, hirsutism, acne, infertility. Elevated LH:FSH ratio, elevated androgens. Rotterdam criteria: 2 of 3 — oligo-anovulation, hyperandrogenism, polycystic ovary morphology. US alone cannot diagnose PCOS.',
     reportingTips: 'Report ovarian volume and follicle count per ovary. State: "Right ovary measures ___ cm³ with ___ follicles. Left ovary measures ___ cm³ with ___ follicles. Findings are consistent with/do not meet criteria for polycystic ovary morphology." Add: "Clinical and hormonal correlation required for PCOS diagnosis."',
     tags: ['pcos', 'polycystic ovary', 'follicles', 'ob', 'gynecology', 'infertility', 'amenorrhea'],
-    images: [],
+    images: [
+      { src: '/pathologies/pcos_1.png', caption: 'PCOS — automated 3D follicle count and volume measurement per ovary', credit: 'Wikimedia Commons — CC BY-SA 4.0, Stefano Di Michele et al.' },
+    ],
   },
   {
     id: 'toa',
@@ -965,6 +967,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'First-trimester bleeding, uterus large for dates, hyperemesis, pre-eclampsia before 20 weeks, markedly elevated hCG. Treatment: suction curettage + hCG monitoring for 6–12 months.',
     reportingTips: 'State uterine contents, presence/absence of embryo, hCG correlation, and bilateral ovarian appearance. "Heterogeneous uterine contents without identifiable fetus. Multiple anechoic cysts noted — findings concerning for gestational trophoblastic disease. Correlate with hCG."',
     tags: ['molar pregnancy', 'hydatidiform mole', 'gtd', 'snowstorm', 'hcg', 'ob', 'first trimester', 'trophoblastic'],
+    images: [
+      { src: '/pathologies/molar_pregnancy_1.jpg', caption: 'Complete hydatidiform mole — classic "snowstorm" appearance', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström' },
+      { src: '/pathologies/molar_pregnancy_2.jpg', caption: 'Molar pregnancy — heterogeneous vesicular uterine contents with calipers', credit: 'Wikimedia Commons — CC BY-SA 4.0, Mme Mim' },
+    ],
   },
   {
     id: 'placenta-abruption',
@@ -1016,6 +1022,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common cause of hypothyroidism in iodine-sufficient countries. Women 5× more common. Elevated TPO antibodies (anti-thyroid peroxidase). Thyroid function may be normal initially, then hypothyroid. Levothyroxine when symptomatic.',
     reportingTips: 'State: "Diffusely heterogeneous, hypoechoic thyroid parenchyma consistent with Hashimoto\'s thyroiditis pattern. No discrete nodule identified." If nodule present: apply TI-RADS with notation that background thyroiditis makes characterization more challenging.',
     tags: ['hashimoto', 'thyroiditis', 'hypothyroid', 'autoimmune', 'thyroid', 'heterogeneous', 'hypoechoic'],
+    images: [
+      { src: '/pathologies/hashimoto_thyroiditis_1.jpg', caption: 'Hashimoto\'s thyroiditis — heterogeneous thyroid parenchyma, transverse view', credit: 'Wikimedia Commons — CC BY-SA 3.0, Drahreg01' },
+      { src: '/pathologies/hashimoto_thyroiditis_2.jpg', caption: 'Hashimoto\'s thyroiditis — enlarged, heterogeneous gland in the goitrous phase', credit: 'Wikimedia Commons — Public Domain, Schomynv' },
+    ],
   },
   {
     id: 'graves-disease',
@@ -1342,6 +1352,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Neck/axilla/groin mass. Reactive: infection, recent vaccination, EBV, CMV. Malignant: metastatic carcinoma, lymphoma. Key features: shape (round = suspicious), hilum (absent = suspicious), vascularity pattern, size >1 cm short axis.',
     reportingTips: 'Measure short axis. Document hilum (present/absent), shape (oval/round), L:S ratio, cortical thickness, and Doppler vascularity pattern. "Round lymph node measuring ___ cm short axis with absent fatty hilum and peripheral vascularity — concerning for metastatic involvement. FNA recommended." vs "Oval lymph node with preserved echogenic hilum and hilar vascularity — reactive appearance."',
     tags: ['lymph node', 'lymphadenopathy', 'neck mass', 'metastasis', 'lymphoma', 'superficial', 'reactive', 'malignant', 'hilum'],
+    images: [
+      { src: '/pathologies/lymph_node_malignant_1.jpg', caption: 'Suspected malignant lymph node — grayscale (round, effaced hilum) with color Doppler vascularity pattern', credit: 'Wikimedia Commons — CC BY 4.0, Vandana Dialani, D F James, Priscilla Slanetz' },
+    ],
   },
   {
     id: 'soft-tissue-lipoma-vs-sarcoma',
@@ -1367,6 +1380,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Soft tissue mass. Lipomas: most common soft tissue tumor — benign, but ultrasound cannot reliably exclude liposarcoma if deep or >5 cm. Rule of thumb: superficial, <5 cm, compressible = likely benign. Any doubt → MRI.',
     reportingTips: 'Measure size (3D), assess depth (superficial/deep to fascia), echogenicity, vascularity, compressibility. Describe as: "Superficial well-defined echogenic compressible mass consistent with lipoma — benign features" OR "Deep subfascial heterogeneous mass with vascularity — MRI and surgical oncology referral recommended."',
     tags: ['lipoma', 'sarcoma', 'soft tissue', 'superficial', 'mass', 'liposarcoma', 'msk', 'subcutaneous'],
+    images: [
+      { src: '/pathologies/soft_tissue_lipoma_1.jpg', caption: 'Soft tissue lipoma — grayscale with sonoelastography overlay', credit: 'Wikimedia Commons — CC BY-SA 3.0, Clrodriguezramirez' },
+    ],
   },
   {
     id: 'epidermal-inclusion-cyst',
@@ -1440,6 +1456,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Palpable groin bulge, worse with standing/straining/lifting, may reduce when lying down. Indirect hernias are more common overall and in younger patients (patent processus vaginalis); direct hernias are more common in older men with weakened abdominal wall musculature.',
     reportingTips: 'Always image with Valsalva or standing if the supine resting study is negative but history is convincing — a normal resting exam does not exclude a hernia. State laterality relative to the inferior epigastric vessels (indirect vs. direct), measure the fascial defect, and explicitly document reducibility and Doppler flow within any contained bowel.',
     tags: ['hernia', 'inguinal hernia', 'groin hernia', 'direct hernia', 'indirect hernia', 'femoral hernia', 'incarcerated', 'strangulated', 'valsalva', 'groin', 'superficial'],
+    images: [
+      { src: '/pathologies/inguinal_hernia_1.jpg', caption: 'Inguinal hernia — size increases from 2.16 cm at rest to 2.95 cm with Valsalva', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström, M.D.' },
+      { src: '/pathologies/inguinal_hernia_2.jpg', caption: 'Inguinal hernia contents adjacent to the testicle, labeled', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström, M.D.' },
+    ],
   },
   {
     id: 'ventral-hernia',
