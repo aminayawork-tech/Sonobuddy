@@ -687,11 +687,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'First-trimester pain and/or bleeding with positive beta-hCG and empty uterus on ultrasound. Risk factors: prior ectopic, PID/tubal damage, IUD, IVF, tubal surgery. Most common site: fallopian tube (ampullary). Discriminatory zone: hCG ~1,500–2,000 mIU/mL (IUP should be visible by TVUS above this level).',
     reportingTips: 'The combination of empty uterus + positive hCG + adnexal finding = ectopic until proven otherwise. State: "No intrauterine pregnancy identified. Adnexal ring sign present at [location]. Free fluid: [simple/complex/absent]." Do NOT diagnose "probable IUP" in first trimester without a clear IUP — risk missing ectopic.',
     tags: ['ectopic', 'ectopic pregnancy', 'tubal ectopic', 'adnexal ring', 'hemoperitoneum', 'ob', 'first trimester', 'pelvic pain', 'empty uterus', 'beta-hcg'],
-    images: [
-      { src: '/pathologies/ectopic_pregnancy_1.jpg', caption: 'Transvaginal scan of a tubal ectopic pregnancy (labeled G.E.U.)', credit: 'Wikimedia Commons — Public Domain, X. Compagnion' },
-      { src: '/pathologies/ectopic_pregnancy_2.png', caption: 'Adnexal ring sign — echogenic ring with anechoic center, separate from the ovary', credit: 'Wikimedia Commons — CC BY-SA 3.0, James Heilman, MD' },
-      { src: '/pathologies/ectopic_pregnancy_3.png', caption: 'Free fluid in Morison\'s pouch — sign of hemoperitoneum from a ruptured ectopic', credit: 'Wikimedia Commons — CC BY-SA 3.0, James Heilman, MD' },
-    ],
+    images: [],
   },
   {
     id: 'ovarian-torsion',
@@ -744,11 +740,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common primary liver cancer. Almost always in cirrhotic liver (hepatitis B, C, alcohol, NASH). AFP may be elevated. Annual ultrasound surveillance recommended in cirrhotic patients. LI-RADS system standardizes reporting. Screening detects HCC at curative stage.',
     reportingTips: 'Use LI-RADS lexicon for any liver observation in at-risk patients (cirrhosis, chronic HBV). State: "New [X cm] hypoechoic hepatic nodule — LI-RADS [category]. Recommend multiphasic CT or MRI liver for further characterization." Do NOT diagnose HCC on ultrasound alone — CT/MRI with arterial washout pattern required.',
     tags: ['hcc', 'hepatocellular carcinoma', 'liver cancer', 'cirrhosis', 'li-rads', 'portal vein thrombus', 'liver', 'abdomen', 'hepatoma', 'surveillance'],
-    images: [
-      { src: '/pathologies/hepatocellular_carcinoma_1.jpg', caption: 'HCC — arterial hypervascularity within a hepatic nodule on color Doppler', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
-      { src: '/pathologies/hepatocellular_carcinoma_2.jpg', caption: 'HCC — contrast-enhanced ultrasound before and after transarterial embolization', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
-      { src: '/pathologies/hepatocellular_carcinoma_3.jpg', caption: 'Early HCC arising in a dysplastic nodule — hypoechoic lesion with internal vascularity', credit: 'Wikimedia Commons — CC BY 3.0, R. Badea and Simona Ioanitescu' },
-    ],
+    images: [],
   },
   {
     id: 'rcc',
@@ -774,11 +766,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Hematuria (most common presenting symptom), flank pain, palpable mass — "classic triad" present in only 10%. Most now incidentally found on CT/MRI for other indications. Risk factors: smoking, obesity, hypertension, von Hippel-Lindau syndrome. Ultrasound confirms mass; CT/MRI for staging.',
     reportingTips: 'Any solid renal mass requires CT or MRI for characterization and staging. State mass size (3D), location, vascularity, and renal vein/IVC assessment. Use Bosniak classification only for cystic masses. Recommend: "CT abdomen/pelvis with contrast for characterization and staging."',
     tags: ['rcc', 'renal cell carcinoma', 'kidney cancer', 'renal mass', 'kidney', 'abdomen', 'ivc thrombus', 'hematuria', 'bosniak'],
-    images: [
-      { src: '/pathologies/renal_cell_carcinoma_1.jpg', caption: 'RCC — solid renal mass with cystic and solid components', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
-      { src: '/pathologies/renal_cell_carcinoma_2.jpg', caption: 'RCC — contrast-enhanced ultrasound after successful thermal ablation', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
-      { src: '/pathologies/renal_cell_carcinoma_3.jpg', caption: 'RCC — cortical solid renal mass with caliper measurement', credit: 'Wikimedia Commons — CC BY 4.0, Kristoffer Lindskov Hansen, Michael Bachmann Nielsen and Caroline Ewertsen' },
-    ],
+    images: [],
   },
   {
     id: 'portal-hypertension',
@@ -916,9 +904,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Oligomenorrhea/amenorrhea, hirsutism, acne, infertility. Elevated LH:FSH ratio, elevated androgens. Rotterdam criteria: 2 of 3 — oligo-anovulation, hyperandrogenism, polycystic ovary morphology. US alone cannot diagnose PCOS.',
     reportingTips: 'Report ovarian volume and follicle count per ovary. State: "Right ovary measures ___ cm³ with ___ follicles. Left ovary measures ___ cm³ with ___ follicles. Findings are consistent with/do not meet criteria for polycystic ovary morphology." Add: "Clinical and hormonal correlation required for PCOS diagnosis."',
     tags: ['pcos', 'polycystic ovary', 'follicles', 'ob', 'gynecology', 'infertility', 'amenorrhea'],
-    images: [
-      { src: '/pathologies/pcos_1.png', caption: 'PCOS — automated 3D follicle count and volume measurement per ovary', credit: 'Wikimedia Commons — CC BY-SA 4.0, Stefano Di Michele et al.' },
-    ],
+    images: [],
   },
   {
     id: 'toa',
@@ -967,10 +953,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'First-trimester bleeding, uterus large for dates, hyperemesis, pre-eclampsia before 20 weeks, markedly elevated hCG. Treatment: suction curettage + hCG monitoring for 6–12 months.',
     reportingTips: 'State uterine contents, presence/absence of embryo, hCG correlation, and bilateral ovarian appearance. "Heterogeneous uterine contents without identifiable fetus. Multiple anechoic cysts noted — findings concerning for gestational trophoblastic disease. Correlate with hCG."',
     tags: ['molar pregnancy', 'hydatidiform mole', 'gtd', 'snowstorm', 'hcg', 'ob', 'first trimester', 'trophoblastic'],
-    images: [
-      { src: '/pathologies/molar_pregnancy_1.jpg', caption: 'Complete hydatidiform mole — classic "snowstorm" appearance', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström' },
-      { src: '/pathologies/molar_pregnancy_2.jpg', caption: 'Molar pregnancy — heterogeneous vesicular uterine contents with calipers', credit: 'Wikimedia Commons — CC BY-SA 4.0, Mme Mim' },
-    ],
+    images: [],
   },
   {
     id: 'placenta-abruption',
@@ -1022,10 +1005,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Most common cause of hypothyroidism in iodine-sufficient countries. Women 5× more common. Elevated TPO antibodies (anti-thyroid peroxidase). Thyroid function may be normal initially, then hypothyroid. Levothyroxine when symptomatic.',
     reportingTips: 'State: "Diffusely heterogeneous, hypoechoic thyroid parenchyma consistent with Hashimoto\'s thyroiditis pattern. No discrete nodule identified." If nodule present: apply TI-RADS with notation that background thyroiditis makes characterization more challenging.',
     tags: ['hashimoto', 'thyroiditis', 'hypothyroid', 'autoimmune', 'thyroid', 'heterogeneous', 'hypoechoic'],
-    images: [
-      { src: '/pathologies/hashimoto_thyroiditis_1.jpg', caption: 'Hashimoto\'s thyroiditis — heterogeneous thyroid parenchyma, transverse view', credit: 'Wikimedia Commons — CC BY-SA 3.0, Drahreg01' },
-      { src: '/pathologies/hashimoto_thyroiditis_2.jpg', caption: 'Hashimoto\'s thyroiditis — enlarged, heterogeneous gland in the goitrous phase', credit: 'Wikimedia Commons — Public Domain, Schomynv' },
-    ],
+    images: [],
   },
   {
     id: 'graves-disease',
@@ -1219,9 +1199,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Posterior heel/calf pain, stiffness (worse in morning), pain with activity. Thompson test (squeeze calf — absent plantarflexion = complete rupture). Peak in 30–50 year-old athletes. Non-insertional tendinopathy (2–6 cm above insertion) vs insertional (at bone attachment).',
     reportingTips: 'Measure tendon AP diameter, document fibrillar pattern, focal vs diffuse changes, and neovascularity. Dynamic assessment: passively dorsiflex foot and observe tendon fibers — complete rupture confirmed by persistent gap. Measure gap distance if present.',
     tags: ['achilles', 'tendinopathy', 'tendon', 'msk', 'heel pain', 'rupture', 'insertional', 'plantar'],
-    images: [
-      { src: '/pathologies/achilles_tendinopathy_1.jpg', caption: 'Achilles tendon rupture — longitudinal ultrasound alongside correlating X-ray', credit: 'Wikimedia Commons — CC BY-SA 3.0, Hellerhoff' },
-    ],
+    images: [],
   },
   {
     id: 'plantar-fasciitis',
@@ -1245,9 +1223,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Inferior heel pain worst with first steps in morning ("post-static dyskinesia") or after prolonged standing. Most common cause of heel pain. Risk factors: obesity, prolonged standing, running, pes planus. 90% resolve with conservative treatment.',
     reportingTips: 'Measure plantar fascia thickness at calcaneal origin (longitudinal view). Document Doppler vascularity and any calcaneal spur. State: "Plantar fascia at calcaneal origin measures ___ mm (normal <4 mm), with [hypoechoic/normal] echotexture consistent with [fasciitis/normal]."',
     tags: ['plantar fasciitis', 'heel pain', 'plantar fascia', 'msk', 'calcaneus', 'fascia', 'tendinopathy'],
-    images: [
-      { src: '/pathologies/plantar_fasciitis_1.png', caption: 'Plantar fascia thickness measurement at the calcaneal origin', credit: 'Wikimedia Commons — CC BY-SA 4.0, Mme Mim' },
-    ],
+    images: [],
   },
   {
     id: 'carpal-tunnel-syndrome',
@@ -1352,9 +1328,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Neck/axilla/groin mass. Reactive: infection, recent vaccination, EBV, CMV. Malignant: metastatic carcinoma, lymphoma. Key features: shape (round = suspicious), hilum (absent = suspicious), vascularity pattern, size >1 cm short axis.',
     reportingTips: 'Measure short axis. Document hilum (present/absent), shape (oval/round), L:S ratio, cortical thickness, and Doppler vascularity pattern. "Round lymph node measuring ___ cm short axis with absent fatty hilum and peripheral vascularity — concerning for metastatic involvement. FNA recommended." vs "Oval lymph node with preserved echogenic hilum and hilar vascularity — reactive appearance."',
     tags: ['lymph node', 'lymphadenopathy', 'neck mass', 'metastasis', 'lymphoma', 'superficial', 'reactive', 'malignant', 'hilum'],
-    images: [
-      { src: '/pathologies/lymph_node_malignant_1.jpg', caption: 'Suspected malignant lymph node — grayscale (round, effaced hilum) with color Doppler vascularity pattern', credit: 'Wikimedia Commons — CC BY 4.0, Vandana Dialani, D F James, Priscilla Slanetz' },
-    ],
+    images: [],
   },
   {
     id: 'soft-tissue-lipoma-vs-sarcoma',
@@ -1380,9 +1354,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Soft tissue mass. Lipomas: most common soft tissue tumor — benign, but ultrasound cannot reliably exclude liposarcoma if deep or >5 cm. Rule of thumb: superficial, <5 cm, compressible = likely benign. Any doubt → MRI.',
     reportingTips: 'Measure size (3D), assess depth (superficial/deep to fascia), echogenicity, vascularity, compressibility. Describe as: "Superficial well-defined echogenic compressible mass consistent with lipoma — benign features" OR "Deep subfascial heterogeneous mass with vascularity — MRI and surgical oncology referral recommended."',
     tags: ['lipoma', 'sarcoma', 'soft tissue', 'superficial', 'mass', 'liposarcoma', 'msk', 'subcutaneous'],
-    images: [
-      { src: '/pathologies/soft_tissue_lipoma_1.jpg', caption: 'Soft tissue lipoma — grayscale with sonoelastography overlay', credit: 'Wikimedia Commons — CC BY-SA 3.0, Clrodriguezramirez' },
-    ],
+    images: [],
   },
   {
     id: 'epidermal-inclusion-cyst',
@@ -1456,10 +1428,7 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Palpable groin bulge, worse with standing/straining/lifting, may reduce when lying down. Indirect hernias are more common overall and in younger patients (patent processus vaginalis); direct hernias are more common in older men with weakened abdominal wall musculature.',
     reportingTips: 'Always image with Valsalva or standing if the supine resting study is negative but history is convincing — a normal resting exam does not exclude a hernia. State laterality relative to the inferior epigastric vessels (indirect vs. direct), measure the fascial defect, and explicitly document reducibility and Doppler flow within any contained bowel.',
     tags: ['hernia', 'inguinal hernia', 'groin hernia', 'direct hernia', 'indirect hernia', 'femoral hernia', 'incarcerated', 'strangulated', 'valsalva', 'groin', 'superficial'],
-    images: [
-      { src: '/pathologies/inguinal_hernia_1.jpg', caption: 'Inguinal hernia — size increases from 2.16 cm at rest to 2.95 cm with Valsalva', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström, M.D.' },
-      { src: '/pathologies/inguinal_hernia_2.jpg', caption: 'Inguinal hernia contents adjacent to the testicle, labeled', credit: 'Wikimedia Commons — Public Domain, Mikael Häggström, M.D.' },
-    ],
+    images: [],
   },
   {
     id: 'ventral-hernia',
