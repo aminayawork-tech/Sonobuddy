@@ -1,11 +1,14 @@
 import SwiftUI
 import UserNotifications
+import WebKit
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        Self.purgeStaleWebViewCacheOnce()
+
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
             guard granted else { return }
             DispatchQueue.main.async {
@@ -13,6 +16,24 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
         return true
+    }
+
+    /// Older builds cached HTTP responses for the app's custom URL schemes
+    /// before those responses declared `Cache-Control: no-store`, including
+    /// 404s for pathology images that didn't exist yet at the time. Because
+    /// WKWebView's cache lives in the app's persistent container, that stale
+    /// 404 survives a normal App Store/TestFlight update and keeps hiding
+    /// images that are now bundled — only a full delete+reinstall would clear
+    /// it otherwise. Run once per install to purge just the HTTP cache
+    /// layers; localStorage (onboarding state, quick-access picks, the
+    /// share-unlock flag) is untouched.
+    private static func purgeStaleWebViewCacheOnce() {
+        let key = "purgedStaleWebViewCache_v1"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        let types: Set<String> = [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]
+        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {
+            UserDefaults.standard.set(true, forKey: key)
+        }
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
