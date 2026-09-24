@@ -32,7 +32,12 @@ final class AppStoreShareSource: NSObject, UIActivityItemSource {
         metadata.url = url
         metadata.originalURL = url
         if let icon = UIImage(named: "ShareIcon") {
+            // iconProvider alone renders small with heavy system padding, like a
+            // home-screen icon badge. imageProvider gets treated as a full preview
+            // photo instead and fills the card edge-to-edge — set both so the
+            // share sheet always has something to show full-bleed.
             metadata.iconProvider = NSItemProvider(object: icon)
+            metadata.imageProvider = NSItemProvider(object: icon)
         }
         return metadata
     }
