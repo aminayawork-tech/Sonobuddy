@@ -52,7 +52,6 @@ struct WebView: UIViewRepresentable {
         config.allowsInlineMediaPlayback = true
 
         config.setURLSchemeHandler(WebAppSchemeHandler(), forURLScheme: "sono-web")
-        config.setURLSchemeHandler(ImageSchemeHandler(), forURLScheme: "sono")
 
         // Inject premium flag before the page parses any JS so usePremium() reads it synchronously
         let isPremium = purchaseManager.isPremium
@@ -62,14 +61,6 @@ struct WebView: UIViewRepresentable {
             forMainFrameOnly: true
         )
         config.userContentController.addUserScript(premiumScript)
-
-        // Rewrite /pathologies/* image src to sono:// for offline bundle serving
-        let rewriteScript = WKUserScript(
-            source: imageRewriteJS,
-            injectionTime: .atDocumentStart,
-            forMainFrameOnly: false
-        )
-        config.userContentController.addUserScript(rewriteScript)
 
         // Register the native message handler (purchase / restore actions from JS)
         config.userContentController.add(context.coordinator, name: "sonobuddy")
@@ -104,29 +95,6 @@ struct WebView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
-
-    private let imageRewriteJS = """
-    (function () {
-      function rewrite(img) {
-        var src = img.getAttribute('src');
-        if (src && src.indexOf('/pathologies/') === 0) {
-          var file = src.slice('/pathologies/'.length);
-          img.setAttribute('src', 'sono://pathologies/' + encodeURIComponent(file));
-        }
-      }
-      function rewriteAll() { document.querySelectorAll('img').forEach(rewrite); }
-      new MutationObserver(function (mutations) {
-        mutations.forEach(function (m) {
-          m.addedNodes.forEach(function (node) {
-            if (node.nodeName === 'IMG') { rewrite(node); }
-            if (node.querySelectorAll) { node.querySelectorAll('img').forEach(rewrite); }
-          });
-        });
-      }).observe(document.documentElement, { childList: true, subtree: true });
-      if (document.readyState !== 'loading') { rewriteAll(); }
-      else { document.addEventListener('DOMContentLoaded', rewriteAll); }
-    })();
-    """
 
     class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         var didNotifyPremium = false
