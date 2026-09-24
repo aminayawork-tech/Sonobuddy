@@ -14,7 +14,7 @@ export const FREE_MEASUREMENT_IDS = new Set([
   'lymph-node-size',   // superficial
 ]);
 export const FREE_PROTOCOL_IDS = new Set([
-  'carotid-duplex',    // vascular
+  'dvt-lower',         // vascular — has a real reference image, unlike carotid-duplex
   'ruo',              // abdomen
   'ob-first-trimester', // ob
   // thyroid, cardiac, msk each have only 1 protocol — keep fully gated
