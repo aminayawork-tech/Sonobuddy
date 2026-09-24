@@ -26,13 +26,16 @@ class WebAppSchemeHandler: NSObject, WKURLSchemeHandler {
         let fileURL = resolveFileURL(for: requestURL)
 
         guard let data = try? Data(contentsOf: fileURL) else {
-            // Return a minimal 404 instead of crashing
+            // Return a minimal 404 instead of crashing. Explicitly uncacheable —
+            // otherwise WKWebView's disk cache remembers "missing" for this path
+            // and keeps serving that 404 forever, even after a future app update
+            // adds the file the first miss was for.
             let notFound = Data("Not found".utf8)
             let response = HTTPURLResponse(
                 url: requestURL,
                 statusCode: 404,
                 httpVersion: "HTTP/1.1",
-                headerFields: ["Content-Type": "text/plain"]
+                headerFields: ["Content-Type": "text/plain", "Cache-Control": "no-store"]
             )!
             urlSchemeTask.didReceive(response)
             urlSchemeTask.didReceive(notFound)
@@ -50,6 +53,10 @@ class WebAppSchemeHandler: NSObject, WKURLSchemeHandler {
                 "Content-Length": "\(data.count)",
                 // Allow the web app's JS to read from the same scheme origin
                 "Access-Control-Allow-Origin": "*",
+                // Every install gets the bundle fresh; nothing here needs a
+                // browser-level disk cache, and caching hides bundle updates
+                // (e.g. yesterday's 404 for a since-added image would stick).
+                "Cache-Control": "no-store",
             ]
         )!
         urlSchemeTask.didReceive(response)
