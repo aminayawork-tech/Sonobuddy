@@ -11,6 +11,7 @@ on:
       - 'app/**'
       - 'components/**'
       - 'data/**'
+      - 'hooks/**'
       - 'lib/**'
       - 'public/**'
       - 'content/**'
