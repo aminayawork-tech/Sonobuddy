@@ -1,22 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
-import { parseLocalDate } from '@/lib/date';
-import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import AppStoreBadge from '@/components/AppStoreBadge';
+import BlogListClient from '@/components/BlogListClient';
 
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Sonography tips, protocol guides, clinical reference articles, and updates from the SonoBuddy team.',
 };
-
-function formatDate(dateStr: string) {
-  return parseLocalDate(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
 
 export default function BlogPage() {
   const posts = getAllPosts();
@@ -47,48 +38,7 @@ export default function BlogPage() {
           </div>
 
           {/* Posts */}
-          {posts.length === 0 ? (
-            <p className="text-gray-400">No posts yet — check back soon.</p>
-          ) : (
-            <div className="space-y-6">
-              {posts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="block bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-sky-200 transition-all group"
-                >
-                  <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
-                    <span className="flex items-center gap-1">
-                      <Calendar size={12} />
-                      {formatDate(post.date)}
-                    </span>
-                    <span>·</span>
-                    <span>{post.author}</span>
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-sky-600 transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex items-center gap-1 bg-sky-50 text-sky-600 text-xs font-medium px-2.5 py-1 rounded-full"
-                        >
-                          <Tag size={10} />
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-sky-500 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Read <ArrowRight size={14} />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+          <BlogListClient posts={posts} />
         </div>
       </main>
 
