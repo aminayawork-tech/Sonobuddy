@@ -717,6 +717,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Acute severe pelvic pain, often with nausea/vomiting. Intermittent torsion can cause episodic pain that spontaneously resolves. Common in reproductive age (peak 20–30s) but can occur at any age. Risk factors: ovarian cyst or mass >5 cm (most common predisposing factor), hyperstimulation syndrome, pregnancy.',
     reportingTips: 'Normal Doppler does NOT exclude torsion — clinical suspicion + enlarged ovary = emergent gyn consult. State: "Enlarged right/left ovary measuring [X cm]. Intraovarian blood flow [absent/decreased/present]. Clinical concern for torsion — urgent gynecologic evaluation recommended."',
     tags: ['ovarian torsion', 'torsion', 'adnexal', 'ovary', 'whirlpool sign', 'absent flow', 'pelvic pain', 'ob', 'emergency'],
+    images: [
+      { src: '/pathologies/ovarian_torsion_whirlpool_1.png', caption: 'Color Doppler showing a tangled, twisted vascular pedicle — the "whirlpool sign" of ovarian torsion', credit: 'Wikimedia Commons — CC BY-SA 3.0, Nevit Dilmen' },
+      { src: '/pathologies/ovarian_torsion_doppler_2.png', caption: 'Enlarged, cystic ovary with peripheral flow on color Doppler in torsion', credit: 'Wikimedia Commons — CC BY-SA 3.0, Nevit Dilmen' },
+    ],
   },
 
   // ── ABDOMINAL PATHOLOGIES ─────────────────────────────────────────────────
@@ -995,7 +999,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Painful vaginal bleeding in 2nd/3rd trimester. Uterine tenderness, contractions, fetal distress. Risk factors: trauma, hypertension, cocaine use, prior abruption, smoking. Mortality: fetal (20–30%), maternal (low but significant).',
     reportingTips: 'Examine retroplacental space in all 3rd trimester exams with bleeding. State: "Retroplacental space is [clear/[X] cm hematoma present]." If hematoma present: measure, describe echogenicity (acute vs chronic). Urgent OB notification for any hematoma.',
     tags: ['placental abruption', 'abruption', 'retroplacental hematoma', 'ob', 'third trimester', 'bleeding', 'emergency'],
-    images: [],
+    images: [
+      { src: '/pathologies/placental_abruption_1.jpg', caption: 'Retroplacental hematoma — hypoechoic collection of detached blood behind the placenta', credit: 'Wikimedia Commons — CC BY-SA 3.0, Nevit Dilmen' },
+    ],
   },
 
   // ── THYROID PATHOLOGIES ───────────────────────────────────────────────────────
