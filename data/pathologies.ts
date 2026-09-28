@@ -1049,6 +1049,10 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Hyperthyroidism (tremor, palpitations, weight loss, heat intolerance, diarrhea). TSH suppressed, elevated free T4/T3. TSI (thyroid-stimulating immunoglobulin) positive. Treatment: methimazole, RAI, or thyroidectomy.',
     reportingTips: 'State thyroid size, echotexture, and Doppler vascularity. "Diffusely enlarged thyroid with markedly increased vascularity consistent with Graves\' disease pattern. Clinical correlation with thyroid function tests recommended."',
     tags: ['graves', 'hyperthyroidism', 'thyroid inferno', 'goiter', 'thyroid', 'autoimmune', 'vascularity'],
+    images: [
+      { src: '/pathologies/graves_disease_thyroid_inferno.jpg', caption: 'Grayscale (top) shows enlarged, heterogeneous hypoechoic thyroid; color Doppler (bottom) shows markedly increased vascularity — the "thyroid inferno" pattern', credit: 'Wikimedia Commons — CC BY-SA 4.0, Hellerhoff' },
+      { src: '/pathologies/graves_disease_hypervascularity.jpg', caption: 'Grayscale (left) vs. color Doppler (right) of an enlarged, hypoechoic, strongly hyperperfused thyroid in Graves\' disease', credit: 'Wikimedia Commons — CC BY-SA 4.0, Hellerhoff' },
+    ],
   },
   {
     id: 'parathyroid-adenoma',
