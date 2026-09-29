@@ -1442,6 +1442,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Erythema, warmth, fluctuance, fever. US can distinguish abscess (requires drainage) from cellulitis (antibiotics only) — this is the primary clinical utility. Can also guide I&D needle placement.',
     reportingTips: 'State: "Complex fluid collection measuring ___ × ___ × ___ cm with [internal debris/septations]. Surrounding fat stranding present. Findings consistent with abscess — I&D vs US-guided drainage recommended." If no discrete collection: "Diffuse soft tissue edema with cobblestone appearance consistent with cellulitis — no drainable collection identified."',
     tags: ['abscess', 'soft tissue infection', 'cellulitis', 'superficial', 'skin', 'ssti', 'drainage', 'fluid collection'],
+    images: [
+      { src: '/pathologies/abscess_soft_tissue_1.jpg', caption: 'Longitudinal view of a quadriceps intramuscular loculated abscess (pyomyositis)', credit: 'Wikimedia Commons — CC BY 2.0, Tichter A, Riley D' },
+    ],
   },
   {
     id: 'inguinal-hernia',
@@ -1493,6 +1496,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Umbilical hernias are common in adults (higher incidence with obesity, ascites, pregnancy) and in infants (usually resolve spontaneously). Incisional hernias occur at prior surgical sites, more common with midline incisions, wound infection history, or obesity. Epigastric hernias are frequently small and easily overlooked on physical exam.',
     reportingTips: 'Measure the fascial defect width — this is the key number surgeons use for repair planning. Distinguish clearly from diastasis recti (measure inter-recti distance, note absence of a discrete defect) since diastasis rarely requires surgical repair. For incisional hernias, survey the entire scar for multiple defects, not just the site of maximal bulge.',
     tags: ['hernia', 'umbilical hernia', 'ventral hernia', 'incisional hernia', 'epigastric hernia', 'paraumbilical hernia', 'diastasis recti', 'mesh', 'abdominal wall', 'superficial'],
+    images: [
+      { src: '/pathologies/ventral_hernia_umbilical_1.jpg', caption: 'Incarcerated small bowel loop in an umbilical hernia, with ascites from liver cirrhosis (ultrasound panels, top/bottom-left; correlating CT, bottom-right)', credit: 'Wikimedia Commons — CC BY-SA 4.0, Hellerhoff' },
+    ],
   },
 ];
 
