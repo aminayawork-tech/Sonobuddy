@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
 
     if (allDays.length === 0) {
       return NextResponse.json(
-        { surface, days: [], totals: { views: 0, taps: 0, sessions: 0 }, topPages: [], topArticles: [], months: [] },
+        { surface, days: [], totals: { views: 0, taps: 0, sessions: 0 }, topPages: [], topArticles: [], named: [], months: [] },
         { headers: { 'Cache-Control': 'no-store' } }
       );
     }
@@ -80,11 +80,13 @@ export async function GET(req: NextRequest) {
     // One command per day per counter type, all in a single round trip.
     const routesCmds = allDays.map((d) => ['HGETALL', `routes:${d}:${surface}`]);
     const viewsCmds = allDays.map((d) => ['HGETALL', `views:${d}:${surface}`]);
+    const namedCmds = allDays.map((d) => ['HGETALL', `named:${d}:${surface}`]);
     const sessionKeysCmds = allDays.map((d) => ['SCARD', `sessions:${d}:${surface}`]);
 
-    const [routesResults, viewsResults, sessionCounts] = await Promise.all([
+    const [routesResults, viewsResults, namedResults, sessionCounts] = await Promise.all([
       redisPipeline(cfg, routesCmds),
       redisPipeline(cfg, viewsCmds),
+      redisPipeline(cfg, namedCmds),
       redisPipeline(cfg, sessionKeysCmds),
     ]);
 
@@ -93,18 +95,23 @@ export async function GET(req: NextRequest) {
       day,
       routes: toPairs(routesResults[i]),
       views: toPairs(viewsResults[i]),
+      named: toPairs(namedResults[i]),
       sessions: Number(sessionCounts[i]) || 0,
     }));
 
-    // All-time totals and top lists.
+    // All-time totals and top lists. Named events (paywall/onboarding/share
+    // steps) are summed the same way rather than top-N'd — the dashboard
+    // needs every counter by exact name to rebuild funnels, not a ranking.
     const allTaps = new Map<string, number>();
     const allViews = new Map<string, number>();
+    const allNamed = new Map<string, number>();
     let totalTaps = 0;
     let totalViews = 0;
     let totalSessions = 0;
     for (const d of perDay) {
       mergeCounts(allTaps, d.routes);
       mergeCounts(allViews, d.views);
+      mergeCounts(allNamed, d.named);
       totalTaps += d.routes.reduce((s, p) => s + p.count, 0);
       totalViews += d.views.reduce((s, p) => s + p.count, 0);
       totalSessions += d.sessions;
@@ -161,6 +168,7 @@ export async function GET(req: NextRequest) {
         totals: { views: totalViews, taps: totalTaps, sessions: totalSessions },
         topPages: topN(allTaps, 15),
         topArticles: topN(articleViews, 15),
+        named: Array.from(allNamed, ([name, count]) => ({ name, count })),
         months,
         monthOverMonth,
       },
