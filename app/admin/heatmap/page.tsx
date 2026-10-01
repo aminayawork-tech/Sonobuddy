@@ -29,6 +29,7 @@ interface Insights {
   totals: { views: number; taps: number; sessions: number };
   topPages: Pair[];
   topArticles: Pair[];
+  named: Pair[];
   months: MonthTotals[];
   monthOverMonth: {
     current: MonthTotals;
@@ -285,6 +286,48 @@ export default function HeatmapAdminPage() {
     ];
   })();
 
+  // Same three funnels as above, but summed across every day on record
+  // instead of just the selected one — "how many people total declined the
+  // offer" needs all-time counts, not one day's.
+  type FunnelRow = { label: string; count: number; pct: number | null };
+  function buildFunnel(
+    named: Pair[], baseEvent: string, baseLabel: string,
+    rows: [label: string, event: string][],
+  ): FunnelRow[] {
+    const get = (n: string) => named.find((x) => x.name === n)?.count ?? 0;
+    const base = get(baseEvent);
+    if (base === 0) return [];
+    return [
+      { label: baseLabel, count: base, pct: null },
+      ...rows.map(([label, event]) => {
+        const count = get(event);
+        return { label, count, pct: Math.round((count / base) * 100) };
+      }),
+    ];
+  }
+  const allTimeFunnel = insights ? buildFunnel(insights.named, 'paywall:shown', 'Saw paywall', [
+    ['Tapped purchase', 'paywall:purchase'],
+    ['  → completed', 'paywall:completed:purchase'],
+    ['Tapped restore', 'paywall:restore'],
+    ['  → completed', 'paywall:completed:restore'],
+    ['Dismissed', 'paywall:dismissed'],
+  ]) : [];
+  const allTimeShareFunnel = insights ? buildFunnel(insights.named, 'paywall:discount-offer-shown', 'Offer shown', [
+    ['Declined to share', 'paywall:offer-declined'],
+    ['Tapped share', 'paywall:share-tapped'],
+    ['Share completed', 'paywall:share-completed'],
+    ['Tapped $6.99 unlock', 'paywall:discount-purchase'],
+    ['  → completed', 'paywall:completed:purchaseDiscount'],
+    ['Declined at $6.99', 'paywall:discount-declined'],
+  ]) : [];
+  const allTimeOnboardingFunnel = insights ? buildFunnel(insights.named, 'onboarding:screen-1', 'Screen 1', [
+    ['Screen 2', 'onboarding:screen-2'],
+    ['Screen 3', 'onboarding:screen-3'],
+    ['Screen 4', 'onboarding:screen-4'],
+    ['Completed', 'onboarding:completed'],
+    ['Skipped', 'onboarding:skipped'],
+  ]) : [];
+
   // Merge views and taps into one list so a screen that was opened but never
   // touched still appears — that gap is exactly what taps alone hide.
   const screenRows = (() => {
@@ -450,6 +493,82 @@ export default function HeatmapAdminPage() {
                         >
                           <span className="font-mono text-xs truncate">{a.name}</span>
                           <span className="tabular-nums text-slate-300 shrink-0">{a.count}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Paywall funnel, all time */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Paywall funnel · all time
+                  </h3>
+                  {allTimeFunnel.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No paywall activity recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {allTimeFunnel.map((f) => (
+                        <li
+                          key={f.label}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span>{f.label}</span>
+                          <span className="tabular-nums text-slate-300">
+                            {f.count}
+                            {f.pct !== null && <span className="text-slate-500 text-xs"> · {f.pct}%</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Share-to-save funnel, all time — answers "how many people
+                    total decline the discount offer." */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Share to save $3 · all time
+                  </h3>
+                  {allTimeShareFunnel.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No share offers recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {allTimeShareFunnel.map((f) => (
+                        <li
+                          key={f.label}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span>{f.label}</span>
+                          <span className="tabular-nums text-slate-300">
+                            {f.count}
+                            {f.pct !== null && <span className="text-slate-500 text-xs"> · {f.pct}%</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Onboarding funnel, all time */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Onboarding · all time
+                  </h3>
+                  {allTimeOnboardingFunnel.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No onboarding activity recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {allTimeOnboardingFunnel.map((f) => (
+                        <li
+                          key={f.label}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span>{f.label}</span>
+                          <span className="tabular-nums text-slate-300">
+                            {f.count}
+                            {f.pct !== null && <span className="text-slate-500 text-xs"> · {f.pct}%</span>}
+                          </span>
                         </li>
                       ))}
                     </ul>
