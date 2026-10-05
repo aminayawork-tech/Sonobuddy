@@ -149,8 +149,8 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
   const checks = [
     'All measurements & normal value tables',
     'Full exam protocols with key images',
-    'Calculators — zero connectivity needed',
-    'No login required — open and go',
+    'Calculators that need zero connectivity',
+    'No login required, just open and go',
   ];
 
   return (
@@ -211,7 +211,7 @@ function Screen2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void })
 /* ── Screen 3 — Everything in One Place ───────────────────────────────────── */
 function Screen3({ onNext }: { onNext: () => void }) {
   const features = [
-    { Icon: Ruler,         title: 'Measurements',  desc: '20+ normal value tables — vascular, OB, thyroid, cardiac' },
+    { Icon: Ruler,         title: 'Measurements',  desc: '20+ normal value tables covering vascular, OB, thyroid, cardiac' },
     { Icon: ClipboardList, title: 'Protocols',     desc: 'Step-by-step exam guides with key images & checklists' },
     { Icon: Calculator,    title: 'Calculators',   desc: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
     { Icon: Microscope,    title: 'Pathologies',   desc: '50+ conditions with red flags & reporting tips' },
@@ -264,18 +264,18 @@ function Screen4({ onNext }: { onNext: () => void }) {
 
       <div className="flex-1 space-y-4">
         <p className="text-[15px] text-slate-600 leading-relaxed">
-          When I started scanning, nobody expected me to carry two hundred normal values and a dozen exam protocols in my head — but I still needed them, usually mid-scan, with a patient on the table and no time to dig.
+          When I started scanning, nobody expected me to carry two hundred normal values and a dozen exam protocols in my head. I still needed them, though, usually mid-scan, with a patient on the table and no time to dig.
         </p>
         <p className="text-[15px] text-slate-600 leading-relaxed">
-          The references that existed were scattered everywhere: a textbook here, a forum thread there, a PDF a classmate sent you two semesters ago — each one slightly different from the last, none of it built for the moment you actually needed it.
+          The references that existed were scattered everywhere: a textbook here, a forum thread there, a PDF a classmate sent you two semesters ago. Each one was slightly different from the last, and none of it was built for the moment you actually needed it.
         </p>
         <p className="text-[15px] text-slate-600 leading-relaxed">
-          So I built the tool I wished existed back then — the real numbers and the real steps, in your pocket, right when you need them.
+          So I built the tool I wished existed back then: the real numbers and the real steps, in your pocket, right when you need them.
         </p>
       </div>
 
       <p className="text-[14px] font-semibold text-slate-400 mt-6 mb-7">
-        — Sonographer &amp; founder of SonoBuddy
+        Sonographer &amp; founder of SonoBuddy
       </p>
 
       <CtaButton label="Start exploring" onClick={onNext} />
