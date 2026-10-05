@@ -250,74 +250,35 @@ function Screen3({ onNext }: { onNext: () => void }) {
   );
 }
 
-/* ── Screen 4 — Configure Specialty ──────────────────────────────────────── */
-const SPECIALTIES = [
-  { id: 'ob-gyn',   label: 'OB/Gyn' },
-  { id: 'cardiac',  label: 'Cardiac' },
-  { id: 'vascular', label: 'Vascular' },
-  { id: 'thyroid',  label: 'Thyroid' },
-  { id: 'abdomen',  label: 'Abdomen' },
-  { id: 'msk',      label: 'MSK' },
-];
-
+/* ── Screen 4 — From the Founder ───────────────────────────────────────────── */
 function Screen4({ onNext }: { onNext: () => void }) {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-
-  function toggle(id: string) {
-    setSelected(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
-
-  function handleDone() {
-    if (selected.size > 0) {
-      try {
-        localStorage.setItem('sonobuddy_specialties', JSON.stringify(Array.from(selected)));
-      } catch {}
-    }
-    onNext();
-  }
-
   return (
     <div className="flex-1 flex flex-col px-6 pb-[calc(env(safe-area-inset-bottom)+28px)] overflow-auto">
       <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.14em] mb-5">
-        Configure
+        From the founder
       </p>
 
-      <h1 className="text-[40px] font-black leading-[1.02] tracking-tight text-slate-900 mb-2">
-        What do you<br /><span className="text-sky-500">scan</span> most?
+      <h1 className="text-[40px] font-black leading-[1.02] tracking-tight text-slate-900 mb-6">
+        I wish I&apos;d had<br />this on <span className="text-sky-500">day one.</span>
       </h1>
-      <p className="text-[14px] text-slate-400 leading-relaxed mb-7">
-        Select all that apply.
+
+      <div className="flex-1 space-y-4">
+        <p className="text-[15px] text-slate-600 leading-relaxed">
+          When I started scanning, nobody expected me to carry two hundred normal values and a dozen exam protocols in my head — but I still needed them, usually mid-scan, with a patient on the table and no time to dig.
+        </p>
+        <p className="text-[15px] text-slate-600 leading-relaxed">
+          The references that existed were scattered everywhere: a textbook here, a forum thread there, a PDF a classmate sent you two semesters ago — each one slightly different from the last, none of it built for the moment you actually needed it.
+        </p>
+        <p className="text-[15px] text-slate-600 leading-relaxed">
+          So I built the tool I wished existed back then — the real numbers and the real steps, in your pocket, right when you need them.
+        </p>
+      </div>
+
+      <p className="text-[14px] font-semibold text-slate-400 mt-6 mb-7">
+        — Anthony, sonographer &amp; founder of SonoBuddy
       </p>
 
-      {/* 2×3 specialty grid */}
-      <div className="grid grid-cols-2 gap-3 flex-1">
-        {SPECIALTIES.map(({ id, label }) => {
-          const active = selected.has(id);
-          return (
-            <button
-              key={id}
-              onClick={() => toggle(id)}
-              className={`rounded-2xl py-6 flex items-center justify-center font-bold text-[15px] transition-all active:scale-[0.97] ${
-                active ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 shadow-sm'
-              }`}
-            >
-              {label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-6">
-        <CtaButton
-          label={selected.size > 0 ? "Let's go" : 'Skip for now'}
-          onClick={handleDone}
-        />
-      </div>
+      <CtaButton label="Start exploring" onClick={onNext} />
     </div>
   );
 }
