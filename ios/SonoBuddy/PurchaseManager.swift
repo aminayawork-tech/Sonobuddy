@@ -49,10 +49,26 @@ final class PurchaseManager: ObservableObject {
         let products = try await Product.products(for: [productID])
         guard let product = products.first else { throw PurchaseError.productNotFound }
         let result = try await product.purchase()
-        if case .success(let verification) = result,
-           case .verified(let tx) = verification {
+        switch result {
+        case .success(.verified(let tx)):
             grant()
             await tx.finish()
+        case .success(.unverified(let tx, _)):
+            // StoreKit couldn't verify the signature (rare — e.g. a tampered
+            // receipt). Finish it to clear the queue, but don't grant access,
+            // and surface something instead of leaving the button looking
+            // dead — this and .pending below were previously the silent
+            // "nothing happens" cases driving people to mash Restore Purchase.
+            await tx.finish()
+            throw PurchaseError.verificationFailed
+        case .pending:
+            throw PurchaseError.pending
+        case .userCancelled:
+            // Not a failure — they backed out of the sheet on purpose.
+            // No grant, no throw, no error shown.
+            break
+        @unknown default:
+            throw PurchaseError.unknown
         }
     }
 
@@ -69,11 +85,20 @@ final class PurchaseManager: ObservableObject {
 
 enum PurchaseError: Error {
     case productNotFound
+    case verificationFailed
+    case pending
+    case unknown
 
     var message: String {
         switch self {
         case .productNotFound:
             return "That's not available yet — try again in a moment."
+        case .verificationFailed:
+            return "We couldn't verify that purchase — please try again, or contact support if you were charged."
+        case .pending:
+            return "Your purchase needs approval (Ask to Buy or similar) — it'll unlock automatically once approved."
+        case .unknown:
+            return "Something went wrong — please try again."
         }
     }
 }
