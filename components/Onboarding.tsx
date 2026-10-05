@@ -275,7 +275,7 @@ function Screen4({ onNext }: { onNext: () => void }) {
       </div>
 
       <p className="text-[14px] font-semibold text-slate-400 mt-6 mb-7">
-        — Anthony, sonographer &amp; founder of SonoBuddy
+        — Sonographer &amp; founder of SonoBuddy
       </p>
 
       <CtaButton label="Start exploring" onClick={onNext} />
