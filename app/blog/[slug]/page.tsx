@@ -168,7 +168,18 @@ export default function BlogPostPage({ params }: Props) {
             prose-hr:border-gray-200 prose-hr:my-10
             prose-img:rounded-2xl prose-img:shadow-md
           ">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                // Wide tables get their own horizontal scroll so they never
+                // force the whole page to scroll sideways.
+                table: ({ ...props }) => (
+                  <div className="overflow-x-auto">
+                    <table {...props} />
+                  </div>
+                ),
+              }}
+            >
               {post.content}
             </ReactMarkdown>
           </div>
