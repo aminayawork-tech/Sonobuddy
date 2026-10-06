@@ -21,6 +21,7 @@ const FEATURES = [
   { label: 'All exam protocols',               sub: 'Step-by-step guides with key images & checklists' },
   { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
   { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips' },
+  { label: 'Every article in the library',     sub: '170+ clinical guides and career articles' },
 ];
 
 // The X button interrupts the first time someone ever tries to leave the
