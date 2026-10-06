@@ -162,7 +162,7 @@ export default function PaywallModal({
 
             {/* Social proof */}
             <p className="text-center text-slate-400 text-xs mb-6">
-              Used by sonographers at hospitals across the US
+              Used by sonographers at hospitals worldwide
             </p>
           </div>
 
