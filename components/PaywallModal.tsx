@@ -33,6 +33,21 @@ type Screen = 'main' | 'offer' | 'discount';
 
 const OFFER_SEEN_KEY = 'sb_paywall_offer_seen';
 
+// Turned off because purchases dropped after this launched — conversion data
+// suggested the share-to-save interstitial was adding friction rather than
+// recovering it. Left fully in place (UI, native purchaseDiscount(), funnel
+// events) so it's a one-line flip back on for a Black Friday — or similar —
+// promotion rather than a rebuild.
+const SHARE_DISCOUNT_ENABLED = false;
+
+// Straightforward flash-sale pricing on the main screen itself — no share
+// action required. Reuses the same $6.99 product (and the same funnel
+// events) as the old share-unlock flow, just offered to everyone up front
+// instead of gated behind sharing. Flip off when the sale ends; flip
+// SHARE_DISCOUNT_ENABLED back on instead for a future share-to-save promo —
+// the two are independent so they're never both live by accident.
+const FLASH_SALE_ACTIVE = true;
+
 export default function PaywallModal({
   onClose, onPurchase, onRestore,
   shareUnlocked, onShare, onDiscountPurchase,
@@ -85,6 +100,7 @@ export default function PaywallModal({
   function handleXTap() {
     if (screen === 'offer' || screen === 'discount') { reallyClose(screen); return; }
     if (screen !== 'main') { reallyClose(); return; }
+    if (!SHARE_DISCOUNT_ENABLED) { reallyClose(); return; }
     if (shareUnlocked) {
       recordEvent('paywall:discount-shown');
       setScreen('discount');
@@ -113,6 +129,11 @@ export default function PaywallModal({
           <div className="flex-1 overflow-y-auto px-6 pt-14 pb-8">
             {/* Icon + heading */}
             <div className="flex flex-col items-center text-center mb-8">
+              {FLASH_SALE_ACTIVE && (
+                <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-700 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full mb-4">
+                  🔥 Limited-time sale, ends soon
+                </span>
+              )}
               <div className="w-16 h-16 rounded-2xl bg-sky-100 flex items-center justify-center mb-4">
                 <Lock className="w-8 h-8 text-[#0EA5E9]" />
               </div>
@@ -151,10 +172,14 @@ export default function PaywallModal({
               <p className="text-center text-red-500 text-xs mb-3">{purchaseError}</p>
             )}
             <button
-              onClick={handlePurchase}
+              onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
               className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-sky-200/60"
             >
-              Unlock Full Access — $9.99
+              {FLASH_SALE_ACTIVE ? (
+                <>Unlock Full Access · <span className="line-through opacity-60 font-normal">$9.99</span> $6.99</>
+              ) : (
+                'Unlock Full Access · $9.99'
+              )}
             </button>
             <p className="text-center text-slate-400 text-[11px] mt-2 mb-1">
               One-time purchase · No subscription · Offline access
@@ -176,14 +201,14 @@ export default function PaywallModal({
               <Share2 className="w-8 h-8 text-[#0EA5E9]" />
             </div>
             <h2 className="text-[26px] font-black tracking-tight leading-tight text-slate-900 mb-2">
-              Hold up — save $3
+              Hold up, save $3
             </h2>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs mb-1">
               Share SonoBuddy with a friend or colleague and unlock full access
               for <span className="font-semibold text-slate-700">$6.99</span> instead of $9.99.
             </p>
             <p className="text-slate-400 text-xs max-w-xs">
-              Just open the share sheet — no confirmation needed from them.
+              Just open the share sheet, no confirmation needed from them.
               This offer is shown once, so grab it now.
             </p>
           </div>
@@ -229,7 +254,7 @@ export default function PaywallModal({
               onClick={handleDiscountPurchase}
               className="w-full bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-emerald-200/60"
             >
-              Unlock Full Access — $6.99
+              Unlock Full Access · $6.99
             </button>
             <p className="text-center text-slate-400 text-[11px] mt-2 mb-1">
               One-time purchase · No subscription · Offline access
