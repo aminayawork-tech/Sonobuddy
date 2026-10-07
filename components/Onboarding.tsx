@@ -385,9 +385,9 @@ function Screen5({
             <p className="text-[20px] font-black text-white leading-tight">
               Unlock Everything ·{' '}
               {FLASH_SALE_ACTIVE ? (
-                <><span className="line-through text-white/60 font-normal text-[15px]">$9.99</span> <span className="text-slate-900">$6.99</span></>
+                <><span className="line-through text-white/60 font-normal text-[15px]">$9.99</span> $6.99</>
               ) : (
-                <span className="text-slate-900">$9.99</span>
+                '$9.99'
               )}
             </p>
             <ChevronRight size={18} className="text-white shrink-0" strokeWidth={2.5} />
