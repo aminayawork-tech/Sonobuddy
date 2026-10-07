@@ -67,6 +67,7 @@ struct WebView: UIViewRepresentable {
 
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
+        webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = false
         webView.customUserAgent = "SonoBuddyApp/iOS"
         webView.scrollView.contentInsetAdjustmentBehavior = .never
@@ -96,7 +97,18 @@ struct WebView: UIViewRepresentable {
         Coordinator()
     }
 
-    class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+        // window.open(...) (used by the Jobs "apply" links) asks WKWebView to
+        // create a new web view via this delegate method — without it, the
+        // request is silently dropped and tapping the link does nothing.
+        // Hand it to Safari instead of creating a second WKWebView.
+        func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+            if let url = navigationAction.request.url {
+                UIApplication.shared.open(url)
+            }
+            return nil
+        }
+
         var didNotifyPremium = false
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
