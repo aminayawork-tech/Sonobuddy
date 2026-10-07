@@ -17,7 +17,7 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // Bump this when the search query logic changes (e.g. switching match
 // fields) so stale cached results from the old logic aren't served to
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v4';
 
 function cacheKey(location?: string): string {
   return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
@@ -45,6 +45,7 @@ interface AdzunaJob {
   redirect_url: string;
   salary_min?: number;
   salary_max?: number;
+  salary_is_predicted?: string;
 }
 
 async function searchPhrase(
@@ -85,19 +86,36 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
     for (const j of batch) byId.set(j.id, j);
   }
 
+  // No sonography role realistically clears this, stated or not — a few
+  // staffing-agency feeds have sent clearly-wrong annualized figures (e.g.
+  // a weekly rate annualized twice) even with salary_is_predicted unset, so
+  // this catches those in addition to the predicted-salary filter below.
+  const MAX_PLAUSIBLE_SALARY = 300_000;
+
   return Array.from(byId.values())
     .sort((a, b) => (a.created < b.created ? 1 : -1))
-    .map((j) => ({
-      id: j.id,
-      title: j.title,
-      company: j.company?.display_name ?? 'Confidential',
-      location: j.location?.display_name ?? '',
-      created: j.created,
-      description: (j.description ?? '').trim(),
-      redirectUrl: j.redirect_url,
-      salaryMin: j.salary_min ?? null,
-      salaryMax: j.salary_max ?? null,
-    }));
+    .map((j) => {
+      // Adzuna model-guesses a salary for postings that don't state one and
+      // flags it with salary_is_predicted — these guesses are frequently
+      // wildly off (e.g. $500k/yr for a staffing-agency travel posting), so
+      // only ever show a figure the employer actually stated.
+      const stated = j.salary_is_predicted !== '1';
+      const rawMin = stated ? j.salary_min ?? null : null;
+      const rawMax = stated ? j.salary_max ?? null : null;
+      const plausible = (n: number | null) =>
+        n !== null && n <= MAX_PLAUSIBLE_SALARY ? n : null;
+      return {
+        id: j.id,
+        title: j.title,
+        company: j.company?.display_name ?? 'Confidential',
+        location: j.location?.display_name ?? '',
+        created: j.created,
+        description: (j.description ?? '').trim(),
+        redirectUrl: j.redirect_url,
+        salaryMin: plausible(rawMin),
+        salaryMax: plausible(rawMax),
+      };
+    });
 }
 
 /**

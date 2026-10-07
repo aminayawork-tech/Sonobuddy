@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import {
-  Ruler, ClipboardList, Calculator, Microscope,
+  Ruler, ClipboardList, Calculator, Microscope, Briefcase,
   ChevronRight, WifiOff,
 } from 'lucide-react';
 import { recordEvent } from '@/lib/tap-tracking';
@@ -215,6 +215,7 @@ function Screen3({ onNext }: { onNext: () => void }) {
     { Icon: ClipboardList, title: 'Protocols',     desc: 'Step-by-step exam guides with key images & checklists' },
     { Icon: Calculator,    title: 'Calculators',   desc: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
     { Icon: Microscope,    title: 'Pathologies',   desc: '50+ conditions with red flags & reporting tips' },
+    { Icon: Briefcase,     title: 'Jobs',          desc: 'Sonographer openings, updated regularly' },
   ];
 
   return (
