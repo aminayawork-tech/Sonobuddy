@@ -10,7 +10,7 @@ import { usePremium, FREE_PROTOCOL_IDS, FREE_CALCULATOR_IDS } from '@/hooks/useP
 import {
   Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2,
   Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check, Lock,
-  Menu, Share2, MessageSquare, ShieldCheck, Newspaper,
+  Menu, Share2, MessageSquare, ShieldCheck, Newspaper, Briefcase,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -237,6 +237,18 @@ export default function HomePage() {
                 >
                   <Newspaper size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
                   <span className="text-white text-[16px] font-semibold">Blog & Articles</span>
+                </button>
+
+                {/* Jobs */}
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    router.push('/jobs');
+                  }}
+                  className="w-full flex items-center justify-center gap-3 bg-white/[0.09] rounded-2xl px-5 py-4 mb-3 active:bg-white/[0.15] transition-colors"
+                >
+                  <Briefcase size={18} style={{ color: "#39a5e9" }} strokeWidth={1.75} />
+                  <span className="text-white text-[16px] font-semibold">Jobs</span>
                 </button>
 
                 {/* Share */}
