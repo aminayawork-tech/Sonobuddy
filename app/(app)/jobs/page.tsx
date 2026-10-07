@@ -18,15 +18,16 @@ function formatRelative(iso: string): string {
   return months === 1 ? '1 month ago' : `${months} months ago`;
 }
 
-function formatSalary(min: number | null, max: number | null): string | null {
+function formatSalary(min: number | null, max: number | null, estimated: boolean): string | null {
   // Adzuna sometimes sends a 0 for one side of the range rather than
   // omitting it — treat that the same as missing, not a real $0 salary.
   const lo = min || null;
   const hi = max || null;
   if (!lo && !hi) return null;
   const fmt = (n: number) => `$${Math.round(n / 1000)}k`;
-  if (lo && hi && lo !== hi) return `${fmt(lo)}–${fmt(hi)}/yr`;
-  return `${fmt(lo ?? hi!)}/yr`;
+  const prefix = estimated ? 'Est. ' : '';
+  if (lo && hi && lo !== hi) return `${prefix}${fmt(lo)}–${fmt(hi)}/yr`;
+  return `${prefix}${fmt(lo ?? hi!)}/yr`;
 }
 
 export default function JobsPage() {
@@ -126,7 +127,7 @@ export default function JobsPage() {
         )}
 
         {jobs?.map((job) => {
-          const salary = formatSalary(job.salaryMin, job.salaryMax);
+          const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryEstimated);
           return (
             <button
               key={job.id}
