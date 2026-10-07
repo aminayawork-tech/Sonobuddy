@@ -2,18 +2,25 @@
 
 import { useState, useRef, useEffect } from 'react';
 import {
-  Ruler, ClipboardList, Calculator, Microscope, Briefcase,
+  Ruler, ClipboardList, Calculator, Microscope, Briefcase, Newspaper,
   ChevronRight, WifiOff,
 } from 'lucide-react';
 import { recordEvent } from '@/lib/tap-tracking';
 
 interface OnboardingProps {
   onComplete: () => void;
+  isPremium: boolean;
+  requestDiscountPurchase: () => void;
+  purchaseError: string | null;
+  clearPurchaseError: () => void;
 }
 
-const TOTAL = 4;
+const TOTAL = 5;
 
-export default function Onboarding({ onComplete }: OnboardingProps) {
+export default function Onboarding({
+  onComplete, isPremium, requestDiscountPurchase,
+  purchaseError, clearPurchaseError,
+}: OnboardingProps) {
   const [screen, setScreen] = useState(0);
   const [exiting, setExiting] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -22,6 +29,15 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   // so without this every screen and every skip/complete looked identical to
   // an ordinary /home tap. Named events give each step a distinct row.
   useEffect(() => { recordEvent(`onboarding:screen-${screen + 1}`); }, [screen]);
+
+  // The offer screen's purchase buttons go through the same native bridge as
+  // the main paywall — isPremium flips true asynchronously once native
+  // confirms the purchase, so this is what actually advances onboarding
+  // rather than any local click handler guessing at success.
+  useEffect(() => {
+    if (isPremium && screen === TOTAL - 1) finish('completed');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPremium]);
 
   function finish(reason: 'completed' | 'skipped') {
     recordEvent(`onboarding:${reason}`);
@@ -67,7 +83,15 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         {screen === 0 && <Screen1 onNext={next} onSkip={() => finish('skipped')} />}
         {screen === 1 && <Screen2 onNext={next} onSkip={() => finish('skipped')} />}
         {screen === 2 && <Screen3 onNext={next} />}
-        {screen === 3 && <Screen4 onNext={() => finish('completed')} />}
+        {screen === 3 && <Screen4 onNext={next} />}
+        {screen === 4 && (
+          <Screen5
+            onDiscountPurchase={requestDiscountPurchase}
+            purchaseError={purchaseError}
+            onClearError={clearPurchaseError}
+            onSkip={() => finish('completed')}
+          />
+        )}
       </div>
     </div>
   );
@@ -215,6 +239,7 @@ function Screen3({ onNext }: { onNext: () => void }) {
     { Icon: ClipboardList, title: 'Protocols',     desc: 'Step-by-step exam guides with key images & checklists' },
     { Icon: Calculator,    title: 'Calculators',   desc: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
     { Icon: Microscope,    title: 'Pathologies',   desc: '50+ conditions with red flags & reporting tips' },
+    { Icon: Newspaper,     title: 'Blog & Articles', desc: '170+ clinical guides and career articles' },
     { Icon: Briefcase,     title: 'Jobs',          desc: 'Sonographer openings, updated regularly' },
   ];
 
@@ -279,7 +304,98 @@ function Screen4({ onNext }: { onNext: () => void }) {
         Sonographer &amp; founder of SonoBuddy
       </p>
 
-      <CtaButton label="Start exploring" onClick={onNext} />
+      <CtaButton label="One last thing" stepLabel="04 →" onClick={onNext} />
+    </div>
+  );
+}
+
+/* ── Screen 5 — The Offer ──────────────────────────────────────────────────── */
+function Screen5({
+  onDiscountPurchase, purchaseError, onClearError, onSkip,
+}: {
+  onDiscountPurchase: () => void;
+  purchaseError: string | null;
+  onClearError: () => void;
+  onSkip: () => void;
+}) {
+  // Mirrors PaywallModal's FLASH_SALE_ACTIVE $6.99 pricing — this screen
+  // assumes that sale is live, since it's making the same offer at the same
+  // price. If that flag ever flips off, update the copy here too.
+  const stack = [
+    { Icon: Ruler,         label: 'Full Measurement Library',      value: 49 },
+    { Icon: ClipboardList, label: 'Every Exam Protocol',           value: 39 },
+    { Icon: Calculator,    label: 'All Clinical Calculators',      value: 29 },
+    { Icon: Microscope,    label: 'Complete Pathology Library',    value: 39 },
+    { Icon: Newspaper,     label: '170+ Articles & Career Guides', value: 29 },
+    { Icon: Briefcase,     label: 'Full Sonography Job Board',     value: 19 },
+  ];
+  const totalValue = stack.reduce((sum, item) => sum + item.value, 0);
+
+  function handlePurchase() {
+    onClearError();
+    recordEvent('onboarding:offer-purchase');
+    onDiscountPurchase();
+  }
+
+  return (
+    <div className="flex-1 flex flex-col px-6 pb-[calc(env(safe-area-inset-bottom)+28px)] overflow-auto">
+      <p className="text-[11px] font-bold text-amber-600 uppercase tracking-[0.14em] mb-5">
+        Before you go — launch pricing
+      </p>
+
+      <h1 className="text-[34px] font-black leading-[1.05] tracking-tight text-slate-900 mb-2">
+        Never blank<br />on a scan <span className="text-sky-500">again.</span>
+      </h1>
+      <p className="text-[14px] text-slate-500 leading-relaxed mb-6">
+        Unlock everything right now — no subscription, no login, works offline, forever.
+      </p>
+
+      <div className="flex-1">
+        {/* Value stack */}
+        <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100 mb-4">
+          {stack.map(({ Icon, label, value }) => (
+            <div key={label} className="flex items-center gap-3 px-4 py-3">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                <Icon size={15} className="text-slate-700" strokeWidth={1.75} />
+              </div>
+              <span className="flex-1 text-[13px] font-semibold text-slate-800">{label}</span>
+              <span className="text-[12px] text-slate-400 line-through">${value}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Price anchor */}
+        <div className="bg-slate-900 rounded-2xl px-5 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-[12px] text-slate-400 mb-0.5">
+              Total value <span className="line-through">${totalValue}</span>
+            </p>
+            <p className="text-[22px] font-black text-white">
+              Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99
+            </p>
+          </div>
+          <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
+            One-time
+          </span>
+        </div>
+      </div>
+
+      {purchaseError && (
+        <p className="text-center text-red-500 text-xs mt-4">{purchaseError}</p>
+      )}
+
+      <div className="mt-6 space-y-2">
+        <CtaButton label="Unlock Everything · $6.99" onClick={handlePurchase} />
+        <button
+          onClick={onSkip}
+          className="w-full py-2.5 text-[13px] font-medium text-slate-400 text-center"
+        >
+          Try limited features today
+        </button>
+        <p className="text-center text-slate-300 text-[11px] pt-1">
+          Every purchase is protected by Apple&apos;s standard purchase policies.
+        </p>
+      </div>
     </div>
   );
 }
