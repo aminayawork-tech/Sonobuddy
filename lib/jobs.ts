@@ -14,8 +14,13 @@ export interface Job {
 
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
 
+// Bump this when the search query logic changes (e.g. switching match
+// fields) so stale cached results from the old logic aren't served to
+// users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
+const CACHE_VERSION = 'v2';
+
 function cacheKey(location?: string): string {
-  return `jobs:sonography:us:${location?.toLowerCase().trim() || 'all'}`;
+  return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
 }
 
 // `what_or` ORs individual words, not phrases — a query built from these
