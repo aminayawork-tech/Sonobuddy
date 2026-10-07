@@ -1,4 +1,4 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[878],{8030:function(t,e,r){"use strict";r.d(e,{Z:function(){return o}});var n=r(2265);/**
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[734],{8030:function(t,e,r){"use strict";r.d(e,{Z:function(){return o}});var n=r(2265);/**
  * @license lucide-react v0.400.0 - ISC
  *
  * This source code is licensed under the ISC license.
@@ -33,7 +33,12 @@
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
- */let n=(0,r(8030).Z)("Bell",[["path",{d:"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9",key:"1qo2s2"}],["path",{d:"M10.3 21a1.94 1.94 0 0 0 3.4 0",key:"qgo35s"}]])},4567:function(t,e,r){"use strict";r.d(e,{Z:function(){return n}});/**
+ */let n=(0,r(8030).Z)("Bell",[["path",{d:"M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9",key:"1qo2s2"}],["path",{d:"M10.3 21a1.94 1.94 0 0 0 3.4 0",key:"qgo35s"}]])},5912:function(t,e,r){"use strict";r.d(e,{Z:function(){return n}});/**
+ * @license lucide-react v0.400.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */let n=(0,r(8030).Z)("Briefcase",[["path",{d:"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16",key:"jecpp"}],["rect",{width:"20",height:"14",x:"2",y:"6",rx:"2",key:"i6l2r4"}]])},4567:function(t,e,r){"use strict";r.d(e,{Z:function(){return n}});/**
  * @license lucide-react v0.400.0 - ISC
  *
  * This source code is licensed under the ISC license.
