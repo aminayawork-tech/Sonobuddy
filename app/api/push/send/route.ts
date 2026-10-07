@@ -6,7 +6,8 @@ import http2 from 'http2';
 import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
-import { getDailyHook } from '@/lib/tips';
+import { getDailyHook, getDailyIndex } from '@/lib/tips';
+import { getJobs } from '@/lib/jobs';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -106,10 +107,32 @@ export async function GET(req: NextRequest) {
     const customBody  = searchParams.get('body');
     const customUrl   = searchParams.get('url');
 
+    // Alternate article and job content by day so the same hook-only
+    // notification doesn't get stale — a fresh job posting is a different
+    // kind of reason to open the app than a clinical tip. Falls back to the
+    // article hook on a "job day" if Adzuna has nothing to offer (quota
+    // exhausted, no listings) rather than sending an empty notification.
     const hook = getDailyHook();
-    const notifTitle = customTitle ?? hook.title;
-    const notifBody  = customBody  ?? hook.preview;
-    const notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
+    let contentType: 'hook' | 'job' = 'hook';
+    let notifTitle = customTitle ?? hook.title;
+    let notifBody  = customBody  ?? hook.preview;
+    let notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
+
+    if (!customTitle && !customBody && getDailyIndex() % 2 === 1) {
+      try {
+        const [job] = await getJobs();
+        if (job) {
+          contentType = 'job';
+          notifTitle = '📋 New Sonography Job Posted';
+          // Company name is intentionally left out — it's gated behind
+          // premium on the Jobs page itself, so the push shouldn't leak it.
+          notifBody = `${job.title} — ${job.location || 'multiple locations'}. Tap to view and apply.`;
+          notifUrl = '/jobs';
+        }
+      } catch {
+        // Adzuna/Redis hiccup — fall through to the article hook already set above.
+      }
+    }
 
     // ── 1. Web Push (browser subscribers) ───────────────────────────────────
     let webSent = 0;
@@ -194,7 +217,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
       apns: { sent: apnsSent, failed: apnsFailed },
-      debug: { hook: hook.title },
+      debug: { contentType, title: notifTitle },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);

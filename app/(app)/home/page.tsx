@@ -194,7 +194,15 @@ export default function HomePage() {
   }
 
   if (showOnboarding) {
-    return <Onboarding onComplete={completeOnboarding} />;
+    return (
+      <Onboarding
+        onComplete={completeOnboarding}
+        isPremium={isPremium}
+        requestDiscountPurchase={requestDiscountPurchase}
+        purchaseError={purchaseError}
+        clearPurchaseError={clearPurchaseError}
+      />
+    );
   }
 
   function handleSearchSelect(result: SearchResult) {

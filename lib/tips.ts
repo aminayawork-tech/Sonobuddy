@@ -416,15 +416,20 @@ export const SONO_TIPS: string[] = [
 // Anchor day rollover at 9am ET (1pm UTC) so the notification and app always show the same tip.
 const ET_ANCHOR_MS = 13 * 3_600_000;
 
+// Shared by every daily-rotating feature (tip, hook, and the push route's
+// article/job alternation) so they all roll over at the same moment instead
+// of drifting against each other.
+export function getDailyIndex(): number {
+  return Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
+}
+
 export function getDailyTip(): string {
-  const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
-  return SONO_TIPS[dayIndex % SONO_TIPS.length];
+  return SONO_TIPS[getDailyIndex() % SONO_TIPS.length];
 }
 
 import { DAILY_HOOKS, type DailyHook } from '@/data/dailyHooks';
 export type { DailyHook };
 
 export function getDailyHook(): DailyHook {
-  const dayIndex = Math.floor((Date.now() - ET_ANCHOR_MS) / 86_400_000);
-  return DAILY_HOOKS[dayIndex % DAILY_HOOKS.length];
+  return DAILY_HOOKS[getDailyIndex() % DAILY_HOOKS.length];
 }
