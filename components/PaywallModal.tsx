@@ -22,6 +22,7 @@ const FEATURES = [
   { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
   { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips' },
   { label: 'Every article in the library',     sub: '170+ clinical guides and career articles' },
+  { label: 'Full sonography job board',        sub: 'Apply to openings updated regularly, any location' },
 ];
 
 // The X button interrupts the first time someone ever tries to leave the

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Briefcase, MapPin, Clock, DollarSign, Search, X } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Search, X, Lock, ChevronRight } from 'lucide-react';
 import type { Job } from '@/lib/jobs';
+import { usePremium } from '@/hooks/usePremium';
+import PaywallModal from '@/components/PaywallModal';
 
 const API_BASE = 'https://www.sonobuddy.com';
 const SEARCH_DEBOUNCE_MS = 500;
@@ -17,10 +19,14 @@ function formatRelative(iso: string): string {
 }
 
 function formatSalary(min: number | null, max: number | null): string | null {
-  if (!min && !max) return null;
+  // Adzuna sometimes sends a 0 for one side of the range rather than
+  // omitting it — treat that the same as missing, not a real $0 salary.
+  const lo = min || null;
+  const hi = max || null;
+  if (!lo && !hi) return null;
   const fmt = (n: number) => `$${Math.round(n / 1000)}k`;
-  if (min && max && min !== max) return `${fmt(min)}–${fmt(max)}/yr`;
-  return `${fmt(min ?? max!)}/yr`;
+  if (lo && hi && lo !== hi) return `${fmt(lo)}–${fmt(hi)}/yr`;
+  return `${fmt(lo ?? hi!)}/yr`;
 }
 
 export default function JobsPage() {
@@ -28,6 +34,10 @@ export default function JobsPage() {
   const [error, setError] = useState(false);
   const [locationInput, setLocationInput] = useState('');
   const [location, setLocation] = useState('');
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
 
   // Debounce so we're not firing a request on every keystroke.
   useEffect(() => {
@@ -47,6 +57,17 @@ export default function JobsPage() {
 
   return (
     <div className="min-h-screen bg-white pb-nav">
+      {paywallOpen && <PaywallModal
+        onClose={closePaywall}
+        onPurchase={requestPurchase}
+        onRestore={requestRestore}
+        shareUnlocked={shareUnlocked}
+        onShare={requestShare}
+        onDiscountPurchase={requestDiscountPurchase}
+        purchaseError={purchaseError}
+        onClearError={clearPurchaseError}
+      />}
+
       <div className="bg-white border-b border-slate-100 px-5 pt-14 pb-4 sticky top-0 z-10">
         <div className="flex items-center gap-2.5">
           <Briefcase size={20} className="text-sky-500" strokeWidth={2} />
@@ -107,44 +128,61 @@ export default function JobsPage() {
         {jobs?.map((job) => {
           const salary = formatSalary(job.salaryMin, job.salaryMax);
           return (
-            <a
+            <button
               key={job.id}
-              href={job.redirectUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors"
+              onClick={() =>
+                isPremium
+                  ? window.open(job.redirectUrl, '_blank', 'noopener,noreferrer')
+                  : openPaywall('jobs')
+              }
+              className="w-full flex items-start justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors text-left"
             >
-              <p className="text-[15px] font-bold text-slate-900 leading-snug mb-1">
-                {job.title}
-              </p>
-              <p className="text-[13px] text-slate-500 mb-2">{job.company}</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-[15px] font-bold text-slate-900 leading-snug mb-1">
+                  {job.title}
+                </p>
+                <p
+                  className={`text-[13px] text-slate-500 mb-2 w-fit ${
+                    isPremium ? '' : 'blur-[4px] select-none'
+                  }`}
+                >
+                  {job.company}
+                </p>
 
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
-                {job.location && (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+                  {job.location && (
+                    <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
+                      <MapPin size={11} /> {job.location}
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                    <MapPin size={11} /> {job.location}
+                    <Clock size={11} /> {formatRelative(job.created)}
                   </span>
-                )}
-                <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                  <Clock size={11} /> {formatRelative(job.created)}
-                </span>
-                {salary && (
-                  <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-semibold">
-                    <DollarSign size={11} /> {salary}
-                  </span>
-                )}
-              </div>
+                  {salary && (
+                    <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-semibold">
+                      <DollarSign size={11} /> {salary}
+                    </span>
+                  )}
+                </div>
 
-              <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-2">
-                {job.description}
-              </p>
-            </a>
+                <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-2">
+                  {job.description}
+                </p>
+              </div>
+              {isPremium ? (
+                <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
+              ) : (
+                <Lock size={14} className="text-slate-300 shrink-0 mt-1" />
+              )}
+            </button>
           );
         })}
 
         {jobs && jobs.length > 0 && (
           <p className="text-slate-300 text-[11px] text-center pt-2 pb-4">
-            Listings via Adzuna · Opens in your browser to apply
+            {isPremium
+              ? 'Listings via Adzuna · Opens in your browser to apply'
+              : 'Unlock SonoBuddy Premium to apply to any listing'}
           </p>
         )}
       </div>
