@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { recordEvent } from '@/lib/tap-tracking';
+import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
 
 import { Lock, X, CheckCircle2, Share2, PartyPopper } from 'lucide-react';
 
@@ -41,14 +42,6 @@ const OFFER_SEEN_KEY = 'sb_paywall_offer_seen';
 // events) so it's a one-line flip back on for a Black Friday — or similar —
 // promotion rather than a rebuild.
 const SHARE_DISCOUNT_ENABLED = false;
-
-// Straightforward flash-sale pricing on the main screen itself — no share
-// action required. Reuses the same $6.99 product (and the same funnel
-// events) as the old share-unlock flow, just offered to everyone up front
-// instead of gated behind sharing. Flip off when the sale ends; flip
-// SHARE_DISCOUNT_ENABLED back on instead for a future share-to-save promo —
-// the two are independent so they're never both live by accident.
-const FLASH_SALE_ACTIVE = true;
 
 export default function PaywallModal({
   onClose, onPurchase, onRestore,

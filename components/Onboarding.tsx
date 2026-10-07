@@ -6,10 +6,12 @@ import {
   ChevronRight, WifiOff,
 } from 'lucide-react';
 import { recordEvent } from '@/lib/tap-tracking';
+import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
 
 interface OnboardingProps {
   onComplete: () => void;
   isPremium: boolean;
+  requestPurchase: () => void;
   requestDiscountPurchase: () => void;
   purchaseError: string | null;
   clearPurchaseError: () => void;
@@ -18,7 +20,7 @@ interface OnboardingProps {
 const TOTAL = 5;
 
 export default function Onboarding({
-  onComplete, isPremium, requestDiscountPurchase,
+  onComplete, isPremium, requestPurchase, requestDiscountPurchase,
   purchaseError, clearPurchaseError,
 }: OnboardingProps) {
   const [screen, setScreen] = useState(0);
@@ -86,6 +88,7 @@ export default function Onboarding({
         {screen === 3 && <Screen4 onNext={next} />}
         {screen === 4 && (
           <Screen5
+            onPurchase={requestPurchase}
             onDiscountPurchase={requestDiscountPurchase}
             purchaseError={purchaseError}
             onClearError={clearPurchaseError}
@@ -311,16 +314,14 @@ function Screen4({ onNext }: { onNext: () => void }) {
 
 /* ── Screen 5 — The Offer ──────────────────────────────────────────────────── */
 function Screen5({
-  onDiscountPurchase, purchaseError, onClearError, onSkip,
+  onPurchase, onDiscountPurchase, purchaseError, onClearError, onSkip,
 }: {
+  onPurchase: () => void;
   onDiscountPurchase: () => void;
   purchaseError: string | null;
   onClearError: () => void;
   onSkip: () => void;
 }) {
-  // Mirrors PaywallModal's FLASH_SALE_ACTIVE $6.99 pricing — this screen
-  // assumes that sale is live, since it's making the same offer at the same
-  // price. If that flag ever flips off, update the copy here too.
   const stack = [
     { Icon: Ruler,         label: 'Full Measurement Library',      value: 49 },
     { Icon: ClipboardList, label: 'Every Exam Protocol',           value: 39 },
@@ -334,7 +335,7 @@ function Screen5({
   function handlePurchase() {
     onClearError();
     recordEvent('onboarding:offer-purchase');
-    onDiscountPurchase();
+    if (FLASH_SALE_ACTIVE) onDiscountPurchase(); else onPurchase();
   }
 
   return (
@@ -352,7 +353,7 @@ function Screen5({
 
       <div className="flex-1">
         {/* Value stack */}
-        <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100 mb-4">
+        <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
           {stack.map(({ Icon, label, value }) => (
             <div key={label} className="flex items-center gap-3 px-4 py-3">
               <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
@@ -363,29 +364,35 @@ function Screen5({
             </div>
           ))}
         </div>
-
-        {/* Price anchor */}
-        <div className="bg-slate-900 rounded-2xl px-5 py-4 flex items-center justify-between">
-          <div>
-            <p className="text-[12px] text-slate-400 mb-0.5">
-              Total value <span className="line-through">${totalValue}</span>
-            </p>
-            <p className="text-[22px] font-black text-white">
-              Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99
-            </p>
-          </div>
-          <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
-            One-time
-          </span>
-        </div>
       </div>
 
       {purchaseError && (
         <p className="text-center text-red-500 text-xs mt-4">{purchaseError}</p>
       )}
 
+      {/* Single tappable element — price context and the purchase action live
+          in the same button, rather than a separate price card sitting on
+          top of it, which read as two stacked buttons. */}
       <div className="mt-6 space-y-2">
-        <CtaButton label="Unlock Everything · $6.99" onClick={handlePurchase} />
+        <button
+          onClick={handlePurchase}
+          className="w-full bg-slate-900 active:bg-slate-800 rounded-2xl px-5 py-4 transition-all active:scale-[0.98] text-left"
+        >
+          <p className="text-[12px] text-slate-400 mb-1">
+            Total value <span className="line-through">${totalValue}</span>
+          </p>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[20px] font-black text-white leading-tight">
+              Unlock Everything ·{' '}
+              {FLASH_SALE_ACTIVE ? (
+                <><span className="line-through text-slate-500 font-normal text-[15px]">$9.99</span> $6.99</>
+              ) : (
+                '$9.99'
+              )}
+            </p>
+            <ChevronRight size={18} className="text-white shrink-0" strokeWidth={2.5} />
+          </div>
+        </button>
         <button
           onClick={onSkip}
           className="w-full py-2.5 text-[13px] font-medium text-slate-400 text-center"
@@ -393,7 +400,7 @@ function Screen5({
           Try limited features today
         </button>
         <p className="text-center text-slate-300 text-[11px] pt-1">
-          Every purchase is protected by Apple&apos;s standard purchase policies.
+          One-time purchase · No subscription · Offline access
         </p>
       </div>
     </div>
