@@ -349,9 +349,12 @@ export default function HomePage() {
       {/* Hero Header */}
       <div className="px-5 pt-14 pb-7">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-3xl font-black tracking-tight">
-            <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
-          </h1>
+          <div className="flex items-center gap-2">
+            <img src="/icons/icon-192.png" alt="" className="w-8 h-8 rounded-xl shrink-0" />
+            <h1 className="text-3xl font-black tracking-tight">
+              <span className="text-slate-900">Sono</span><span className="text-sono-blue">Buddy</span>
+            </h1>
+          </div>
           <button
             onClick={() => setMenuOpen(true)}
             className="w-10 h-10 flex items-center justify-center rounded-xl active:bg-slate-100 transition-colors"

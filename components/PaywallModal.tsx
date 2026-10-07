@@ -18,13 +18,15 @@ interface Props {
 }
 
 const FEATURES = [
-  { label: 'All measurement reference tables', sub: '20+ vascular, OB, thyroid, cardiac, abdominal' },
-  { label: 'All exam protocols',               sub: 'Step-by-step guides with key images & checklists' },
-  { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more' },
-  { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips' },
-  { label: 'Every article in the library',     sub: '170+ clinical guides and career articles' },
-  { label: 'Full sonography job board',        sub: 'Apply to openings updated regularly, any location' },
+  { label: 'All measurement reference tables', sub: '20+ vascular, OB, thyroid, cardiac, abdominal', value: 49 },
+  { label: 'All exam protocols',               sub: 'Step-by-step guides with key images & checklists', value: 39 },
+  { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more', value: 29 },
+  { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips', value: 39 },
+  { label: 'Every article in the library',     sub: '170+ clinical guides and career articles', value: 29 },
+  { label: 'Full sonography job board',        sub: 'Apply to openings updated regularly, any location', value: 19 },
 ];
+
+const TOTAL_VALUE = FEATURES.reduce((sum, f) => sum + f.value, 0);
 
 // The X button interrupts the first time someone ever tries to leave the
 // main pricing screen — 'offer' asks them to share for a discount. Every
@@ -166,15 +168,33 @@ export default function PaywallModal({
             {purchaseError && (
               <p className="text-center text-red-500 text-xs mb-3">{purchaseError}</p>
             )}
+            {/* Value-stack price anchor — same framing as the onboarding
+                offer screen: total feature value crossed out, then today's
+                price crossed against a $14.99 list price to justify it as a
+                discount, independent of whether FLASH_SALE_ACTIVE further
+                discounts it to $6.99. */}
             <button
               onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
-              className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-sky-200/60"
+              className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] rounded-2xl px-5 py-4 mb-3 flex items-center justify-between transition-all text-left"
             >
-              {FLASH_SALE_ACTIVE ? (
-                <>Unlock Full Access · <span className="line-through opacity-60 font-normal">$9.99</span> $6.99</>
-              ) : (
-                'Unlock Full Access · $9.99'
-              )}
+              <div>
+                <p className="text-[12px] text-slate-400 mb-0.5">
+                  Total value <span className="line-through">${TOTAL_VALUE}</span>
+                </p>
+                <p className="text-[22px] font-black text-white">
+                  Today: <span className="line-through text-slate-500 font-normal text-[16px]">$14.99</span>{' '}
+                  {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+                </p>
+              </div>
+              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
+                One-time
+              </span>
+            </button>
+            <button
+              onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
+              className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all"
+            >
+              Unlock Full Access · {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
             </button>
             <p className="text-center text-slate-400 text-[11px] mt-2 mb-1">
               One-time purchase · No subscription · Offline access
