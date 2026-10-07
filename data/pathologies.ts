@@ -302,6 +302,9 @@ export const pathologies: Pathology[] = [
     clinicalContext: 'Epigastric/mid-abdominal pain radiating to the back, elevated lipase/amylase. Most common causes: gallstones (40%), alcohol (30%). US role: identify biliary cause (gallstones, CBD dilation), assess complications.',
     reportingTips: 'Ultrasound is not sensitive for pancreatic parenchymal changes — CT is gold standard for severity grading (CTSI). State: "Gallstones identified/not identified. CBD measures ___ mm." If complications suspected, recommend CT abdomen/pelvis with contrast.',
     tags: ['pancreatitis', 'pancreas', 'gallstones', 'abd', 'abdomen', 'lipase', 'epigastric'],
+    images: [
+      { src: '/pathologies/pancreatitis_acute_focal_tail.png', caption: 'Focal acute pancreatitis of the pancreatic tail — bulky, ill-defined parenchyma; color Doppler of the splenic vein confirms patency without thrombosis', credit: 'Wikimedia Commons — CC BY-SA 4.0, Cerevisae' },
+    ],
   },
   {
     id: 'choledocholithiasis',
