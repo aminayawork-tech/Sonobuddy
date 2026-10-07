@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Briefcase, MapPin, Clock, DollarSign } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Search, X } from 'lucide-react';
 import type { Job } from '@/lib/jobs';
 
 const API_BASE = 'https://www.sonobuddy.com';
+const SEARCH_DEBOUNCE_MS = 500;
 
 function formatRelative(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
@@ -25,13 +26,24 @@ function formatSalary(min: number | null, max: number | null): string | null {
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [error, setError] = useState(false);
+  const [locationInput, setLocationInput] = useState('');
+  const [location, setLocation] = useState('');
+
+  // Debounce so we're not firing a request on every keystroke.
+  useEffect(() => {
+    const id = setTimeout(() => setLocation(locationInput.trim()), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(id);
+  }, [locationInput]);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/jobs/`)
+    setJobs(null);
+    setError(false);
+    const url = `${API_BASE}/api/jobs/${location ? `?location=${encodeURIComponent(location)}` : ''}`;
+    fetch(url)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => setJobs(Array.isArray(data) ? data : []))
       .catch(() => setError(true));
-  }, []);
+  }, [location]);
 
   return (
     <div className="min-h-screen bg-white pb-nav">
@@ -41,8 +53,28 @@ export default function JobsPage() {
           <h1 className="text-[22px] font-black tracking-tight text-slate-900">Jobs</h1>
         </div>
         <p className="text-[13px] text-slate-400 mt-0.5">
-          Sonographer openings across the US, updated regularly
+          Sonographer openings, updated regularly
         </p>
+
+        <div className="relative mt-3">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
+          <input
+            type="text"
+            value={locationInput}
+            onChange={(e) => setLocationInput(e.target.value)}
+            placeholder="Filter by city, state, or country"
+            className="w-full bg-slate-50 rounded-xl pl-10 pr-9 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-sky-200"
+          />
+          {locationInput && (
+            <button
+              onClick={() => setLocationInput('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 active:text-slate-500"
+              aria-label="Clear location filter"
+            >
+              <X size={15} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="px-4 pt-4 space-y-3">
@@ -66,7 +98,9 @@ export default function JobsPage() {
 
         {!error && jobs?.length === 0 && (
           <p className="text-slate-400 text-sm text-center py-12">
-            No openings found right now — check back soon.
+            {location
+              ? `No openings found for "${location}" — try a broader search.`
+              : 'No openings found right now — check back soon.'}
           </p>
         )}
 
