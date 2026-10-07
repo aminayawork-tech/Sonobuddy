@@ -376,18 +376,18 @@ function Screen5({
       <div className="mt-6 space-y-2">
         <button
           onClick={handlePurchase}
-          className="w-full bg-slate-900 active:bg-slate-800 rounded-2xl px-5 py-4 transition-all active:scale-[0.98] text-left"
+          className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] rounded-2xl px-5 py-4 transition-all text-left shadow-lg shadow-sky-200/60"
         >
-          <p className="text-[12px] text-slate-400 mb-1">
+          <p className="text-[12px] text-white/80 mb-1">
             Total value <span className="line-through">${totalValue}</span>
           </p>
           <div className="flex items-center justify-between gap-3">
             <p className="text-[20px] font-black text-white leading-tight">
               Unlock Everything ·{' '}
               {FLASH_SALE_ACTIVE ? (
-                <><span className="line-through text-slate-500 font-normal text-[15px]">$9.99</span> $6.99</>
+                <><span className="line-through text-white/60 font-normal text-[15px]">$9.99</span> <span className="text-slate-900">$6.99</span></>
               ) : (
-                '$9.99'
+                <span className="text-slate-900">$9.99</span>
               )}
             </p>
             <ChevronRight size={18} className="text-white shrink-0" strokeWidth={2.5} />
