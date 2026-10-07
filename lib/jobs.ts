@@ -21,8 +21,13 @@ function cacheKey(location?: string): string {
 // `what_or` ORs individual words, not phrases — a query built from these
 // phrases that way matched on generic words like "medical" and pulled in
 // completely unrelated jobs (home caregivers, dispatchers). `what_phrase`
-// does an exact-phrase match instead, so each term needs its own request;
-// kept to two calls to stay well within a trial-tier daily quota.
+// is an exact-phrase match but still searches the full description, which
+// let staffing-agency postings (travel RN roles whose boilerplate mentions
+// "sonographer" among dozens of other specialties they recruit for) leak
+// in. `title_only` restricts the match to the job title itself, which is
+// what actually keeps results exclusively sonography jobs; each term still
+// needs its own request, kept to two calls to stay within a trial-tier
+// daily quota.
 const SEARCH_PHRASES = ['sonographer', 'ultrasound technologist'];
 
 interface AdzunaJob {
@@ -44,7 +49,7 @@ async function searchPhrase(
     app_id: appId,
     app_key: appKey,
     results_per_page: '25',
-    what_phrase: phrase,
+    title_only: phrase,
     sort_by: 'date',
     max_days_old: '30',
     'content-type': 'application/json',
