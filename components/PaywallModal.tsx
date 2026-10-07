@@ -168,11 +168,10 @@ export default function PaywallModal({
             {purchaseError && (
               <p className="text-center text-red-500 text-xs mb-3">{purchaseError}</p>
             )}
-            {/* Value-stack price anchor — same framing as the onboarding
-                offer screen: total feature value crossed out, then today's
-                price crossed against a $14.99 list price to justify it as a
-                discount, independent of whether FLASH_SALE_ACTIVE further
-                discounts it to $6.99. */}
+            {/* Value-stack price anchor — total feature value crossed out
+                justifies today's price as a discount, without a second,
+                redundant list-price anchor. The button below doesn't repeat
+                the price since it's already shown here. */}
             <button
               onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
               className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] rounded-2xl px-5 py-4 mb-3 flex items-center justify-between transition-all text-left"
@@ -182,8 +181,7 @@ export default function PaywallModal({
                   Total value <span className="line-through">${TOTAL_VALUE}</span>
                 </p>
                 <p className="text-[22px] font-black text-white">
-                  Today: <span className="line-through text-slate-500 font-normal text-[16px]">$14.99</span>{' '}
-                  {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+                  Today: {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
                 </p>
               </div>
               <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
@@ -194,7 +192,7 @@ export default function PaywallModal({
               onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
               className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all"
             >
-              Unlock Full Access · {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+              Unlock Full Access
             </button>
             <p className="text-center text-slate-400 text-[11px] mt-2 mb-1">
               One-time purchase · No subscription · Offline access
