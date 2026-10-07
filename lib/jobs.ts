@@ -10,6 +10,7 @@ export interface Job {
   redirectUrl: string;
   salaryMin: number | null;
   salaryMax: number | null;
+  salaryEstimated: boolean;
 }
 
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
@@ -17,7 +18,7 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // Bump this when the search query logic changes (e.g. switching match
 // fields) so stale cached results from the old logic aren't served to
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 
 function cacheKey(location?: string): string {
   return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
@@ -86,22 +87,22 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
     for (const j of batch) byId.set(j.id, j);
   }
 
-  // No sonography role realistically clears this, stated or not — a few
-  // staffing-agency feeds have sent clearly-wrong annualized figures (e.g.
-  // a weekly rate annualized twice) even with salary_is_predicted unset, so
-  // this catches those in addition to the predicted-salary filter below.
+  // No sonography role realistically clears this, stated or estimated — a
+  // few staffing-agency feeds have sent clearly-wrong annualized figures
+  // (e.g. a weekly rate annualized twice, producing $500k+/yr), so this is
+  // the backstop that keeps Adzuna's model-guessed salaries (see below)
+  // usable instead of excluding them outright.
   const MAX_PLAUSIBLE_SALARY = 300_000;
 
   return Array.from(byId.values())
     .sort((a, b) => (a.created < b.created ? 1 : -1))
     .map((j) => {
       // Adzuna model-guesses a salary for postings that don't state one and
-      // flags it with salary_is_predicted — these guesses are frequently
-      // wildly off (e.g. $500k/yr for a staffing-agency travel posting), so
-      // only ever show a figure the employer actually stated.
-      const stated = j.salary_is_predicted !== '1';
-      const rawMin = stated ? j.salary_min ?? null : null;
-      const rawMax = stated ? j.salary_max ?? null : null;
+      // flags it with salary_is_predicted. Most estimates are reasonable
+      // and showing a figure drives more clicks than hiding it, so these
+      // are kept (labeled as estimates in the UI) rather than dropped —
+      // the sanity ceiling above is what catches the occasional bad guess.
+      const estimated = j.salary_is_predicted === '1';
       const plausible = (n: number | null) =>
         n !== null && n <= MAX_PLAUSIBLE_SALARY ? n : null;
       return {
@@ -112,8 +113,9 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
         created: j.created,
         description: (j.description ?? '').trim(),
         redirectUrl: j.redirect_url,
-        salaryMin: plausible(rawMin),
-        salaryMax: plausible(rawMax),
+        salaryMin: plausible(j.salary_min ?? null),
+        salaryMax: plausible(j.salary_max ?? null),
+        salaryEstimated: estimated,
       };
     });
 }
