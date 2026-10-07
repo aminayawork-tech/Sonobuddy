@@ -12,8 +12,11 @@ export interface Job {
   salaryMax: number | null;
 }
 
-const CACHE_KEY = 'jobs:sonography:us';
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
+
+function cacheKey(location?: string): string {
+  return `jobs:sonography:us:${location?.toLowerCase().trim() || 'all'}`;
+}
 
 // `what_or` ORs individual words, not phrases — a query built from these
 // phrases that way matched on generic words like "medical" and pulled in
@@ -34,7 +37,9 @@ interface AdzunaJob {
   salary_max?: number;
 }
 
-async function searchPhrase(appId: string, appKey: string, phrase: string): Promise<AdzunaJob[]> {
+async function searchPhrase(
+  appId: string, appKey: string, phrase: string, location?: string
+): Promise<AdzunaJob[]> {
   const params = new URLSearchParams({
     app_id: appId,
     app_key: appKey,
@@ -44,6 +49,8 @@ async function searchPhrase(appId: string, appKey: string, phrase: string): Prom
     max_days_old: '30',
     'content-type': 'application/json',
   });
+  if (location) params.set('where', location);
+
   const res = await fetch(`https://api.adzuna.com/v1/api/jobs/us/search/1?${params}`, {
     cache: 'no-store',
   });
@@ -52,13 +59,13 @@ async function searchPhrase(appId: string, appKey: string, phrase: string): Prom
   return Array.isArray(data?.results) ? data.results : [];
 }
 
-async function fetchFromAdzuna(): Promise<Job[]> {
+async function fetchFromAdzuna(location?: string): Promise<Job[]> {
   const appId = process.env.ADZUNA_APP_ID;
   const appKey = process.env.ADZUNA_APP_KEY;
   if (!appId || !appKey) return [];
 
   const batches = await Promise.all(
-    SEARCH_PHRASES.map((phrase) => searchPhrase(appId, appKey, phrase))
+    SEARCH_PHRASES.map((phrase) => searchPhrase(appId, appKey, phrase, location))
   );
 
   // Merge and dedupe — the same posting often appears for more than one
@@ -86,15 +93,19 @@ async function fetchFromAdzuna(): Promise<Job[]> {
 /**
  * Cached in Redis rather than fetched fresh per request — a trial Adzuna
  * plan has a modest daily call quota, and job listings don't change
- * minute-to-minute. Falls back to a stale cache entry (if one exists) when
- * Adzuna errors or the quota is exhausted, rather than showing nothing.
+ * minute-to-minute. Each location filter gets its own cache entry (plus one
+ * for the unfiltered nationwide list), so repeat searches for the same
+ * location within the TTL cost nothing extra. Falls back to a stale cache
+ * entry when Adzuna errors or the quota is exhausted, rather than showing
+ * nothing.
  */
-export async function getJobs(): Promise<Job[]> {
+export async function getJobs(location?: string): Promise<Job[]> {
   const cfg = redisConfig();
+  const key = cacheKey(location);
 
   if (cfg) {
     try {
-      const cached = await redisCommand(cfg, ['GET', CACHE_KEY]);
+      const cached = await redisCommand(cfg, ['GET', key]);
       if (typeof cached === 'string') {
         const parsed = JSON.parse(cached) as { jobs: Job[]; fetchedAt: number };
         const age = Date.now() - parsed.fetchedAt;
@@ -106,10 +117,10 @@ export async function getJobs(): Promise<Job[]> {
   }
 
   try {
-    const jobs = await fetchFromAdzuna();
+    const jobs = await fetchFromAdzuna(location);
     if (cfg && jobs.length > 0) {
       await redisCommand(cfg, [
-        'SET', CACHE_KEY, JSON.stringify({ jobs, fetchedAt: Date.now() }),
+        'SET', key, JSON.stringify({ jobs, fetchedAt: Date.now() }),
         'EX', String(CACHE_TTL_SECONDS * 4), // keep a stale copy around longer than the TTL, for the error-fallback path below
       ]);
     }
@@ -119,7 +130,7 @@ export async function getJobs(): Promise<Job[]> {
     // past its normal TTL, rather than an empty list.
     if (cfg) {
       try {
-        const cached = await redisCommand(cfg, ['GET', CACHE_KEY]);
+        const cached = await redisCommand(cfg, ['GET', key]);
         if (typeof cached === 'string') {
           return (JSON.parse(cached) as { jobs: Job[] }).jobs;
         }
