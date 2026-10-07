@@ -198,6 +198,7 @@ export default function HomePage() {
       <Onboarding
         onComplete={completeOnboarding}
         isPremium={isPremium}
+        requestPurchase={requestPurchase}
         requestDiscountPurchase={requestDiscountPurchase}
         purchaseError={purchaseError}
         clearPurchaseError={clearPurchaseError}

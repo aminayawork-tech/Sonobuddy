@@ -3,6 +3,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { recordEvent } from '@/lib/tap-tracking';
 
+// Shared by PaywallModal and the onboarding offer screen so a price test
+// only needs flipping in one place instead of drifting between two
+// hardcoded copies. 2-week test: $9.99 vs the usual $6.99 flash-sale price,
+// now that the onboarding offer screen's value-stack framing does more of
+// the conversion work than the discount itself. Flip back to true to
+// resume the $6.99 sale.
+export const FLASH_SALE_ACTIVE = false;
+
 // Free items per tab — anything not in these sets requires premium
 // 1 free item per modality so every sonographer gets a taste
 export const FREE_MEASUREMENT_IDS = new Set([
