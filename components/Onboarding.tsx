@@ -370,28 +370,34 @@ function Screen5({
         <p className="text-center text-red-500 text-xs mt-4">{purchaseError}</p>
       )}
 
-      {/* Single tappable element — price context and the purchase action live
-          in the same button, rather than a separate price card sitting on
-          top of it, which read as two stacked buttons. */}
+      {/* Same value-stack anchor + button pattern as the main paywall:
+          total feature value crossed out justifies today's price, and the
+          button doesn't repeat the price since it's already shown above.
+          Both elements trigger the same purchase action. */}
       <div className="mt-6 space-y-2">
         <button
           onClick={handlePurchase}
-          className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] rounded-2xl px-5 py-4 transition-all text-left shadow-lg shadow-sky-200/60"
+          className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] rounded-2xl px-5 py-4 transition-all text-left"
         >
-          <p className="text-[12px] text-white/80 mb-1">
-            Total value <span className="line-through">${totalValue}</span>
-          </p>
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[20px] font-black text-white leading-tight">
-              Unlock Everything ·{' '}
-              {FLASH_SALE_ACTIVE ? (
-                <><span className="line-through text-white/60 font-normal text-[15px]">$9.99</span> $6.99</>
-              ) : (
-                '$9.99'
-              )}
-            </p>
-            <ChevronRight size={18} className="text-white shrink-0" strokeWidth={2.5} />
+            <div>
+              <p className="text-[12px] text-slate-400 mb-0.5">
+                Total value <span className="line-through">${totalValue}</span>
+              </p>
+              <p className="text-[22px] font-black text-white">
+                Today: {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+              </p>
+            </div>
+            <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
+              One-time
+            </span>
           </div>
+        </button>
+        <button
+          onClick={handlePurchase}
+          className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all"
+        >
+          Unlock Full Access
         </button>
         <button
           onClick={onSkip}
