@@ -18,7 +18,7 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // Bump this when the search query logic changes (e.g. switching match
 // fields) so stale cached results from the old logic aren't served to
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v7';
 
 function cacheKey(location?: string): string {
   return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
@@ -94,7 +94,7 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
   // usable instead of excluding them outright.
   const MAX_PLAUSIBLE_SALARY = 300_000;
 
-  return Array.from(byId.values())
+  const jobs = Array.from(byId.values())
     .sort((a, b) => (a.created < b.created ? 1 : -1))
     .map((j) => {
       // Adzuna model-guesses a salary for postings that don't state one and
@@ -118,6 +118,30 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
         salaryEstimated: estimated,
       };
     });
+
+  // Staffing agencies post the identical listing under a distinct job id for
+  // every city they're hiring in — same title, same company, different id —
+  // which reads as spam when a dozen of them show up back to back. Collapse
+  // to one (the most recent, since jobs are already sorted newest-first) per
+  // company+title pair. Scoped to the exact pair rather than title alone, so
+  // different real employers posting a similarly-named role stay distinct.
+  // The title itself is normalized first — the same template often bakes a
+  // different pay rate into each repost ("...- $2,267 per week" vs "...-
+  // $2,953 per week"), which would otherwise dodge an exact-title match.
+  const normalizeTitle = (title: string) =>
+    title
+      .toLowerCase()
+      .replace(/\$[\d,]+(\.\d+)?\s*(per\s*(week|hour|hr|day|yr|year)|\/\s*(week|hour|hr|day|yr|year))?/g, '')
+      .replace(/[-–—]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  const seenCompanyTitle = new Set<string>();
+  return jobs.filter((j) => {
+    const key = `${j.company.toLowerCase().trim()}|${normalizeTitle(j.title)}`;
+    if (seenCompanyTitle.has(key)) return false;
+    seenCompanyTitle.add(key);
+    return true;
+  });
 }
 
 /**
