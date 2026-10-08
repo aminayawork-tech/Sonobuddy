@@ -385,7 +385,11 @@ function Screen5({
                 Total value <span className="line-through">${totalValue}</span>
               </p>
               <p className="text-[22px] font-black text-white">
-                Today: {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+                {FLASH_SALE_ACTIVE ? (
+                  <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99</>
+                ) : (
+                  'Today: $9.99'
+                )}
               </p>
             </div>
             <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">

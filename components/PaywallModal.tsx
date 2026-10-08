@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { recordEvent } from '@/lib/tap-tracking';
 import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
 
-import { Lock, X, CheckCircle2, Share2, PartyPopper } from 'lucide-react';
+import { X, CheckCircle2, Share2, PartyPopper } from 'lucide-react';
 
 interface Props {
   onClose: () => void;
@@ -131,9 +131,7 @@ export default function PaywallModal({
                   🔥 Limited-time sale, ends soon
                 </span>
               )}
-              <div className="w-16 h-16 rounded-2xl bg-sky-100 flex items-center justify-center mb-4">
-                <Lock className="w-8 h-8 text-[#0EA5E9]" />
-              </div>
+              <img src="/icons/icon-192.png" alt="" className="w-16 h-16 rounded-2xl mb-4" />
               <h2 className="text-[28px] font-black tracking-tight leading-tight mb-1">
                 <span className="text-slate-900">Unlock </span><span className="text-slate-900">Sono</span><span className="text-[#0EA5E9]">Buddy</span>
               </h2>
@@ -181,7 +179,11 @@ export default function PaywallModal({
                   Total value <span className="line-through">${TOTAL_VALUE}</span>
                 </p>
                 <p className="text-[22px] font-black text-white">
-                  Today: {FLASH_SALE_ACTIVE ? '$6.99' : '$9.99'}
+                  {FLASH_SALE_ACTIVE ? (
+                    <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99</>
+                  ) : (
+                    'Today: $9.99'
+                  )}
                 </p>
               </div>
               <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
