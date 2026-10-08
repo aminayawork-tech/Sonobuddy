@@ -246,6 +246,8 @@ export default function HeatmapAdminPage() {
       step('Screen 2', get('onboarding:screen-2')),
       step('Screen 3', get('onboarding:screen-3')),
       step('Screen 4', get('onboarding:screen-4')),
+      step('Screen 5 (offer)', get('onboarding:screen-5')),
+      step('  → tapped unlock', get('onboarding:offer-purchase')),
       step('Completed', get('onboarding:completed')),
       step('Skipped', get('onboarding:skipped')),
     ];
@@ -260,6 +262,20 @@ export default function HeatmapAdminPage() {
       .filter((n) => n.name.startsWith('paywall:trigger:'))
       .map((n) => ({ name: n.name.replace('paywall:trigger:', ''), count: n.count }))
       .sort((a, b) => b.count - a.count);
+  })();
+
+  // Jobs doesn't get its own named events — it flows through the same
+  // generic route views/taps as every other screen — so without this it's
+  // easy to miss in the "Screens" list for a feature this new and this
+  // directly tied to revenue (gated behind the same paywall as everything
+  // else, see "Paywall triggered by" below).
+  const jobsStats = (() => {
+    if (!data) return null;
+    const views = data.views.find((v) => v.name === '/jobs')?.count ?? 0;
+    const taps = data.routes.find((r) => r.name === '/jobs')?.count ?? 0;
+    const paywallFromJobs = paywallTriggers.find((t) => t.name === 'jobs')?.count ?? 0;
+    if (views === 0 && taps === 0) return null;
+    return { views, taps, paywallFromJobs };
   })();
 
   // Share-to-save: how many people offered the discount actually share, and
@@ -324,9 +340,27 @@ export default function HeatmapAdminPage() {
     ['Screen 2', 'onboarding:screen-2'],
     ['Screen 3', 'onboarding:screen-3'],
     ['Screen 4', 'onboarding:screen-4'],
+    ['Screen 5 (offer)', 'onboarding:screen-5'],
+    ['  → tapped unlock', 'onboarding:offer-purchase'],
     ['Completed', 'onboarding:completed'],
     ['Skipped', 'onboarding:skipped'],
   ]) : [];
+  // Full price ($9.99) vs sale price ($6.99) completions, summed across both
+  // purchase entry points (main paywall and the onboarding offer screen) and
+  // both the direct flash-sale button and the share-to-save flow — this is
+  // the one place that answers "which price actually converts better,"
+  // which neither funnel above shows on its own since they're scoped to a
+  // single entry point or flow.
+  const priceComparison = insights ? (() => {
+    const get = (n: string) => insights.named.find((x) => x.name === n)?.count ?? 0;
+    const fullPrice = get('paywall:completed:purchase');
+    const salePrice = get('paywall:completed:purchaseDiscount');
+    if (fullPrice === 0 && salePrice === 0) return [];
+    return [
+      { label: 'Full price ($9.99) purchases', count: fullPrice, revenue: fullPrice * 9.99 },
+      { label: 'Sale price ($6.99) purchases', count: salePrice, revenue: salePrice * 6.99 },
+    ];
+  })() : [];
 
   // Merge views and taps into one list so a screen that was opened but never
   // touched still appears — that gap is exactly what taps alone hide.
@@ -517,6 +551,33 @@ export default function HeatmapAdminPage() {
                           <span className="tabular-nums text-slate-300">
                             {f.count}
                             {f.pct !== null && <span className="text-slate-500 text-xs"> · {f.pct}%</span>}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Full price vs sale price completions, all time — the
+                    direct answer to "did the $9.99 test convert better or
+                    worse than the usual $6.99 sale." */}
+                <div>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                    Price test · all time
+                  </h3>
+                  {priceComparison.length === 0 ? (
+                    <p className="text-slate-500 text-sm">No completed purchases recorded yet.</p>
+                  ) : (
+                    <ul className="space-y-1">
+                      {priceComparison.map((p) => (
+                        <li
+                          key={p.label}
+                          className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm"
+                        >
+                          <span>{p.label}</span>
+                          <span className="tabular-nums text-slate-300">
+                            {p.count}
+                            <span className="text-slate-500 text-xs"> · ${p.revenue.toFixed(2)}</span>
                           </span>
                         </li>
                       ))}
@@ -809,8 +870,8 @@ export default function HeatmapAdminPage() {
               )}
             </section>
 
-            {/* Onboarding funnel, what drove people to the paywall, share-to-save */}
-            <section className="lg:col-span-3 grid md:grid-cols-3 gap-6">
+            {/* Onboarding funnel, what drove people to the paywall, share-to-save, Jobs */}
+            <section className="lg:col-span-3 grid md:grid-cols-2 xl:grid-cols-4 gap-6">
               <div>
                 <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
                   Onboarding
@@ -889,6 +950,33 @@ export default function HeatmapAdminPage() {
                         </span>
                       </li>
                     ))}
+                  </ul>
+                )}
+              </div>
+
+              <div>
+                <h2 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                  Jobs
+                </h2>
+                <p className="text-xs text-slate-500 mb-3">
+                  The job board — gated behind the same paywall as everything else.
+                </p>
+                {!jobsStats ? (
+                  <p className="text-slate-500 text-sm">No Jobs activity this day.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    <li className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm">
+                      <span>Page views</span>
+                      <span className="tabular-nums text-slate-300">{jobsStats.views}</span>
+                    </li>
+                    <li className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm">
+                      <span>Taps</span>
+                      <span className="tabular-nums text-slate-300">{jobsStats.taps}</span>
+                    </li>
+                    <li className="flex items-center justify-between gap-3 bg-slate-900 px-3 py-2 rounded-lg text-sm">
+                      <span>→ Hit paywall</span>
+                      <span className="tabular-nums text-slate-300">{jobsStats.paywallFromJobs}</span>
+                    </li>
                   </ul>
                 )}
               </div>
