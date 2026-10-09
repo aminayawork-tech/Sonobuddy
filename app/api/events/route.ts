@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redisConfig } from '@/lib/redis';
+import { analyticsDayKey } from '@/lib/date';
 
 export const runtime = 'edge';
 
@@ -36,10 +37,8 @@ function clean(v: unknown, max: number): string | null {
   return s.length > 0 ? s : null;
 }
 
-/** UTC day bucket, so counts can be trended and expired per day. */
-function dayKey(ts: number): string {
-  return new Date(ts).toISOString().slice(0, 10);
-}
+/** Eastern-time day bucket (see lib/date.ts), so counts can be trended and expired per day. */
+const dayKey = analyticsDayKey;
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS });
