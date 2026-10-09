@@ -15,3 +15,20 @@ export function todayLocalStr(): string {
   const p = (v: number) => String(v).padStart(2, '0');
   return `${n.getFullYear()}-${p(n.getMonth() + 1)}-${p(n.getDate())}`;
 }
+
+// Day bucket for analytics, fixed to US Eastern rather than UTC. Analytics
+// runs on Vercel's edge (always UTC, no "local" time of its own) and the
+// admin dashboard's day picker defaults to the viewer's own browser-local
+// date — for a US-based viewer that's Eastern. Bucketing writes by raw UTC
+// meant anything after ~8pm Eastern landed in the *next* day's counters, so
+// a real sale or paywall step could look "missing" from the day it actually
+// happened on. en-CA formats as YYYY-MM-DD directly.
+const dayFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'America/New_York',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+export function analyticsDayKey(ts: number): string {
+  return dayFormatter.format(new Date(ts));
+}

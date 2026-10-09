@@ -88,7 +88,11 @@ function previewUrl(route: string): string | null {
 
 export default function HeatmapAdminPage() {
   const [token, setToken] = useState('');
-  const [surface, setSurface] = useState('web');
+  // iOS, not web, by default — purchases only ever happen in the native app
+  // (StoreKit doesn't exist on the website), so every revenue-relevant
+  // section (paywall funnel, price test, completed sales) read as empty by
+  // default even on a day with a real sale, unless this was flipped by hand.
+  const [surface, setSurface] = useState('ios');
   const [day, setDay] = useState(() => todayLocalStr());
   const [route, setRoute] = useState<string | null>(null);
   const [data, setData] = useState<Summary | null>(null);

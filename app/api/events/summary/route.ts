@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redisConfig, redisCommand, redisPipeline } from '@/lib/redis';
 import { authorize } from '@/lib/analytics-auth';
+import { analyticsDayKey } from '@/lib/date';
 
 export const runtime = 'edge';
 
@@ -38,7 +39,7 @@ export async function GET(req: NextRequest) {
 
   const redis = (cmd: string[]) => redisCommand(cfg, cmd);
 
-  const day = req.nextUrl.searchParams.get('day') || new Date().toISOString().slice(0, 10);
+  const day = req.nextUrl.searchParams.get('day') || analyticsDayKey(Date.now());
   const surface = req.nextUrl.searchParams.get('surface') || 'ios';
   const route = req.nextUrl.searchParams.get('route');
   const requestedVw = req.nextUrl.searchParams.get('vw');
