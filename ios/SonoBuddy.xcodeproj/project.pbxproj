@@ -64,7 +64,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AA000402 /* MainGroup */ = {
+		AA000402 = {
 			isa = PBXGroup;
 			children = (
 				AA000400 /* SonoBuddy */,
@@ -285,6 +285,7 @@
 				MARKETING_VERSION = 9.5;
 				PRODUCT_BUNDLE_IDENTIFIER = app.sonobuddy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SonoBuddy AppStore";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
