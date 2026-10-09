@@ -53,9 +53,17 @@ export default function JobsPage() {
    separate, explicit action from there, not an immediate redirect. One job
    a day (whichever the home screen features) is free for everyone. ────────── */
 function JobList() {
+  const searchParams = useSearchParams();
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [error, setError] = useState(false);
-  const [query, setQuery] = useState('');
+  // Initialized from the URL so the search survives navigating into a job's
+  // detail view and back — otherwise every "back" tap silently cleared it.
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '');
+  const [debouncedQuery, setDebouncedQuery] = useState(query.trim());
+  // Extra results from a location-scoped Adzuna search for the current
+  // query (see the fetch effect below for why this exists alongside the
+  // plain client-side filter).
+  const [locationJobs, setLocationJobs] = useState<Job[] | null>(null);
   const router = useRouter();
   const {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
@@ -71,13 +79,8 @@ function JobList() {
     setFreeJobId(isJobDay() ? 'pending' : null);
   }, []);
 
-  // One fetch of the nationwide list — search (city, title, or keyword) all
-  // runs client-side against it below, so there's a single search box
-  // instead of a separate server-backed location filter and a client-side
-  // keyword one. (A location-scoped Adzuna call was tried as the backing
-  // query for this box, but Adzuna returns zero results for anything that
-  // isn't a real place name — e.g. "bonus" — which would break keyword
-  // search entirely.)
+  // One fetch of the nationwide list — the instant part of search (title,
+  // description, location text) runs client-side against it below.
   useEffect(() => {
     fetch(`${API_BASE}/api/jobs/`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
@@ -89,14 +92,55 @@ function JobList() {
       .catch(() => setError(true));
   }, []);
 
+  // Debounce before hitting the network or touching the URL, and persist
+  // the settled query in ?q= so it's still there if the user taps into a
+  // job and comes back.
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const trimmed = query.trim();
+      setDebouncedQuery(trimmed);
+      router.replace(`/jobs${trimmed ? `?q=${encodeURIComponent(trimmed)}` : ''}`, { scroll: false });
+    }, 500);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  // High-volume metros (NYC, Florida, etc.) have more sonographer postings
+  // than fit in the nationwide list's top-25-per-phrase cap, so a city/state
+  // search needs its own Adzuna query to actually find them — the client
+  // filter below only catches whatever happened to already be in that
+  // capped sample. Returns an empty list (not an error) for non-place text
+  // like "bonus", which is expected — the keyword filter covers that case.
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setLocationJobs(null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`${API_BASE}/api/jobs/?location=${encodeURIComponent(debouncedQuery)}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => { if (!cancelled) setLocationJobs(Array.isArray(data) ? data : []); })
+      .catch(() => { if (!cancelled) setLocationJobs([]); });
+    return () => { cancelled = true; };
+  }, [debouncedQuery]);
+
   const trimmedQuery = query.trim().toLowerCase();
-  const visibleJobs = trimmedQuery
-    ? jobs?.filter((j) =>
-        j.title.toLowerCase().includes(trimmedQuery) ||
-        j.description.toLowerCase().includes(trimmedQuery) ||
-        j.location.toLowerCase().includes(trimmedQuery)
-      )
-    : jobs;
+  const visibleJobs = !trimmedQuery
+    ? jobs
+    : (() => {
+        const byId = new Map<string, Job>();
+        for (const j of jobs ?? []) {
+          if (
+            j.title.toLowerCase().includes(trimmedQuery) ||
+            j.description.toLowerCase().includes(trimmedQuery) ||
+            j.location.toLowerCase().includes(trimmedQuery)
+          ) {
+            byId.set(j.id, j);
+          }
+        }
+        for (const j of locationJobs ?? []) byId.set(j.id, j);
+        return Array.from(byId.values()).sort((a, b) => (a.created < b.created ? 1 : -1));
+      })();
 
   return (
     <div className="min-h-screen bg-white pb-nav">
@@ -183,7 +227,9 @@ function JobList() {
               key={job.id}
               onClick={() =>
                 unlocked
-                  ? router.push(`/jobs?id=${encodeURIComponent(job.id)}`)
+                  ? router.push(
+                      `/jobs?id=${encodeURIComponent(job.id)}${trimmedQuery ? `&q=${encodeURIComponent(query.trim())}` : ''}`
+                    )
                   : openPaywall('jobs')
               }
               className="w-full flex items-start justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors text-left"
@@ -248,6 +294,8 @@ function JobList() {
    today's free job. ─────────────────────────────────────────────────────── */
 function JobDetail({ id }: { id: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q');
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [error, setError] = useState(false);
   const { isPremium, openPaywall, ...paywall } = usePremium();
@@ -290,7 +338,7 @@ function JobDetail({ id }: { id: string }) {
 
       <div className="bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 pt-14 pb-3 sticky top-0 z-10">
         <button
-          onClick={() => router.push('/jobs')}
+          onClick={() => router.push(`/jobs${q ? `?q=${encodeURIComponent(q)}` : ''}`)}
           className="inline-flex items-center gap-1 text-sky-500 text-sm font-semibold"
         >
           <ChevronLeft size={16} strokeWidth={2.5} />
