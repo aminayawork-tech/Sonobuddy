@@ -6,7 +6,7 @@ import http2 from 'http2';
 import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
-import { getDailyHook, getDailyIndex } from '@/lib/tips';
+import { getDailyHook, isJobDay } from '@/lib/tips';
 import { getJobs } from '@/lib/jobs';
 
 const redis = new Redis({
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
     let notifBody  = customBody  ?? hook.preview;
     let notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
 
-    if (!customTitle && !customBody && getDailyIndex() % 2 === 1) {
+    if (!customTitle && !customBody && isJobDay()) {
       try {
         const [job] = await getJobs();
         if (job) {

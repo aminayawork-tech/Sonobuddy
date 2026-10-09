@@ -10,6 +10,7 @@ import { Calendar, ChevronRight, ChevronLeft, Newspaper, Search, Lock } from 'lu
 import { usePremium } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import ArticleDetailClient from '@/components/ArticleDetailClient';
+import { getDailyHook, isJobDay } from '@/lib/tips';
 
 const API_BASE = 'https://www.sonobuddy.com';
 type ArticleMeta = Omit<Article, 'content'>;
@@ -56,6 +57,15 @@ function ArticleList() {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
     shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
   } = usePremium();
+
+  // Whichever article today's home-screen hook points to is free to read —
+  // same mechanism ArticleDetailClient uses, kept out of the static HTML (see
+  // its comment) by only setting this after mount so there's no hydration
+  // mismatch between the build-time date and the viewer's actual date.
+  const [freeSlug, setFreeSlug] = useState<string | null>(null);
+  useEffect(() => {
+    setFreeSlug(!isJobDay() ? getDailyHook().articleSlug ?? null : null);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/articles/`)
@@ -116,17 +126,23 @@ function ArticleList() {
             const href = BUNDLED_SLUGS.has(article.slug)
               ? `/articles/${article.slug}`
               : `/articles?slug=${article.slug}`;
+            const isFreeToday = article.slug === freeSlug;
 
             return (
               <button
                 key={article.slug}
-                onClick={() => isPremium ? router.push(href) : openPaywall('articles')}
+                onClick={() => (isPremium || isFreeToday) ? router.push(href) : openPaywall('articles')}
                 className="w-full flex items-start justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors text-left"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <Calendar size={11} className="text-slate-400 shrink-0" />
                     <span className="text-[11px] text-slate-400">{formatDate(article.date)}</span>
+                    {isFreeToday && !isPremium && (
+                      <span className="bg-emerald-50 text-emerald-600 text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full">
+                        Free today
+                      </span>
+                    )}
                   </div>
                   <p className="text-[15px] font-bold text-slate-900 leading-snug mb-1.5 line-clamp-2">
                     {article.title}
@@ -147,7 +163,7 @@ function ArticleList() {
                     </div>
                   )}
                 </div>
-                {isPremium ? (
+                {isPremium || isFreeToday ? (
                   <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
                 ) : (
                   <Lock size={14} className="text-slate-300 shrink-0 mt-1" />

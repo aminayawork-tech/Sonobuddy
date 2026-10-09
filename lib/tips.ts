@@ -433,3 +433,11 @@ export type { DailyHook };
 export function getDailyHook(): DailyHook {
   return DAILY_HOOKS[getDailyIndex() % DAILY_HOOKS.length];
 }
+
+// Shared by the home page, the Articles pages, the Jobs page, and the push
+// route so they all agree on which days feature an article vs a job without
+// any of them needing to ask each other — it's the same pure date math
+// everywhere, so it can never drift out of sync.
+export function isJobDay(): boolean {
+  return getDailyIndex() % 2 === 1;
+}
