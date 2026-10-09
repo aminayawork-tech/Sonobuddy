@@ -10,6 +10,33 @@ import { isJobDay } from '@/lib/tips';
 
 const API_BASE = 'https://www.sonobuddy.com';
 
+// Adzuna's location text is always the full state name ("New York", never
+// "NY"), but people naturally search by abbreviation — and the debounced
+// location-scoped search (which does understand "NY") only kicks in ~500ms
+// after typing, so without this the instant client-side filter shows
+// nothing for that gap. A bare two-letter query is otherwise too ambiguous
+// to substring-match, so this only fires on an exact abbreviation match.
+const STATE_ABBREVIATIONS: Record<string, string> = {
+  al: 'alabama', ak: 'alaska', az: 'arizona', ar: 'arkansas', ca: 'california',
+  co: 'colorado', ct: 'connecticut', de: 'delaware', dc: 'district of columbia',
+  fl: 'florida', ga: 'georgia', hi: 'hawaii', id: 'idaho', il: 'illinois',
+  in: 'indiana', ia: 'iowa', ks: 'kansas', ky: 'kentucky', la: 'louisiana',
+  me: 'maine', md: 'maryland', ma: 'massachusetts', mi: 'michigan', mn: 'minnesota',
+  ms: 'mississippi', mo: 'missouri', mt: 'montana', ne: 'nebraska', nv: 'nevada',
+  nh: 'new hampshire', nj: 'new jersey', nm: 'new mexico', ny: 'new york',
+  nc: 'north carolina', nd: 'north dakota', oh: 'ohio', ok: 'oklahoma', or: 'oregon',
+  pa: 'pennsylvania', ri: 'rhode island', sc: 'south carolina', sd: 'south dakota',
+  tn: 'tennessee', tx: 'texas', ut: 'utah', vt: 'vermont', va: 'virginia',
+  wa: 'washington', wv: 'west virginia', wi: 'wisconsin', wy: 'wyoming',
+};
+
+function matchesLocation(location: string, query: string): boolean {
+  const loc = location.toLowerCase();
+  if (loc.includes(query)) return true;
+  const expanded = STATE_ABBREVIATIONS[query];
+  return expanded ? loc.includes(expanded) : false;
+}
+
 function formatRelative(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
   if (days <= 0) return 'Today';
@@ -133,7 +160,7 @@ function JobList() {
           if (
             j.title.toLowerCase().includes(trimmedQuery) ||
             j.description.toLowerCase().includes(trimmedQuery) ||
-            j.location.toLowerCase().includes(trimmedQuery)
+            matchesLocation(j.location, trimmedQuery)
           ) {
             byId.set(j.id, j);
           }
