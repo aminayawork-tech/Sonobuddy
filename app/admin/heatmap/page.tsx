@@ -282,6 +282,19 @@ export default function HeatmapAdminPage() {
     return { views, taps, paywallFromJobs };
   })();
 
+  // Purchases for just the selected day — the all-time headline stat above
+  // answers "did I ever sell anything," this answers "did today's traffic
+  // convert," which is what actually needs checking day to day.
+  const todaySales = (() => {
+    if (!data) return null;
+    const get = (n: string) => data.named.find((x) => x.name === n)?.count ?? 0;
+    const fullPrice = get('paywall:completed:purchase');
+    const salePrice = get('paywall:completed:purchaseDiscount');
+    const count = fullPrice + salePrice;
+    const revenue = fullPrice * 9.99 + salePrice * 6.99;
+    return { count, revenue };
+  })();
+
   // Share-to-save: how many people offered the discount actually share, and
   // how many of those go on to buy at $6.99. Counted against the offer
   // itself, not against total paywall views — most people never hit X.
@@ -698,6 +711,32 @@ export default function HeatmapAdminPage() {
             >
               {resetting ? 'Clearing…' : `Clear ${day} (${surface})`}
             </button>
+          </div>
+        )}
+
+        {/* Sales for just the selected day, separate from the all-time
+            headline above — the one place that answers "did today's
+            traffic convert," which is what to check against App Store
+            Connect's own per-day numbers when something looks off. */}
+        {data && todaySales && (
+          <div className="mb-6 -mt-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-5 py-4 flex flex-wrap items-center gap-x-10 gap-y-3">
+            <div>
+              <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
+                Purchases · {day}
+              </p>
+              <p className="text-3xl font-black text-white tabular-nums">{todaySales.count}</p>
+            </div>
+            <div>
+              <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
+                Revenue · {day} (before Apple&apos;s cut)
+              </p>
+              <p className="text-3xl font-black text-white tabular-nums">${todaySales.revenue.toFixed(2)}</p>
+            </div>
+            {todaySales.count === 0 && (
+              <p className="text-slate-400 text-xs">
+                No completed purchases recorded for this day/surface — check App Store Connect&apos;s own per-day Sales report if you expected one here.
+              </p>
+            )}
           </div>
         )}
 
