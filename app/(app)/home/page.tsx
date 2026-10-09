@@ -15,7 +15,8 @@ import {
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
 import { calculators } from '@/data/calculators';
-import { getDailyHook, type DailyHook } from '@/lib/tips';
+import { getDailyHook, isJobDay, type DailyHook } from '@/lib/tips';
+import type { Job } from '@/lib/jobs';
 import NotificationPrompt from '@/components/NotificationPrompt';
 
 // ── Quick Access types & defaults ────────────────────────────────────────────
@@ -117,12 +118,29 @@ export default function HomePage() {
   // mount would stay frozen at the build date until something forced a real
   // re-render. Computing it inside an effect guarantees the first paint is a
   // genuine client render, using the date on the user's device.
+  //
+  // The card alternates day to day between an article hook and a job
+  // posting — same isJobDay() split the push notification uses, so whatever
+  // this card shows always matches what today's notification pointed to.
+  const [dayKind, setDayKind] = useState<'article' | 'job' | null>(null);
   const [hook, setHook] = useState<DailyHook | null>(null);
+  const [featuredJob, setFeaturedJob] = useState<Job | null>(null);
   const [tipDate, setTipDate] = useState('');
 
   useEffect(() => {
-    setHook(getDailyHook());
     setTipDate(new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+    if (isJobDay()) {
+      setDayKind('job');
+      fetch('https://www.sonobuddy.com/api/jobs/')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((jobs: Job[] | null) => { if (jobs && jobs[0]) setFeaturedJob(jobs[0]); })
+        .catch(() => { /* card just stays on its skeleton */ });
+      return;
+    }
+
+    setDayKind('article');
+    setHook(getDailyHook());
 
     // Then try the server's version, so it exactly matches the push
     // notification when a connection is available.
@@ -467,16 +485,46 @@ export default function HomePage() {
         <NotificationPrompt />
       </div>
 
-      {/* Daily Insight Card */}
+      {/* Daily Insight Card — alternates with a featured job by day (see the
+          mount effect above), so the label and content both switch together. */}
       <div className="px-5 mb-6">
         <div className="bg-slate-900 rounded-2xl overflow-hidden shadow-lg">
           {/* Header row */}
           <div className="flex items-center justify-between px-5 pt-5 mb-3">
-            <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">Today&apos;s Insight</span>
+            <span className="text-[11px] font-bold text-[#0EA5E9] uppercase tracking-widest">
+              {dayKind === 'job' ? "Today's Opening" : "Today's Insight"}
+            </span>
             <span className="text-[11px] text-slate-400 font-medium">{tipDate}</span>
           </div>
 
-          {!hook ? (
+          {dayKind === 'job' ? (
+            !featuredJob ? (
+              <div className="px-5 pb-6 space-y-2 animate-pulse">
+                <div className="h-4 bg-slate-800 rounded w-3/4" />
+                <div className="h-3 bg-slate-800 rounded w-full" />
+                <div className="h-3 bg-slate-800 rounded w-5/6" />
+              </div>
+            ) : (
+              <>
+                <h2 className="px-5 text-[17px] font-black text-white leading-snug tracking-tight mb-2">
+                  {featuredJob.title}
+                </h2>
+                <p className="px-5 text-[14px] text-slate-300 leading-relaxed">
+                  {featuredJob.location || 'Multiple locations'}
+                </p>
+                <p className="px-5 mt-2 text-[13px] text-slate-400 leading-relaxed line-clamp-2">
+                  {featuredJob.description}
+                </p>
+                <button
+                  onClick={() => router.push(`/jobs?id=${encodeURIComponent(featuredJob.id)}`)}
+                  className="mx-5 mt-4 mb-5 flex items-center gap-1.5 text-[13px] font-semibold text-[#0EA5E9] active:opacity-70 transition-opacity"
+                >
+                  View job details
+                  <span className="text-[16px] leading-none">→</span>
+                </button>
+              </>
+            )
+          ) : !hook ? (
             // Brief skeleton for the one tick before the mount effect sets the
             // hook — this content is date-dependent, so it is never computed
             // before mount (see the effect above for why).

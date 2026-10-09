@@ -1,12 +1,14 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Calendar, ChevronLeft, Lock } from 'lucide-react';
+import { Calendar, ChevronLeft } from 'lucide-react';
 import { usePremium } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import { parseLocalDate } from '@/lib/date';
+import { getDailyHook, isJobDay } from '@/lib/tips';
 import type { Article } from '@/lib/articles-data';
 
 function formatDateLong(dateStr: string) {
@@ -20,6 +22,16 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
     shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
   } = usePremium();
+
+  // Reached directly (deep link, bookmark, or the home screen's "Read full
+  // article" button, which navigates here unconditionally) rather than only
+  // through the list's own gate, so this needs its own independent check —
+  // set after mount, same as the home page's hook, to avoid a hydration
+  // mismatch against the build-time date.
+  const [freeToday, setFreeToday] = useState(false);
+  useEffect(() => {
+    setFreeToday(!isJobDay() && getDailyHook().articleSlug === article.slug);
+  }, [article.slug]);
 
   return (
     <div className="min-h-screen bg-white pb-nav">
@@ -45,6 +57,11 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
         <div className="flex items-center gap-1.5 mb-3">
           <Calendar size={12} className="text-slate-400" />
           <span className="text-[12px] text-slate-400">{formatDateLong(article.date)}</span>
+          {freeToday && !isPremium && (
+            <span className="bg-emerald-50 text-emerald-600 text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full">
+              Free today
+            </span>
+          )}
         </div>
 
         <h1 className="text-[24px] font-black tracking-tight text-slate-900 leading-tight mb-3">
@@ -64,7 +81,7 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
           </div>
         )}
 
-        {isPremium ? (
+        {isPremium || freeToday ? (
           <>
             <div className="
               prose prose-slate max-w-none
@@ -120,9 +137,7 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
             onClick={() => openPaywall('articles')}
             className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center active:bg-slate-100 transition-colors"
           >
-            <div className="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center mx-auto mb-3">
-              <Lock className="w-6 h-6 text-sky-500" />
-            </div>
+            <img src="/icons/icon-192.png" alt="" className="w-12 h-12 rounded-2xl mx-auto mb-3" />
             <p className="text-slate-900 font-bold text-[15px] mb-1">Unlock to keep reading</p>
             <p className="text-slate-500 text-[13px] leading-relaxed mb-4">
               This article is part of SonoBuddy premium, along with every measurement, protocol, calculator, and pathology.
