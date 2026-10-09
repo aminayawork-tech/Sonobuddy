@@ -305,16 +305,27 @@ function JobDetail({ id }: { id: string }) {
     setFreeJobId(isJobDay() ? 'pending' : null);
   }, []);
 
+  // Also fetches the same location-scoped search (when the list was reached
+  // via one — see ?q= above) so a job that only shows up in that scoped
+  // search, not the capped nationwide sample, can still be found here by
+  // id. Without this, tapping a New York or Florida listing (those markets
+  // have more postings than fit in the nationwide cap) always 404'd.
   useEffect(() => {
-    fetch(`${API_BASE}/api/jobs/`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data) => {
-        const list: Job[] = Array.isArray(data) ? data : [];
+    const requests = [fetch(`${API_BASE}/api/jobs/`).then((r) => (r.ok ? r.json() : []))];
+    if (q) requests.push(fetch(`${API_BASE}/api/jobs/?location=${encodeURIComponent(q)}`).then((r) => (r.ok ? r.json() : [])));
+
+    Promise.all(requests)
+      .then(([nationwide, located]) => {
+        const byId = new Map<string, Job>();
+        for (const j of Array.isArray(nationwide) ? nationwide : []) byId.set(j.id, j);
+        for (const j of Array.isArray(located) ? located : []) byId.set(j.id, j);
+        const list = Array.from(byId.values());
         setJobs(list);
-        setFreeJobId((prev) => (prev === 'pending' && list[0] ? list[0].id : prev === 'pending' ? null : prev));
+        const first = (Array.isArray(nationwide) ? nationwide : [])[0];
+        setFreeJobId((prev) => (prev === 'pending' && first ? first.id : prev === 'pending' ? null : prev));
       })
       .catch(() => setError(true));
-  }, []);
+  }, [q]);
 
   const job = jobs?.find((j) => j.id === id) ?? null;
   const isFreeToday = job?.id === freeJobId;
