@@ -58,6 +58,7 @@ function JobList() {
   const [error, setError] = useState(false);
   const [locationInput, setLocationInput] = useState('');
   const [location, setLocation] = useState('');
+  const [keyword, setKeyword] = useState('');
   const router = useRouter();
   const {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
@@ -97,6 +98,17 @@ function JobList() {
       })
       .catch(() => setError(true));
   }, [location]);
+
+  // Searches within what's already loaded — title and description — so
+  // typing something like "bonus" or "weekend" narrows the list instantly,
+  // no extra network round-trip the way the location filter needs.
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  const visibleJobs = trimmedKeyword
+    ? jobs?.filter((j) =>
+        j.title.toLowerCase().includes(trimmedKeyword) ||
+        j.description.toLowerCase().includes(trimmedKeyword)
+      )
+    : jobs;
 
   return (
     <div className="min-h-screen bg-white pb-nav">
@@ -141,6 +153,26 @@ function JobList() {
             </button>
           )}
         </div>
+
+        <div className="relative mt-2">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
+          <input
+            type="text"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="Search title & description, e.g. bonus, remote"
+            className="w-full bg-slate-50 rounded-xl pl-10 pr-9 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-sky-200"
+          />
+          {keyword && (
+            <button
+              onClick={() => setKeyword('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 active:text-slate-500"
+              aria-label="Clear keyword search"
+            >
+              <X size={15} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="px-4 pt-4 space-y-3">
@@ -170,7 +202,13 @@ function JobList() {
           </p>
         )}
 
-        {jobs?.map((job) => {
+        {!error && jobs && jobs.length > 0 && visibleJobs?.length === 0 && (
+          <p className="text-slate-400 text-sm text-center py-12">
+            No openings match &quot;{keyword.trim()}&quot; — try a different word.
+          </p>
+        )}
+
+        {visibleJobs?.map((job) => {
           const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryEstimated);
           const isFreeToday = job.id === freeJobId;
           const unlocked = isPremium || isFreeToday;
@@ -228,7 +266,7 @@ function JobList() {
           );
         })}
 
-        {jobs && jobs.length > 0 && (
+        {visibleJobs && visibleJobs.length > 0 && (
           <p className="text-slate-300 text-[11px] text-center pt-2 pb-4">
             Tap a listing to see full details
           </p>
