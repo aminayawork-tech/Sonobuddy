@@ -9,7 +9,6 @@ import PaywallModal from '@/components/PaywallModal';
 import { isJobDay } from '@/lib/tips';
 
 const API_BASE = 'https://www.sonobuddy.com';
-const SEARCH_DEBOUNCE_MS = 500;
 
 function formatRelative(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
@@ -56,9 +55,7 @@ export default function JobsPage() {
 function JobList() {
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [error, setError] = useState(false);
-  const [locationInput, setLocationInput] = useState('');
-  const [location, setLocation] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [query, setQuery] = useState('');
   const router = useRouter();
   const {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
@@ -74,39 +71,30 @@ function JobList() {
     setFreeJobId(isJobDay() ? 'pending' : null);
   }, []);
 
-  // Debounce so we're not firing a request on every keystroke.
+  // One fetch of the nationwide list — search (city, title, or keyword) all
+  // runs client-side against it below, so there's a single search box
+  // instead of a separate server-backed location filter and a client-side
+  // keyword one. (A location-scoped Adzuna call was tried as the backing
+  // query for this box, but Adzuna returns zero results for anything that
+  // isn't a real place name — e.g. "bonus" — which would break keyword
+  // search entirely.)
   useEffect(() => {
-    const id = setTimeout(() => setLocation(locationInput.trim()), SEARCH_DEBOUNCE_MS);
-    return () => clearTimeout(id);
-  }, [locationInput]);
-
-  useEffect(() => {
-    setJobs(null);
-    setError(false);
-    const url = `${API_BASE}/api/jobs/${location ? `?location=${encodeURIComponent(location)}` : ''}`;
-    fetch(url)
+    fetch(`${API_BASE}/api/jobs/`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         const list = Array.isArray(data) ? data : [];
         setJobs(list);
-        // The free job is always the top of the *unfiltered* list — the same
-        // one the home screen features — so a location search doesn't quietly
-        // change which job is free, it just might filter it out of view.
-        if (!location) {
-          setFreeJobId((prev) => (prev === 'pending' && list[0] ? list[0].id : prev === 'pending' ? null : prev));
-        }
+        setFreeJobId((prev) => (prev === 'pending' && list[0] ? list[0].id : prev === 'pending' ? null : prev));
       })
       .catch(() => setError(true));
-  }, [location]);
+  }, []);
 
-  // Searches within what's already loaded — title and description — so
-  // typing something like "bonus" or "weekend" narrows the list instantly,
-  // no extra network round-trip the way the location filter needs.
-  const trimmedKeyword = keyword.trim().toLowerCase();
-  const visibleJobs = trimmedKeyword
+  const trimmedQuery = query.trim().toLowerCase();
+  const visibleJobs = trimmedQuery
     ? jobs?.filter((j) =>
-        j.title.toLowerCase().includes(trimmedKeyword) ||
-        j.description.toLowerCase().includes(trimmedKeyword)
+        j.title.toLowerCase().includes(trimmedQuery) ||
+        j.description.toLowerCase().includes(trimmedQuery) ||
+        j.location.toLowerCase().includes(trimmedQuery)
       )
     : jobs;
 
@@ -138,36 +126,16 @@ function JobList() {
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
           <input
             type="text"
-            value={locationInput}
-            onChange={(e) => setLocationInput(e.target.value)}
-            placeholder="Filter by city, state, or country"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search city, title, or keyword — e.g. Dallas, bonus"
             className="w-full bg-slate-50 rounded-xl pl-10 pr-9 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-sky-200"
           />
-          {locationInput && (
+          {query && (
             <button
-              onClick={() => setLocationInput('')}
+              onClick={() => setQuery('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 active:text-slate-500"
-              aria-label="Clear location filter"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-
-        <div className="relative mt-2">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
-          <input
-            type="text"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            placeholder="Search title & description, e.g. bonus, remote"
-            className="w-full bg-slate-50 rounded-xl pl-10 pr-9 py-2.5 text-[14px] text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-sky-200"
-          />
-          {keyword && (
-            <button
-              onClick={() => setKeyword('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 active:text-slate-500"
-              aria-label="Clear keyword search"
+              aria-label="Clear search"
             >
               <X size={15} />
             </button>
@@ -196,15 +164,13 @@ function JobList() {
 
         {!error && jobs?.length === 0 && (
           <p className="text-slate-400 text-sm text-center py-12">
-            {location
-              ? `No openings found for "${location}" — try a broader search.`
-              : 'No openings found right now — check back soon.'}
+            No openings found right now — check back soon.
           </p>
         )}
 
         {!error && jobs && jobs.length > 0 && visibleJobs?.length === 0 && (
           <p className="text-slate-400 text-sm text-center py-12">
-            No openings match &quot;{keyword.trim()}&quot; — try a different word.
+            No openings match &quot;{query.trim()}&quot; — try a different word.
           </p>
         )}
 
