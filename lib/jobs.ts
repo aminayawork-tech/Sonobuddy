@@ -18,7 +18,7 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // Bump this when the search query logic changes (e.g. switching match
 // fields) so stale cached results from the old logic aren't served to
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 
 function cacheKey(location?: string): string {
   return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
@@ -94,6 +94,13 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
   // usable instead of excluding them outright.
   const MAX_PLAUSIBLE_SALARY = 300_000;
 
+  // Floor, same idea in the other direction — Adzuna's model occasionally
+  // guesses a part-time-shift rate (e.g. one day's pay) and annualizes it as
+  // if it were full-time, producing $12k–$30k "salaries" no real US
+  // sonographer role pays. Below this is treated as a bad guess rather than
+  // a real figure.
+  const MIN_PLAUSIBLE_SALARY = 50_000;
+
   const jobs = Array.from(byId.values())
     .sort((a, b) => (a.created < b.created ? 1 : -1))
     .map((j) => {
@@ -101,10 +108,10 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
       // flags it with salary_is_predicted. Most estimates are reasonable
       // and showing a figure drives more clicks than hiding it, so these
       // are kept (labeled as estimates in the UI) rather than dropped —
-      // the sanity ceiling above is what catches the occasional bad guess.
+      // the sanity bounds above are what catch the occasional bad guess.
       const estimated = j.salary_is_predicted === '1';
       const plausible = (n: number | null) =>
-        n !== null && n <= MAX_PLAUSIBLE_SALARY ? n : null;
+        n !== null && n >= MIN_PLAUSIBLE_SALARY && n <= MAX_PLAUSIBLE_SALARY ? n : null;
       return {
         id: j.id,
         title: j.title,
