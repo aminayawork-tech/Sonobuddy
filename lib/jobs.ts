@@ -18,7 +18,7 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // Bump this when the search query logic changes (e.g. switching match
 // fields) so stale cached results from the old logic aren't served to
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
-const CACHE_VERSION = 'v8';
+const CACHE_VERSION = 'v9';
 
 function cacheKey(location?: string): string {
   return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
@@ -124,7 +124,12 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
         salaryMax: plausible(j.salary_max ?? null),
         salaryEstimated: estimated,
       };
-    });
+    })
+    // A listing with no salary at all, or one whose only figure got nulled
+    // out as implausible above, reads as half-finished rather than just
+    // "no stated salary" — drop it instead of showing a card with a blank
+    // where the pay would be.
+    .filter((j) => j.salaryMin !== null || j.salaryMax !== null);
 
   // Staffing agencies post the identical listing under a distinct job id for
   // every city they're hiring in — same title, same company, different id —
