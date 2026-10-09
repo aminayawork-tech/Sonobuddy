@@ -441,7 +441,37 @@ export default function HeatmapAdminPage() {
             )}
 
             {insights && insights.dayCount > 0 && (
-              <div className="grid lg:grid-cols-3 gap-6">
+              <>
+                {/* Headline purchase stat — the "Price test" tile below has
+                    the same numbers, but as one of six equal-weight cards
+                    it's easy to miss. This is the one place that answers
+                    "did I sell anything" at a glance, always visible (even
+                    at $0) rather than only appearing once there's a sale. */}
+                <div className="mb-6 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-5 py-4 flex flex-wrap items-center gap-x-10 gap-y-3">
+                  <div>
+                    <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
+                      Purchases · all time
+                    </p>
+                    <p className="text-3xl font-black text-white tabular-nums">
+                      {priceComparison.reduce((s, p) => s + p.count, 0)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
+                      Revenue · all time (before Apple&apos;s cut)
+                    </p>
+                    <p className="text-3xl font-black text-white tabular-nums">
+                      ${priceComparison.reduce((s, p) => s + p.revenue, 0).toFixed(2)}
+                    </p>
+                  </div>
+                  {priceComparison.reduce((s, p) => s + p.count, 0) === 0 && (
+                    <p className="text-slate-400 text-xs">
+                      No completed purchases yet for {surface === 'ios' ? 'the iOS app' : 'the website'} — try the iOS surface if you expected a sale to show here.
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid lg:grid-cols-3 gap-6">
                 {/* Month over month */}
                 <div>
                   <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-3">
@@ -639,7 +669,8 @@ export default function HeatmapAdminPage() {
                     </ul>
                   )}
                 </div>
-              </div>
+                </div>
+              </>
             )}
           </section>
         )}
