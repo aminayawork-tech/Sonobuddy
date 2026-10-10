@@ -4,7 +4,7 @@ import { protocols, DIFFICULTY_COLORS, type KeyImage } from '@/data/protocols';
 import Link from 'next/link';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Clock, Zap, ChevronDown, Copy, Check } from 'lucide-react';
 import ImageLightbox from '@/components/ImageLightbox';
 
@@ -14,6 +14,19 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
   const [expandedTemplate, setExpandedTemplate] = useState<number | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<KeyImage | null>(null);
+  // Opens full-screen on double-tap rather than a single tap, consistent
+  // with Pathologies — a normal tap while scrolling shouldn't pop it open.
+  const lastImageTapRef = useRef<{ key: string; time: number } | null>(null);
+  function handleImageTap(key: string, img: KeyImage) {
+    const now = Date.now();
+    const last = lastImageTapRef.current;
+    if (last && last.key === key && now - last.time < 350) {
+      lastImageTapRef.current = null;
+      setLightbox(img);
+    } else {
+      lastImageTapRef.current = { key, time: now };
+    }
+  }
 
   function copyTemplate(text: string, index: number) {
     navigator.clipboard.writeText(text).then(() => {
@@ -143,7 +156,7 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
                 <p className="text-sm text-slate-700 flex-1">{img.label}</p>
                 {img.src && (
                   <button
-                    onClick={() => setLightbox(img)}
+                    onClick={() => handleImageTap(`${id}-${i}`, img)}
                     className="shrink-0 rounded-lg overflow-hidden border border-sono-border active:scale-95 transition-transform"
                   >
                     <Image

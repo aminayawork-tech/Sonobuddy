@@ -40,6 +40,20 @@ export default function PathologiesPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<PathologyImage | null>(null);
+  // Thumbnails open full-screen on double-tap rather than a single tap, so a
+  // normal tap while scrolling the horizontal image strip doesn't
+  // accidentally pop the viewer open.
+  const lastImageTapRef = useRef<{ key: string; time: number } | null>(null);
+  function handleImageTap(key: string, img: PathologyImage) {
+    const now = Date.now();
+    const last = lastImageTapRef.current;
+    if (last && last.key === key && now - last.time < 350) {
+      lastImageTapRef.current = null;
+      setLightbox(img);
+    } else {
+      lastImageTapRef.current = { key, time: now };
+    }
+  }
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const headerRef = useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -224,7 +238,7 @@ export default function PathologiesPage() {
                         {p.images.map((img, i) => (
                           <button
                             key={i}
-                            onClick={() => setLightbox(img)}
+                            onClick={() => handleImageTap(`${p.id}-${i}`, img)}
                             className="shrink-0 rounded-xl overflow-hidden border border-sono-border active:scale-95 transition-transform"
                           >
                             <Image
