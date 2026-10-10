@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Microscope, X, Lock } from 'lucide-react';
+import { Microscope, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
 import { usePremium, FREE_PATHOLOGY_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
+import ImageLightbox from '@/components/ImageLightbox';
 import clsx from 'clsx';
 
 const CATEGORY_LABELS: Record<PathologyCategory, string> = {
@@ -91,31 +92,14 @@ export default function PathologiesPage() {
         />}
       {/* Lightbox */}
       {lightbox && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4"
-          onClick={() => setLightbox(null)}
-        >
-          <button
-            className="absolute top-4 right-4 text-white/70 hover:text-white"
-            onClick={() => setLightbox(null)}
-          >
-            <X className="w-7 h-7" />
-          </button>
-          <div className="relative w-full max-w-lg max-h-[75vh]" onClick={(e) => e.stopPropagation()}>
-            <Image
-              src={lightbox.src}
-              alt={lightbox.caption}
-              width={800}
-              height={600}
-              unoptimized
-              className="rounded-xl object-contain w-full max-h-[75vh]"
-            />
-          </div>
-          <p className="text-white/80 text-sm mt-3 text-center max-w-sm">{lightbox.caption}</p>
-          {lightbox.credit && (
-            <p className="text-white/40 text-[11px] mt-1 text-center max-w-sm">{lightbox.credit}</p>
-          )}
-        </div>
+        <ImageLightbox
+          key={lightbox.src}
+          src={lightbox.src}
+          alt={lightbox.caption}
+          caption={lightbox.caption}
+          credit={lightbox.credit}
+          onClose={() => setLightbox(null)}
+        />
       )}
 
       {/* Header */}
