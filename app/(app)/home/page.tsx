@@ -12,6 +12,9 @@ import {
   Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check, Lock,
   Menu, Share2, MessageSquare, ShieldCheck, Newspaper, Briefcase,
   Waves, Footprints, BicepsFlexed, Baby, Divide, Percent,
+  Siren, Hand, Map, GitMerge, Brain, ArrowDownUp, Thermometer, Filter,
+  User, Layers, Calendar, Droplet, CalendarClock, Box, AudioWaveform,
+  Scale, Bone, CircleDot,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -33,28 +36,56 @@ type QuickAccessItem = {
 const CATEGORY_STYLE: Record<string, { iconBg: string; iconColor: string; Icon: LucideIcon }> = {
   vascular:       { iconBg: 'bg-sky-100',    iconColor: 'text-sky-600',    Icon: Activity     },
   abdomen:        { iconBg: 'bg-amber-100',  iconColor: 'text-amber-600',  Icon: Stethoscope  },
-  ob:             { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Heart        },
+  ob:             { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Baby         },
   thyroid:        { iconBg: 'bg-violet-100', iconColor: 'text-violet-600', Icon: Scan         },
   cardiac:        { iconBg: 'bg-rose-100',   iconColor: 'text-rose-600',   Icon: Heart        },
-  msk:            { iconBg: 'bg-green-100',  iconColor: 'text-green-600',  Icon: Ruler        },
+  msk:            { iconBg: 'bg-green-100',  iconColor: 'text-green-600',  Icon: Bone         },
+  breast:         { iconBg: 'bg-fuchsia-100',iconColor: 'text-fuchsia-600',Icon: CircleDot    },
   'calc-vascular':{ iconBg: 'bg-purple-100', iconColor: 'text-purple-600', Icon: BarChart2    },
   'calc-abdomen': { iconBg: 'bg-amber-100',  iconColor: 'text-amber-600',  Icon: Calculator   },
   'calc-ob':      { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Calculator   },
   'calc-general': { iconBg: 'bg-teal-100',   iconColor: 'text-teal-600',   Icon: Gauge        },
 };
 
-// Purpose-built icons for specific exams/calculators, since the broad
+// Purpose-built icons for every specific exam/calculator — the broad
 // category style above (one icon per modality) left every vascular protocol
-// sharing a single glyph, and gave Pelvic US the same heart as a cardiac
-// echo. These take priority over the category default wherever an item id
-// matches, including in the "choose a quick access item" picker list below.
+// sharing a single glyph, gave Pelvic US the same heart as a cardiac echo,
+// and every OB/general calculator sharing one generic icon with its
+// siblings. These take priority over the category default wherever an item
+// id matches, including in the "choose a quick access item" picker list,
+// which lists every protocol and calculator, not just the Quick Access
+// defaults — so every one of them needs its own entry here, not only the 8
+// that start pinned to the home screen.
 const ITEM_ICON_OVERRIDES: Record<string, { iconBg: string; iconColor: string; Icon: LucideIcon }> = {
-  'carotid-duplex':        { iconBg: 'bg-sky-100',    iconColor: 'text-sky-600',    Icon: Waves      }, // blood flow through the neck vessels
-  'dvt-lower':             { iconBg: 'bg-cyan-100',   iconColor: 'text-cyan-600',   Icon: Footprints   }, // lower-extremity exam
-  'ue-arterial':           { iconBg: 'bg-blue-100',   iconColor: 'text-blue-600',   Icon: BicepsFlexed }, // upper-extremity exam
-  'pelvic-us':             { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Baby       }, // OB/GYN, not the heart cardiac uses
-  'calc-abi':              { iconBg: 'bg-purple-100', iconColor: 'text-purple-600', Icon: Divide     }, // ABI is a ratio between two pressures
-  'calc-carotid-stenosis': { iconBg: 'bg-indigo-100', iconColor: 'text-indigo-600', Icon: Percent    }, // stenosis is graded as a % narrowing
+  // Vascular protocols
+  'carotid-duplex':        { iconBg: 'bg-sky-100',     iconColor: 'text-sky-600',     Icon: Waves        }, // blood flow through the neck vessels
+  'dvt-lower':              { iconBg: 'bg-cyan-100',    iconColor: 'text-cyan-600',    Icon: Footprints   }, // lower-extremity exam
+  'aorta-screening':        { iconBg: 'bg-orange-100',  iconColor: 'text-orange-600',  Icon: Siren        }, // AAA screening catches a life-threatening finding
+  'ue-arterial':            { iconBg: 'bg-blue-100',    iconColor: 'text-blue-600',    Icon: BicepsFlexed }, // upper-extremity exam
+  'ue-venous':              { iconBg: 'bg-indigo-100',  iconColor: 'text-indigo-600',  Icon: Hand         }, // also upper-extremity, distinct from the arterial study
+  'vein-mapping':           { iconBg: 'bg-teal-100',    iconColor: 'text-teal-600',    Icon: Map          }, // literally mapping a vein's course
+  'av-fistula-graft':       { iconBg: 'bg-violet-100',  iconColor: 'text-violet-600',  Icon: GitMerge     }, // an artery and vein surgically joined
+  'tcd':                    { iconBg: 'bg-fuchsia-100', iconColor: 'text-fuchsia-600', Icon: Brain        }, // transcranial — through the skull to brain flow
+  'venous-reflux':          { iconBg: 'bg-amber-100',   iconColor: 'text-amber-600',   Icon: ArrowDownUp  }, // reflux is backward/bidirectional flow
+  'abi-psr':                { iconBg: 'bg-lime-100',    iconColor: 'text-lime-600',    Icon: Thermometer  }, // segmental pressure measurements
+  'renal-duplex':           { iconBg: 'bg-emerald-100', iconColor: 'text-emerald-600', Icon: Filter       }, // kidneys filter blood
+  // Abdomen protocols
+  'male-pelvis':            { iconBg: 'bg-stone-100',   iconColor: 'text-stone-600',   Icon: User         },
+  'hernia-abdominal-wall':  { iconBg: 'bg-orange-100',  iconColor: 'text-orange-600',  Icon: Layers       }, // a weakness through the wall's layers
+  // OB protocols
+  'ob-first-trimester':     { iconBg: 'bg-pink-100',    iconColor: 'text-pink-600',    Icon: Calendar     }, // dating scan — distinct from Pelvic US
+  'pelvic-us':              { iconBg: 'bg-pink-100',    iconColor: 'text-pink-600',    Icon: Baby         }, // OB/GYN, not the heart cardiac uses
+  // Vascular calculators
+  'calc-abi':               { iconBg: 'bg-purple-100',  iconColor: 'text-purple-600',  Icon: Divide       }, // ABI is a ratio between two pressures
+  'calc-resistive-index':   { iconBg: 'bg-sky-100',     iconColor: 'text-sky-600',     Icon: AudioWaveform}, // derived from a Doppler waveform
+  'calc-psv-ratio':         { iconBg: 'bg-rose-100',    iconColor: 'text-rose-600',    Icon: Scale        }, // a ratio between two velocities
+  'calc-carotid-stenosis':  { iconBg: 'bg-indigo-100',  iconColor: 'text-indigo-600',  Icon: Percent      }, // stenosis is graded as a % narrowing
+  // OB calculators
+  'calc-afi':               { iconBg: 'bg-sky-100',     iconColor: 'text-sky-600',     Icon: Droplet      }, // amniotic fluid
+  'calc-gestational-age-crl': { iconBg: 'bg-pink-100',  iconColor: 'text-pink-600',    Icon: Ruler        }, // measuring crown-rump length
+  'calc-edd-lmp':           { iconBg: 'bg-rose-100',    iconColor: 'text-rose-600',    Icon: CalendarClock}, // a due-date countdown
+  // General calculators
+  'calc-volume-ellipsoid':  { iconBg: 'bg-teal-100',    iconColor: 'text-teal-600',    Icon: Box          }, // a 3D volume formula
 };
 
 function getStyle(item: QuickAccessItem) {
