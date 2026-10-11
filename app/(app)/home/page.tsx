@@ -11,6 +11,7 @@ import {
   Activity, Heart, Stethoscope, Calculator, Gauge, BarChart2,
   Ruler, ClipboardList, Microscope, Scan, Plus, X, Pencil, Check, Lock,
   Menu, Share2, MessageSquare, ShieldCheck, Newspaper, Briefcase,
+  Waves, Footprints, Hand, Baby, Divide, Percent,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -42,7 +43,22 @@ const CATEGORY_STYLE: Record<string, { iconBg: string; iconColor: string; Icon: 
   'calc-general': { iconBg: 'bg-teal-100',   iconColor: 'text-teal-600',   Icon: Gauge        },
 };
 
+// Purpose-built icons for specific exams/calculators, since the broad
+// category style above (one icon per modality) left every vascular protocol
+// sharing a single glyph, and gave Pelvic US the same heart as a cardiac
+// echo. These take priority over the category default wherever an item id
+// matches, including in the "choose a quick access item" picker list below.
+const ITEM_ICON_OVERRIDES: Record<string, { iconBg: string; iconColor: string; Icon: LucideIcon }> = {
+  'carotid-duplex':        { iconBg: 'bg-sky-100',    iconColor: 'text-sky-600',    Icon: Waves      }, // blood flow through the neck vessels
+  'dvt-lower':             { iconBg: 'bg-cyan-100',   iconColor: 'text-cyan-600',   Icon: Footprints }, // lower-extremity exam
+  'ue-arterial':           { iconBg: 'bg-blue-100',   iconColor: 'text-blue-600',   Icon: Hand       }, // upper-extremity exam
+  'pelvic-us':             { iconBg: 'bg-pink-100',   iconColor: 'text-pink-600',   Icon: Baby       }, // OB/GYN, not the heart cardiac uses
+  'calc-abi':              { iconBg: 'bg-purple-100', iconColor: 'text-purple-600', Icon: Divide     }, // ABI is a ratio between two pressures
+  'calc-carotid-stenosis': { iconBg: 'bg-indigo-100', iconColor: 'text-indigo-600', Icon: Percent    }, // stenosis is graded as a % narrowing
+};
+
 function getStyle(item: QuickAccessItem) {
+  if (ITEM_ICON_OVERRIDES[item.id]) return ITEM_ICON_OVERRIDES[item.id];
   const key = item.type === 'calculator' ? `calc-${item.category}` : item.category;
   return CATEGORY_STYLE[key] ?? { iconBg: 'bg-slate-100', iconColor: 'text-slate-500', Icon: ClipboardList };
 }
