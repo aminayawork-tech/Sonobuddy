@@ -6,8 +6,7 @@ import http2 from 'http2';
 import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
-import { getDailyHook, isJobDay } from '@/lib/tips';
-import { getJobs } from '@/lib/jobs';
+import { getDailyHook } from '@/lib/tips';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -107,32 +106,17 @@ export async function GET(req: NextRequest) {
     const customBody  = searchParams.get('body');
     const customUrl   = searchParams.get('url');
 
-    // Alternate article and job content by day so the same hook-only
-    // notification doesn't get stale — a fresh job posting is a different
-    // kind of reason to open the app than a clinical tip. Falls back to the
-    // article hook on a "job day" if Adzuna has nothing to offer (quota
-    // exhausted, no listings) rather than sending an empty notification.
+    // Used to alternate with a job posting on "job days" (see isJobDay()),
+    // but that meant this route's response time depended on Adzuna, which
+    // runs ahead of the actual web push / APNs sending below — a slow or
+    // hanging Adzuna call could eat enough of this function's 30s budget
+    // that some or all devices never got reached before the timeout, on job
+    // days specifically. Always sending the article hook removes that
+    // dependency from the one path that actually has to finish reliably.
     const hook = getDailyHook();
-    let contentType: 'hook' | 'job' = 'hook';
-    let notifTitle = customTitle ?? hook.title;
-    let notifBody  = customBody  ?? hook.preview;
-    let notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
-
-    if (!customTitle && !customBody && isJobDay()) {
-      try {
-        const [job] = await getJobs();
-        if (job) {
-          contentType = 'job';
-          notifTitle = '📋 New Sonography Job Posted';
-          // Company name is intentionally left out — it's gated behind
-          // premium on the Jobs page itself, so the push shouldn't leak it.
-          notifBody = `${job.title} — ${job.location || 'multiple locations'}. Tap to view and apply.`;
-          notifUrl = '/jobs';
-        }
-      } catch {
-        // Adzuna/Redis hiccup — fall through to the article hook already set above.
-      }
-    }
+    const notifTitle = customTitle ?? hook.title;
+    const notifBody  = customBody  ?? hook.preview;
+    const notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
 
     // ── 1. Web Push (browser subscribers) ───────────────────────────────────
     let webSent = 0;
@@ -217,7 +201,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
       apns: { sent: apnsSent, failed: apnsFailed },
-      debug: { contentType, title: notifTitle },
+      debug: { title: notifTitle },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
