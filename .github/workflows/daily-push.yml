@@ -1,11 +1,15 @@
 name: Daily Push Notification
 
 on:
-  # The automatic daily send runs via Vercel Cron (see vercel.json) hitting
-  # the same /api/push/send endpoint — a duplicate `schedule:` trigger here
-  # was firing a second notification every day at the same target time.
-  # workflow_dispatch is kept so a custom notification can still be sent
-  # manually from the Actions tab.
+  # This ran reliably every day for two straight weeks (Sept 28 – Oct 7)
+  # before being switched off in favor of Vercel Cron, on the theory that
+  # running both was double-sending. Vercel Cron's reliability couldn't be
+  # confirmed afterward (no dashboard access, and notifications stopped
+  # entirely for several days with no diagnosable cause), so this reverts to
+  # the mechanism with an actual track record. vercel.json's `crons` block
+  # is removed in the same change, so only one of the two ever runs again.
+  schedule:
+    - cron: '0 13 * * *'  # 9am ET (UTC-4 summer / UTC-5 winter — adjust if needed)
   workflow_dispatch:
     inputs:
       title:
