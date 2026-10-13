@@ -6,7 +6,8 @@ import http2 from 'http2';
 import crypto from 'crypto';
 import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
-import { getDailyHook } from '@/lib/tips';
+import { getDailyHook, isJobDay } from '@/lib/tips';
+import { getJobs } from '@/lib/jobs';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -106,17 +107,35 @@ export async function GET(req: NextRequest) {
     const customBody  = searchParams.get('body');
     const customUrl   = searchParams.get('url');
 
-    // Used to alternate with a job posting on "job days" (see isJobDay()),
-    // but that meant this route's response time depended on Adzuna, which
-    // runs ahead of the actual web push / APNs sending below — a slow or
-    // hanging Adzuna call could eat enough of this function's 30s budget
-    // that some or all devices never got reached before the timeout, on job
-    // days specifically. Always sending the article hook removes that
-    // dependency from the one path that actually has to finish reliably.
+    // Alternates with a job posting on "job days" (see isJobDay()). This
+    // previously ate this function's 30s send budget whenever Adzuna was
+    // slow or hanging, since it ran ahead of the actual web push / APNs
+    // loops below — on a job day, that could mean some or all devices never
+    // got reached before the timeout. getJobs() is race'd against a hard
+    // 5s timeout here so a slow Adzuna call can never block the sends;
+    // it just falls back to the article hook instead.
     const hook = getDailyHook();
-    const notifTitle = customTitle ?? hook.title;
-    const notifBody  = customBody  ?? hook.preview;
-    const notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
+    let notifTitle = customTitle ?? hook.title;
+    let notifBody  = customBody  ?? hook.preview;
+    let notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
+
+    if (!customTitle && !customBody && isJobDay()) {
+      try {
+        const [job] = await Promise.race([
+          getJobs(),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('jobs timeout')), 5000)),
+        ]);
+        if (job) {
+          notifTitle = '📋 New Sonography Job Posted';
+          // Company name is intentionally left out — it's gated behind
+          // premium on the Jobs page itself, so the push shouldn't leak it.
+          notifBody = `${job.title} — ${job.location || 'multiple locations'}. Tap to view and apply.`;
+          notifUrl = '/jobs';
+        }
+      } catch {
+        // Adzuna/Redis hiccup or the 5s timeout — fall through to the article hook already set above.
+      }
+    }
 
     // ── 1. Web Push (browser subscribers) ───────────────────────────────────
     let webSent = 0;
