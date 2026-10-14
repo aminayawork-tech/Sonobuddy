@@ -1,7 +1,23 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { recordEvent } from '@/lib/tap-tracking';
+
+// Android counterpart to the iOS window.webkit.messageHandlers.sonobuddy
+// bridge — see android/app/src/main/java/com/sonobuddy/app/SonoBuddyBillingPlugin.java.
+// Both platforms end up driving the same window.__onPremiumUnlocked /
+// window.__onPurchaseError callbacks below, so nothing else in the app needs
+// to know which platform it's running on.
+interface SonoBuddyBillingPlugin {
+  purchase(): Promise<{ success?: boolean; cancelled?: boolean }>;
+  purchaseDiscount(): Promise<{ success?: boolean; cancelled?: boolean }>;
+  restore(): Promise<{ success: boolean }>;
+  checkStatus(): Promise<{ success: boolean }>;
+  share(): Promise<{ completed?: boolean }>;
+}
+const SonoBuddyBilling = registerPlugin<SonoBuddyBillingPlugin>('SonoBuddyBilling');
+const isAndroid = () => Capacitor.getPlatform() === 'android';
 
 // Shared by PaywallModal and the onboarding offer screen so a price test
 // only needs flipping in one place instead of drifting between two
@@ -103,6 +119,15 @@ export function usePremium() {
     window.__onPurchaseError = (message: string) => {
       setPurchaseError(message);
     };
+
+    // Android has no WKWebView-style "inject a global before the page
+    // parses" hook, so premium status is confirmed asynchronously here
+    // instead of synchronously like iOS's window.__isPremium.
+    if (isAndroid() && !alreadyPremium) {
+      SonoBuddyBilling.checkStatus()
+        .then((result) => { if (result.success) window.__onPremiumUnlocked?.(); })
+        .catch(() => { /* billing not connected yet — user can still try to buy */ });
+    }
   }, []);
 
   // `source` says which locked feature drove the tap — the paywall itself is
@@ -117,20 +142,51 @@ export function usePremium() {
   const closePaywall = useCallback(() => setPaywallOpen(false), []);
   const clearPurchaseError = useCallback(() => setPurchaseError(null), []);
 
-  // Called by paywall buttons to trigger StoreKit in native
+  // Called by paywall buttons to trigger StoreKit (iOS) or Play Billing
+  // (Android) in native. Android resolves/rejects this plugin call directly
+  // instead of native calling back into evaluated JS, but drives the exact
+  // same window.__onPremiumUnlocked / window.__onPurchaseError callbacks so
+  // the rest of this hook doesn't need a platform branch anywhere else.
   const requestPurchase = useCallback(() => {
+    if (isAndroid()) {
+      SonoBuddyBilling.purchase()
+        .then((result) => { if (result.success) window.__onPremiumUnlocked?.('purchase'); })
+        .catch((err) => window.__onPurchaseError?.(err?.message || 'Something went wrong — please try again.'));
+      return;
+    }
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'purchase' });
   }, []);
 
   const requestDiscountPurchase = useCallback(() => {
+    if (isAndroid()) {
+      SonoBuddyBilling.purchaseDiscount()
+        .then((result) => { if (result.success) window.__onPremiumUnlocked?.('purchaseDiscount'); })
+        .catch((err) => window.__onPurchaseError?.(err?.message || 'Something went wrong — please try again.'));
+      return;
+    }
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'purchaseDiscount' });
   }, []);
 
   const requestRestore = useCallback(() => {
+    if (isAndroid()) {
+      SonoBuddyBilling.restore()
+        .then((result) => {
+          if (result.success) window.__onPremiumUnlocked?.('restore');
+          else window.__onPurchaseError?.('No previous purchase found for this account.');
+        })
+        .catch((err) => window.__onPurchaseError?.(err?.message || 'Something went wrong — please try again.'));
+      return;
+    }
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'restore' });
   }, []);
 
   const requestShare = useCallback(() => {
+    if (isAndroid()) {
+      SonoBuddyBilling.share()
+        .then((result) => { if (result.completed) window.__onShareCompleted?.(); })
+        .catch(() => { /* cancelled or failed — leave the share offer untouched, same as iOS */ });
+      return;
+    }
     window.webkit?.messageHandlers?.sonobuddy?.postMessage({ action: 'share' });
   }, []);
 
