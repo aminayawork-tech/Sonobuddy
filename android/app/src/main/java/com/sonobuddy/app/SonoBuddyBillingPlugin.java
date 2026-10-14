@@ -14,6 +14,7 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -51,7 +52,8 @@ public class SonoBuddyBillingPlugin extends Plugin implements PurchasesUpdatedLi
     public void load() {
         billingClient = BillingClient.newBuilder(getContext())
                 .setListener(this)
-                .enablePendingPurchases()
+                .enablePendingPurchases(
+                        PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
                 .build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
@@ -92,7 +94,9 @@ public class SonoBuddyBillingPlugin extends Plugin implements PurchasesUpdatedLi
                 .setProductList(Collections.singletonList(product))
                 .build();
 
-        billingClient.queryProductDetailsAsync(params, (billingResult, productDetailsList) -> {
+        billingClient.queryProductDetailsAsync(params, (billingResult, queryResult) -> {
+            List<ProductDetails> productDetailsList = queryResult != null
+                    ? queryResult.getProductDetailsList() : null;
             if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK
                     || productDetailsList == null || productDetailsList.isEmpty()) {
                 PluginCall c = pendingPurchaseCall;
