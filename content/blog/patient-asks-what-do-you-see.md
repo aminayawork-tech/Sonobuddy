@@ -1,7 +1,7 @@
 ---
 title: "What to Say When the Patient Asks What You See"
 slug: "patient-asks-what-do-you-see"
-date: "2026-10-17"
+date: "2026-10-16"
 excerpt: "Word-for-word scripts for the question every sonographer hears in every exam — broken out by scenario: routine studies, an obviously abnormal finding on the screen, oncology follow-up, pediatric patients, and the patient who turns the monitor to look for themselves."
 author: "SonoBuddy Team"
 tags: ["patient care", "communication", "scope of practice", "professionalism"]

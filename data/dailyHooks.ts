@@ -258,6 +258,12 @@ export const DAILY_HOOKS: DailyHook[] = [
     articleSlug: 'sonographer-military-career',
   },
   {
+    title: 'What do you say when a patient asks what you see?',
+    preview: 'You can\'t give results — but you can give more than silence. Scripts that stay honest and stay in scope, broken out by scenario.',
+    tip: '<b>You are not the interpreter.</b> Say: "The radiologist will review the images and your doctor will discuss the results with you." Every time — routine study, obvious finding, or oncology follow-up.',
+    articleSlug: 'patient-asks-what-do-you-see',
+  },
+  {
     title: 'How does sonographer license renewal work?',
     preview: 'ARDMS, CCI, and ARRT each have different renewal cycles, CME requirements, and audit procedures. Missing a deadline triggers costly reinstatement.',
     tip: 'ARDMS 3-year cycle: 30 CME credits + $110 renewal fee. Set a calendar reminder 6 months before expiration. Audit risk increases if you auto-submit — keep documentation for every credit. Lapsed credentials require reinstatement exams at some organizations.',
