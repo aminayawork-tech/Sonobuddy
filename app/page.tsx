@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import PlayStoreWaitlist from '@/components/PlayStoreWaitlist';
+import GooglePlayBadge from '@/components/GooglePlayBadge';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -229,7 +229,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <AppStoreBadge />
-                <PlayStoreWaitlist />
+                <GooglePlayBadge />
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-5 mt-8">
                 <div className="flex items-center gap-1">
@@ -345,13 +345,13 @@ export default function LandingPage() {
             Your pocket reference.<br />Always ready.
           </h2>
           <p className="text-sky-100 mb-8 leading-relaxed">
-            Download SonoBuddy on the App Store — works offline, loads instantly, built for the scan room.
+            Download SonoBuddy on iOS and Android — works offline, loads instantly, built for the scan room.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <AppStoreBadge />
-            <PlayStoreWaitlist />
+            <GooglePlayBadge />
           </div>
-          <p className="text-sky-200 text-xs mt-4">No account required · iOS today, Android soon · Offline capable</p>
+          <p className="text-sky-200 text-xs mt-4">No account required · iOS &amp; Android · Offline capable</p>
         </div>
       </section>
 
