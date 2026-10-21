@@ -14,7 +14,7 @@ export default function GooglePlayBadge({ className = '' }: { className?: string
         <path fill="#00C853" d="M17.28 8.51L5.31 1.72C4.6 1.31 3.98 1.36 3.6 1.76l10.2 10.22 3.48-3.47z" />
       </svg>
       <div className="text-left">
-        <div className="text-[10px] text-gray-300 leading-none mb-0.5">GET IT ON</div>
+        <div className="text-[10px] text-gray-300 leading-none mb-0.5">Download on the</div>
         <div className="text-[15px] font-semibold leading-none">Google Play</div>
       </div>
     </a>
