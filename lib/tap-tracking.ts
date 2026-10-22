@@ -40,7 +40,7 @@ export interface TapEvent {
    * 'event' a named milestone such as a paywall step.
    */
   type: 'tap' | 'view' | 'dead' | 'scroll' | 'event' | 'searchmiss';
-  /** 'ios' for the native app shell, 'web' for the site */
+  /** 'ios'/'android' for the native app shells, 'web' for the site */
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
   route: string;
@@ -68,7 +68,9 @@ export interface TapEvent {
 
 function surface(): string {
   if (typeof navigator === 'undefined') return 'unknown';
-  return navigator.userAgent.includes('SonoBuddyApp/iOS') ? 'ios' : 'web';
+  if (navigator.userAgent.includes('SonoBuddyApp/iOS')) return 'ios';
+  if (navigator.userAgent.includes('SonoBuddyApp/Android')) return 'android';
+  return 'web';
 }
 
 /** Strip query, hash and trailing slash, keeping the slug intact. */
