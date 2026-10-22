@@ -8,9 +8,26 @@ import { todayLocalStr } from '@/lib/date';
  * token-gated at the API rather than here — the page itself is just a shell.
  *
  * The heat is overlaid on the live page rendered in an iframe at phone width.
- * That works because the iOS app is these same pages inside a webview, so a
- * 390px rendering is a faithful stand-in for the app screen.
+ * That works because the iOS and Android apps are these same pages inside a
+ * webview, so a 390px rendering is a faithful stand-in for the app screen.
  */
+
+const SURFACE_LABELS: Record<string, string> = {
+  ios: 'the iOS app',
+  android: 'the Android app',
+  web: 'the website',
+};
+function surfaceLabel(surface: string): string {
+  return SURFACE_LABELS[surface] ?? surface;
+}
+
+const STORE_CUT_LABELS: Record<string, string> = {
+  ios: "Apple's cut",
+  android: "Google's cut",
+};
+function storeCutLabel(surface: string): string {
+  return STORE_CUT_LABELS[surface] ?? "the store's cut";
+}
 
 const GRID_COLS = 20;
 const BAND_PX = 20;
@@ -88,10 +105,11 @@ function previewUrl(route: string): string | null {
 
 export default function HeatmapAdminPage() {
   const [token, setToken] = useState('');
-  // iOS, not web, by default — purchases only ever happen in the native app
-  // (StoreKit doesn't exist on the website), so every revenue-relevant
-  // section (paywall funnel, price test, completed sales) read as empty by
-  // default even on a day with a real sale, unless this was flipped by hand.
+  // iOS, not web, by default — purchases only ever happen in a native app
+  // (StoreKit/Play Billing don't exist on the website), so every
+  // revenue-relevant section (paywall funnel, price test, completed sales)
+  // read as empty by default even on a day with a real sale, unless this was
+  // flipped by hand.
   const [surface, setSurface] = useState('ios');
   const [day, setDay] = useState(() => todayLocalStr());
   const [route, setRoute] = useState<string | null>(null);
@@ -417,6 +435,7 @@ export default function HeatmapAdminPage() {
           >
             <option value="web">Website</option>
             <option value="ios">iOS app</option>
+            <option value="android">Android app</option>
           </select>
           <input
             type="date"
@@ -438,7 +457,7 @@ export default function HeatmapAdminPage() {
           <section className="mb-10 pb-10 border-b border-slate-800">
             <h2 className="text-lg font-black tracking-tight text-white mb-1">Insights</h2>
             <p className="text-slate-400 text-xs mb-5">
-              Across every day on record for {surface === 'ios' ? 'the iOS app' : 'the website'}
+              Across every day on record for {surfaceLabel(surface)}
               {insights?.range ? ` (${insights.range.from} – ${insights.range.to})` : ''}.
             </p>
 
@@ -471,7 +490,7 @@ export default function HeatmapAdminPage() {
                   </div>
                   <div>
                     <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
-                      Revenue · all time (before Apple&apos;s cut)
+                      Revenue · all time (before {storeCutLabel(surface)})
                     </p>
                     <p className="text-3xl font-black text-white tabular-nums">
                       ${priceComparison.reduce((s, p) => s + p.revenue, 0).toFixed(2)}
@@ -479,7 +498,7 @@ export default function HeatmapAdminPage() {
                   </div>
                   {priceComparison.reduce((s, p) => s + p.count, 0) === 0 && (
                     <p className="text-slate-400 text-xs">
-                      No completed purchases yet for {surface === 'ios' ? 'the iOS app' : 'the website'} — try the iOS surface if you expected a sale to show here.
+                      No completed purchases yet for {surfaceLabel(surface)} — try the iOS or Android surface if you expected a sale to show here.
                     </p>
                   )}
                 </div>
@@ -717,7 +736,8 @@ export default function HeatmapAdminPage() {
         {/* Sales for just the selected day, separate from the all-time
             headline above — the one place that answers "did today's
             traffic convert," which is what to check against App Store
-            Connect's own per-day numbers when something looks off. */}
+            Connect's or Play Console's own per-day numbers when something
+            looks off. */}
         {data && todaySales && (
           <div className="mb-6 -mt-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-5 py-4 flex flex-wrap items-center gap-x-10 gap-y-3">
             <div>
@@ -728,13 +748,13 @@ export default function HeatmapAdminPage() {
             </div>
             <div>
               <p className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide mb-1">
-                Revenue · {day} (before Apple&apos;s cut)
+                Revenue · {day} (before {storeCutLabel(surface)})
               </p>
               <p className="text-3xl font-black text-white tabular-nums">${todaySales.revenue.toFixed(2)}</p>
             </div>
             {todaySales.count === 0 && (
               <p className="text-slate-400 text-xs">
-                No completed purchases recorded for this day/surface — check App Store Connect&apos;s own per-day Sales report if you expected one here.
+                No completed purchases recorded for this day/surface — check {surface === 'android' ? "Play Console's own per-day order report" : "App Store Connect's own per-day Sales report"} if you expected one here.
               </p>
             )}
           </div>
