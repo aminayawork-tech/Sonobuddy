@@ -5,6 +5,7 @@ import AppStoreBadge from '@/components/AppStoreBadge';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import ArticleImage from '@/components/ArticleImage';
 import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
 import { parseLocalDate } from '@/lib/date';
 import { Calendar, ArrowLeft, Tag } from 'lucide-react';
@@ -177,6 +178,9 @@ export default function BlogPostPage({ params }: Props) {
                   <div className="overflow-x-auto">
                     <table {...props} />
                   </div>
+                ),
+                img: ({ src, alt, title }) => (
+                  <ArticleImage src={typeof src === 'string' ? src : undefined} alt={alt} title={title} />
                 ),
               }}
             >

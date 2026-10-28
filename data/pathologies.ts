@@ -440,7 +440,7 @@ export const pathologies: Pathology[] = [
       'Absent portal flow: acute decompensation — urgent GI/hepatology',
     ],
     differentials: ['Hepatic steatosis (echogenic but without surface nodularity or portal HTN signs)', 'Chronic hepatitis (may show coarse texture without cirrhotic changes)', 'Congestive hepatopathy (dilated hepatic veins, pulsatile flow, cardiac cause)'],
-    clinicalContext: 'History of hepatitis B/C, alcohol use, NASH, autoimmune hepatitis. Annual HCC surveillance ultrasound recommended (with AFP). Findings guide management: TIPS candidacy, transplant evaluation, variceal screening.',
+    clinicalContext: 'History of hepatitis B/C, alcohol use, NASH, autoimmune hepatitis. HCC surveillance ultrasound (± AFP) every 6 months is recommended (AASLD/EASL). Findings guide management: TIPS candidacy, transplant evaluation, variceal screening.',
     reportingTips: 'Document liver surface (smooth/nodular/coarse), echotexture, caudate:right lobe ratio, spleen size, portal vein direction/velocity, and presence of ascites. Use LI-RADS for any new hepatic observations in at-risk patients.',
     tags: ['cirrhosis', 'liver', 'fibrosis', 'portal hypertension', 'hcc surveillance', 'ascites', 'splenomegaly', 'abdomen'],
     images: [
@@ -748,7 +748,7 @@ export const pathologies: Pathology[] = [
       'Rapidly enlarging nodule or satellite lesions: aggressive biology',
     ],
     differentials: ['Hemangioma (hyperechoic, well-defined, posterior acoustic enhancement)', 'Metastasis (multiple lesions, non-cirrhotic background, known primary)', 'Regenerative nodule (small, background cirrhosis, no Doppler signal)', 'Focal nodular hyperplasia (central scar, spoke-wheel Doppler)'],
-    clinicalContext: 'Most common primary liver cancer. Almost always in cirrhotic liver (hepatitis B, C, alcohol, NASH). AFP may be elevated. Annual ultrasound surveillance recommended in cirrhotic patients. LI-RADS system standardizes reporting. Screening detects HCC at curative stage.',
+    clinicalContext: 'Most common primary liver cancer. Almost always in cirrhotic liver (hepatitis B, C, alcohol, NASH). AFP may be elevated. Surveillance ultrasound (± AFP) every 6 months is recommended in cirrhosis and in higher-risk chronic hepatitis B (AASLD/EASL). LI-RADS system standardizes reporting. Screening detects HCC at curative stage.',
     reportingTips: 'Use LI-RADS lexicon for any liver observation in at-risk patients (cirrhosis, chronic HBV). State: "New [X cm] hypoechoic hepatic nodule — LI-RADS [category]. Recommend multiphasic CT or MRI liver for further characterization." Do NOT diagnose HCC on ultrasound alone — CT/MRI with arterial washout pattern required.',
     tags: ['hcc', 'hepatocellular carcinoma', 'liver cancer', 'cirrhosis', 'li-rads', 'portal vein thrombus', 'liver', 'abdomen', 'hepatoma', 'surveillance'],
     images: [

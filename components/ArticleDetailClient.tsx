@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import ArticleImage from '@/components/ArticleImage';
 import { Calendar, ChevronLeft } from 'lucide-react';
 import { usePremium } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
@@ -110,6 +111,9 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
                     <div className="overflow-x-auto">
                       <table {...props} />
                     </div>
+                  ),
+                  img: ({ src, alt, title }) => (
+                    <ArticleImage src={typeof src === 'string' ? src : undefined} alt={alt} title={title} />
                   ),
                 }}
               >
