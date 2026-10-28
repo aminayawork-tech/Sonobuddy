@@ -14,7 +14,7 @@ import {
   Waves, Footprints, BicepsFlexed, Baby, Divide, Percent,
   Siren, Hand, Map, GitMerge, Brain, ArrowDownUp, Thermometer, Filter,
   User, Layers, Calendar, Droplet, CalendarClock, Box, AudioWaveform,
-  Scale, Bone, CircleDot,
+  Scale, Bone, CircleDot, ChevronRight,
   type LucideIcon,
 } from 'lucide-react';
 import { protocols } from '@/data/protocols';
@@ -133,13 +133,13 @@ const ALL_PICKER_ENTRIES: PickerEntry[] = [
 
 // ── Category tiles ────────────────────────────────────────────────────────────
 
-type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; iconColor: string };
+type CategoryTile = { label: string; href: string; Icon: LucideIcon; desc: string; iconBg: string };
 
 const CATEGORY_TILES: CategoryTile[] = [
-  { label: 'Measurements', href: '/measurements', Icon: Ruler,         desc: '20+ normal value tables — vascular, OB, thyroid, cardiac', iconColor: 'text-blue-600'   },
-  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides with key images & checklists',    iconColor: 'text-green-600'  },
-  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,    desc: 'ABI, RI, gestational age, EDD, thyroid volume & more',      iconColor: 'text-purple-600' },
-  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,    desc: '50+ conditions with red flags & reporting tips',            iconColor: 'text-red-600'    },
+  { label: 'Measurements', href: '/measurements', Icon: Ruler,         desc: '20+ normal value tables — vascular, OB, thyroid, cardiac', iconBg: 'from-sky-400 to-blue-600 shadow-blue-500/30'      },
+  { label: 'Protocols',    href: '/protocols',    Icon: ClipboardList, desc: 'Step-by-step exam guides with key images & checklists',    iconBg: 'from-emerald-400 to-green-600 shadow-green-500/30' },
+  { label: 'Calculators',  href: '/calculators',  Icon: Calculator,    desc: 'ABI, RI, gestational age, EDD, thyroid volume & more',      iconBg: 'from-violet-400 to-purple-600 shadow-purple-500/30' },
+  { label: 'Pathologies',  href: '/pathologies',  Icon: Microscope,    desc: '50+ conditions with red flags & reporting tips',            iconBg: 'from-rose-400 to-red-600 shadow-red-500/30'        },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -444,15 +444,16 @@ export default function HomePage() {
             <button
               key={tile.href}
               onClick={() => router.push(tile.href)}
-              className="bg-white rounded-2xl px-4 py-3.5 flex items-center gap-4 text-left active:scale-[0.98] transition-all shadow-sm"
+              className="card card-press px-4 py-3.5 flex items-center gap-4 text-left"
             >
-              <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
-                <tile.Icon size={17} className={tile.iconColor} strokeWidth={1.75} />
+              <div className={`bg-gradient-to-br ${tile.iconBg} w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md ring-1 ring-inset ring-white/20`}>
+                <tile.Icon size={17} className="text-white" strokeWidth={2} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[14px] font-bold text-slate-900">{tile.label}</p>
                 <p className="text-[11px] text-slate-400 leading-snug">{tile.desc}</p>
               </div>
+              <ChevronRight size={16} className="text-slate-300 shrink-0" strokeWidth={2} />
             </button>
           ))}
         </div>
@@ -486,13 +487,15 @@ export default function HomePage() {
                     if (locked) { openPaywall('quick-access'); return; }
                     router.push(item.href);
                   }}
-                  className={`w-full bg-sono-card border border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all shadow-sm ${locked ? 'opacity-60' : ''}`}
+                  className="w-full card card-press rounded-2xl py-3 px-2 text-center"
                 >
-                  <div className={`${iconBg} w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
-                    {locked
-                      ? <Lock size={15} className="text-slate-400" strokeWidth={2} />
-                      : <Icon size={18} className={iconColor} strokeWidth={2} />
-                    }
+                  <div className={`${iconBg} relative w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1.5`}>
+                    <Icon size={18} className={iconColor} strokeWidth={2} />
+                    {locked && (
+                      <span className="pro-badge absolute -top-1.5 -right-2.5 px-1 py-0.5">
+                        <Lock size={9} strokeWidth={3} />
+                      </span>
+                    )}
                   </div>
                   <div className="text-[11px] text-slate-700 font-semibold leading-tight">{item.label}</div>
                 </button>
@@ -514,7 +517,7 @@ export default function HomePage() {
               if (!isFull) setShowPicker(true);
               setEditMode(true);
             }}
-            className="bg-sono-card border-2 border-dashed border-sono-border rounded-2xl py-3 px-2 text-center active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+            className="bg-white/50 border-2 border-dashed border-slate-300/70 rounded-2xl py-3 px-2 text-center card-press flex flex-col items-center justify-center gap-1"
           >
             <div className="bg-slate-100 w-9 h-9 rounded-xl flex items-center justify-center">
               {isPremium

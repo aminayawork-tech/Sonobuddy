@@ -20,7 +20,7 @@ export default function Navigation() {
   if (pathname === '/') return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-white/10 safe-area-bottom shadow-lg lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/[0.94] backdrop-blur-xl backdrop-saturate-150 border-t border-slate-900/[0.06] safe-area-bottom shadow-[0_-8px_24px_-16px_rgba(15,23,42,0.18)] lg:hidden">
       <div className="max-w-lg mx-auto flex items-stretch">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -30,18 +30,25 @@ export default function Navigation() {
               href={item.href}
               className="flex-1 flex flex-col items-center justify-center py-2 px-1 text-center min-h-[60px]"
             >
-              <item.Icon
-                size={20}
-                strokeWidth={isActive ? 2.5 : 1.8}
+              <span
                 className={clsx(
-                  'transition-colors duration-200',
-                  isActive ? 'text-sono-blue' : 'text-[#f1f4f9]'
+                  'flex items-center justify-center w-12 h-7 rounded-full transition-colors duration-200',
+                  isActive ? 'bg-sono-blue/10' : 'bg-transparent'
                 )}
-              />
+              >
+                <item.Icon
+                  size={20}
+                  strokeWidth={isActive ? 2.5 : 1.8}
+                  className={clsx(
+                    'transition-colors duration-200',
+                    isActive ? 'text-sono-blue' : 'text-slate-500'
+                  )}
+                />
+              </span>
               <span
                 className={clsx(
                   'text-[10px] mt-1 font-medium leading-none transition-colors duration-200',
-                  isActive ? 'text-sono-blue font-semibold' : 'text-[#f1f4f9]'
+                  isActive ? 'text-sono-blue font-semibold' : 'text-slate-500'
                 )}
               >
                 {item.label}

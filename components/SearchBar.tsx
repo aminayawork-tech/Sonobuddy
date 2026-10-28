@@ -66,7 +66,7 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full bg-sono-card border border-sono-border rounded-xl pl-10 pr-4 py-3.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm transition-colors shadow-sm"
+          className="search-field pl-10 pr-4 py-3.5 text-sm"
           onKeyDown={(e) => {
             if (e.key === 'Escape') { setOpen(false); setQuery(''); }
             if (e.key === 'Enter' && results.length > 0) handleSelect(results[0]);
@@ -84,7 +84,7 @@ export default function SearchBar({ placeholder = 'Search measurements, protocol
       </div>
 
       {open && results.length > 0 && (
-        <div className="absolute top-full mt-2 left-0 right-0 bg-sono-card border border-sono-border rounded-xl shadow-xl z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full mt-2 left-0 right-0 bg-white/95 backdrop-blur-xl ring-1 ring-slate-900/[0.06] rounded-2xl shadow-[0_20px_40px_-16px_rgba(15,23,42,0.25)] z-50 max-h-80 overflow-y-auto">
           {results.map((result) => (
             <button
               key={`${result.type}-${result.id}`}

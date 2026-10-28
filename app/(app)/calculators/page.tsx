@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Calculator, Lock } from 'lucide-react';
+import { Calculator } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
 import { usePremium, FREE_CALCULATOR_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import {
@@ -97,7 +98,7 @@ function CalculatorContent() {
           onClearError={clearPurchaseError}
         />}
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
+      <div className="sticky top-0 z-40 glass-header">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Calculator className="w-5 h-5 text-sono-blue" /> Calculators</h1>
           {activeCalc ? (
@@ -113,7 +114,7 @@ function CalculatorContent() {
               value={query}
               onChange={(e) => { setQuery(e.target.value); setActiveId(null); }}
               placeholder='Search "ABI", "volume", "AFI"…'
-              className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+              className="search-field px-4 py-2.5 text-sm"
             />
           )}
         </div>
@@ -121,14 +122,14 @@ function CalculatorContent() {
 
       {/* Calculator list */}
       {!activeCalc && (
-        <div className="px-4 py-4 space-y-2">
+        <div className="px-4 py-4 space-y-3">
           {filtered.map((c) => {
             const locked = !isPremium && !FREE_CALCULATOR_IDS.has(c.id);
             return (
               <button
                 key={c.id}
                 onClick={() => locked ? openPaywall('calculators') : setActiveId(c.id)}
-                className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] ${locked ? 'opacity-60' : ''}`}
+                className="w-full card card-press p-4 text-left"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -136,7 +137,7 @@ function CalculatorContent() {
                     <p className="text-[13px] text-slate-500 line-clamp-2">{c.description}</p>
                   </div>
                   {locked
-                    ? <Lock className="w-4 h-4 text-sono-muted shrink-0" />
+                    ? <ProBadge />
                     : <span className="text-sono-muted shrink-0">›</span>
                   }
                 </div>
@@ -152,7 +153,7 @@ function CalculatorContent() {
       {/* Active Calculator */}
       {activeCalc && (
         <div className="px-4 py-4">
-          <div className="bg-sono-card border border-sono-border rounded-2xl p-4 mb-4">
+          <div className="card p-4 mb-4">
             <h2 className="font-black text-slate-900 text-lg tracking-tight mb-1">{activeCalc.name}</h2>
             <p className="text-[13px] text-slate-500 mb-3 leading-relaxed">{activeCalc.description}</p>
             <code className="text-[11px] text-sono-blue font-mono bg-sono-blue/10 px-2 py-1 rounded block">{activeCalc.formula}</code>
@@ -161,7 +162,7 @@ function CalculatorContent() {
           {/* Input fields */}
           <div className="space-y-3 mb-4">
             {activeCalc.fields.map((field) => (
-              <div key={field.id} className="bg-sono-card border border-sono-border rounded-xl p-3">
+              <div key={field.id} className="card rounded-2xl p-3">
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   {field.label}
                   <span className="text-sono-muted font-normal ml-1">({field.unit})</span>
@@ -171,7 +172,7 @@ function CalculatorContent() {
                     type="date"
                     value={inputs[field.id] ?? ''}
                     onChange={(e) => setInputs((prev) => ({ ...prev, [field.id]: e.target.value }))}
-                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-sono-blue"
+                    className="w-full bg-slate-50 rounded-xl ring-1 ring-slate-900/[0.06] px-3 py-2 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sono-blue/40 focus:bg-white transition-shadow"
                   />
                 ) : (
                   <input
@@ -183,7 +184,7 @@ function CalculatorContent() {
                     min={field.min}
                     max={field.max}
                     step={field.step ?? 'any'}
-                    className="w-full bg-transparent border border-sono-border rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-sono-blue placeholder-sono-muted"
+                    className="w-full bg-slate-50 rounded-xl ring-1 ring-slate-900/[0.06] px-3 py-2 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-sono-blue/40 focus:bg-white transition-shadow placeholder-sono-muted"
                   />
                 )}
                 {field.hint && <p className="text-[11px] text-sono-muted mt-1">{field.hint}</p>}
@@ -193,13 +194,13 @@ function CalculatorContent() {
 
           <button
             onClick={calculate}
-            className="w-full bg-sono-blue hover:bg-sky-500 text-white font-semibold py-3.5 rounded-xl transition-colors active:scale-95 text-sm"
+            className="w-full bg-gradient-to-b from-sky-400 to-sono-blue text-white font-semibold py-3.5 rounded-2xl shadow-[0_10px_24px_-10px_rgba(14,165,233,0.75),inset_0_1px_0_rgba(255,255,255,0.3)] transition-transform active:scale-[0.98] text-sm"
           >
             Calculate
           </button>
 
           {result && result.value !== '—' && (
-            <div className={clsx('mt-4 border rounded-2xl p-4', RESULT_COLORS[result.color ?? 'blue'])}>
+            <div className={clsx('mt-4 border rounded-[20px] p-4 shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]', RESULT_COLORS[result.color ?? 'blue'])}>
               <p className="text-[10px] font-bold uppercase tracking-[0.12em] opacity-60 mb-1">Result</p>
               <p className="text-3xl font-black tracking-tight mb-1">
                 {result.value} <span className="text-lg font-normal opacity-60">{result.unit}</span>
