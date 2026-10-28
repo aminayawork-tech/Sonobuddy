@@ -37,6 +37,43 @@
   }
 }
 
+@layer components {
+  /* Layered, low-contrast depth instead of a single flat shadow — the
+     hairline ring keeps edges crisp on the light page background. */
+  .card {
+    @apply bg-white rounded-[20px] ring-1 ring-slate-900/[0.05];
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+  }
+  .card-press {
+    @apply transition-transform duration-200 ease-out active:scale-[0.985];
+  }
+
+  .glass-header {
+    @apply bg-sono-dark/80 backdrop-blur-xl backdrop-saturate-150 border-b border-slate-900/[0.06];
+  }
+
+  .search-field {
+    @apply w-full bg-white rounded-2xl text-slate-900 placeholder-slate-400 ring-1 ring-slate-900/[0.06]
+      focus:outline-none focus:ring-2 focus:ring-sono-blue/40 transition-shadow;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px -8px rgba(15, 23, 42, 0.12);
+  }
+
+  .chip {
+    @apply shrink-0 rounded-full bg-white text-slate-600 ring-1 ring-slate-900/[0.07] transition-all duration-200;
+  }
+  .chip-active {
+    @apply bg-slate-900 text-white ring-slate-900;
+    box-shadow: 0 6px 14px -6px rgba(15, 23, 42, 0.5);
+  }
+
+  /* Gold, not grey: locked content should read as an upgrade, not as broken. */
+  .pro-badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-amber-950;
+    background: linear-gradient(135deg, #FDE68A 0%, #FBBF24 55%, #F59E0B 100%);
+    box-shadow: 0 2px 8px -2px rgba(245, 158, 11, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+}
+
 @layer utilities {
   .pb-nav {
     padding-bottom: calc(76px + env(safe-area-inset-bottom));

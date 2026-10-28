@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { ClipboardList, Clock, Zap, Lock } from 'lucide-react';
+import { ClipboardList, Clock, Zap } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
 import { protocols, searchProtocols, PROTOCOL_CATEGORY_LABELS, DIFFICULTY_COLORS, type ProtocolCategory } from '@/data/protocols';
 import { usePremium, FREE_PROTOCOL_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
@@ -40,7 +41,7 @@ export default function ProtocolsPage() {
           onClearError={clearPurchaseError}
         />}
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
+      <div className="sticky top-0 z-40 glass-header">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><ClipboardList className="w-5 h-5 text-sono-blue" /> Protocols</h1>
           <input
@@ -48,17 +49,17 @@ export default function ProtocolsPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "carotid", "DVT", "thyroid"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="search-field px-4 py-2.5 text-sm"
           />
         </div>
         <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveCategory('all')}
             className={clsx(
-              'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+              'chip text-xs px-3 py-1.5 font-medium',
               activeCategory === 'all'
-                ? 'bg-sono-blue text-white border-sono-blue'
-                : 'bg-transparent text-sono-muted border-sono-border'
+                ? 'chip-active'
+                : 'hover:text-slate-900'
             )}
           >
             All
@@ -68,10 +69,10 @@ export default function ProtocolsPage() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={clsx(
-                'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+                'chip text-xs px-3 py-1.5 font-medium',
                 activeCategory === cat
-                  ? 'bg-sono-blue text-white border-sono-blue'
-                  : 'bg-transparent text-sono-muted border-sono-border'
+                  ? 'chip-active'
+                  : 'hover:text-slate-900'
               )}
             >
               {label}
@@ -96,7 +97,7 @@ export default function ProtocolsPage() {
             <button
               key={p.id}
               onClick={() => locked ? openPaywall('protocols') : router.push(`/protocols/${p.id}`)}
-              className={`w-full bg-sono-card border border-sono-border rounded-2xl p-4 text-left hover:border-sono-blue/50 transition-all active:scale-[0.98] shadow-sm ${locked ? 'opacity-60' : ''}`}
+              className="w-full card card-press p-4 text-left"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
@@ -111,7 +112,7 @@ export default function ProtocolsPage() {
                   <p className="text-[12px] text-slate-500 mt-2 line-clamp-2 leading-relaxed">{p.indication}</p>
                 </div>
                 {locked
-                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
+                  ? <ProBadge className="mt-0.5" />
                   : <span className="text-sono-muted shrink-0 mt-1">›</span>
                 }
               </div>

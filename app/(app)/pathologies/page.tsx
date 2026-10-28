@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Microscope, Lock } from 'lucide-react';
+import { Microscope } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
 import Image from 'next/image';
 import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
 import { usePremium, FREE_PATHOLOGY_IDS } from '@/hooks/usePremium';
@@ -103,7 +104,7 @@ export default function PathologiesPage() {
       )}
 
       {/* Header */}
-      <div ref={headerRef} className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
+      <div ref={headerRef} className="sticky top-0 z-40 glass-header">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Microscope className="w-5 h-5 text-sono-blue" /> Pathologies</h1>
           <input
@@ -111,17 +112,17 @@ export default function PathologiesPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "DVT", "cholecystitis", "fatty liver"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="search-field px-4 py-2.5 text-sm"
           />
         </div>
         <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveCategory('all')}
             className={clsx(
-              'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+              'chip text-xs px-3 py-1.5 font-medium',
               activeCategory === 'all'
-                ? 'bg-sono-blue text-white border-sono-blue'
-                : 'bg-transparent text-sono-muted border-sono-border'
+                ? 'chip-active'
+                : 'hover:text-slate-900'
             )}
           >
             All
@@ -131,10 +132,10 @@ export default function PathologiesPage() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={clsx(
-                'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+                'chip text-xs px-3 py-1.5 font-medium',
                 activeCategory === cat
-                  ? 'bg-sono-blue text-white border-sono-blue'
-                  : 'bg-transparent text-sono-muted border-sono-border'
+                  ? 'chip-active'
+                  : 'hover:text-slate-900'
               )}
             >
               {label}
@@ -161,10 +162,10 @@ export default function PathologiesPage() {
             <div
               key={p.id}
               ref={(el) => { if (el) cardRefs.current.set(p.id, el); else cardRefs.current.delete(p.id); }}
-              className={`bg-white border border-slate-100 rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
+              className="card"
             >
               <button
-                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
+                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 rounded-t-[20px]"
                 onClick={() => locked ? openPaywall('pathologies') : setExpandedId(isExpanded ? null : p.id)}
               >
                 <div className="min-w-0 flex-1">
@@ -177,7 +178,7 @@ export default function PathologiesPage() {
                   </div>
                 </div>
                 {locked
-                  ? <Lock className="w-4 h-4 text-sono-muted shrink-0 mt-1" />
+                  ? <ProBadge className="mt-0.5" />
                   : <span className="text-sono-muted text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
                 }
               </button>

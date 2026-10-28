@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Ruler, Lock } from 'lucide-react';
+import { Ruler } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
 import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
@@ -69,7 +70,7 @@ export default function MeasurementsPage() {
           onClearError={clearPurchaseError}
         />}
       {/* Header */}
-      <div ref={headerRef} className="sticky top-0 z-40 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border">
+      <div ref={headerRef} className="sticky top-0 z-40 glass-header">
         <div className="px-4 pt-12 pb-3">
           <h1 className="text-xl font-black tracking-tight text-slate-900 mb-3 flex items-center gap-2"><Ruler className="w-5 h-5 text-sono-blue" /> Measurements</h1>
           <input
@@ -77,7 +78,7 @@ export default function MeasurementsPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder='Search "aorta", "BPD", "endometrium"…'
-            className="w-full bg-sono-card border border-sono-border rounded-xl px-4 py-2.5 text-slate-900 placeholder-sono-muted focus:outline-none focus:border-sono-blue text-sm shadow-sm"
+            className="search-field px-4 py-2.5 text-sm"
           />
         </div>
         {/* Category filter */}
@@ -85,10 +86,10 @@ export default function MeasurementsPage() {
           <button
             onClick={() => setActiveCategory('all')}
             className={clsx(
-              'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+              'chip text-xs px-3 py-1.5 font-medium',
               activeCategory === 'all'
-                ? 'bg-sono-blue text-white border-sono-blue'
-                : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-400'
+                ? 'chip-active'
+                : 'hover:text-slate-900'
             )}
           >
             All
@@ -98,10 +99,10 @@ export default function MeasurementsPage() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={clsx(
-                'shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium transition-colors',
+                'chip text-xs px-3 py-1.5 font-medium',
                 activeCategory === cat
-                  ? 'bg-sono-blue text-white border-sono-blue'
-                  : 'bg-transparent text-sono-muted border-sono-border hover:border-slate-400'
+                  ? 'chip-active'
+                  : 'hover:text-slate-900'
               )}
             >
               {label}
@@ -129,10 +130,10 @@ export default function MeasurementsPage() {
             <div
               key={m.id}
               ref={(el) => { if (el) cardRefs.current.set(m.id, el); else cardRefs.current.delete(m.id); }}
-              className={`bg-white border border-slate-100 rounded-2xl shadow-sm ${locked ? 'opacity-60' : ''}`}
+              className="card"
             >
               <button
-                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 bg-white rounded-t-2xl"
+                className="w-full px-4 py-4 text-left flex items-start justify-between gap-3 rounded-t-[20px]"
                 onClick={() => locked ? openPaywall('measurements') : setExpandedId(isExpanded ? null : m.id)}
               >
                 <div className="min-w-0 flex-1">
@@ -147,7 +148,7 @@ export default function MeasurementsPage() {
                   </div>
                 </div>
                 {locked
-                  ? <Lock className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
+                  ? <ProBadge className="mt-0.5" />
                   : <span className="text-slate-400 text-lg shrink-0 mt-0.5 transition-transform" style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>⌄</span>
                 }
               </button>
