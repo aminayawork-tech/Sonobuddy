@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { getAllArticles, ARTICLES, getArticleBySlug } from '@/lib/articles-data';
 import type { Article } from '@/lib/articles-data';
 import { parseLocalDate, todayLocalStr } from '@/lib/date';
-import { Calendar, ChevronRight, ChevronLeft, Newspaper, Search, Lock } from 'lucide-react';
+import { Calendar, ChevronRight, ChevronLeft, Newspaper, Search } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
 import { usePremium } from '@/hooks/usePremium';
-import PaywallModal from '@/components/PaywallModal';
 import ArticleDetailClient from '@/components/ArticleDetailClient';
 import { getDailyHook, isJobDay } from '@/lib/tips';
 
@@ -53,10 +53,7 @@ function ArticleList() {
   const [articles, setArticles] = useState<ArticleMeta[]>(() => filterAndSort(getAllArticles()));
   const [query, setQuery] = useState('');
   const router = useRouter();
-  const {
-    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
-    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
-  } = usePremium();
+  const { isPremium } = usePremium();
 
   // Whichever article today's home-screen hook points to is free to read —
   // same mechanism ArticleDetailClient uses, kept out of the static HTML (see
@@ -85,17 +82,6 @@ function ArticleList() {
 
   return (
     <div className="min-h-screen bg-white pb-nav">
-      {paywallOpen && <PaywallModal
-        onClose={closePaywall}
-        onPurchase={requestPurchase}
-        onRestore={requestRestore}
-        shareUnlocked={shareUnlocked}
-        onShare={requestShare}
-        onDiscountPurchase={requestDiscountPurchase}
-        purchaseError={purchaseError}
-        onClearError={clearPurchaseError}
-      />}
-
       <div className="bg-white border-b border-slate-100 px-5 pt-14 pb-4 sticky top-0 z-10">
         <div className="flex items-center gap-2.5">
           <Newspaper size={20} className="text-sky-500" strokeWidth={2} />
@@ -131,8 +117,8 @@ function ArticleList() {
             return (
               <button
                 key={article.slug}
-                onClick={() => (isPremium || isFreeToday) ? router.push(href) : openPaywall('articles')}
-                className="w-full flex items-start justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors text-left"
+                onClick={() => router.push(href)}
+                className="w-full flex items-start justify-between gap-3 card card-press px-4 py-4 text-left"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
@@ -166,7 +152,7 @@ function ArticleList() {
                 {isPremium || isFreeToday ? (
                   <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
                 ) : (
-                  <Lock size={14} className="text-slate-300 shrink-0 mt-1" />
+                  <ProBadge className="mt-0.5" />
                 )}
               </button>
             );

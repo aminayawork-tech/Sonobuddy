@@ -2,7 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Briefcase, MapPin, Clock, DollarSign, Search, X, Lock, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Briefcase, MapPin, Clock, DollarSign, Search, X, ChevronRight, ChevronLeft } from 'lucide-react';
+import ProBadge from '@/components/ProBadge';
+import ProUpsellCard from '@/components/ProUpsellCard';
 import type { Job } from '@/lib/jobs';
 import { usePremium } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
@@ -92,10 +94,7 @@ function JobList() {
   // plain client-side filter).
   const [locationJobs, setLocationJobs] = useState<Job[] | null>(null);
   const router = useRouter();
-  const {
-    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
-    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
-  } = usePremium();
+  const { isPremium } = usePremium();
 
   // Which job is free today — only meaningful on a job day, since that's the
   // only day the home screen actually features one. Kept out of the static
@@ -171,19 +170,6 @@ function JobList() {
 
   return (
     <div className="min-h-screen bg-white pb-nav">
-      {paywallOpen && (
-        <PaywallModal
-          onClose={closePaywall}
-          onPurchase={requestPurchase}
-          onRestore={requestRestore}
-          shareUnlocked={shareUnlocked}
-          onShare={requestShare}
-          onDiscountPurchase={requestDiscountPurchase}
-          purchaseError={purchaseError}
-          onClearError={clearPurchaseError}
-        />
-      )}
-
       <div className="bg-white border-b border-slate-100 px-5 pt-14 pb-4 sticky top-0 z-10">
         <div className="flex items-center gap-2.5">
           <Briefcase size={20} className="text-sky-500" strokeWidth={2} />
@@ -253,13 +239,11 @@ function JobList() {
             <button
               key={job.id}
               onClick={() =>
-                unlocked
-                  ? router.push(
-                      `/jobs?id=${encodeURIComponent(job.id)}${trimmedQuery ? `&q=${encodeURIComponent(query.trim())}` : ''}`
-                    )
-                  : openPaywall('jobs')
+                router.push(
+                  `/jobs?id=${encodeURIComponent(job.id)}${trimmedQuery ? `&q=${encodeURIComponent(query.trim())}` : ''}`
+                )
               }
-              className="w-full flex items-start justify-between gap-3 bg-white border border-slate-100 rounded-2xl px-4 py-4 shadow-sm active:bg-slate-50 transition-colors text-left"
+              className="w-full flex items-start justify-between gap-3 card card-press px-4 py-4 text-left"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-1">
@@ -299,7 +283,7 @@ function JobList() {
               {unlocked ? (
                 <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
               ) : (
-                <Lock size={14} className="text-slate-300 shrink-0 mt-1" />
+                <ProBadge className="mt-0.5" />
               )}
             </button>
           );
@@ -452,19 +436,11 @@ function JobDetail({ id }: { id: string }) {
               <p className="text-[14px] text-slate-500 leading-relaxed line-clamp-3 mb-6">
                 {job.description}
               </p>
-              <button
-                onClick={() => openPaywall('jobs')}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center active:bg-slate-100 transition-colors"
-              >
-                <img src="/icons/icon-192.png" alt="" className="w-12 h-12 rounded-2xl mx-auto mb-3" />
-                <p className="text-slate-900 font-bold text-[15px] mb-1">Unlock to view &amp; apply</p>
-                <p className="text-slate-500 text-[13px] leading-relaxed mb-4">
-                  Full job details and the company name are part of SonoBuddy premium, along with every measurement, protocol, calculator, and pathology.
-                </p>
-                <span className="inline-block bg-sky-500 text-white font-bold text-[14px] px-6 py-3 rounded-xl">
-                  Unlock Full Access
-                </span>
-              </button>
+              <ProUpsellCard
+                title="See the full listing with Pro"
+                subtitle="Unlock the company name, full job details, and the apply link."
+                onUnlock={() => openPaywall('jobs')}
+              />
             </>
           )}
         </div>
