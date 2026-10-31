@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { recordEvent } from '@/lib/tap-tracking';
 
@@ -72,8 +72,37 @@ declare global {
   }
 }
 
+// Premium status lives in a tiny external store rather than per-component
+// state. Per-component state started every screen at `false` and only
+// corrected itself in an effect after the first paint, so paying users saw
+// the PRO badges flash on every navigation. Reading the store synchronously
+// means client-side screens render already-unlocked; the server snapshot
+// stays `false` so static HTML still hydrates cleanly.
+const premiumListeners = new Set<() => void>();
+
+function readPremium(): boolean {
+  if (typeof window === 'undefined') return false;
+  if (window.__isPremium === true) return true;
+  try {
+    return localStorage.getItem('sb_premium') === '1';
+  } catch {
+    return false;
+  }
+}
+
+function subscribePremium(listener: () => void) {
+  premiumListeners.add(listener);
+  return () => { premiumListeners.delete(listener); };
+}
+
+function markPremium() {
+  try { localStorage.setItem('sb_premium', '1'); } catch { /* storage blocked */ }
+  document.documentElement.setAttribute('data-premium', '1');
+  premiumListeners.forEach((l) => l());
+}
+
 export function usePremium() {
-  const [isPremium, setIsPremium] = useState(false);
+  const isPremium = useSyncExternalStore(subscribePremium, readPremium, () => false);
   const [paywallOpen, setPaywallOpen] = useState(false);
   // Persisted once someone completes a share, so the discounted price stays
   // available on future paywall visits without asking them to share again.
@@ -83,11 +112,8 @@ export function usePremium() {
   useEffect(() => {
     // Native injects window.__isPremium = true before the page loads.
     // localStorage fallback covers web-PWA and dev environments.
-    const alreadyPremium =
-      window.__isPremium === true ||
-      localStorage.getItem('sb_premium') === '1';
+    const alreadyPremium = readPremium();
 
-    setIsPremium(alreadyPremium);
     setShareUnlocked(localStorage.getItem(SHARE_UNLOCKED_KEY) === '1');
 
     // Called by native after a successful purchase or restore. `action` is
@@ -98,8 +124,7 @@ export function usePremium() {
     // completion here, not in PaywallModal, since the modal is already
     // closed by the time this fires.
     window.__onPremiumUnlocked = (action?: string) => {
-      localStorage.setItem('sb_premium', '1');
-      setIsPremium(true);
+      markPremium();
       setPaywallOpen(false);
       if (action) recordEvent(`paywall:completed:${action}`);
     };

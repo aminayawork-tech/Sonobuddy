@@ -143,8 +143,17 @@ const softwareAppJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Runs before first paint: the prebuilt HTML is rendered as non-Pro,
+            so without this, paying users would see PRO badges flash on app
+            launch until React takes over. iOS injects __isPremium before
+            any page script runs. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(window.__isPremium===true||localStorage.getItem('sb_premium')==='1')document.documentElement.setAttribute('data-premium','1')}catch(e){}",
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
