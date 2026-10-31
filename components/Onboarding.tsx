@@ -8,6 +8,15 @@ import {
 import { recordEvent } from '@/lib/tap-tracking';
 import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
 import ProBadge from '@/components/ProBadge';
+import localFont from 'next/font/local';
+
+// Bundled rather than loaded from Google Fonts so the founder note renders
+// in handwriting offline and inside the iOS app's local web bundle.
+const handwriting = localFont({
+  src: '../app/fonts/kalam-latin-400.woff2',
+  weight: '400',
+  display: 'swap',
+});
 
 // Same gradient icon tiles as the Home screen's Browse cards.
 const TILE = {
@@ -318,14 +327,14 @@ function Screen4({ onNext }: { onNext: () => void }) {
         I wish I&apos;d had<br />this on <span className="text-sky-500">day one.</span>
       </h1>
 
-      <div className="card p-5 space-y-4 self-start">
-        <p className="text-[15px] text-slate-600 leading-relaxed">
+      <div className={`card p-5 space-y-3 self-start ${handwriting.className}`}>
+        <p className="text-[17px] leading-[1.6] text-slate-800">
           When I started scanning, nobody expected me to carry two hundred normal values and a dozen exam protocols in my head. I still needed them, though, usually mid-scan, with a patient on the table and no time to dig.
         </p>
-        <p className="text-[15px] text-slate-600 leading-relaxed">
+        <p className="text-[17px] leading-[1.6] text-slate-800">
           The references that existed were scattered everywhere: a textbook here, a forum thread there, a PDF a classmate sent you two semesters ago. Each one was slightly different from the last, and none of it was built for the moment you actually needed it.
         </p>
-        <p className="text-[15px] text-slate-600 leading-relaxed">
+        <p className="text-[17px] leading-[1.6] text-slate-800">
           So I built the tool I wished existed back then: the real numbers and the real steps, in your pocket, right when you need them.
         </p>
       </div>
