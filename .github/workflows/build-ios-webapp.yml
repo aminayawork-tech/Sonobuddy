@@ -19,6 +19,7 @@ on:
       - 'tailwind.config.ts'
       - 'package.json'
       - 'package-lock.json'
+      - '.github/workflows/build-ios-webapp.yml'
   workflow_dispatch:
 
 permissions:
@@ -103,5 +104,12 @@ jobs:
             echo "No changes to WebApp bundle."
           else
             git commit -m "chore: auto-update iOS WebApp bundle [skip ci]"
-            git push origin main
+            # main can move while this job builds (another merge lands); a
+            # plain push is then rejected and the bundle silently never
+            # ships. Rebase onto the latest main and retry instead.
+            for attempt in 1 2 3; do
+              git pull --rebase origin main && git push origin main && exit 0
+              sleep 5
+            done
+            exit 1
           fi
