@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Collecting data for 170+ blog/article pages can exceed the 60s default
+  // on slower disks (e.g. an iCloud-synced checkout), failing the build.
+  staticPageGenerationTimeout: 300,
   trailingSlash: true,
   images: {
     unoptimized: true,
