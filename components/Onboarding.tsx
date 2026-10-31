@@ -337,11 +337,10 @@ function Screen4({ onNext }: { onNext: () => void }) {
         <p className="text-[17px] leading-[1.6] text-slate-800">
           So I built the tool I wished existed back then: the real numbers and the real steps, in your pocket, right when you need them.
         </p>
+        <p className="text-[17px] leading-[1.6] text-slate-500 pt-1">
+          — Sonographer &amp; founder of SonoBuddy
+        </p>
       </div>
-
-      <p className="text-[14px] font-semibold text-slate-400 mt-4">
-        Sonographer &amp; founder of SonoBuddy
-      </p>
 
       <div className="flex-1 min-h-7" />
 
