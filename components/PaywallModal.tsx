@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { recordEvent } from '@/lib/tap-tracking';
 import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
 
-import { X, CheckCircle2, Share2, PartyPopper } from 'lucide-react';
+import {
+  X, Share2, PartyPopper, Ruler, ClipboardList, Calculator, Microscope, Newspaper, Briefcase,
+} from 'lucide-react';
+import { TILE, TILE_BASE } from '@/lib/tiles';
 
 interface Props {
   onClose: () => void;
@@ -18,12 +21,12 @@ interface Props {
 }
 
 const FEATURES = [
-  { label: 'All measurement reference tables', sub: '20+ vascular, OB, thyroid, cardiac, abdominal', value: 49 },
-  { label: 'All exam protocols',               sub: 'Step-by-step guides with key images & checklists', value: 39 },
-  { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more', value: 29 },
-  { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips', value: 39 },
-  { label: 'Every article in the library',     sub: '170+ clinical guides and career articles', value: 29 },
-  { label: 'Full sonography job board',        sub: 'Apply to openings updated regularly, any location', value: 19 },
+  { label: 'All measurement reference tables', sub: '20+ vascular, OB, thyroid, cardiac, abdominal', value: 49, Icon: Ruler, tile: TILE.measurements },
+  { label: 'All exam protocols',               sub: 'Step-by-step guides with key images & checklists', value: 39, Icon: ClipboardList, tile: TILE.protocols },
+  { label: 'All clinical calculators',         sub: 'ABI, RI, gestational age, EDD, thyroid volume & more', value: 29, Icon: Calculator, tile: TILE.calculators },
+  { label: 'Full pathology library',           sub: '50+ conditions with red flags & reporting tips', value: 39, Icon: Microscope, tile: TILE.pathologies },
+  { label: 'Every article in the library',     sub: '170+ clinical guides and career articles', value: 29, Icon: Newspaper, tile: TILE.articles },
+  { label: 'Full sonography job board',        sub: 'Apply to openings updated regularly, any location', value: 19, Icon: Briefcase, tile: TILE.jobs },
 ];
 
 const TOTAL_VALUE = FEATURES.reduce((sum, f) => sum + f.value, 0);
@@ -110,7 +113,10 @@ export default function PaywallModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white">
+    <div className="fixed inset-0 z-50 flex flex-col bg-sono-dark overflow-hidden">
+      {/* Soft brand glow, matching onboarding */}
+      <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 w-[620px] h-[620px] rounded-full bg-sky-400/20 blur-3xl" />
+
       {/* Close */}
       <button
         onClick={handleXTap}
@@ -123,15 +129,15 @@ export default function PaywallModal({
       {screen === 'main' && (
         <>
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-6 pt-14 pb-8">
+          <div className="relative flex-1 overflow-y-auto px-6 pt-14 pb-8">
             {/* Icon + heading */}
             <div className="flex flex-col items-center text-center mb-8">
               {FLASH_SALE_ACTIVE && (
-                <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-700 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full mb-4">
+                <span className="inline-flex items-center gap-1.5 bg-amber-100 ring-1 ring-amber-300/60 text-amber-700 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full mb-4 shadow-[0_4px_12px_-4px_rgba(245,158,11,0.45)]">
                   🔥 Limited-time sale, ends soon
                 </span>
               )}
-              <img src="/icons/icon-192.png" alt="" className="w-16 h-16 rounded-2xl mb-4" />
+              <img src="/icons/icon-192.png" alt="" className="w-16 h-16 rounded-2xl mb-4 ring-1 ring-slate-900/[0.06] shadow-[0_14px_30px_-12px_rgba(14,165,233,0.65)]" />
               <h2 className="text-[28px] font-black tracking-tight leading-tight mb-1">
                 <span className="text-slate-900">Unlock </span><span className="text-slate-900">Sono</span><span className="text-[#0EA5E9]">Buddy</span>
               </h2>
@@ -144,9 +150,11 @@ export default function PaywallModal({
 
             {/* Feature list */}
             <div className="space-y-3 mb-8">
-              {FEATURES.map(({ label, sub }) => (
-                <div key={label} className="flex items-start gap-3 bg-slate-50 border border-slate-100 rounded-xl p-4">
-                  <CheckCircle2 className="w-5 h-5 text-[#0EA5E9] shrink-0 mt-0.5" />
+              {FEATURES.map(({ label, sub, Icon, tile }) => (
+                <div key={label} className="card flex items-center gap-3.5 p-4">
+                  <div className={`w-9 h-9 rounded-xl ${TILE_BASE} ${tile}`}>
+                    <Icon size={17} className="text-white" strokeWidth={2} />
+                  </div>
                   <div>
                     <p className="text-sm font-semibold text-slate-900 leading-snug">{label}</p>
                     <p className="text-xs text-slate-500 mt-0.5 leading-snug">{sub}</p>
@@ -162,7 +170,7 @@ export default function PaywallModal({
           </div>
 
           {/* Sticky purchase footer */}
-          <div className="px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 border-t border-slate-100 bg-white">
+          <div className="relative px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 border-t border-slate-900/[0.06] bg-white/90 backdrop-blur-xl">
             {purchaseError && (
               <p className="text-center text-red-500 text-xs mb-3">{purchaseError}</p>
             )}
@@ -172,7 +180,7 @@ export default function PaywallModal({
                 the price since it's already shown here. */}
             <button
               onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
-              className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] rounded-2xl px-5 py-4 mb-3 flex items-center justify-between transition-all text-left"
+              className="w-full bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 ring-1 ring-amber-300/30 shadow-[0_18px_36px_-18px_rgba(245,158,11,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] active:scale-[0.98] rounded-2xl px-5 py-4 mb-3 flex items-center justify-between transition-transform text-left"
             >
               <div>
                 <p className="text-[12px] text-slate-400 mb-0.5">
@@ -186,13 +194,13 @@ export default function PaywallModal({
                   )}
                 </p>
               </div>
-              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full shrink-0">
+              <span className="rounded-full bg-gradient-to-br from-amber-200 via-amber-400 to-amber-500 text-amber-950 shadow-[0_2px_8px_-2px_rgba(245,158,11,0.55),inset_0_1px_0_rgba(255,255,255,0.6)] text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 shrink-0">
                 One-time
               </span>
             </button>
             <button
               onClick={FLASH_SALE_ACTIVE ? handleDiscountPurchase : handlePurchase}
-              className="w-full bg-slate-900 active:bg-slate-800 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all"
+              className="w-full bg-gradient-to-b from-sky-400 to-sono-blue shadow-[0_12px_26px_-10px_rgba(14,165,233,0.75),inset_0_1px_0_rgba(255,255,255,0.3)] active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-transform"
             >
               Unlock Full Access
             </button>
@@ -210,7 +218,7 @@ export default function PaywallModal({
       )}
 
       {screen === 'offer' && (
-        <div className="flex-1 flex flex-col px-6 pt-20 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+        <div className="relative flex-1 flex flex-col px-6 pt-20 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           <div className="flex-1 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 rounded-2xl bg-sky-100 flex items-center justify-center mb-5">
               <Share2 className="w-8 h-8 text-[#0EA5E9]" />
@@ -247,7 +255,7 @@ export default function PaywallModal({
       )}
 
       {screen === 'discount' && (
-        <div className="flex-1 flex flex-col px-6 pt-20 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+        <div className="relative flex-1 flex flex-col px-6 pt-20 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           <div className="flex-1 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center mb-5">
               <PartyPopper className="w-8 h-8 text-emerald-600" />
