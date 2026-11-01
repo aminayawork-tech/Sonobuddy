@@ -5,7 +5,7 @@ import { Microscope } from 'lucide-react';
 import ProBadge from '@/components/ProBadge';
 import Image from 'next/image';
 import { pathologies, searchPathologies, type PathologyCategory, type PathologyImage } from '@/data/pathologies';
-import { usePremium, FREE_PATHOLOGY_IDS } from '@/hooks/usePremium';
+import { usePremium, readPremium, FREE_PATHOLOGY_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import ImageLightbox from '@/components/ImageLightbox';
 import clsx from 'clsx';
@@ -62,6 +62,15 @@ export default function PathologiesPage() {
     }
     return results;
   }, [query, activeCategory]);
+
+  // Search results link here as ?id=<item>. Open that item directly rather
+  // than dropping people at the top of the list to find it again.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) return;
+    if (!readPremium() && !FREE_PATHOLOGY_IDS.has(id)) { openPaywall('search'); return; }
+    setExpandedId(id);
+  }, [openPaywall]);
 
   // Smooth-scroll the opened card into view below the sticky header
   useEffect(() => {
