@@ -62,6 +62,17 @@ struct WebView: UIViewRepresentable {
         )
         config.userContentController.addUserScript(premiumScript)
 
+        // TestFlight and Xcode builds use the sandbox receipt. Flag them so the
+        // web layer files their analytics (including free sandbox "purchases")
+        // separately instead of mixing them into real App Store numbers.
+        if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+            config.userContentController.addUserScript(WKUserScript(
+                source: "window.__sbSandbox = true;",
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: true
+            ))
+        }
+
         // Register the native message handler (purchase / restore actions from JS)
         config.userContentController.add(context.coordinator, name: "sonobuddy")
 
@@ -123,6 +134,7 @@ struct WebView: UIViewRepresentable {
             }
 
             Task { @MainActor in
+                let wasPremium = PurchaseManager.shared.isPremium
                 do {
                     switch action {
                     case "purchase":
@@ -136,11 +148,15 @@ struct WebView: UIViewRepresentable {
                     }
                     if PurchaseManager.shared.isPremium {
                         didNotifyPremium = true
-                        // Passing which action succeeded lets the web side tell a
-                        // genuine completed purchase apart from a button tap —
-                        // those were previously indistinguishable in analytics,
-                        // which is exactly what read as "purchases with no sales."
-                        webView?.evaluateJavaScript("window.__onPremiumUnlocked?.('\(action)')") { _, _ in }
+                        // Passing which action succeeded lets the web side record
+                        // a completed purchase — but only for a real free → Pro
+                        // change. Cancelling the sheet while already Pro, or
+                        // StoreKit re-delivering an already-owned purchase, both
+                        // land here too and were being counted as new sales.
+                        let js = wasPremium
+                            ? "window.__onPremiumUnlocked?.()"
+                            : "window.__onPremiumUnlocked?.('\(action)')"
+                        webView?.evaluateJavaScript(js) { _, _ in }
                     }
                 } catch {
                     // A silent failure here reads to the user as "the button did

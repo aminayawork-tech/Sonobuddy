@@ -15,6 +15,7 @@ import { todayLocalStr } from '@/lib/date';
 const SURFACE_LABELS: Record<string, string> = {
   ios: 'the iOS app',
   android: 'the Android app',
+  iostest: 'iOS TestFlight builds',
   web: 'the website',
 };
 function surfaceLabel(surface: string): string {
@@ -24,6 +25,7 @@ function surfaceLabel(surface: string): string {
 const STORE_CUT_LABELS: Record<string, string> = {
   ios: "Apple's cut",
   android: "Google's cut",
+  iostest: "Apple's cut — sandbox, not real money",
 };
 function storeCutLabel(surface: string): string {
   return STORE_CUT_LABELS[surface] ?? "the store's cut";
@@ -243,8 +245,11 @@ export default function HeatmapAdminPage() {
     if (shown === 0 && data.named.length === 0) return [];
     return [
       step('Saw paywall', shown, true),
-      step('Tapped purchase', get('paywall:purchase')),
-      step('  → completed', get('paywall:completed:purchase')),
+      // The Unlock button fires the full-price or the sale-price purchase
+      // depending on FLASH_SALE_ACTIVE, so count both — counting only the
+      // full-price events showed 0 taps and 0 sales during the $6.99 sale.
+      step('Tapped unlock', get('paywall:purchase') + get('paywall:discount-purchase')),
+      step('  → completed', get('paywall:completed:purchase') + get('paywall:completed:purchaseDiscount')),
       step('Tapped restore', get('paywall:restore')),
       step('  → completed', get('paywall:completed:restore')),
       step('Dismissed', get('paywall:dismissed')),
@@ -343,9 +348,11 @@ export default function HeatmapAdminPage() {
   type FunnelRow = { label: string; count: number; pct: number | null };
   function buildFunnel(
     named: Pair[], baseEvent: string, baseLabel: string,
-    rows: [label: string, event: string][],
+    rows: [label: string, event: string | string[]][],
   ): FunnelRow[] {
-    const get = (n: string) => named.find((x) => x.name === n)?.count ?? 0;
+    const getOne = (n: string) => named.find((x) => x.name === n)?.count ?? 0;
+    const get = (n: string | string[]) =>
+      Array.isArray(n) ? n.reduce((sum, e) => sum + getOne(e), 0) : getOne(n);
     const base = get(baseEvent);
     if (base === 0) return [];
     return [
@@ -357,8 +364,8 @@ export default function HeatmapAdminPage() {
     ];
   }
   const allTimeFunnel = insights ? buildFunnel(insights.named, 'paywall:shown', 'Saw paywall', [
-    ['Tapped purchase', 'paywall:purchase'],
-    ['  → completed', 'paywall:completed:purchase'],
+    ['Tapped unlock', ['paywall:purchase', 'paywall:discount-purchase']],
+    ['  → completed', ['paywall:completed:purchase', 'paywall:completed:purchaseDiscount']],
     ['Tapped restore', 'paywall:restore'],
     ['  → completed', 'paywall:completed:restore'],
     ['Dismissed', 'paywall:dismissed'],
@@ -436,6 +443,7 @@ export default function HeatmapAdminPage() {
             <option value="web">Website</option>
             <option value="ios">iOS app</option>
             <option value="android">Android app</option>
+            <option value="iostest">iOS TestFlight (test data)</option>
           </select>
           <input
             type="date"
