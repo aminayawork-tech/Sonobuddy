@@ -160,9 +160,20 @@ export async function GET(req: NextRequest) {
         }
       : null;
 
+    // Days with a completed purchase, so the dashboard can list them and
+    // let a test purchase be moved out of the real numbers.
+    const purchasesByDay = perDay
+      .map((d) => {
+        const get = (n: string) => d.named.find((x) => x.name === n)?.count ?? 0;
+        return { day: d.day, full: get('paywall:completed:purchase'), sale: get('paywall:completed:purchaseDiscount') };
+      })
+      .filter((d) => d.full > 0 || d.sale > 0)
+      .reverse(); // most recent first
+
     return NextResponse.json(
       {
         surface,
+        purchasesByDay,
         dayCount: allDays.length,
         range: { from: allDays[0], to: allDays[allDays.length - 1] },
         totals: { views: totalViews, taps: totalTaps, sessions: totalSessions },

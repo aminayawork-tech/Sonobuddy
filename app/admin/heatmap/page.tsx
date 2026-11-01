@@ -16,6 +16,7 @@ const SURFACE_LABELS: Record<string, string> = {
   ios: 'the iOS app',
   android: 'the Android app',
   iostest: 'iOS TestFlight builds',
+  androidtest: 'Android test purchases',
   web: 'the website',
 };
 function surfaceLabel(surface: string): string {
@@ -26,6 +27,7 @@ const STORE_CUT_LABELS: Record<string, string> = {
   ios: "Apple's cut",
   android: "Google's cut",
   iostest: "Apple's cut — sandbox, not real money",
+  androidtest: "Google's cut — test purchases, not real money",
 };
 function storeCutLabel(surface: string): string {
   return STORE_CUT_LABELS[surface] ?? "the store's cut";
@@ -49,6 +51,7 @@ interface Insights {
   topPages: Pair[];
   topArticles: Pair[];
   named: Pair[];
+  purchasesByDay?: { day: string; full: number; sale: number }[];
   months: MonthTotals[];
   monthOverMonth: {
     current: MonthTotals;
@@ -191,6 +194,34 @@ export default function HeatmapAdminPage() {
   useEffect(() => { if (token) void loadInsights(); }, [loadInsights, token]);
 
   const [resetting, setResetting] = useState(false);
+  const [moving, setMoving] = useState<string | null>(null);
+
+  /**
+   * Move one recorded purchase into the test bucket (or back, with undo).
+   * For reconciling with App Store Connect / Play Console when a test
+   * purchase was counted as a real sale.
+   */
+  const movePurchase = useCallback(async (d: string, kind: 'full' | 'sale', undo = false) => {
+    if (!token || (surface !== 'ios' && surface !== 'android')) return;
+    setMoving(`${d}:${kind}`);
+    setInsightsError(null);
+    try {
+      const res = await fetch('/api/events/purchases/', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ day: d, surface, kind, undo }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || `Update failed (${res.status})`);
+      await loadInsights();
+      if (d === day) await load();
+    } catch (e) {
+      setInsightsError(e instanceof Error ? e.message : 'Update failed');
+    } finally {
+      setMoving(null);
+    }
+  }, [token, surface, day, load, loadInsights]);
 
   /** Wipe a day so test traffic can't be mistaken for real usage. */
   const reset = useCallback(async () => {
@@ -444,6 +475,7 @@ export default function HeatmapAdminPage() {
             <option value="ios">iOS app</option>
             <option value="android">Android app</option>
             <option value="iostest">iOS TestFlight (test data)</option>
+            <option value="androidtest">Android test purchases</option>
           </select>
           <input
             type="date"
@@ -510,6 +542,40 @@ export default function HeatmapAdminPage() {
                     </p>
                   )}
                 </div>
+
+                {/* Reconcile with the store: every day with a recorded sale,
+                    and a way to move a test purchase out of the real count. */}
+                {(surface === 'ios' || surface === 'android') && (insights.purchasesByDay?.length ?? 0) > 0 && (
+                  <div className="mb-6 bg-slate-900 border border-slate-800 rounded-xl px-5 py-4">
+                    <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                      Purchases by day
+                    </h3>
+                    <p className="text-slate-500 text-xs mb-3">
+                      Compare with {surface === 'android' ? 'Play Console → Order management' : 'App Store Connect → Sales and Trends'}.
+                      If one of these was your own test purchase, use “Move to test” to take it out of the real numbers.
+                      It goes to the {surface === 'android' ? 'Android test purchases' : 'iOS TestFlight (test data)'} view, so it can be moved back.
+                    </p>
+                    <ul className="divide-y divide-slate-800">
+                      {insights.purchasesByDay!.flatMap((p) => ([
+                        ['full', 'Full price ($9.99)', p.full],
+                        ['sale', 'Sale price ($6.99)', p.sale],
+                      ] as const).filter(([, , n]) => n > 0).map(([kind, label, n]) => (
+                        <li key={`${p.day}:${kind}`} className="flex flex-wrap items-center gap-x-4 gap-y-2 py-2 text-sm">
+                          <span className="tabular-nums text-slate-300 w-24">{p.day}</span>
+                          <span className="text-slate-400 flex-1 min-w-[140px]">{label}</span>
+                          <span className="tabular-nums font-bold text-white w-8 text-right">{n}</span>
+                          <button
+                            onClick={() => void movePurchase(p.day, kind)}
+                            disabled={moving !== null}
+                            className="text-xs font-semibold text-amber-300 border border-amber-500/40 hover:bg-amber-500/10 disabled:opacity-50 rounded-lg px-3 py-1.5"
+                          >
+                            {moving === `${p.day}:${kind}` ? 'Moving…' : 'Move 1 to test'}
+                          </button>
+                        </li>
+                      )))}
+                    </ul>
+                  </div>
+                )}
 
                 <div className="grid lg:grid-cols-3 gap-6">
                 {/* Month over month */}
