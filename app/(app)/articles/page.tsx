@@ -10,6 +10,7 @@ import { Calendar, ChevronRight, ChevronLeft, Newspaper, Search } from 'lucide-r
 import ProBadge from '@/components/ProBadge';
 import { usePremium } from '@/hooks/usePremium';
 import ArticleDetailClient from '@/components/ArticleDetailClient';
+import { getRelatedArticles } from '@/lib/related-articles';
 import { getDailyHook, isJobDay } from '@/lib/tips';
 
 const API_BASE = 'https://www.sonobuddy.com';
@@ -197,7 +198,7 @@ function ArticleView({ slug }: { slug: string }) {
     );
   }
 
-  return <ArticleDetailClient article={article} />;
+  return <ArticleDetailClient article={article} related={getRelatedArticles(article.slug)} />;
 }
 
 /* ── Loading skeletons ────────────────────────────────────────────────────── */

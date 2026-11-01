@@ -5,13 +5,14 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ArticleImage from '@/components/ArticleImage';
-import { Calendar, ChevronLeft } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import ProUpsellCard from '@/components/ProUpsellCard';
 import { usePremium } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import { parseLocalDate } from '@/lib/date';
 import { getDailyHook, isJobDay } from '@/lib/tips';
 import type { Article } from '@/lib/articles-data';
+import type { RelatedArticle } from '@/lib/related-articles';
 
 const PROSE_CLASSES = `
   prose prose-slate max-w-none
@@ -81,7 +82,7 @@ function formatDateLong(dateStr: string) {
   });
 }
 
-export default function ArticleDetailClient({ article }: { article: Article }) {
+export default function ArticleDetailClient({ article, related = [] }: { article: Article; related?: RelatedArticle[] }) {
   const {
     isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
     shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
@@ -148,21 +149,6 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
         {isPremium || freeToday ? (
           <>
             <ArticleBody content={article.content} />
-
-            <div className="mt-10 bg-sky-50 border border-sky-100 rounded-2xl p-5 text-center">
-              <p className="text-xl font-black tracking-tight mb-1">
-                <span className="text-slate-900">Sono</span><span className="text-sky-500">Buddy</span>
-              </p>
-              <p className="text-slate-500 text-[13px] mb-4 leading-relaxed">
-                All reference tools in one app, measurements, protocols, calculators, pathologies. Works offline.
-              </p>
-              <Link
-                href="/home"
-                className="inline-flex items-center gap-2 bg-sky-500 text-white font-bold text-[14px] px-6 py-3 rounded-xl active:bg-sky-600 transition-colors"
-              >
-                Open App
-              </Link>
-            </div>
           </>
         ) : (
           <>
@@ -180,6 +166,31 @@ export default function ArticleDetailClient({ article }: { article: Article }) {
               onUnlock={() => openPaywall('article-preview')}
             />
           </>
+        )}
+
+        {related.length > 0 && (
+          <section className="mt-10 pt-8 border-t border-slate-100">
+            <p className="text-[11px] font-bold text-sono-muted uppercase tracking-widest mb-3">Keep reading</p>
+            <div className="space-y-3">
+              {related.map((r) => (
+                <Link
+                  key={r.slug}
+                  href={`/articles/${r.slug}`}
+                  className="card card-press flex items-start justify-between gap-3 px-4 py-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <Calendar size={11} className="text-slate-400 shrink-0" />
+                      <span className="text-[11px] text-slate-400">{formatDateLong(r.date)}</span>
+                    </div>
+                    <p className="text-[15px] font-bold text-slate-900 leading-snug mb-1 line-clamp-2">{r.title}</p>
+                    <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-2">{r.excerpt}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </div>
