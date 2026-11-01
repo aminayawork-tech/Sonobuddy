@@ -40,7 +40,7 @@ export interface TapEvent {
    * 'event' a named milestone such as a paywall step.
    */
   type: 'tap' | 'view' | 'dead' | 'scroll' | 'event' | 'searchmiss';
-  /** 'ios'/'android' for the native app shells, 'web' for the site */
+  /** 'ios'/'android' for the native app shells, 'iostest' for TestFlight builds, 'web' for the site */
   surface: string;
   /** Route with dynamic segments collapsed, e.g. /articles/[slug] */
   route: string;
@@ -68,7 +68,11 @@ export interface TapEvent {
 
 function surface(): string {
   if (typeof navigator === 'undefined') return 'unknown';
-  if (navigator.userAgent.includes('SonoBuddyApp/iOS')) return 'ios';
+  if (navigator.userAgent.includes('SonoBuddyApp/iOS')) {
+    // TestFlight/Xcode builds (flagged natively) get their own bucket so test
+    // sessions and free sandbox purchases never inflate real App Store numbers.
+    return (window as { __sbSandbox?: boolean }).__sbSandbox ? 'iostest' : 'ios';
+  }
   if (navigator.userAgent.includes('SonoBuddyApp/Android')) return 'android';
   return 'web';
 }
