@@ -80,7 +80,9 @@ declare global {
 // stays `false` so static HTML still hydrates cleanly.
 const premiumListeners = new Set<() => void>();
 
-function readPremium(): boolean {
+// Exported for one-off checks inside effects (e.g. honoring a deep link on
+// mount), where the hook's value may still be the pre-hydration `false`.
+export function readPremium(): boolean {
   if (typeof window === 'undefined') return false;
   if (window.__isPremium === true) return true;
   try {

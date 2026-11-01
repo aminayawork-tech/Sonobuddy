@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { Ruler } from 'lucide-react';
 import ProBadge from '@/components/ProBadge';
 import { measurements, searchMeasurements, CATEGORY_LABELS, CATEGORY_COLORS, type MeasurementCategory } from '@/data/measurements';
-import { usePremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
+import { usePremium, readPremium, FREE_MEASUREMENT_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import RangeBar from '@/components/RangeBar';
 import clsx from 'clsx';
@@ -40,6 +40,15 @@ export default function MeasurementsPage() {
     }
     return results;
   }, [query, activeCategory]);
+
+  // Search results link here as ?id=<item>. Open that item directly rather
+  // than dropping people at the top of the list to find it again.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) return;
+    if (!readPremium() && !FREE_MEASUREMENT_IDS.has(id)) { openPaywall('search'); return; }
+    setExpandedId(id);
+  }, [openPaywall]);
 
   // Smooth-scroll the opened card into view below the sticky header
   useEffect(() => {

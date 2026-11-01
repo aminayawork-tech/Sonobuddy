@@ -7,6 +7,9 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Clock, Zap, ChevronDown, Copy, Check } from 'lucide-react';
 import ImageLightbox from '@/components/ImageLightbox';
+import PaywallModal from '@/components/PaywallModal';
+import ProUpsellCard from '@/components/ProUpsellCard';
+import { usePremium, FREE_PROTOCOL_IDS } from '@/hooks/usePremium';
 
 export default function ProtocolDetailClient({ id }: { id: string }) {
   const protocol = protocols.find((p) => p.id === id);
@@ -14,6 +17,13 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
   const [expandedTemplate, setExpandedTemplate] = useState<number | null>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<KeyImage | null>(null);
+  const {
+    isPremium, paywallOpen, openPaywall, closePaywall, requestPurchase, requestRestore,
+    shareUnlocked, requestShare, requestDiscountPurchase, purchaseError, clearPurchaseError,
+  } = usePremium();
+  // This page is reachable directly (search results, links), not only through
+  // the protocols list's own lock, so it needs its own check.
+  const locked = !isPremium && !FREE_PROTOCOL_IDS.has(id);
 
   function copyTemplate(text: string, index: number) {
     navigator.clipboard.writeText(text).then(() => {
@@ -41,6 +51,16 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen pb-nav">
+      {paywallOpen && <PaywallModal
+        onClose={closePaywall}
+        onPurchase={requestPurchase}
+        onRestore={requestRestore}
+        shareUnlocked={shareUnlocked}
+        onShare={requestShare}
+        onDiscountPurchase={requestDiscountPurchase}
+        purchaseError={purchaseError}
+        onClearError={clearPurchaseError}
+      />}
       {/* Lightbox */}
       {lightbox && lightbox.src && (
         <ImageLightbox
@@ -81,6 +101,16 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {locked ? (
+        <div className="px-4 py-6">
+          <ProUpsellCard
+            title="See the full protocol with Pro"
+            subtitle="Unlock the step-by-step scan, key images, and report checklist."
+            onUnlock={() => openPaywall('protocol-detail')}
+          />
+        </div>
+      ) : (
+      <>
       {/* Tabs */}
       <div className="sticky top-0 z-30 bg-sono-dark/95 backdrop-blur-sm border-b border-sono-border mt-4">
         <div className="flex px-4">
@@ -224,6 +254,8 @@ export default function ProtocolDetailClient({ id }: { id: string }) {
           </div>
         )}
       </div>
+      </>
+      )}
     </div>
   );
 }

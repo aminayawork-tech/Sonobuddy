@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Calculator } from 'lucide-react';
 import ProBadge from '@/components/ProBadge';
-import { usePremium, FREE_CALCULATOR_IDS } from '@/hooks/usePremium';
+import { usePremium, readPremium, FREE_CALCULATOR_IDS } from '@/hooks/usePremium';
 import PaywallModal from '@/components/PaywallModal';
 import {
   calculators, searchCalculators,
@@ -30,7 +30,16 @@ function CalculatorContent() {
   const preselected = searchParams.get('id');
 
   const [query, setQuery] = useState('');
-  const [activeId, setActiveId] = useState<string | null>(preselected);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Search links here as ?id=<calculator>. Opening it unconditionally let a
+  // free user reach any locked calculator straight from Home search, so the
+  // same lock check as tapping it in the list applies.
+  useEffect(() => {
+    if (!preselected) return;
+    if (!readPremium() && !FREE_CALCULATOR_IDS.has(preselected)) { openPaywall('search'); return; }
+    setActiveId(preselected);
+  }, [preselected, openPaywall]);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [result, setResult] = useState<CalcResult | null>(null);
 
