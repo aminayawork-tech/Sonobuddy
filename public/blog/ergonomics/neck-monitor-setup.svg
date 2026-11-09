@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<rect width="1200" height="900" fill="#F0F8FF"/>
+<rect x="72" y="64" width="96" height="40" rx="20" fill="#E0F2FE"/>
+<text x="94" y="91" font-size="18" font-weight="700" letter-spacing="3" fill="#0EA5E9">NECK</text>
+<text x="72" y="180" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">Set up the </tspan><tspan fill="#0EA5E9">monitor</tspan></text>
+<text x="72" y="250" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">before image one</tspan></text>
+<rect x="72" y="346" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="382" r="16" fill="#10B981"/><path d="M106 382 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="391" font-size="27" font-weight="700" fill="#0F172A">Directly in front of you, not off to the side</text>
+<rect x="72" y="432" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="468" r="16" fill="#10B981"/><path d="M106 468 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="477" font-size="27" font-weight="700" fill="#0F172A">Top of the screen at or just below eye level</text>
+<rect x="72" y="518" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="554" r="16" fill="#10B981"/><path d="M106 554 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="563" font-size="27" font-weight="700" fill="#0F172A">About an arm’s length away</text>
+<rect x="72" y="604" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="640" r="16" fill="#10B981"/><path d="M106 640 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="649" font-size="27" font-weight="700" fill="#0F172A">Turn your chair, not just your neck</text>
+<rect x="72" y="690" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="726" r="16" fill="#10B981"/><path d="M106 726 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="735" font-size="27" font-weight="700" fill="#0F172A">Chin back: ears over shoulders</text>
+<text x="72" y="844" font-size="22" fill="#475569">Ten seconds of setup saves a whole shift of neck strain.</text>
+<text x="1128" y="846" text-anchor="end" font-size="34" font-weight="900" letter-spacing="-1"><tspan fill="#0F172A">Sono</tspan><tspan fill="#0EA5E9">Buddy</tspan></text>
+</svg>

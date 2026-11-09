@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
+import HeaderStoreButtons from '@/components/HeaderStoreButtons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -201,12 +202,7 @@ export default function LandingPage() {
             >
               Blog
             </Link>
-            <a
-              href={APP_STORE_URL}
-              className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl transition-colors text-sm font-semibold"
-            >
-              Download on App Store
-            </a>
+            <HeaderStoreButtons />
           </div>
         </div>
       </header>
