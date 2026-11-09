@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import AppStoreBadge from '@/components/AppStoreBadge';
+import HeaderStoreButtons from '@/components/HeaderStoreButtons';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -104,7 +105,7 @@ export default function BlogPostPage({ params }: Props) {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <AppStoreBadge />
+          <HeaderStoreButtons />
         </div>
       </header>
 

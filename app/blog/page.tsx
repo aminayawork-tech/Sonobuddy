@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
-import AppStoreBadge from '@/components/AppStoreBadge';
+import HeaderStoreButtons from '@/components/HeaderStoreButtons';
 import BlogListClient from '@/components/BlogListClient';
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function BlogPage() {
           <Link href="/" className="text-xl font-black tracking-tight">
             <span className="text-gray-900">Sono</span><span className="text-sky-500">Buddy</span>
           </Link>
-          <AppStoreBadge />
+          <HeaderStoreButtons />
         </div>
       </header>
 

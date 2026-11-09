@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<rect width="1200" height="900" fill="#F0F8FF"/>
+<rect x="72" y="64" width="148" height="40" rx="20" fill="#E0F2FE"/>
+<text x="94" y="91" font-size="18" font-weight="700" letter-spacing="3" fill="#0EA5E9">SHOULDER</text>
+<text x="72" y="180" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">The </tspan><tspan fill="#0EA5E9">30° rule</tspan></text>
+<rect x="72" y="276" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="312" r="16" fill="#10B981"/><path d="M106 312 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="321" font-size="27" font-weight="700" fill="#0F172A">Keep your scanning arm within ~30° of your side</text>
+<rect x="72" y="362" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="398" r="16" fill="#10B981"/><path d="M106 398 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="407" font-size="27" font-weight="700" fill="#0F172A">Bring the patient to the edge of the bed</text>
+<rect x="72" y="448" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="484" r="16" fill="#10B981"/><path d="M106 484 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="493" font-size="27" font-weight="700" fill="#0F172A">Raise your chair or lower the bed</text>
+<rect x="72" y="534" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="570" r="16" fill="#10B981"/><path d="M106 570 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="579" font-size="27" font-weight="700" fill="#0F172A">Rest your forearm on a cushion or the bed</text>
+<rect x="72" y="620" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<circle cx="114" cy="656" r="16" fill="#10B981"/><path d="M106 656 l6 6 l11 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="148" y="665" font-size="27" font-weight="700" fill="#0F172A">Elbow lower than your shoulder, always</text>
+<text x="72" y="844" font-size="22" fill="#475569">If your elbow is winging out, move the patient, not your arm.</text>
+<text x="1128" y="846" text-anchor="end" font-size="34" font-weight="900" letter-spacing="-1"><tspan fill="#0F172A">Sono</tspan><tspan fill="#0EA5E9">Buddy</tspan></text>
+</svg>
