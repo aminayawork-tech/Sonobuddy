@@ -22,6 +22,12 @@ allprojects {
         google()
         mavenCentral()
     }
+    // Keep build outputs out of the repo folder. The project lives in an
+    // iCloud-synced ~/Documents, and iCloud syncing thousands of build
+    // intermediates mid-build corrupts Gradle caches and stalls bundling.
+    // The release bundle ends up in
+    // ~/.sonobuddy-android-build/app/outputs/bundle/release/app-release.aab
+    layout.buildDirectory.set(new File(System.getProperty('user.home'), ".sonobuddy-android-build/${project.name}"))
 }
 
 task clean(type: Delete) {
