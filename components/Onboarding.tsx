@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { recordEvent } from '@/lib/tap-tracking';
 import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
+import { useSale } from '@/lib/sale';
 import ProBadge from '@/components/ProBadge';
 import { TILE, TILE_BASE } from '@/lib/tiles';
 import localFont from 'next/font/local';
@@ -350,6 +351,7 @@ function Screen5({
   onClearError: () => void;
   onSkip: () => void;
 }) {
+  const sale = useSale();
   const stack = [
     { Icon: Ruler,         label: 'Full Measurement Library',      value: 49, tile: TILE.measurements },
     { Icon: ClipboardList, label: 'Every Exam Protocol',           value: 39, tile: TILE.protocols },
@@ -371,7 +373,9 @@ function Screen5({
       <div className="flex items-center gap-2.5 mb-5">
         <ProBadge />
         <p className="text-[11px] font-bold text-amber-600 uppercase tracking-[0.14em]">
-          Before you go — launch pricing
+          {FLASH_SALE_ACTIVE && sale.event
+            ? `${sale.event.badge} · ${sale.event.percentOff}% off`
+            : 'Before you go — launch pricing'}
         </p>
       </div>
 
@@ -406,6 +410,9 @@ function Screen5({
           button doesn't repeat the price since it's already shown above.
           Both elements trigger the same purchase action. */}
       <div className="mt-6 space-y-2">
+        {FLASH_SALE_ACTIVE && sale.event && (
+          <p className="text-center text-[12px] font-semibold text-slate-500">{sale.event.endsLabel}</p>
+        )}
         <button
           onClick={handlePurchase}
           className="w-full bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 ring-1 ring-amber-300/30 shadow-[0_18px_36px_-18px_rgba(245,158,11,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] active:scale-[0.98] rounded-2xl px-5 py-4 transition-transform text-left"
@@ -417,7 +424,7 @@ function Screen5({
               </p>
               <p className="text-[22px] font-black text-white">
                 {FLASH_SALE_ACTIVE ? (
-                  <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99</>
+                  <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> {sale.price}</>
                 ) : (
                   'Today: $9.99'
                 )}

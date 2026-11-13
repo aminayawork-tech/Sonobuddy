@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { recordEvent } from '@/lib/tap-tracking';
 import { FLASH_SALE_ACTIVE } from '@/hooks/usePremium';
+import { useSale } from '@/lib/sale';
 
 import {
   X, Share2, PartyPopper, Ruler, ClipboardList, Calculator, Microscope, Newspaper, Briefcase,
@@ -54,6 +55,7 @@ export default function PaywallModal({
   purchaseError, onClearError,
 }: Props) {
   const [screen, setScreen] = useState<Screen>('main');
+  const sale = useSale();
   // Whether THIS visit is allowed to show the offer — decided once at mount
   // from localStorage, then immediately marked seen for every future visit.
   const [offerEligible, setOfferEligible] = useState(false);
@@ -132,7 +134,15 @@ export default function PaywallModal({
           <div className="relative flex-1 overflow-y-auto px-6 pt-14 pb-8">
             {/* Icon + heading */}
             <div className="flex flex-col items-center text-center mb-8">
-              {FLASH_SALE_ACTIVE && (
+              {FLASH_SALE_ACTIVE && sale.event && (
+                <div className="flex flex-col items-center gap-1.5 mb-4">
+                  <span className="inline-flex items-center gap-1.5 bg-slate-950 text-white ring-1 ring-amber-300/40 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full shadow-[0_6px_16px_-6px_rgba(15,23,42,0.6)]">
+                  {sale.event.badge} <span className="text-amber-300">· {sale.event.percentOff}% off</span>
+                </span>
+                  <span className="text-[11px] font-semibold text-slate-500">{sale.event.endsLabel}</span>
+                </div>
+              )}
+              {FLASH_SALE_ACTIVE && !sale.event && (
                 <span className="inline-flex items-center gap-1.5 bg-amber-100 ring-1 ring-amber-300/60 text-amber-700 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full mb-4 shadow-[0_4px_12px_-4px_rgba(245,158,11,0.45)]">
                   🔥 Limited-time sale, ends soon
                 </span>
@@ -188,7 +198,7 @@ export default function PaywallModal({
                 </p>
                 <p className="text-[22px] font-black text-white">
                   {FLASH_SALE_ACTIVE ? (
-                    <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> $6.99</>
+                    <>Today: <span className="line-through text-slate-500 font-normal text-[16px]">$9.99</span> {sale.price}</>
                   ) : (
                     'Today: $9.99'
                   )}
@@ -224,11 +234,11 @@ export default function PaywallModal({
               <Share2 className="w-8 h-8 text-[#0EA5E9]" />
             </div>
             <h2 className="text-[26px] font-black tracking-tight leading-tight text-slate-900 mb-2">
-              Hold up, save $3
+              Hold up, save {sale.savings}
             </h2>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs mb-1">
               Share SonoBuddy with a friend or colleague and unlock full access
-              for <span className="font-semibold text-slate-700">$6.99</span> instead of $9.99.
+              for <span className="font-semibold text-slate-700">{sale.price}</span> instead of $9.99.
             </p>
             <p className="text-slate-400 text-xs max-w-xs">
               Just open the share sheet, no confirmation needed from them.
@@ -242,7 +252,7 @@ export default function PaywallModal({
               className="w-full bg-[#0EA5E9] hover:bg-sky-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-sky-200/60 flex items-center justify-center gap-2"
             >
               <Share2 className="w-5 h-5" />
-              Share &amp; Save $3
+              Share &amp; Save {sale.savings}
             </button>
             <button
               onClick={() => reallyClose('offer')}
@@ -264,7 +274,7 @@ export default function PaywallModal({
               Discount unlocked
             </h2>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-              Thanks for sharing SonoBuddy. Full access is <span className="font-semibold text-slate-700">$6.99</span> for
+              Thanks for sharing SonoBuddy. Full access is <span className="font-semibold text-slate-700">{sale.price}</span> for
               you, one time.
             </p>
           </div>
@@ -277,7 +287,7 @@ export default function PaywallModal({
               onClick={handleDiscountPurchase}
               className="w-full bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-white font-bold py-4 rounded-2xl text-base transition-all shadow-lg shadow-emerald-200/60"
             >
-              Unlock Full Access · $6.99
+              Unlock Full Access · {sale.price}
             </button>
             <p className="text-center text-slate-400 text-[11px] mt-2 mb-1">
               One-time purchase · No subscription · Offline access

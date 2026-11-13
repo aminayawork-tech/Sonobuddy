@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { todayLocalStr } from '@/lib/date';
+import { FULL_PRICE, REGULAR_SALE_PRICE, salePriceOn } from '@/lib/sale';
 
 /**
  * Tap analytics viewer. Client-only so it survives the static export, and
@@ -345,7 +346,7 @@ export default function HeatmapAdminPage() {
     const fullPrice = get('paywall:completed:purchase');
     const salePrice = get('paywall:completed:purchaseDiscount');
     const count = fullPrice + salePrice;
-    const revenue = fullPrice * 9.99 + salePrice * 6.99;
+    const revenue = fullPrice * FULL_PRICE + salePrice * salePriceOn(day);
     return { count, revenue };
   })();
 
@@ -430,8 +431,15 @@ export default function HeatmapAdminPage() {
     const salePrice = get('paywall:completed:purchaseDiscount');
     if (fullPrice === 0 && salePrice === 0) return [];
     return [
-      { label: 'Full price ($9.99) purchases', count: fullPrice, revenue: fullPrice * 9.99 },
-      { label: 'Sale price ($6.99) purchases', count: salePrice, revenue: salePrice * 6.99 },
+      { label: 'Full price ($9.99) purchases', count: fullPrice, revenue: fullPrice * FULL_PRICE },
+      // Sale revenue per day, since the Black Friday window sold at $4.99.
+      {
+        label: 'Sale price ($6.99 / $4.99 Black Friday) purchases',
+        count: salePrice,
+        revenue: insights.purchasesByDay
+          ? insights.purchasesByDay.reduce((sum, d) => sum + d.sale * salePriceOn(d.day), 0)
+          : salePrice * REGULAR_SALE_PRICE,
+      },
     ];
   })() : [];
 
@@ -558,7 +566,7 @@ export default function HeatmapAdminPage() {
                     <ul className="divide-y divide-slate-800">
                       {insights.purchasesByDay!.flatMap((p) => ([
                         ['full', 'Full price ($9.99)', p.full],
-                        ['sale', 'Sale price ($6.99)', p.sale],
+                        ['sale', `Sale price ($${salePriceOn(p.day).toFixed(2)})`, p.sale],
                       ] as const).filter(([, , n]) => n > 0).map(([kind, label, n]) => (
                         <li key={`${p.day}:${kind}`} className="flex flex-wrap items-center gap-x-4 gap-y-2 py-2 text-sm">
                           <span className="tabular-nums text-slate-300 w-24">{p.day}</span>
