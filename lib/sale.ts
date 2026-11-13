@@ -12,7 +12,7 @@ import { useSyncExternalStore } from 'react';
  *
  * Dates are the device's local midnight.
  */
-export const SALE_START = new Date(2026, 10, 16); // Mon Nov 16, 2026
+export const SALE_START = new Date(2026, 10, 13); // Fri Nov 13, 2026 (early bird)
 export const BLACK_FRIDAY = new Date(2026, 10, 27); // Fri Nov 27
 export const CYBER_MONDAY = new Date(2026, 10, 30); // Mon Nov 30
 export const SALE_END = new Date(2026, 11, 1); // Tue Dec 1 (exclusive)
@@ -22,7 +22,7 @@ export const REGULAR_SALE_PRICE = 6.99;
 export const BLACK_FRIDAY_PRICE = 4.99;
 
 /** ISO day strings for the analytics dashboard, which buckets by day. */
-export const SALE_START_DAY = '2026-11-16';
+export const SALE_START_DAY = '2026-11-13';
 export const SALE_LAST_DAY = '2026-11-30';
 
 export interface Sale {
