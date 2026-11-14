@@ -38,7 +38,7 @@ export default function Onboarding({
 }: OnboardingProps) {
   const [screen, setScreen] = useState(0);
   const [exiting, setExiting] = useState(false);
-  const touchStartX = useRef<number | null>(null);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   // The route never changes during onboarding — it's an overlay on /home —
   // so without this every screen and every skip/complete looked identical to
@@ -66,15 +66,22 @@ export default function Onboarding({
   }
 
   function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX;
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }
 
+  // Only a deliberate sideways swipe changes screens. Vertical swipes
+  // (scrolling, or a thumb pulling down) used to drift 40px sideways and
+  // skip a page, so require a longer swipe that is clearly more horizontal
+  // than vertical.
   function handleTouchEnd(e: React.TouchEvent) {
-    if (touchStartX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    if (dx < -40 && screen < TOTAL - 1) setScreen(s => s + 1);
-    if (dx > 40 && screen > 0) setScreen(s => s - 1);
-    touchStartX.current = null;
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const dx = e.changedTouches[0].clientX - start.x;
+    const dy = e.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 2) return;
+    if (dx < 0 && screen < TOTAL - 1) setScreen(s => s + 1);
+    if (dx > 0 && screen > 0) setScreen(s => s - 1);
   }
 
   return (
@@ -82,6 +89,7 @@ export default function Onboarding({
       className={`fixed inset-0 z-50 bg-sono-dark flex flex-col overflow-hidden transition-opacity duration-350 ${exiting ? 'opacity-0' : 'opacity-100'}`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => { touchStart.current = null; }}
     >
       {/* Soft brand glow behind the content */}
       <div aria-hidden className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 w-[620px] h-[620px] rounded-full bg-sky-400/20 blur-3xl" />
