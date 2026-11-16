@@ -77,7 +77,12 @@ export async function POST(req: NextRequest) {
       const label = clean(e.label, 60);
       const cell = clean(e.cell, 8);
       const pcell = clean(e.pcell, 10);
-      const ts = typeof e.ts === 'number' && isFinite(e.ts) ? e.ts : Date.now();
+      // Timestamps come from the device clock. A phone set to a future date
+      // (e.g. to preview a sale) would otherwise file taps under days that
+      // haven't happened yet, so cap at server time. Past timestamps are kept:
+      // offline taps are legitimately queued and sent later.
+      const now = Date.now();
+      const ts = typeof e.ts === 'number' && isFinite(e.ts) ? Math.min(e.ts, now) : now;
       const vw = typeof e.vw === 'number' && isFinite(e.vw) ? Math.round(e.vw) : 0;
       if (!surface || !route) continue;
 

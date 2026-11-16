@@ -65,6 +65,7 @@ interface Summary {
   surface: string;
   route: string | null;
   days: string[];
+  futureDays?: string[];
   routes: Pair[];
   views: Pair[];
   named: Pair[];
@@ -196,6 +197,42 @@ export default function HeatmapAdminPage() {
 
   const [resetting, setResetting] = useState(false);
   const [moving, setMoving] = useState<string | null>(null);
+  const [clearingFuture, setClearingFuture] = useState(false);
+
+  /**
+   * Remove days dated in the future (taps from a device whose clock was set
+   * ahead), across every surface, so they can't mix into those dates' real
+   * numbers when the dates arrive.
+   */
+  const clearFutureDays = useCallback(async (days: string[]) => {
+    if (!token || days.length === 0) return;
+    if (!window.confirm(`Delete analytics recorded under ${days.length} future date(s): ${days.join(', ')}? These came from a device with its clock set ahead. This cannot be undone.`)) return;
+    setClearingFuture(true);
+    setError(null);
+    const surfaces = ['web', 'ios', 'android', 'iostest', 'androidtest'];
+    try {
+      for (const d of days) {
+        for (let i = 0; i < surfaces.length; i++) {
+          const sf = surfaces[i];
+          const forget = i === surfaces.length - 1 ? '&forget=1' : '';
+          const res = await fetch(`/api/events/reset/?day=${d}&surface=${sf}${forget}`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            referrerPolicy: 'no-referrer',
+          });
+          if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body.error || `Clearing ${d} failed (${res.status})`);
+          }
+        }
+      }
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Clearing failed');
+    } finally {
+      setClearingFuture(false);
+    }
+  }, [token, load]);
 
   /**
    * Move one recorded purchase into the test bucket (or back, with undo).
@@ -787,6 +824,23 @@ export default function HeatmapAdminPage() {
               </>
             )}
           </section>
+        )}
+
+        {data && (data.futureDays?.length ?? 0) > 0 && (
+          <div className="mb-6 -mt-4 bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex flex-wrap items-center gap-3 text-xs">
+            <p className="text-amber-200 flex-1 min-w-[240px]">
+              {data.futureDays!.length} future date{data.futureDays!.length === 1 ? '' : 's'} ({data.futureDays!.join(', ')}) have
+              data from a device with its clock set ahead. They&apos;re hidden here; clear them so they don&apos;t mix into
+              those days&apos; real numbers.
+            </p>
+            <button
+              onClick={() => void clearFutureDays(data.futureDays!)}
+              disabled={clearingFuture}
+              className="px-3 py-1.5 rounded-lg border border-amber-500/50 text-amber-200 hover:bg-amber-500/10 disabled:opacity-50 font-semibold"
+            >
+              {clearingFuture ? 'Clearing…' : 'Clear future dates'}
+            </button>
+          </div>
         )}
 
         {data && data.days.length > 0 && (

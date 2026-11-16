@@ -91,6 +91,12 @@ export async function POST(req: NextRequest) {
       deleted += Number(n) || 0;
     }
 
+    // forget=1 also removes the day from the day index, once every surface
+    // for it has been cleared.
+    if (req.nextUrl.searchParams.get('forget') === '1') {
+      await redis(['SREM', 'days', day]);
+    }
+
     return NextResponse.json({ ok: true, day, surface, keysDeleted: deleted });
   } catch (err) {
     console.error('Analytics reset failed:', err);

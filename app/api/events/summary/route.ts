@@ -68,6 +68,8 @@ export async function GET(req: NextRequest) {
 
   try {
     const days = await redis(['SMEMBERS', 'days']);
+    const today = analyticsDayKey(Date.now());
+    const dayList = Array.isArray(days) ? (days as unknown[]).map(String).sort().reverse() : [];
     const routes = toPairs(await redis(['HGETALL', `routes:${day}:${surface}`]));
     const views = toPairs(await redis(['HGETALL', `views:${day}:${surface}`]));
     const named = toPairs(await redis(['HGETALL', `named:${day}:${surface}`]));
@@ -124,7 +126,10 @@ export async function GET(req: NextRequest) {
         day,
         surface,
         route,
-        days: Array.isArray(days) ? days.sort().reverse() : [],
+        days: dayList.filter((d) => d <= today),
+        // Days stamped by a device clock set ahead, before ingestion capped
+        // timestamps. Hidden from the picker; the dashboard offers to clear them.
+        futureDays: dayList.filter((d) => d > today),
         routes,
         views,
         named,

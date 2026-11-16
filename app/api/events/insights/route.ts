@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redisConfig, redisPipeline } from '@/lib/redis';
 import { authorize } from '@/lib/analytics-auth';
+import { analyticsDayKey } from '@/lib/date';
 
 export const runtime = 'edge';
 
@@ -68,7 +69,10 @@ export async function GET(req: NextRequest) {
 
   try {
     const daysRaw = await redisPipeline(cfg, [['SMEMBERS', 'days']]);
-    const allDays = (Array.isArray(daysRaw[0]) ? (daysRaw[0] as unknown[]).map(String) : []).sort();
+    const today = analyticsDayKey(Date.now());
+    const allDays = (Array.isArray(daysRaw[0]) ? (daysRaw[0] as unknown[]).map(String) : [])
+      .filter((d) => d <= today) // future-dated days come from a device clock set ahead
+      .sort();
 
     if (allDays.length === 0) {
       return NextResponse.json(
