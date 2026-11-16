@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<rect width="1200" height="900" fill="#F0F8FF"/>
+<rect x="72" y="64" width="239" height="40" rx="20" fill="#E0F2FE"/>
+<text x="94" y="91" font-size="18" font-weight="700" letter-spacing="3" fill="#0EA5E9">SONOGRAPHER PAY</text>
+<text x="72" y="180" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">Can you make </tspan><tspan fill="#0EA5E9">six figures</tspan><tspan fill="#0F172A">?</tspan></text>
+<rect x="72" y="276" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="321" font-size="27" font-weight="700" fill="#0F172A">Bottom 10% earned under</text>
+<text x="1096" y="321" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">$64,760</text>
+<rect x="72" y="362" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="407" font-size="27" font-weight="700" fill="#0F172A">Median sonographer</text>
+<text x="1096" y="407" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">$89,340</text>
+<rect x="72" y="448" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="493" font-size="27" font-weight="700" fill="#0F172A">Top 10% earned over</text>
+<text x="1096" y="493" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">$123,170</text>
+<rect x="72" y="534" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="579" font-size="27" font-weight="700" fill="#0F172A">Fastest levers</text>
+<text x="1096" y="579" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Specialty + extra credentials</text>
+<rect x="72" y="620" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="665" font-size="27" font-weight="700" fill="#0F172A">Also</text>
+<text x="1096" y="665" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Travel, call, overtime, location</text>
+<text x="72" y="844" font-size="22" fill="#475569">Wages: U.S. Bureau of Labor Statistics, May 2024.</text>
+<text x="1128" y="846" text-anchor="end" font-size="34" font-weight="900" letter-spacing="-1"><tspan fill="#0F172A">Sono</tspan><tspan fill="#0EA5E9">Buddy</tspan></text></svg>
