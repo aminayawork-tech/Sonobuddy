@@ -8,6 +8,7 @@ import { Redis } from '@upstash/redis';
 import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
 import { getDailyHook, isJobDay } from '@/lib/tips';
 import { getJobs } from '@/lib/jobs';
+import { analyticsDayKey } from '@/lib/date';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -114,6 +115,15 @@ export async function GET(req: NextRequest) {
     // got reached before the timeout. getJobs() is race'd against a hard
     // 5s timeout here so a slow Adzuna call can never block the sends;
     // it just falls back to the article hook instead.
+    // One daily tip per day: a manual test send and the (often late) GitHub
+    // schedule must not both reach people. Custom sends are never skipped.
+    // Not under push:*, which is the web-subscription keyspace scanned below.
+    const isDaily = !customTitle && !customBody;
+    const sentKey = `pushlog:daily-sent:${analyticsDayKey(Date.now())}`;
+    if (isDaily && searchParams.get('force') !== '1' && await redis.get(sentKey)) {
+      return NextResponse.json({ skipped: true, reason: 'daily tip already delivered today' });
+    }
+
     const hook = getDailyHook();
     let notifTitle = customTitle ?? hook.title;
     let notifBody  = customBody  ?? hook.preview;
@@ -222,6 +232,12 @@ export async function GET(req: NextRequest) {
           }
         }
       } while (apnsCursor !== 0);
+    }
+
+    // Only mark the day done if someone actually received it, so a failed
+    // send (e.g. a bad APNs key) can be retried the same day.
+    if (isDaily && webSent + apnsSent > 0) {
+      await redis.set(sentKey, '1', { ex: 60 * 60 * 36 });
     }
 
     return NextResponse.json({
