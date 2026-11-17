@@ -44,17 +44,24 @@ jobs:
 
           echo "Full response: $RESPONSE"
           echo "$RESPONSE" | grep -q '"error"' && echo "ERROR: API returned error" && exit 1 || true
-          APNS_SENT=$(echo "$RESPONSE" | grep -o '"sent":[0-9]*' | head -2 | tail -1 | grep -o '[0-9]*' || echo "0")
-          WEB_SENT=$(echo "$RESPONSE" | grep -o '"sent":[0-9]*' | head -1 | grep -o '[0-9]*' || echo "0")
-          echo "Web push sent: $WEB_SENT"
-          echo "APNs sent: $APNS_SENT"
 
-          # Fail the run (GitHub emails the repo owner) when iPhones were
-          # targeted but none got through, e.g. a wrong APNs key or team ID.
-          # This silently failed for weeks after the developer-account
-          # transfer because the run still showed green.
-          APNS_FAILED=$(echo "$RESPONSE" | grep -o '"apns":{"sent":[0-9]*,"failed":[0-9]*' | grep -o '[0-9]*$' || echo "0")
-          if [ "${APNS_SENT:-0}" = "0" ] && [ "${APNS_FAILED:-0}" != "0" ]; then
-            echo "ERROR: every APNs send failed ($APNS_FAILED). See apns.reasons above."
-            exit 1
+          if [ "$(echo "$RESPONSE" | jq -r '.skipped // false')" = "true" ]; then
+            echo "Skipped: today's tip was already delivered."
+            exit 0
           fi
+
+          # Per-platform results. Fail the run (GitHub emails the repo owner)
+          # when a platform had devices but reached none of them, e.g. a wrong
+          # APNs key or Firebase credentials. This once failed silently for
+          # weeks while the run showed green.
+          STATUS=0
+          for P in webPush apns fcm; do
+            SENT=$(echo "$RESPONSE" | jq -r ".${P}.sent // 0")
+            FAILED=$(echo "$RESPONSE" | jq -r ".${P}.failed // 0")
+            echo "$P: sent $SENT, failed $FAILED, reasons $(echo "$RESPONSE" | jq -c ".${P}.reasons // {}")"
+            if [ "$P" != "webPush" ] && [ "$SENT" = "0" ] && [ "$FAILED" != "0" ]; then
+              echo "ERROR: every $P send failed."
+              STATUS=1
+            fi
+          done
+          exit $STATUS
