@@ -172,6 +172,11 @@ export async function GET(req: NextRequest) {
     // ── 2. APNs (iOS native app) ─────────────────────────────────────────────
     let apnsSent = 0;
     let apnsFailed = 0;
+    // Apple's rejection reasons, counted, so the daily run's log says *why*
+    // sends failed (e.g. InvalidProviderToken = wrong key/team ID) instead
+    // of only how many.
+    const apnsReasons: Record<string, number> = {};
+    const apnsConfigured = !!(process.env.APNS_KEY && process.env.APNS_KEY_ID && process.env.APNS_TEAM_ID);
 
     const apnsKey = process.env.APNS_KEY;
     const apnsKeyId = process.env.APNS_KEY_ID;
@@ -212,6 +217,8 @@ export async function GET(req: NextRequest) {
               await redis.del(key);
             }
             apnsFailed++;
+            const reason = res.reason ?? 'unknown';
+            apnsReasons[reason] = (apnsReasons[reason] ?? 0) + 1;
           }
         }
       } while (apnsCursor !== 0);
@@ -219,7 +226,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
-      apns: { sent: apnsSent, failed: apnsFailed },
+      apns: { sent: apnsSent, failed: apnsFailed, reasons: apnsReasons, configured: apnsConfigured, teamId: process.env.APNS_TEAM_ID ?? null },
       debug: { title: notifTitle },
     });
   } catch (err: unknown) {
