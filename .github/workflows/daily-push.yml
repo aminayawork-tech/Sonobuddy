@@ -20,6 +20,12 @@ on:
         description: 'Notification body (leave blank to send today''s daily tip)'
         required: false
         default: ''
+      platform:
+        description: 'Who receives it (pick android or ios to test one platform)'
+        required: false
+        default: 'all'
+        type: choice
+        options: [all, android, ios]
 
 jobs:
   send:
@@ -29,16 +35,21 @@ jobs:
         run: |
           TITLE="${{ github.event.inputs.title }}"
           BODY="${{ github.event.inputs.body }}"
+          PLATFORM="${{ github.event.inputs.platform }}"
+          ONLY=""
+          if [ -n "$PLATFORM" ] && [ "$PLATFORM" != "all" ]; then ONLY="$PLATFORM"; fi
 
           if [ -n "$TITLE" ] && [ -n "$BODY" ]; then
             echo "Sending custom notification: $TITLE"
             RESPONSE=$(curl -sL -G "https://www.sonobuddy.com/api/push/send" \
               --data-urlencode "title=$TITLE" \
               --data-urlencode "body=$BODY" \
+              --data-urlencode "only=$ONLY" \
               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
           else
             echo "Sending daily tip notification..."
-            RESPONSE=$(curl -sL "https://www.sonobuddy.com/api/push/send" \
+            RESPONSE=$(curl -sL -G "https://www.sonobuddy.com/api/push/send" \
+              --data-urlencode "only=$ONLY" \
               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
           fi
 

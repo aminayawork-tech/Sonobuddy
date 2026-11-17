@@ -108,6 +108,10 @@ export async function GET(req: NextRequest) {
     const customTitle = searchParams.get('title');
     const customBody  = searchParams.get('body');
     const customUrl   = searchParams.get('url');
+    // Optional: send to one platform only (e.g. a test to Android phones
+    // without notifying every iPhone). Omitted = all platforms.
+    const only = searchParams.get('only'); // 'web' | 'ios' | 'android' | null
+    const wants = (p: 'web' | 'ios' | 'android') => !only || only === p;
 
     // Alternates with a job posting on "job days" (see isJobDay()). This
     // previously ate this function's 30s send budget whenever Adzuna was
@@ -119,7 +123,7 @@ export async function GET(req: NextRequest) {
     // One daily tip per day: a manual test send and the (often late) GitHub
     // schedule must not both reach people. Custom sends are never skipped.
     // Not under push:*, which is the web-subscription keyspace scanned below.
-    const isDaily = !customTitle && !customBody;
+    const isDaily = !customTitle && !customBody && !only;
     const sentKey = `pushlog:daily-sent:${analyticsDayKey(Date.now())}`;
     if (isDaily && searchParams.get('force') !== '1' && await redis.get(sentKey)) {
       return NextResponse.json({ skipped: true, reason: 'daily tip already delivered today' });
@@ -153,7 +157,7 @@ export async function GET(req: NextRequest) {
     let webFailed = 0;
 
     let cursor = 0;
-    do {
+    if (wants('web')) do {
       const [nextCursor, keys] = await redis.scan(cursor, { match: 'push:*', count: 100 });
       cursor = Number(nextCursor);
 
@@ -193,7 +197,7 @@ export async function GET(req: NextRequest) {
     const apnsKeyId = process.env.APNS_KEY_ID;
     const apnsTeamId = process.env.APNS_TEAM_ID;
 
-    if (apnsKey && apnsKeyId && apnsTeamId) {
+    if (wants('ios') && apnsKey && apnsKeyId && apnsTeamId) {
       // Restore real newlines if Vercel stored them escaped
       let apnsKeyPem = apnsKey.replace(/\\n/g, '\n');
       if (!apnsKeyPem.includes('-----BEGIN')) {
@@ -240,7 +244,7 @@ export async function GET(req: NextRequest) {
     let fcmFailed = 0;
     const fcmReasons: Record<string, number> = {};
     const sa = fcmServiceAccount();
-    if (sa) {
+    if (sa && wants('android')) {
       const tokens: { key: string; token: string }[] = [];
       let fcmCursor = 0;
       do {
