@@ -132,7 +132,7 @@ export async function GET(req: NextRequest) {
     const hook = getDailyHook();
     let notifTitle = customTitle ?? hook.title;
     let notifBody  = customBody  ?? hook.preview;
-    let notifUrl   = customUrl   ?? (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
+    let notifUrl   = customUrl || (hook.articleSlug ? `/articles/${hook.articleSlug}` : '/home');
 
     if (!customTitle && !customBody && isJobDay()) {
       try {

@@ -43,7 +43,11 @@ export default function AndroidPushRegistrar() {
       PushNotifications.addListener('registration', ({ value }) => { void saveToken(value); }),
       PushNotifications.addListener('pushNotificationActionPerformed', ({ notification }) => {
         const url = (notification.data as { url?: string } | undefined)?.url;
-        if (url && url.startsWith('/')) window.location.href = url;
+        // In-app paths, or SonoBuddy's own Play Store page (e.g. a review
+        // request); Capacitor hands play.google.com off to the Play Store app.
+        if (url && (url.startsWith('/') || url.startsWith('https://play.google.com/store/apps/details?id=com.sonobuddy.app'))) {
+          window.location.href = url;
+        }
       }),
     ];
 
