@@ -243,6 +243,9 @@ export async function GET(req: NextRequest) {
     let fcmSent = 0;
     let fcmFailed = 0;
     const fcmReasons: Record<string, number> = {};
+    // Per-device results (token prefix + last check-in) so the run log can
+    // show which phones were reached; tokens themselves stay private.
+    const fcmDevices: { id: string; lastSeen: string | null; result: string }[] = [];
     const sa = fcmServiceAccount();
     if (sa && wants('android')) {
       const tokens: { key: string; token: string }[] = [];
@@ -271,8 +274,10 @@ export async function GET(req: NextRequest) {
             const batch = tokens.slice(i, i + 20);
             const results = await Promise.all(batch.map(({ token }) =>
               sendOneFcm(sa, accessToken!, token, { title: notifTitle, body: notifBody, url: notifUrl })));
+            const seen = await Promise.all(batch.map(({ token }) => redis.get<string>(`fcmseen:${token}`)));
             for (let j = 0; j < results.length; j++) {
               const res = results[j];
+              fcmDevices.push({ id: batch[j].token.slice(0, 8), lastSeen: seen[j] ?? null, result: res.ok ? 'sent' : (res.reason ?? 'failed') });
               if (res.ok) { fcmSent++; continue; }
               fcmFailed++;
               const reason = res.reason ?? 'unknown';
@@ -293,7 +298,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
       apns: { sent: apnsSent, failed: apnsFailed, reasons: apnsReasons, configured: apnsConfigured, teamId: process.env.APNS_TEAM_ID ?? null },
-      fcm: { sent: fcmSent, failed: fcmFailed, reasons: fcmReasons, configured: !!sa },
+      fcm: {
+        sent: fcmSent, failed: fcmFailed, reasons: fcmReasons, configured: !!sa,
+        devices: fcmDevices,
+        // Recent registration problems reported by Android phones
+        problems: ((await redis.lrange('fcmdiag', 0, 9)) ?? []).map((e) => (typeof e === 'string' ? JSON.parse(e) : e)),
+      },
       debug: { title: notifTitle },
     });
   } catch (err: unknown) {
