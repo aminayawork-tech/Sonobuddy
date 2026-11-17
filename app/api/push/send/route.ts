@@ -1,5 +1,5 @@
 export const runtime = 'nodejs';
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 import { NextRequest, NextResponse } from 'next/server';
 import http2 from 'http2';
@@ -9,6 +9,7 @@ import { webpush, stripHtml, type PushSubscriptionData } from '@/lib/webpush';
 import { getDailyHook, isJobDay } from '@/lib/tips';
 import { getJobs } from '@/lib/jobs';
 import { analyticsDayKey } from '@/lib/date';
+import { fcmServiceAccount, fcmAccessToken, sendOneFcm } from '@/lib/fcm';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -234,15 +235,61 @@ export async function GET(req: NextRequest) {
       } while (apnsCursor !== 0);
     }
 
+    // ── 3. FCM (Android native app) ──────────────────────────────────────────
+    let fcmSent = 0;
+    let fcmFailed = 0;
+    const fcmReasons: Record<string, number> = {};
+    const sa = fcmServiceAccount();
+    if (sa) {
+      const tokens: { key: string; token: string }[] = [];
+      let fcmCursor = 0;
+      do {
+        const [nextCursor, keys] = await redis.scan(fcmCursor, { match: 'fcm:*', count: 100 });
+        fcmCursor = Number(nextCursor);
+        for (const key of keys) {
+          const token = await redis.get<string>(key);
+          if (token) tokens.push({ key, token });
+        }
+      } while (fcmCursor !== 0);
+
+      if (tokens.length > 0) {
+        let accessToken: string | null = null;
+        try {
+          accessToken = await fcmAccessToken(sa);
+        } catch (err) {
+          const reason = err instanceof Error ? err.message : 'fcm-auth';
+          fcmReasons[reason] = tokens.length;
+          fcmFailed = tokens.length;
+        }
+        if (accessToken) {
+          // Small parallel batches keep this inside the function's time budget.
+          for (let i = 0; i < tokens.length; i += 20) {
+            const batch = tokens.slice(i, i + 20);
+            const results = await Promise.all(batch.map(({ token }) =>
+              sendOneFcm(sa, accessToken!, token, { title: notifTitle, body: notifBody, url: notifUrl })));
+            for (let j = 0; j < results.length; j++) {
+              const res = results[j];
+              if (res.ok) { fcmSent++; continue; }
+              fcmFailed++;
+              const reason = res.reason ?? 'unknown';
+              fcmReasons[reason] = (fcmReasons[reason] ?? 0) + 1;
+              if (res.unregistered) await redis.del(batch[j].key);
+            }
+          }
+        }
+      }
+    }
+
     // Only mark the day done if someone actually received it, so a failed
     // send (e.g. a bad APNs key) can be retried the same day.
-    if (isDaily && webSent + apnsSent > 0) {
+    if (isDaily && webSent + apnsSent + fcmSent > 0) {
       await redis.set(sentKey, '1', { ex: 60 * 60 * 36 });
     }
 
     return NextResponse.json({
       webPush: { sent: webSent, failed: webFailed },
       apns: { sent: apnsSent, failed: apnsFailed, reasons: apnsReasons, configured: apnsConfigured, teamId: process.env.APNS_TEAM_ID ?? null },
+      fcm: { sent: fcmSent, failed: fcmFailed, reasons: fcmReasons, configured: !!sa },
       debug: { title: notifTitle },
     });
   } catch (err: unknown) {
