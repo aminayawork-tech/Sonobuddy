@@ -20,6 +20,10 @@ on:
         description: 'Notification body (leave blank to send today''s daily tip)'
         required: false
         default: ''
+      url:
+        description: 'Link opened on tap (optional): an app page like /articles/... or the Play Store page'
+        required: false
+        default: ''
       platform:
         description: 'Who receives it (pick android or ios to test one platform)'
         required: false
@@ -36,6 +40,7 @@ jobs:
           TITLE="${{ github.event.inputs.title }}"
           BODY="${{ github.event.inputs.body }}"
           PLATFORM="${{ github.event.inputs.platform }}"
+          URL="${{ github.event.inputs.url }}"
           ONLY=""
           if [ -n "$PLATFORM" ] && [ "$PLATFORM" != "all" ]; then ONLY="$PLATFORM"; fi
 
@@ -45,6 +50,7 @@ jobs:
               --data-urlencode "title=$TITLE" \
               --data-urlencode "body=$BODY" \
               --data-urlencode "only=$ONLY" \
+              --data-urlencode "url=$URL" \
               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
           else
             echo "Sending daily tip notification..."
