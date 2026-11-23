@@ -12,6 +12,26 @@ import { isJobDay } from '@/lib/tips';
 
 const API_BASE = 'https://www.sonobuddy.com';
 
+// Preview a different job feed: open /jobs?source=mix once and it sticks for
+// the browsing session (the page rewrites its URL as you search, so the flag
+// can't live in the URL alone).
+const SOURCE_KEY = 'sb_jobs_source';
+function jobsSourceParam(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get('source');
+    if (fromUrl === 'mix' || fromUrl === 'jsearch' || fromUrl === 'adzuna') sessionStorage.setItem(SOURCE_KEY, fromUrl);
+    const s = sessionStorage.getItem(SOURCE_KEY);
+    return s ? `source=${s}` : '';
+  } catch {
+    return '';
+  }
+}
+const withSource = (path: string) => {
+  const p = jobsSourceParam();
+  return p ? `${path}${path.includes('?') ? '&' : '?'}${p}` : path;
+};
+
 // Adzuna's location text is always the full state name ("New York", never
 // "NY"), but people naturally search by abbreviation — and the debounced
 // location-scoped search (which does understand "NY") only kicks in ~500ms
@@ -108,7 +128,7 @@ function JobList() {
   // One fetch of the nationwide list — the instant part of search (title,
   // description, location text) runs client-side against it below.
   useEffect(() => {
-    fetch(`${API_BASE}/api/jobs/`)
+    fetch(withSource(`${API_BASE}/api/jobs/`))
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         const list = Array.isArray(data) ? data : [];
@@ -143,7 +163,7 @@ function JobList() {
       return;
     }
     let cancelled = false;
-    fetch(`${API_BASE}/api/jobs/?location=${encodeURIComponent(debouncedQuery)}`)
+    fetch(withSource(`${API_BASE}/api/jobs/?location=${encodeURIComponent(debouncedQuery)}`))
       .then((r) => (r.ok ? r.json() : []))
       .then((data) => { if (!cancelled) setLocationJobs(Array.isArray(data) ? data : []); })
       .catch(() => { if (!cancelled) setLocationJobs([]); });
@@ -256,6 +276,11 @@ function JobList() {
                     </span>
                   )}
                 </div>
+                {job.direct && (
+                  <span className="inline-flex items-center mb-1.5 bg-sky-50 text-sky-600 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full">
+                    Apply on hospital site
+                  </span>
+                )}
                 <p className={`text-[13px] text-slate-500 mb-2 w-fit ${unlocked ? '' : 'blur-[4px] select-none'}`}>
                   {job.company}
                 </p>
@@ -322,8 +347,8 @@ function JobDetail({ id }: { id: string }) {
   // id. Without this, tapping a New York or Florida listing (those markets
   // have more postings than fit in the nationwide cap) always 404'd.
   useEffect(() => {
-    const requests = [fetch(`${API_BASE}/api/jobs/`).then((r) => (r.ok ? r.json() : []))];
-    if (q) requests.push(fetch(`${API_BASE}/api/jobs/?location=${encodeURIComponent(q)}`).then((r) => (r.ok ? r.json() : [])));
+    const requests = [fetch(withSource(`${API_BASE}/api/jobs/`)).then((r) => (r.ok ? r.json() : []))];
+    if (q) requests.push(fetch(withSource(`${API_BASE}/api/jobs/?location=${encodeURIComponent(q)}`)).then((r) => (r.ok ? r.json() : [])));
 
     Promise.all(requests)
       .then(([nationwide, located]) => {
@@ -428,7 +453,9 @@ function JobDetail({ id }: { id: string }) {
                 Apply Now
               </button>
               <p className="text-center text-slate-300 text-[11px] mt-3">
-                Listing via Adzuna · Opens in your browser to apply
+                {job.direct
+                  ? 'Opens the employer\u2019s own site to apply'
+                  : job.id.startsWith('js_') ? 'Opens in your browser to apply' : 'Listing via Adzuna · Opens in your browser to apply'}
               </p>
             </>
           ) : (

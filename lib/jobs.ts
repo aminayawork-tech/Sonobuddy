@@ -15,11 +15,13 @@ export interface Job {
   direct?: boolean;
 }
 
-export type JobSource = 'adzuna' | 'jsearch';
+export type JobSource = 'adzuna' | 'jsearch' | 'mix';
 
-/** Which provider the app uses. JOBS_SOURCE=jsearch switches over; anything else keeps Adzuna. */
+/** Which feed the app uses: JOBS_SOURCE=mix|jsearch (needs RAPIDAPI_KEY); otherwise Adzuna. */
 export function defaultJobSource(): JobSource {
-  return process.env.JOBS_SOURCE === 'jsearch' && process.env.RAPIDAPI_KEY ? 'jsearch' : 'adzuna';
+  const s = process.env.JOBS_SOURCE;
+  if ((s === 'mix' || s === 'jsearch') && process.env.RAPIDAPI_KEY) return s;
+  return 'adzuna';
 }
 
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
@@ -176,6 +178,7 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
  * nothing.
  */
 export async function getJobs(location?: string, source: JobSource = defaultJobSource()): Promise<Job[]> {
+  if (source === 'mix') return getMixedJobs(location);
   const cfg = redisConfig();
   const key = cacheKey(location, source);
   // JSearch's plans are metered per request, so its results are kept longer.
@@ -361,4 +364,37 @@ export async function probeJSearch(): Promise<{ configured: boolean; path?: stri
   } catch (err) {
     return { configured: true, message: err instanceof Error ? err.message : 'request failed' };
   }
+}
+
+// ── Mixed feed ─────────────────────────────────────────────────────────────
+// Hospital jobs from JSearch that apply on the employer's own site come first
+// (labeled in the app), then Adzuna's list. Staffing/travel agency posts are
+// dropped from both, and a job listed by both sources appears once. Each
+// source keeps its own cache, so this adds no extra API calls.
+
+const AGGREGATOR_HOSTS = /linkedin\.|indeed\.|ziprecruiter\.|glassdoor\.|jobleads\.|monster\.|simplyhired\.|talent\.com|jooble\.|adzuna\.|careerbuilder\.|dice\.|lensa\.|jobright\.|snagajob\.|vitalhiremed\.|americantraveler\./i;
+
+function isAgencyJob(j: Job): boolean {
+  return STAFFING.test(j.company) || /\btravel\b|per week|\bcontract\b|locum/i.test(j.title);
+}
+
+function hostOf(url: string): string {
+  try { return new URL(url).hostname; } catch { return ''; }
+}
+
+async function getMixedJobs(location?: string): Promise<Job[]> {
+  const [adzuna, jsearch] = await Promise.all([
+    getJobs(location, 'adzuna').catch(() => [] as Job[]),
+    process.env.RAPIDAPI_KEY ? getJobs(location, 'jsearch').catch(() => [] as Job[]) : Promise.resolve([] as Job[]),
+  ]);
+
+  const direct = jsearch
+    .filter((j) => !isAgencyJob(j) && !AGGREGATOR_HOSTS.test(hostOf(j.redirectUrl)))
+    .map((j) => ({ ...j, direct: true }));
+
+  const key = (j: Job) => `${j.company.toLowerCase().trim()}|${j.title.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()}`;
+  const seen = new Set(direct.map(key));
+  const rest = adzuna.filter((j) => !isAgencyJob(j) && !seen.has(key(j)));
+
+  return [...direct, ...rest];
 }
