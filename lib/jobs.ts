@@ -231,6 +231,17 @@ const JSEARCH_CACHE_TTL_SECONDS = 12 * 60 * 60;
 // name first and fall back, so a rename on their side doesn't empty the board.
 const JSEARCH_PATHS = ['/search-v2', '/search'];
 
+/** Job list from either response shape: v1 { data: [...] } or v2 { data: { jobs: [...] } }. */
+function jsearchJobs(body: unknown): JSearchJob[] {
+  const b = body as { data?: unknown; jobs?: unknown } | null;
+  if (Array.isArray(b?.data)) return b!.data as JSearchJob[];
+  const d = b?.data as { jobs?: unknown; data?: unknown } | undefined;
+  if (Array.isArray(d?.jobs)) return d!.jobs as JSearchJob[];
+  if (Array.isArray(d?.data)) return d!.data as JSearchJob[];
+  if (Array.isArray(b?.jobs)) return b!.jobs as JSearchJob[];
+  return [];
+}
+
 async function jsearchRequest(key: string, params: URLSearchParams): Promise<{ res: Response; path: string }> {
   let last: { res: Response; path: string } | null = null;
   for (const path of JSEARCH_PATHS) {
@@ -292,7 +303,7 @@ async function fetchFromJSearch(location?: string): Promise<Job[]> {
   const { res } = await jsearchRequest(key, params);
   if (!res.ok) throw new Error(`JSearch ${res.status}`);
   const body = await res.json();
-  const raw: JSearchJob[] = Array.isArray(body?.data) ? body.data : [];
+  const raw = jsearchJobs(body);
 
   const MIN = 50_000, MAX = 300_000;
   const ok = (n: number | null) => (n !== null && n >= MIN && n <= MAX ? n : null);
@@ -327,7 +338,7 @@ async function fetchFromJSearch(location?: string): Promise<Job[]> {
 }
 
 /** Diagnostic for the JSearch preview: whether a key is set and what RapidAPI says. Never returns the key. */
-export async function probeJSearch(): Promise<{ configured: boolean; path?: string; status?: number; message?: string; results?: number }> {
+export async function probeJSearch(): Promise<{ configured: boolean; path?: string; status?: number; message?: string; results?: number; shape?: unknown }> {
   const key = process.env.RAPIDAPI_KEY;
   if (!key) return { configured: false };
   const params = new URLSearchParams({ query: 'sonographer jobs in USA', page: '1', num_pages: '1', country: 'us', date_posted: 'month' });
@@ -339,7 +350,13 @@ export async function probeJSearch(): Promise<{ configured: boolean; path?: stri
       path,
       status: res.status,
       message: typeof body?.message === 'string' ? body.message.slice(0, 200) : body?.status,
-      results: Array.isArray(body?.data) ? body.data.length : undefined,
+      results: jsearchJobs(body).length,
+      // Structure only (key names), to adapt to format changes; no values.
+      shape: {
+        top: body && typeof body === 'object' ? Object.keys(body) : [],
+        data: body?.data && typeof body.data === 'object' && !Array.isArray(body.data) ? Object.keys(body.data) : (Array.isArray(body?.data) ? 'array' : typeof body?.data),
+        firstJobKeys: Object.keys(jsearchJobs(body)[0] ?? {}).slice(0, 40),
+      },
     };
   } catch (err) {
     return { configured: true, message: err instanceof Error ? err.message : 'request failed' };
