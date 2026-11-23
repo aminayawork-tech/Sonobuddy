@@ -227,6 +227,23 @@ export async function getJobs(location?: string, source: JobSource = defaultJobS
 
 const JSEARCH_CACHE_TTL_SECONDS = 12 * 60 * 60;
 
+// JSearch renamed its search endpoint (/search → /search-v2); try the current
+// name first and fall back, so a rename on their side doesn't empty the board.
+const JSEARCH_PATHS = ['/search-v2', '/search'];
+
+async function jsearchRequest(key: string, params: URLSearchParams): Promise<{ res: Response; path: string }> {
+  let last: { res: Response; path: string } | null = null;
+  for (const path of JSEARCH_PATHS) {
+    const res = await fetch(`https://jsearch.p.rapidapi.com${path}?${params}`, {
+      headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
+      cache: 'no-store',
+    });
+    last = { res, path };
+    if (res.status !== 404) break;
+  }
+  return last!;
+}
+
 // Titles that are actually sonography roles. JSearch's matching is looser
 // than Adzuna's title_only, so this keeps unrelated jobs out.
 const SONO_TITLE = /sonograph|ultrasound|\becho\b|echocardiograph|vascular tech|\brdms\b|\brvt\b|\brdcs\b|\brcs\b/i;
@@ -272,10 +289,7 @@ async function fetchFromJSearch(location?: string): Promise<Job[]> {
     country: 'us',
     date_posted: 'month',
   });
-  const res = await fetch(`https://jsearch.p.rapidapi.com/search?${params}`, {
-    headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
-    cache: 'no-store',
-  });
+  const { res } = await jsearchRequest(key, params);
   if (!res.ok) throw new Error(`JSearch ${res.status}`);
   const body = await res.json();
   const raw: JSearchJob[] = Array.isArray(body?.data) ? body.data : [];
@@ -313,18 +327,16 @@ async function fetchFromJSearch(location?: string): Promise<Job[]> {
 }
 
 /** Diagnostic for the JSearch preview: whether a key is set and what RapidAPI says. Never returns the key. */
-export async function probeJSearch(): Promise<{ configured: boolean; status?: number; message?: string; results?: number }> {
+export async function probeJSearch(): Promise<{ configured: boolean; path?: string; status?: number; message?: string; results?: number }> {
   const key = process.env.RAPIDAPI_KEY;
   if (!key) return { configured: false };
   const params = new URLSearchParams({ query: 'sonographer jobs in USA', page: '1', num_pages: '1', country: 'us', date_posted: 'month' });
   try {
-    const res = await fetch(`https://jsearch.p.rapidapi.com/search?${params}`, {
-      headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
-      cache: 'no-store',
-    });
+    const { res, path } = await jsearchRequest(key, params);
     const body = await res.json().catch(() => ({}));
     return {
       configured: true,
+      path,
       status: res.status,
       message: typeof body?.message === 'string' ? body.message.slice(0, 200) : body?.status,
       results: Array.isArray(body?.data) ? body.data.length : undefined,
