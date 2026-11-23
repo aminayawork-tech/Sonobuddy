@@ -11,6 +11,15 @@ export interface Job {
   salaryMin: number | null;
   salaryMax: number | null;
   salaryEstimated: boolean;
+  /** True when the apply link goes straight to the employer (not a job board or agency). JSearch only. */
+  direct?: boolean;
+}
+
+export type JobSource = 'adzuna' | 'jsearch';
+
+/** Which provider the app uses. JOBS_SOURCE=jsearch switches over; anything else keeps Adzuna. */
+export function defaultJobSource(): JobSource {
+  return process.env.JOBS_SOURCE === 'jsearch' && process.env.RAPIDAPI_KEY ? 'jsearch' : 'adzuna';
 }
 
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
@@ -20,8 +29,9 @@ const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under t
 // users for up to CACHE_TTL_SECONDS * 4 after a fix ships.
 const CACHE_VERSION = 'v9';
 
-function cacheKey(location?: string): string {
-  return `jobs:sonography:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
+function cacheKey(location?: string, source: JobSource = 'adzuna'): string {
+  const prefix = source === 'adzuna' ? 'jobs:sonography' : `jobs:${source}`;
+  return `${prefix}:${CACHE_VERSION}:us:${location?.toLowerCase().trim() || 'all'}`;
 }
 
 // `what_or` ORs individual words, not phrases — a query built from these
@@ -165,9 +175,11 @@ async function fetchFromAdzuna(location?: string): Promise<Job[]> {
  * entry when Adzuna errors or the quota is exhausted, rather than showing
  * nothing.
  */
-export async function getJobs(location?: string): Promise<Job[]> {
+export async function getJobs(location?: string, source: JobSource = defaultJobSource()): Promise<Job[]> {
   const cfg = redisConfig();
-  const key = cacheKey(location);
+  const key = cacheKey(location, source);
+  // JSearch's plans are metered per request, so its results are kept longer.
+  const ttl = source === 'jsearch' ? JSEARCH_CACHE_TTL_SECONDS : CACHE_TTL_SECONDS;
 
   if (cfg) {
     try {
@@ -175,7 +187,7 @@ export async function getJobs(location?: string): Promise<Job[]> {
       if (typeof cached === 'string') {
         const parsed = JSON.parse(cached) as { jobs: Job[]; fetchedAt: number };
         const age = Date.now() - parsed.fetchedAt;
-        if (age < CACHE_TTL_SECONDS * 1000) return parsed.jobs;
+        if (age < ttl * 1000) return parsed.jobs;
       }
     } catch {
       // Corrupt cache entry or Redis hiccup — fall through to a fresh fetch.
@@ -183,11 +195,11 @@ export async function getJobs(location?: string): Promise<Job[]> {
   }
 
   try {
-    const jobs = await fetchFromAdzuna(location);
+    const jobs = source === 'jsearch' ? await fetchFromJSearch(location) : await fetchFromAdzuna(location);
     if (cfg && jobs.length > 0) {
       await redisCommand(cfg, [
         'SET', key, JSON.stringify({ jobs, fetchedAt: Date.now() }),
-        'EX', String(CACHE_TTL_SECONDS * 4), // keep a stale copy around longer than the TTL, for the error-fallback path below
+        'EX', String(ttl * 4), // keep a stale copy around longer than the TTL, for the error-fallback path below
       ]);
     }
     return jobs;
@@ -206,4 +218,96 @@ export async function getJobs(location?: string): Promise<Job[]> {
     }
     return [];
   }
+}
+
+// ── JSearch (RapidAPI) ─────────────────────────────────────────────────────
+// Google for Jobs results, which include employers' own career sites as well
+// as LinkedIn, Indeed and job boards, so far more direct hospital postings
+// than Adzuna. Needs RAPIDAPI_KEY.
+
+const JSEARCH_CACHE_TTL_SECONDS = 12 * 60 * 60;
+
+// Titles that are actually sonography roles. JSearch's matching is looser
+// than Adzuna's title_only, so this keeps unrelated jobs out.
+const SONO_TITLE = /sonograph|ultrasound|\becho\b|echocardiograph|vascular tech|\brdms\b|\brvt\b|\brdcs\b|\brcs\b/i;
+
+// Staffing/travel agencies: kept, but listed after direct employers.
+const STAFFING = /staffing|travel|locum|agency|recruit|\baya\b|amn\b|cross country|medical solutions|vivian|trusted|fusion|host healthcare|totalmed|ventura|prime|aureus|core medical|nomad|jackson|soliant|cariant|lrs|krucial|bluepipes|tailored/i;
+
+interface JSearchJob {
+  job_id: string;
+  job_title: string;
+  employer_name?: string;
+  job_publisher?: string;
+  job_city?: string | null;
+  job_state?: string | null;
+  job_location?: string | null;
+  job_posted_at_datetime_utc?: string | null;
+  job_description?: string;
+  job_apply_link?: string;
+  job_apply_is_direct?: boolean;
+  job_min_salary?: number | null;
+  job_max_salary?: number | null;
+  job_salary_period?: string | null;
+}
+
+function annualize(n: number | null | undefined, period?: string | null): number | null {
+  if (typeof n !== 'number' || !isFinite(n) || n <= 0) return null;
+  switch ((period ?? '').toUpperCase()) {
+    case 'HOUR': return Math.round(n * 2080);
+    case 'WEEK': return Math.round(n * 52);
+    case 'MONTH': return Math.round(n * 12);
+    case 'YEAR': return Math.round(n);
+    default: return null;
+  }
+}
+
+async function fetchFromJSearch(location?: string): Promise<Job[]> {
+  const key = process.env.RAPIDAPI_KEY;
+  if (!key) return [];
+  const params = new URLSearchParams({
+    query: `sonographer ultrasound technologist jobs in ${location || 'USA'}`,
+    page: '1',
+    num_pages: '2',
+    country: 'us',
+    date_posted: 'month',
+  });
+  const res = await fetch(`https://jsearch.p.rapidapi.com/search?${params}`, {
+    headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(`JSearch ${res.status}`);
+  const body = await res.json();
+  const raw: JSearchJob[] = Array.isArray(body?.data) ? body.data : [];
+
+  const MIN = 50_000, MAX = 300_000;
+  const ok = (n: number | null) => (n !== null && n >= MIN && n <= MAX ? n : null);
+
+  const seen = new Set<string>();
+  const jobs: Job[] = [];
+  for (const j of raw) {
+    if (!j.job_title || !SONO_TITLE.test(j.job_title) || !j.job_apply_link) continue;
+    const company = j.employer_name?.trim() || 'Confidential';
+    const dedupe = `${company.toLowerCase()}|${j.job_title.toLowerCase().replace(/\s+/g, ' ').trim()}`;
+    if (seen.has(dedupe)) continue;
+    seen.add(dedupe);
+    const loc = j.job_city && j.job_state ? `${j.job_city}, ${j.job_state}` : (j.job_location ?? j.job_state ?? '');
+    jobs.push({
+      id: `js_${j.job_id}`,
+      title: j.job_title.trim(),
+      company,
+      location: loc ?? '',
+      created: j.job_posted_at_datetime_utc ?? new Date().toISOString(),
+      description: (j.job_description ?? '').trim().slice(0, 4000),
+      redirectUrl: j.job_apply_link,
+      salaryMin: ok(annualize(j.job_min_salary, j.job_salary_period)),
+      salaryMax: ok(annualize(j.job_max_salary, j.job_salary_period)),
+      salaryEstimated: false,
+      direct: !!j.job_apply_is_direct && !STAFFING.test(company),
+    });
+  }
+
+  // Direct employers first (hospitals, clinics), then agencies; newest first within each.
+  const agency = (j: Job) => (STAFFING.test(j.company) ? 1 : 0);
+  return jobs.sort((a, b) => agency(a) - agency(b) || (a.created < b.created ? 1 : -1));
 }
