@@ -311,3 +311,25 @@ async function fetchFromJSearch(location?: string): Promise<Job[]> {
   const agency = (j: Job) => (STAFFING.test(j.company) ? 1 : 0);
   return jobs.sort((a, b) => agency(a) - agency(b) || (a.created < b.created ? 1 : -1));
 }
+
+/** Diagnostic for the JSearch preview: whether a key is set and what RapidAPI says. Never returns the key. */
+export async function probeJSearch(): Promise<{ configured: boolean; status?: number; message?: string; results?: number }> {
+  const key = process.env.RAPIDAPI_KEY;
+  if (!key) return { configured: false };
+  const params = new URLSearchParams({ query: 'sonographer jobs in USA', page: '1', num_pages: '1', country: 'us', date_posted: 'month' });
+  try {
+    const res = await fetch(`https://jsearch.p.rapidapi.com/search?${params}`, {
+      headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'jsearch.p.rapidapi.com' },
+      cache: 'no-store',
+    });
+    const body = await res.json().catch(() => ({}));
+    return {
+      configured: true,
+      status: res.status,
+      message: typeof body?.message === 'string' ? body.message.slice(0, 200) : body?.status,
+      results: Array.isArray(body?.data) ? body.data.length : undefined,
+    };
+  } catch (err) {
+    return { configured: true, message: err instanceof Error ? err.message : 'request failed' };
+  }
+}
