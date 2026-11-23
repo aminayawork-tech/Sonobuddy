@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getJobs } from '@/lib/jobs';
+import { getJobs, probeJSearch } from '@/lib/jobs';
 
 // Reads from Redis cache / calls a live third-party API depending on cache
 // age — must never be frozen at build time.
@@ -11,6 +11,9 @@ export async function GET(req: Request) {
   // ?source=jsearch previews the JSearch feed without switching the app over.
   const sourceParam = searchParams.get('source');
   const source = sourceParam === 'jsearch' || sourceParam === 'adzuna' ? sourceParam : undefined;
+  if (source === 'jsearch' && searchParams.get('debug') === '1') {
+    return NextResponse.json(await probeJSearch(), { headers: { 'Cache-Control': 'no-store' } });
+  }
   const jobs = await getJobs(location, source);
   return NextResponse.json(jobs, {
     headers: {
