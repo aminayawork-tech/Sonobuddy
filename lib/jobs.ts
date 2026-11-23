@@ -17,11 +17,16 @@ export interface Job {
 
 export type JobSource = 'adzuna' | 'jsearch' | 'mix';
 
-/** Which feed the app uses: JOBS_SOURCE=mix|jsearch (needs RAPIDAPI_KEY); otherwise Adzuna. */
+/**
+ * Which feed the app uses. The mixed feed (hospital-direct jobs from JSearch
+ * plus Adzuna) whenever RAPIDAPI_KEY is set; JOBS_SOURCE=adzuna or =jsearch
+ * forces one source. Without a RapidAPI key it's Adzuna alone.
+ */
 export function defaultJobSource(): JobSource {
   const s = process.env.JOBS_SOURCE;
-  if ((s === 'mix' || s === 'jsearch') && process.env.RAPIDAPI_KEY) return s;
-  return 'adzuna';
+  if (s === 'adzuna') return 'adzuna';
+  if (!process.env.RAPIDAPI_KEY) return 'adzuna';
+  return s === 'jsearch' ? 'jsearch' : 'mix';
 }
 
 const CACHE_TTL_SECONDS = 6 * 60 * 60; // 6h — keeps Adzuna calls well under trial quota
