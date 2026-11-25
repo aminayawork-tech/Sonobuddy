@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<rect width="1200" height="900" fill="#F0F8FF"/>
+<rect x="72" y="64" width="200" height="40" rx="20" fill="#E0F2FE"/>
+<text x="94" y="91" font-size="18" font-weight="700" letter-spacing="3" fill="#0EA5E9">PATIENT PREP</text>
+<text x="72" y="180" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">Why the </tspan><tspan fill="#0EA5E9">full bladder</tspan></text>
+<text x="72" y="250" font-size="62" font-weight="900" letter-spacing="-2"><tspan fill="#0F172A">rule exists</tspan></text>
+<rect x="72" y="346" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="391" font-size="27" font-weight="700" fill="#0F172A">Drink it on time</text>
+<text x="1096" y="391" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">About 1 hr before</text>
+<rect x="72" y="432" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="477" font-size="27" font-weight="700" fill="#0F172A">Chugging at check-in</text>
+<text x="1096" y="477" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Too late</text>
+<rect x="72" y="518" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="563" font-size="27" font-weight="700" fill="#0F172A">Why it matters</text>
+<text x="1096" y="563" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Moves bowel aside</text>
+<rect x="72" y="604" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="649" font-size="27" font-weight="700" fill="#0F172A">Transvaginal scan</text>
+<text x="1096" y="649" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Empty is fine</text>
+<rect x="72" y="690" width="1056" height="72" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+<text x="104" y="735" font-size="27" font-weight="700" fill="#0F172A">The real rule</text>
+<text x="1096" y="735" text-anchor="end" font-size="27" font-weight="800" fill="#0EA5E9">Follow your center</text>
+<text x="72" y="844" font-size="22" fill="#475569">Water has to be absorbed and filtered before it reaches the bladder.</text>
+<text x="1128" y="846" text-anchor="end" font-size="34" font-weight="900" letter-spacing="-1"><tspan fill="#0F172A">Sono</tspan><tspan fill="#0EA5E9">Buddy</tspan></text></svg>
