@@ -22,6 +22,7 @@ import { calculators } from '@/data/calculators';
 import { getDailyHook, isJobDay, type DailyHook } from '@/lib/tips';
 import type { Job } from '@/lib/jobs';
 import NotificationPrompt from '@/components/NotificationPrompt';
+import PollOfTheDay from '@/components/PollOfTheDay';
 
 // ── Quick Access types & defaults ────────────────────────────────────────────
 
@@ -619,6 +620,11 @@ export default function HomePage() {
             </>
           )}
         </div>
+      </div>
+
+      {/* Poll of the Day — community without a feed: one anonymous tap, then results */}
+      <div className="px-5 mb-6">
+        <PollOfTheDay />
       </div>
 
       <div className="px-5 pb-4 text-center">
