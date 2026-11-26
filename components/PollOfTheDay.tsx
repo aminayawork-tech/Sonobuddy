@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 import { recordEvent } from '@/lib/tap-tracking';
 
 /**
@@ -55,6 +56,8 @@ export default function PollOfTheDay() {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
+    // Hidden in the Android app while a launch delay there is investigated.
+    if (Capacitor.getPlatform() === 'android') return;
     let cancelled = false;
     fetch(API, { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
