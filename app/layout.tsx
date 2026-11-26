@@ -145,6 +145,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* App launches open the marketing homepage first, which used to load
+            its whole bundle before redirecting to /home (about a second of
+            delay on Android). This jumps straight to /home before anything
+            downloads, only inside the SonoBuddy app: the Android app's
+            Capacitor bridge, the app user agent, or an installed PWA.
+            In-app browsers (TikTok, Instagram) have none of these, so they
+            still see the homepage. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(location.pathname==='/'&&('androidBridge' in window||navigator.userAgent.indexOf('SonoBuddyApp')>-1||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)){location.replace('/home/')}}catch(e){}",
+          }}
+        />
         {/* Runs before first paint: the prebuilt HTML is rendered as non-Pro,
             so without this, paying users would see PRO badges flash on app
             launch until React takes over. iOS injects __isPremium before
