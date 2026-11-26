@@ -48,6 +48,11 @@ export async function GET(req: NextRequest) {
     }));
     return NextResponse.json(all, { headers: { ...CORS, 'Cache-Control': 'no-store' } });
   }
+  // Switched off (POLL_ENABLED=1 turns it back on). The iOS 11.3 build has
+  // the card built in; it hides itself when no poll is returned.
+  if (process.env.POLL_ENABLED !== '1') {
+    return NextResponse.json({ poll: null }, { headers: { ...CORS, 'Cache-Control': 'no-store' } });
+  }
   const poll = todaysPoll();
   const c = await counts(poll.id, poll.options.length);
   return NextResponse.json({ poll, counts: c }, { headers: { ...CORS, 'Cache-Control': 'no-store' } });
